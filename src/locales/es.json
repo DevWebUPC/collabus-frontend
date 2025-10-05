@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "menu": "Menú",
+    "home": "Inicio",
+    "projects": "Proyectos", 
+    "collaborators": "Colaboradores",
+    "notifications": "Notificaciones"
+  },
+  "home": {
+    "title": "Inicio",
+    "content": "Bienvenido a CollabUs."
+  },
+  "page-not-found": {
+    "title": "Página no encontrada",
+    "content": "La ruta {unavailable-route} no está disponible.",
+    "go-home": "Ir al Inicio"
+  },
+  "errors": {
+    "occurred": "Ocurrieron errores"
+  },
+  "footer": {
+    "copyright": "© 2025 CollabUs. Todos los derechos reservados.",
+    "description": "Potenciando la colaboración y productividad a través de soluciones innovadoras.",
+    "authoring-phrase": {
+      "intro": "Desarrollado con",
+      "use": "y",
+      "author": "por el equipo de desarrollo de {brand}"
+    },
+    "links": {
+      "privacy": "Política de Privacidad",
+      "terms": "Términos de Servicio",
+      "contact": "Contáctanos"
+    }
+  }
+}

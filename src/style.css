@@ -1,0 +1,272 @@
+
+/* CSS Custom Properties - Design System */
+:root {
+  /* Typography */
+  --font-family-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Brand Colors - CollabUs Palette */
+  --color-primary: #6C63FF;        /* Primary - Botones y links principales */
+  --color-secondary: #FF7A30;      /* Secondary - Elementos secundarios */
+  --color-accent: #CBFCFF;         /* Accent - Acentuación y highlights */
+  --color-neutral: #C4C4C4;        /* Neutral - Elementos neutros */
+  --color-white: #FFFFFF;          /* White - Fondos principales */
+  
+  /* Primary Color Variations */
+  --color-primary-50: #F0EFFF;     /* Primary muy claro */
+  --color-primary-100: #E1DEFF;    /* Primary claro */
+  --color-primary-200: #C9C1FF;    /* Primary medio claro */
+  --color-primary-300: #B1A4FF;    /* Primary medio */
+  --color-primary-400: #8E83FF;    /* Primary medio oscuro */
+  --color-primary-500: #6C63FF;    /* Primary base */
+  --color-primary-600: #5B52E6;    /* Primary oscuro */
+  --color-primary-700: #4A41CC;    /* Primary más oscuro */
+  --color-primary-800: #3930B3;    /* Primary muy oscuro */
+  --color-primary-900: #282099;    /* Primary extremo */
+  
+  /* Secondary Color Variations */
+  --color-secondary-50: #FFF4F0;   /* Secondary muy claro */
+  --color-secondary-100: #FFE9E1;  /* Secondary claro */
+  --color-secondary-200: #FFD3C2;  /* Secondary medio claro */
+  --color-secondary-300: #FFBCA3;  /* Secondary medio */
+  --color-secondary-400: #FF9669;  /* Secondary medio oscuro */
+  --color-secondary-500: #FF7A30;  /* Secondary base */
+  --color-secondary-600: #E6691B;  /* Secondary oscuro */
+  --color-secondary-700: #CC5A0F;  /* Secondary más oscuro */
+  --color-secondary-800: #B34B07;  /* Secondary muy oscuro */
+  --color-secondary-900: #993D03;  /* Secondary extremo */
+  
+  /* Accent Color Variations */
+  --color-accent-50: #F9FFFF;      /* Accent muy claro */
+  --color-accent-100: #F3FEFF;     /* Accent claro */
+  --color-accent-200: #E7FDFF;     /* Accent medio claro */
+  --color-accent-300: #DBFCFF;     /* Accent medio */
+  --color-accent-400: #D3FCFF;     /* Accent medio oscuro */
+  --color-accent-500: #CBFCFF;     /* Accent base */
+  --color-accent-600: #B7E3E6;     /* Accent oscuro */
+  --color-accent-700: #A3CACC;     /* Accent más oscuro */
+  --color-accent-800: #8FB1B3;     /* Accent muy oscuro */
+  --color-accent-900: #7B9899;     /* Accent extremo */
+  
+  /* Neutral/Gray Variations */
+  --color-gray-50: #FAFAFA;        /* Gris muy claro */
+  --color-gray-100: #F5F5F5;       /* Gris claro */
+  --color-gray-200: #EEEEEE;       /* Gris medio claro */
+  --color-gray-300: #E0E0E0;       /* Gris medio */
+  --color-gray-400: #C4C4C4;       /* Neutral base */
+  --color-gray-500: #9E9E9E;       /* Gris medio oscuro */
+  --color-gray-600: #757575;       /* Gris oscuro */
+  --color-gray-700: #616161;       /* Gris más oscuro */
+  --color-gray-800: #424242;       /* Gris muy oscuro */
+  --color-gray-900: #212121;       /* Gris extremo */
+  
+  /* Semantic Colors usando la nueva paleta */
+  --color-success: #4CAF50;        /* Verde éxito */
+  --color-warning: #FF7A30;        /* Warning usa secondary */
+  --color-error: #F44336;          /* Rojo error */
+  --color-info: #6C63FF;           /* Info usa primary */
+  
+  /* Blacks */
+  --color-black: #000000;
+  
+  /* Spacing Scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  
+  /* Border Radius */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;
+  --radius-base: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 200ms ease-in-out;
+  --transition-slow: 300ms ease-in-out;
+  
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  
+  /* Layout */
+  --max-width-xs: 20rem;
+  --max-width-sm: 24rem;
+  --max-width-md: 28rem;
+  --max-width-lg: 32rem;
+  --max-width-xl: 36rem;
+  --max-width-2xl: 42rem;
+  --max-width-3xl: 48rem;
+  --max-width-4xl: 56rem;
+  --max-width-5xl: 64rem;
+  --max-width-6xl: 72rem;
+  --max-width-7xl: 80rem;
+  --max-width-full: 100%;
+  
+  /* Current Theme Values */
+  font-family: var(--font-family-sans);
+  line-height: var(--line-height-normal);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-gray-900);
+  
+  /* Text Rendering */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* CSS Reset & Base Styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100vh;
+  font-family: var(--font-family-sans);
+  color: var(--color-gray-900);
+  line-height: var(--line-height-normal);
+  background-color: var(--color-gray-50);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-gray-900);
+}
+
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+h5 { font-size: var(--font-size-lg); }
+h6 { font-size: var(--font-size-base); }
+
+p {
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+}
+
+/* Links */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-700);
+  text-decoration: underline;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Buttons */
+button {
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  border: none;
+  border-radius: var(--radius-base);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  text-decoration: none;
+}
+
+button:hover {
+  background-color: var(--color-primary-700);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* App Container */
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
