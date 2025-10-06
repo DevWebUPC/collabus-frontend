@@ -17,6 +17,10 @@ const openForgotPasswordModal = () => {
   showForgotPasswordModal.value = true;
 };
 
+const goToRegister = () => {
+  router.push('/register');
+};
+
 const handleLogin = () => {
   // Aquí iría tu lógica de login
   console.log('Login attempt:', email.value, password.value);
@@ -90,7 +94,7 @@ const handlePasswordRecovery = (email) => {
       </form>
 
       <div class="register-link">
-        <p>¿No tienes cuenta? <a href="#">Registrate</a></p>
+        <p>¿No tienes cuenta? <a href="#" @click.prevent="goToRegister">Registrate</a></p>
       </div>
 
       <div class="footer">
@@ -108,7 +112,6 @@ const handlePasswordRecovery = (email) => {
 </template>
 
 <style scoped>
-/* Header Styles */
 .login-header {
   background-color: white;
   border-bottom: 1px solid #e2e8f0;
@@ -143,7 +146,7 @@ const handlePasswordRecovery = (email) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #3f51b5;
+  color: #6C63FF;
 }
 
 .back-button:hover {
@@ -176,7 +179,7 @@ const handlePasswordRecovery = (email) => {
 }
 
 .logo-text {
-  color: #3f51b5;
+  color: #6C63FF;
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 10px;
@@ -214,7 +217,7 @@ const handlePasswordRecovery = (email) => {
 
 :deep(.p-inputtext:focus) {
   outline: none;
-  border-color: #3f51b5;
+  border-color: #6C63FF;
   box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.1);
 }
 
@@ -224,7 +227,7 @@ const handlePasswordRecovery = (email) => {
 }
 
 .forgot-password a {
-  color: #3f51b5;
+  color: #6C63FF;
   text-decoration: none;
   font-size: 14px;
 }
@@ -235,7 +238,7 @@ const handlePasswordRecovery = (email) => {
 
 .login-button {
   padding: 12px;
-  background-color: #3f51b5;
+  background-color: #6C63FF;
   color: white;
   border: none;
   border-radius: 4px;
@@ -245,7 +248,7 @@ const handlePasswordRecovery = (email) => {
 }
 
 .login-button:hover {
-  background-color: #303f9f;
+  background-color: #6C63FF;
 }
 
 .register-link {
@@ -259,7 +262,7 @@ const handlePasswordRecovery = (email) => {
 }
 
 .register-link a {
-  color: #3f51b5;
+  color: #6C63FF;
   text-decoration: none;
   font-weight: 500;
 }
