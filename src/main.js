@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import "./style.css";
 import App from "./app.vue";
-import i18n from "./i18n.js";
+import i18n from "./i18n/i18n.js";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import Material from "@primeuix/themes/material";
@@ -35,7 +35,7 @@ import {
   Toolbar,
   Tooltip,
 } from "primevue";
-import router from "./router.js";
+import router from "./router/router.js";
 import pinia from "./pinia.js";
 
 // noinspection JSCheckFunctionSignatures
