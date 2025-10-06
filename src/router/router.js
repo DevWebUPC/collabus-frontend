@@ -1,17 +1,15 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../shared/presentation/views/home.vue";
+import Login from "../iam/presentation/views/login.component.vue";
 
 const pageNotFound = () =>
   import("../shared/presentation/views/page-not-found.vue");
 const routes = [
-  { path: "/home", name: "home", component: Home, meta: { title: "Home" } },
-  { path: "/", redirect: "/home" },
-  {
-    path: "/:pathMatch(.*)*",
-    name: "not-found",
-    component: pageNotFound,
-    meta: { title: "Page Not Found" },
-  },
+    { path: "/", name: "login", component: Login, meta: { title: "Login" }},
+    { path: "/login",  redirect: "/", meta: { title: "Login" }},
+    { path: "/home", name: "home", component: Home, meta: { title: "Home" } },
+    { path: "/:pathMatch(.*)*", name: "not-found", component: pageNotFound, meta: { title: "Page Not Found" },},
+
 ];
 
 const router = createRouter({
