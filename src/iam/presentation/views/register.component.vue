@@ -13,6 +13,10 @@ const goBack = () => {
   router.push('/');
 };
 
+const gotoCreateAccount = () => {
+  router.push('/create-account');
+};
+
 const handleRegister = () => {
   if (password.value !== confirmPassword.value) {
     alert('Las contraseñas no coinciden');
@@ -118,6 +122,7 @@ const handleRegister = () => {
               type="submit"
               class="register-button w-full"
               label="Guardar"
+              @click="gotoCreateAccount"
           />
         </form>
 
