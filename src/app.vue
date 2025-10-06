@@ -7,7 +7,7 @@ const route = useRoute();
 
 // Determinar si mostrar el layout basado en la ruta
 const showLayout = computed(() => {
-  return route.name !== 'login';
+  return route.name !== 'login' && route.name !== 'recovery-password' && route.name !== 'register';
 });
 </script>
 
