@@ -1,70 +1,74 @@
 <script setup>
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 import FooterContent from "./footer-content.vue";
 
+import PlanActual from "../../../subscription/presentation/components/PlanActual.vue";
+import PlanesModal from "../../../subscription/presentation/components/PlanesModal.vue";
+
 const { t } = useI18n();
+const route = useRoute();
 
 const menuItems = [
-  { label: 'nav.home', to: '/home', key: 'home' },
-  { label: 'nav.projects', to: '/projects', key: 'projects' },
-  { label: 'nav.collaborators', to: '/collaborators', key: 'collaborators' },
-  { label: 'nav.notifications', to: '/notifications', key: 'notifications' }
+  { label: "nav.home", to: "/home", key: "home" },
+  { label: "nav.projects", to: "/projects", key: "projects" },
+  { label: "nav.collaborators", to: "/collaborators", key: "collaborators" },
+  { label: "nav.notifications", to: "/notifications", key: "notifications" },
 ];
 
 const drawer = ref(false);
-
-const toggleDrawer = () => {
-  drawer.value = !drawer.value;
-};
+const toggleDrawer = () => (drawer.value = !drawer.value);
 </script>
 
 <template>
   <div class="app-layout">
     <!-- Toast & Dialog Components -->
-    <pv-toast/>
-    <pv-confirm-dialog/>
+    <pv-toast />
+    <pv-confirm-dialog />
 
-        <!-- Mobile Drawer -->
+    <!-- Drawer móvil -->
     <pv-drawer v-model:visible="drawer" class="mobile-drawer">
       <div class="drawer-content p-3">
         <router-link
-          v-for="item in menuItems"
-          :key="'drawer-' + item.key"
-          :to="item.to"
-          class="drawer-nav-link"
-          :class="{ 'drawer-nav-link-active': $route.name === item.key }"
-          @click="drawer = false"
+            v-for="item in menuItems"
+            :key="'drawer-' + item.key"
+            :to="item.to"
+            class="drawer-nav-link"
+            :class="{ 'drawer-nav-link-active': $route.name === item.key }"
+            @click="drawer = false"
         >
           {{ t(item.label) }}
         </router-link>
+
+        <!-- Plan Actual (solo visible en Home) -->
+        <div class="drawer-plan card" v-if="route.name === 'home'">
+          <PlanActual />
+        </div>
       </div>
     </pv-drawer>
 
     <!-- Header -->
     <pv-toolbar class="header-toolbar">
       <template #start>
-        <!-- Mobile Menu Button (solo visible en mobile) -->
         <pv-button
-          class="mobile-menu-btn p-button-text"
-          icon="pi pi-bars"
-          @click="toggleDrawer"
+            class="mobile-menu-btn p-button-text"
+            icon="pi pi-bars"
+            @click="toggleDrawer"
         />
-
         <router-link to="/home" class="logo-link">
           <h3 class="logo-text">CollabUs</h3>
         </router-link>
       </template>
 
       <template #center>
-        <!-- Desktop Navigation -->
         <div class="nav-container desktop-nav">
           <router-link
-            v-for="item in menuItems"
-            :key="item.key"
-            :to="item.to"
-            class="nav-link"
-            :class="{ 'nav-link-active': $route.name === item.key }"
+              v-for="item in menuItems"
+              :key="item.key"
+              :to="item.to"
+              class="nav-link"
+              :class="{ 'nav-link-active': $route.name === item.key }"
           >
             {{ t(item.label) }}
           </router-link>
@@ -72,24 +76,30 @@ const toggleDrawer = () => {
       </template>
 
       <template #end>
-        <pv-avatar
-          icon="pi pi-user"
-          class="user-avatar"
-          shape="circle"
-        />
+        <pv-avatar icon="pi pi-user" class="user-avatar" shape="circle" />
       </template>
     </pv-toolbar>
 
-    <!-- Main Content Area -->
+    <!-- Contenido principal -->
     <main class="main-content" role="main">
-      <div class="content-container">
-        <router-view/>
+      <div class="content-grid">
+        <!-- SIDEBAR izquierda -->
+        <aside class="sidebar">
+          <div class="card" v-if="route.name === 'home'">
+            <PlanActual />
+          </div>
+        </aside>
+
+        <!-- CONTENIDO principal -->
+        <section class="content-container">
+          <router-view />
+        </section>
       </div>
     </main>
 
     <!-- Footer -->
     <footer class="app-footer">
-      <footer-content/>
+      <footer-content />
     </footer>
   </div>
 </template>
@@ -101,16 +111,7 @@ const toggleDrawer = () => {
   flex-direction: column;
 }
 
-.main-content {
-  flex: 1;
-  padding: 1rem;
-}
-
-.app-footer {
-  margin-top: auto;
-}
-
-/* Header Styles */
+/* Header */
 .header-toolbar {
   padding: 0.75rem 2rem;
   background-color: var(--color-gray-50);
@@ -120,10 +121,9 @@ const toggleDrawer = () => {
 .logo-link {
   text-decoration: none;
 }
-
 .logo-text {
   margin: 0;
-  color: #6C63FF;
+  color: #6c63ff;
   font-weight: 700;
   font-size: 1.5rem;
 }
@@ -133,16 +133,12 @@ const toggleDrawer = () => {
   gap: 2rem;
   align-items: center;
 }
-
-/* Desktop Navigation - Visible by default */
 .desktop-nav {
   display: flex;
 }
-
-/* Mobile Menu Button - Hidden by default */
 .mobile-menu-btn {
   display: none;
-  color: #6C63FF;
+  color: #6c63ff;
   margin-right: 1rem;
 }
 
@@ -155,32 +151,62 @@ const toggleDrawer = () => {
   border-radius: 8px;
   transition: all 0.2s;
 }
-
 .nav-link:hover {
-  color: #6C63FF;
+  color: #6c63ff;
 }
-
 .nav-link-active {
-  color: #6C63FF;
+  color: #6c63ff;
   font-weight: 600;
-  background-color: rgba(108, 99, 255, 0.1);
+  background: rgba(108, 99, 255, 0.1);
 }
 
 .user-avatar {
   color: white;
 }
 
-/* Mobile Drawer Styles */
-.mobile-drawer {
-  width: 280px;
+/* Grid principal con sidebar */
+.main-content {
+  flex: 1;
+  padding: 1rem;
+}
+.content-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: sticky;
+  top: 1rem;
+}
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
+.content-container {
+  min-height: 60vh;
+}
+
+/* Footer */
+.app-footer {
+  margin-top: auto;
+}
+
+/* Drawer móvil */
+.mobile-drawer {
+  width: 300px;
+}
 .drawer-content {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
-
 .drawer-nav-link {
   display: block;
   text-decoration: none;
@@ -191,39 +217,47 @@ const toggleDrawer = () => {
   border-radius: 8px;
   transition: all 0.2s;
 }
-
 .drawer-nav-link:hover {
-  background-color: rgba(108, 99, 255, 0.05);
-  color: #6C63FF;
+  background: rgba(108, 99, 255, 0.05);
+  color: #6c63ff;
 }
-
 .drawer-nav-link-active {
-  color: #6C63FF;
+  color: #6c63ff;
   font-weight: 600;
-  background-color: rgba(108, 99, 255, 0.1);
+  background: rgba(108, 99, 255, 0.1);
+}
+.drawer-plan {
+  margin-top: 0.5rem;
 }
 
-/* Responsive Styles */
+/* Responsive */
+@media (max-width: 1024px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    order: 2;
+    position: static;
+  }
+  .content-container {
+    order: 1;
+  }
+}
+
 @media (max-width: 768px) {
   .header-toolbar {
     padding: 0.5rem 1rem;
   }
-
   .logo-text {
     font-size: 1.2rem;
   }
-
   .user-avatar {
     width: 32px;
     height: 32px;
   }
-
-  /* Hide desktop navigation */
   .desktop-nav {
     display: none;
   }
-
-  /* Show mobile menu button */
   .mobile-menu-btn {
     display: inline-flex;
   }
