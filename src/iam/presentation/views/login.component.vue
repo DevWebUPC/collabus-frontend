@@ -13,6 +13,10 @@ const goBack = () => {
   window.location.href = 'https://devwebupc.github.io/landing-page/';
 };
 
+const goToHome = () => {
+  router.push('/home');
+};
+
 const openForgotPasswordModal = () => {
   showForgotPasswordModal.value = true;
 };
@@ -90,6 +94,7 @@ const handlePasswordRecovery = (email) => {
             type="submit"
             class="login-button w-full"
             label="Ingresar"
+            @click="goToHome"
         />
       </form>
 
