@@ -28,10 +28,10 @@ const toggleDrawer = () => {
         <!-- Mobile Drawer -->
     <pv-drawer v-model:visible="drawer" class="mobile-drawer">
       <div class="drawer-content p-3">
-        <router-link 
-          v-for="item in menuItems" 
+        <router-link
+          v-for="item in menuItems"
           :key="'drawer-' + item.key"
-          :to="item.to" 
+          :to="item.to"
           class="drawer-nav-link"
           :class="{ 'drawer-nav-link-active': $route.name === item.key }"
           @click="drawer = false"
@@ -40,29 +40,29 @@ const toggleDrawer = () => {
         </router-link>
       </div>
     </pv-drawer>
-    
+
     <!-- Header -->
     <pv-toolbar class="header-toolbar">
       <template #start>
         <!-- Mobile Menu Button (solo visible en mobile) -->
-        <pv-button 
-          class="mobile-menu-btn p-button-text" 
-          icon="pi pi-bars" 
+        <pv-button
+          class="mobile-menu-btn p-button-text"
+          icon="pi pi-bars"
           @click="toggleDrawer"
         />
-        
+
         <router-link to="/home" class="logo-link">
           <h3 class="logo-text">CollabUs</h3>
         </router-link>
       </template>
-      
+
       <template #center>
         <!-- Desktop Navigation -->
         <div class="nav-container desktop-nav">
-          <router-link 
-            v-for="item in menuItems" 
+          <router-link
+            v-for="item in menuItems"
             :key="item.key"
-            :to="item.to" 
+            :to="item.to"
             class="nav-link"
             :class="{ 'nav-link-active': $route.name === item.key }"
           >
@@ -70,12 +70,12 @@ const toggleDrawer = () => {
           </router-link>
         </div>
       </template>
-      
+
       <template #end>
-        <pv-avatar 
-          icon="pi pi-user" 
+        <pv-avatar
+          icon="pi pi-user"
           class="user-avatar"
-          shape="circle" 
+          shape="circle"
         />
       </template>
     </pv-toolbar>
@@ -208,21 +208,21 @@ const toggleDrawer = () => {
   .header-toolbar {
     padding: 0.5rem 1rem;
   }
-  
+
   .logo-text {
     font-size: 1.2rem;
   }
-  
+
   .user-avatar {
     width: 32px;
     height: 32px;
   }
-  
+
   /* Hide desktop navigation */
   .desktop-nav {
     display: none;
   }
-  
+
   /* Show mobile menu button */
   .mobile-menu-btn {
     display: inline-flex;

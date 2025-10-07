@@ -1,17 +1,20 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../shared/presentation/views/home.vue";
-
+import Login from "../iam/presentation/views/login.component.vue";
+import RecoveryPassword from "../iam/presentation/views/recovery-password.component.vue"
+import Register from "../iam/presentation/views/register.component.vue";
+import Onboarding from "../iam/presentation/views/onboarding.component.vue";
 const pageNotFound = () =>
   import("../shared/presentation/views/page-not-found.vue");
 const routes = [
-  { path: "/home", name: "home", component: Home, meta: { title: "Home" } },
-  { path: "/", redirect: "/home" },
-  {
-    path: "/:pathMatch(.*)*",
-    name: "not-found",
-    component: pageNotFound,
-    meta: { title: "Page Not Found" },
-  },
+    { path: "/", name: "login", component: Login, meta: { title: "Login" }},
+    {path: "/register", name: "register", component: Register, meta: { title: "Register" }},
+    { path: "/login",  redirect: "/", meta: { title: "Login" }},
+    {path: "/create-account", name: "create-account", component: Onboarding, meta: { title: "Create Account" }},
+    { path: "/home", name: "home", component: Home, meta: { title: "Home" } },
+    {path: "/recovery-password", name: "recovery-password", component: RecoveryPassword, meta: { title: "Recovery Password" }},
+    { path: "/:pathMatch(.*)*", name: "not-found", component: pageNotFound, meta: { title: "Page Not Found" },},
+
 ];
 
 const router = createRouter({
