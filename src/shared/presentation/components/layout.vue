@@ -5,7 +5,6 @@ import { useRoute } from "vue-router";
 import FooterContent from "./footer-content.vue";
 
 import PlanActual from "../../../subscription/presentation/components/PlanActual.vue";
-import PlanesModal from "../../../subscription/presentation/components/PlanesModal.vue";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -83,17 +82,17 @@ const toggleDrawer = () => (drawer.value = !drawer.value);
     <!-- Contenido principal -->
     <main class="main-content" role="main">
       <div class="content-grid">
-        <!-- SIDEBAR izquierda -->
-        <aside class="sidebar">
-          <div class="card" v-if="route.name === 'home'">
-            <PlanActual />
-          </div>
-        </aside>
-
         <!-- CONTENIDO principal -->
         <section class="content-container">
           <router-view />
         </section>
+      </div>
+
+      <!-- PlanActual posicionado en esquina inferior izquierda -->
+      <div class="floating-plan" v-if="route.name === 'home'">
+        <div class="card">
+          <PlanActual />
+        </div>
       </div>
     </main>
 
@@ -109,6 +108,7 @@ const toggleDrawer = () => (drawer.value = !drawer.value);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 /* Header */
@@ -164,38 +164,46 @@ const toggleDrawer = () => (drawer.value = !drawer.value);
   color: white;
 }
 
-/* Grid principal con sidebar */
+/* Grid principal */
 .main-content {
   flex: 1;
   padding: 1rem;
+  position: relative;
 }
 .content-grid {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 1fr;
   gap: 1rem;
   align-items: start;
-}
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  position: sticky;
-  top: 1rem;
-}
-.card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
 .content-container {
   min-height: 60vh;
 }
 
+/* PlanActual flotante en esquina inferior izquierda */
+.floating-plan {
+  position: fixed;
+  bottom: 100px; /* Espacio suficiente para evitar choque con footer */
+  left: 20px;
+  width: 300px;
+  z-index: 10;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
 /* Footer */
 .app-footer {
   margin-top: auto;
+  position: relative;
+  z-index: 5;
 }
 
 /* Drawer móvil */
@@ -230,17 +238,24 @@ const toggleDrawer = () => (drawer.value = !drawer.value);
   margin-top: 0.5rem;
 }
 
+/* Animación para el PlanActual flotante */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
-  .content-grid {
-    grid-template-columns: 1fr;
-  }
-  .sidebar {
-    order: 2;
-    position: static;
-  }
-  .content-container {
-    order: 1;
+  .floating-plan {
+    width: 280px;
+    left: 15px;
+    bottom: 90px;
   }
 }
 
@@ -260,6 +275,23 @@ const toggleDrawer = () => (drawer.value = !drawer.value);
   }
   .mobile-menu-btn {
     display: inline-flex;
+  }
+
+  /* En móviles, el PlanActual se coloca centrado en la parte inferior */
+  .floating-plan {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 320px;
+  }
+}
+
+@media (max-width: 480px) {
+  .floating-plan {
+    width: calc(100% - 30px);
+    bottom: 70px;
   }
 }
 </style>
