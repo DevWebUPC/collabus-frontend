@@ -2,9 +2,15 @@
   <section class="pa-card">
     <h3 class="pa-title">Plan Actual</h3>
 
-    <button class="pa-circle" @click="showPlans = true" aria-label="Ver y cambiar plan">
-      <span class="pa-circle__title">Plan</span>
-      <span class="pa-circle__name">{{ currentPlan }}</span>
+    <button
+        class="pa-circle"
+        @click="showPlans = true"
+        aria-label="Ver y cambiar plan"
+        @mouseenter="isHovered = true"
+        @mouseleave="isHovered = false"
+    >
+      <span class="pa-circle__title">{{ isHovered ? 'Cambiar' : 'Plan' }}</span>
+      <span class="pa-circle__name">{{ isHovered ? 'de Plan' : currentPlan }}</span>
     </button>
 
     <p class="pa-hint">Haz clic para ver los planes</p>
@@ -25,6 +31,7 @@ import PlanesModal from "./PlanesModal.vue";
 // Estado reactivo para el plan actual
 const currentPlan = ref('Gratuito');
 const showPlans = ref(false);
+const isHovered = ref(false);
 
 // Computed para verificar si es premium
 const isPremium = computed(() => currentPlan.value === 'Premium');
@@ -75,11 +82,12 @@ function onSelectPlan(newPlan) {
   justify-content:center;
   background:radial-gradient(110% 110% at 60% 30%,#7c84ff 0%,#5b61f6 45%,#4a2ff1 100%);
   box-shadow:0 16px 40px rgba(91,97,246,.35), inset 0 2px 8px rgba(255,255,255,.25);
-  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease
+  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease, background .18s ease;
 }
 .pa-circle:hover{
   transform:translateY(-2px) scale(1.02);
-  filter:saturate(1.08)
+  filter:saturate(1.08);
+  background:radial-gradient(110% 110% at 60% 30%,#333 0%,#222 45%,#000 100%);
 }
 .pa-circle__title{
   font-size:18px;
