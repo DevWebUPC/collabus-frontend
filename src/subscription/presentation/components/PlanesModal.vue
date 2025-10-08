@@ -7,68 +7,70 @@
           <button class="pm-close" @click="$emit('close')" aria-label="Cerrar">✕</button>
         </header>
 
-        <div class="pm-grid">
-          <!-- GRATUITO -->
-          <article class="card">
-            <div class="card-head">
-              <h3>Plan Gratuito</h3>
-              <p class="price indigo">$0 <span>/ siempre gratis</span></p>
-            </div>
+        <div class="pm-content">
+          <div class="pm-grid">
+            <!-- GRATUITO -->
+            <article class="card">
+              <div class="card-head">
+                <h3>Plan Gratuito</h3>
+                <p class="price indigo">$0 <span>/ siempre gratis</span></p>
+              </div>
 
-            <hr class="sep" />
+              <hr class="sep" />
 
-            <div class="section">
-              <p class="section-title indigo">👤 Para Emprendedores</p>
-              <ul class="list indigo">
-                <li>✓ Hasta <b>5 proyectos activos</b></li>
-                <li>✓ Mínimo <b>2 Reward</b></li>
-                <li>✓ Invitar hasta <b>3 colaboradores</b></li>
-                <li>✓ Hasta <b>3 tareas</b> y <b>2 hitos</b></li>
-              </ul>
-            </div>
+              <div class="section">
+                <p class="section-title indigo">👤 Para Emprendedores</p>
+                <ul class="list indigo">
+                  <li>✓ Hasta <b>5 proyectos activos</b></li>
+                  <li>✓ Mínimo <b>2 Reward</b></li>
+                  <li>✓ Invitar hasta <b>3 colaboradores</b></li>
+                  <li>✓ Hasta <b>3 tareas</b> y <b>2 hitos</b></li>
+                </ul>
+              </div>
 
-            <div class="section">
-              <p class="section-title indigo">🤝 Para Colaboradores</p>
-              <ul class="list indigo">
-                <li>✓ Solo participar hasta <b>2 proyectos</b></li>
-                <li>✓ Completar hasta <b>2 tareas</b></li>
-                <li>✓ Completar solo <b>2 tareas</b> de <b>2 hitos</b></li>
-              </ul>
-            </div>
+              <div class="section">
+                <p class="section-title indigo">🤝 Para Colaboradores</p>
+                <ul class="list indigo">
+                  <li>✓ Solo participar hasta <b>2 proyectos</b></li>
+                  <li>✓ Completar hasta <b>2 tareas</b></li>
+                  <li>✓ Completar solo <b>2 tareas</b> de <b>2 hitos</b></li>
+                </ul>
+              </div>
 
-            <button class="cta indigo" @click="select('Gratuito')">Seleccionar plan</button>
-          </article>
+              <button class="cta indigo" @click="select('Gratuito')">Seleccionar plan</button>
+            </article>
 
-          <!-- PREMIUM -->
-          <article class="card">
-            <div class="card-head">
-              <h3>Plan Premium</h3>
-              <p class="price orange">$5 <span>/ mensual</span></p>
-            </div>
+            <!-- PREMIUM -->
+            <article class="card">
+              <div class="card-head">
+                <h3>Plan Premium</h3>
+                <p class="price orange">$5 <span>/ mensual</span></p>
+              </div>
 
-            <hr class="sep" />
+              <hr class="sep" />
 
-            <div class="section">
-              <p class="section-title orange">👤 Para Emprendedores</p>
-              <ul class="list orange">
-                <li>✓ <b>Proyectos ilimitados</b></li>
-                <li>✓ <b>Reward</b> ilimitado</li>
-                <li>✓ Mentorías y <b>soporte prioritario</b></li>
-                <li>✓ <b>Tareas</b> e <b>hitos</b> ilimitados</li>
-              </ul>
-            </div>
+              <div class="section">
+                <p class="section-title orange">👤 Para Emprendedores</p>
+                <ul class="list orange">
+                  <li>✓ <b>Proyectos ilimitados</b></li>
+                  <li>✓ <b>Reward</b> ilimitado</li>
+                  <li>✓ Mentorías y <b>soporte prioritario</b></li>
+                  <li>✓ <b>Tareas</b> e <b>hitos</b> ilimitados</li>
+                </ul>
+              </div>
 
-            <div class="section">
-              <p class="section-title orange">🤝 Para Colaboradores</p>
-              <ul class="list orange">
-                <li>✓ <b>Participación ilimitada</b> de proyectos</li>
-                <li>✓ Completar <b>tareas ilimitadas</b></li>
-                <li>✓ Completar diferentes tareas de <b>hitos ilimitados</b></li>
-              </ul>
-            </div>
+              <div class="section">
+                <p class="section-title orange">🤝 Para Colaboradores</p>
+                <ul class="list orange">
+                  <li>✓ <b>Participación ilimitada</b> de proyectos</li>
+                  <li>✓ Completar <b>tareas ilimitadas</b></li>
+                  <li>✓ Completar diferentes tareas de <b>hitos ilimitados</b></li>
+                </ul>
+              </div>
 
-            <button class="cta orange" @click="select('Premium')">Suscribirse ahora</button>
-          </article>
+              <button class="cta orange" @click="select('Premium')">Suscribirse ahora</button>
+            </article>
+          </div>
         </div>
 
         <footer class="pm-foot">© CollabUs · 2025</footer>
@@ -86,8 +88,8 @@ function select(name){ emit('select', name) }
 /* Backdrop + Sheet */
 .pm-backdrop{position:fixed;inset:0;background:rgba(16,18,30,.55);backdrop-filter:blur(6px);
   display:grid;place-items:center;padding:16px;z-index:1000}
-.pm-sheet{width:min(1100px,100%);background:#fff;border-radius:22px;overflow:hidden;
-  box-shadow:0 30px 80px rgba(0,0,0,.25);animation:pop .18s ease}
+.pm-sheet{width:min(1100px,100%);max-height:90vh;background:#fff;border-radius:22px;overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.25);animation:pop .18s ease;display:flex;flex-direction:column}
 @keyframes pop{from{transform:translateY(10px) scale(.98);opacity:.6}to{transform:none;opacity:1}}
 
 .pm-header{display:flex;align-items:center;justify-content:center;position:relative;
@@ -97,8 +99,11 @@ function select(name){ emit('select', name) }
   background:#f4f4fe;cursor:pointer;font-size:18px}
 .pm-close:hover{background:#ececff}
 
+/* Contenedor con scroll */
+.pm-content{overflow-y:auto;padding:22px;flex:1}
+
 /* Grid de tarjetas */
-.pm-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;padding:22px}
+.pm-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
 .card{background:#fff;border:1px solid #e6e7f2;border-radius:22px;padding:0 0 18px;
   box-shadow:0 14px 28px rgba(0,0,0,.06);overflow:hidden}
 .card-head{padding:18px 22px 10px;text-align:center}
@@ -127,5 +132,27 @@ function select(name){ emit('select', name) }
 
 .pm-foot{padding:14px 22px;text-align:center;font-size:12px;color:#8a8a96;border-top:1px solid #f0f0f5}
 
-@media (max-width: 900px){ .pm-grid{grid-template-columns:1fr} }
+/* Mejoras responsive */
+@media (max-width: 900px){
+  .pm-grid{grid-template-columns:1fr}
+  .pm-header{padding:18px 24px}
+  .pm-header h2{font-size:24px}
+  .pm-content{padding:16px}
+}
+
+@media (max-width: 600px){
+  .pm-backdrop{padding:8px}
+  .pm-sheet{max-height:95vh;border-radius:16px}
+  .pm-header{padding:14px 20px}
+  .pm-header h2{font-size:20px}
+  .pm-close{width:36px;height:36px;right:14px;top:14px}
+  .pm-content{padding:12px}
+  .card-head{padding:14px 16px 8px}
+  .card-head h3{font-size:16px}
+  .price{font-size:24px}
+  .section{padding:12px 16px 4px}
+  .list{padding-left:14px}
+  .list li{font-size:14px}
+  .cta{padding:10px 14px;margin:8px 14px 12px;width:calc(100% - 28px)}
+}
 </style>
