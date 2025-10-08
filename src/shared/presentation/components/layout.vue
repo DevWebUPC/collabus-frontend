@@ -1,10 +1,11 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import FooterContent from "./footer-content.vue";
 
 import PlanActual from "../../../subscription/presentation/components/PlanActual.vue";
+import PlanesModal from "../../../subscription/presentation/components/PlanesModal.vue";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -17,7 +18,44 @@ const menuItems = [
 ];
 
 const drawer = ref(false);
+const showPlansModal = ref(false); // Nuevo estado para controlar el modal
 const toggleDrawer = () => (drawer.value = !drawer.value);
+
+// Computed para mostrar PlanActual solo en desktop
+const showFloatingPlan = computed(() => {
+  return route.name === 'home' && window.innerWidth > 768;
+});
+
+// Función para cerrar drawer y abrir modal de planes
+const handlePlanModalOpen = () => {
+  drawer.value = false;
+  // Usar nextTick para asegurar que el drawer se cierre antes de abrir el modal
+  nextTick(() => {
+    showPlansModal.value = true;
+  });
+};
+
+// Función para cerrar el modal de planes
+const handlePlanModalClose = () => {
+  showPlansModal.value = false;
+};
+
+// Función para manejar selección de plan
+const handlePlanSelect = (newPlan) => {
+  // Aquí puedes manejar la lógica de cambio de plan si es necesario
+  console.log('Plan seleccionado:', newPlan);
+  showPlansModal.value = false;
+};
+
+// Función para manejar clic en enlaces del drawer
+const handleDrawerLinkClick = () => {
+  drawer.value = false;
+};
+
+// Cerrar drawer cuando se hace clic fuera (backdrop)
+const handleDrawerHide = () => {
+  drawer.value = false;
+};
 </script>
 
 <template>
@@ -27,7 +65,11 @@ const toggleDrawer = () => (drawer.value = !drawer.value);
     <pv-confirm-dialog />
 
     <!-- Drawer móvil -->
-    <pv-drawer v-model:visible="drawer" class="mobile-drawer">
+    <pv-drawer
+        v-model:visible="drawer"
+        class="mobile-drawer"
+        @hide="handleDrawerHide"
+    >
       <div class="drawer-content p-3">
         <router-link
             v-for="item in menuItems"
@@ -35,14 +77,15 @@ const toggleDrawer = () => (drawer.value = !drawer.value);
             :to="item.to"
             class="drawer-nav-link"
             :class="{ 'drawer-nav-link-active': $route.name === item.key }"
-            @click="drawer = false"
+            @click="handleDrawerLinkClick"
         >
           {{ t(item.label) }}
         </router-link>
 
-        <!-- Plan Actual (solo visible en Home) -->
-        <div class="drawer-plan card" v-if="route.name === 'home'">
-          <PlanActual />
+        <!-- PlanActual en drawer móvil - disponible en todas las páginas -->
+        <div class="drawer-plan">
+          <!-- Solo emitir el evento, el modal se maneja en el layout -->
+          <PlanActual @plan-modal-open="handlePlanModalOpen" />
         </div>
       </div>
     </pv-drawer>
@@ -88,10 +131,11 @@ const toggleDrawer = () => (drawer.value = !drawer.value);
         </section>
       </div>
 
-      <!-- PlanActual posicionado en esquina inferior izquierda -->
-      <div class="floating-plan" v-if="route.name === 'home'">
+      <!-- PlanActual posicionado en esquina inferior izquierda (solo desktop y solo en home) -->
+      <div class="floating-plan" v-if="showFloatingPlan">
         <div class="card">
-          <PlanActual />
+          <!-- Solo emitir el evento, el modal se maneja en el layout -->
+          <PlanActual @plan-modal-open="handlePlanModalOpen" />
         </div>
       </div>
     </main>
@@ -100,6 +144,13 @@ const toggleDrawer = () => (drawer.value = !drawer.value);
     <footer class="app-footer">
       <footer-content />
     </footer>
+
+    <!-- Modal de planes GLOBAL - fuera del drawer -->
+    <PlanesModal
+        v-if="showPlansModal"
+        @close="handlePlanModalClose"
+        @select="handlePlanSelect"
+    />
   </div>
 </template>
 
@@ -235,7 +286,9 @@ const toggleDrawer = () => (drawer.value = !drawer.value);
   background: rgba(108, 99, 255, 0.1);
 }
 .drawer-plan {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid #e5e7eb;
 }
 
 /* Animación para el PlanActual flotante */
@@ -277,21 +330,16 @@ const toggleDrawer = () => (drawer.value = !drawer.value);
     display: inline-flex;
   }
 
-  /* En móviles, el PlanActual se coloca centrado en la parte inferior */
+  /* Ocultar PlanActual flotante en móviles */
   .floating-plan {
-    position: fixed;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 40px);
-    max-width: 320px;
+    display: none;
   }
 }
 
 @media (max-width: 480px) {
-  .floating-plan {
-    width: calc(100% - 30px);
-    bottom: 70px;
+  .drawer-plan {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0;
   }
 }
 </style>
