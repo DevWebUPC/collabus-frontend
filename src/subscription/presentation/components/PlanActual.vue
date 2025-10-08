@@ -4,7 +4,7 @@
 
     <button
         class="pa-circle"
-        @click="showPlans = true"
+        @click="openPlansModal"
         aria-label="Ver y cambiar plan"
         @mouseenter="isHovered = true"
         @mouseleave="isHovered = false"
@@ -14,23 +14,17 @@
     </button>
 
     <p class="pa-hint">Haz clic para ver los planes</p>
-
-    <!-- Modal de planes -->
-    <PlanesModal
-        v-if="showPlans"
-        @close="showPlans = false"
-        @select="onSelectPlan"
-    />
   </section>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import PlanesModal from "./PlanesModal.vue";
+
+// Emit para comunicarse con el componente padre
+const emit = defineEmits(['plan-modal-open']);
 
 // Estado reactivo para el plan actual
 const currentPlan = ref('Gratuito');
-const showPlans = ref(false);
 const isHovered = ref(false);
 
 // Computed para verificar si es premium
@@ -44,11 +38,10 @@ onMounted(() => {
   }
 });
 
-// Función para cambiar de plan
-function onSelectPlan(newPlan) {
-  currentPlan.value = newPlan;
-  localStorage.setItem('plan', newPlan);
-  showPlans.value = false;
+// Función para abrir el modal de planes
+function openPlansModal() {
+  // Emitir evento para que el layout maneje la apertura del modal
+  emit('plan-modal-open');
 }
 </script>
 
