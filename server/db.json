@@ -1,2 +1,904 @@
 {
+  "projects": [
+    {
+      "id": "1",
+      "title": "E-Commerce Platform",
+      "description": "A modern e-commerce platform with advanced features for online retail businesses. Includes payment integration, inventory management, and analytics dashboard.",
+      "summary": "Plataforma de comercio electrónico moderna con funcionalidades avanzadas para empresas de venta online.",
+      "category": "Desarrollo Web, E-commerce",
+      "areas": [
+        "Desarrollo Web",
+        "E-commerce",
+        "Marketing Digital"
+      ],
+      "tags": [
+        "React",
+        "Node.js",
+        "PostgreSQL",
+        "Stripe",
+        "AWS"
+      ],
+      "academicLevel": "Profesional senior",
+      "skills": [
+        "JavaScript",
+        "React",
+        "Node.js",
+        "Database Design",
+        "Payment Integration"
+      ],
+      "durationQuantity": 5,
+      "durationType": "meses",
+      "benefits": "Los participantes aprenderán desarrollo full-stack moderno, integración de pagos, arquitectura escalable y buenas prácticas de desarrollo. Ideal para construir un portafolio sólido y ganar experiencia práctica en proyectos reales de e-commerce.",
+      "roles": [
+        {
+          "id": "role_1",
+          "name": "Frontend Developer",
+          "cards": [
+            {
+              "id": "card_1_1",
+              "title": "Responsabilidades Técnicas",
+              "items": [
+                "Desarrollar interfaces de usuario responsivas con React",
+                "Implementar state management con Redux",
+                "Integrar APIs REST con el backend",
+                "Optimizar rendimiento y experiencia de usuario"
+              ]
+            },
+            {
+              "id": "card_1_2",
+              "title": "Habilidades Requeridas",
+              "items": [
+                "Experiencia sólida en React y JavaScript ES6+",
+                "Conocimiento de CSS3 y preprocesadores",
+                "Familiaridad con herramientas de build (Webpack, Vite)",
+                "Experiencia en testing con Jest/React Testing Library"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "role_2",
+          "name": "Backend Developer",
+          "cards": [
+            {
+              "id": "card_2_1",
+              "title": "Responsabilidades del Servidor",
+              "items": [
+                "Desarrollar APIs REST con Node.js y Express",
+                "Diseñar e implementar base de datos PostgreSQL",
+                "Integrar sistemas de pago (Stripe, PayPal)",
+                "Implementar autenticación y autorización JWT"
+              ]
+            },
+            {
+              "id": "card_2_2",
+              "title": "Requisitos Técnicos",
+              "items": [
+                "Experiencia en Node.js y frameworks backend",
+                "Conocimiento sólido de bases de datos relacionales",
+                "Experiencia con APIs de terceros",
+                "Conocimiento de seguridad web y mejores prácticas"
+              ]
+            }
+          ]
+        }
+      ],
+      "status": "active",
+      "progress": 65,
+      "startDate": "2025-10-15T00:00:00.000Z",
+      "endDate": "2026-06-15T00:00:00.000Z",
+      "budget": 15000,
+      "userId": "2",
+      "collaborators": [
+        "1",
+        "3",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "tasks": [
+        "1",
+        "2",
+        "3"
+      ],
+      "milestones": [
+        "1",
+        "2"
+      ],
+      "createdAt": "2025-10-10T00:00:00.000Z",
+      "updatedAt": "2025-10-20T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "title": "Mobile Banking App",
+      "description": "Secure mobile banking application with biometric authentication, transaction history, and real-time notifications.",
+      "summary": "Aplicación móvil de banca segura con autenticación biométrica y notificaciones en tiempo real.",
+      "category": "mobile-dev",
+      "areas": [
+        "Desarrollo Móvil",
+        "Fintech",
+        "Seguridad"
+      ],
+      "tags": [
+        "React Native",
+        "iOS",
+        "Android",
+        "Biometric",
+        "Security"
+      ],
+      "academicLevel": "Profesional avanzado",
+      "skills": [
+        "React Native",
+        "Mobile Development",
+        "Security",
+        "API Integration",
+        "Biometric Authentication"
+      ],
+      "durationQuantity": 6,
+      "durationType": "meses",
+      "benefits": "Los participantes desarrollarán habilidades especializadas en seguridad móvil, autenticación biométrica, y arquitecturas fintech. Experiencia práctica en el desarrollo de aplicaciones bancarias con estándares de seguridad de nivel enterprise.",
+      "roles": [
+        {
+          "id": "role_mobile_1",
+          "name": "Mobile Developer",
+          "cards": [
+            {
+              "id": "card_mobile_1_1",
+              "title": "Desarrollo Nativo",
+              "items": [
+                "Desarrollar interfaces nativas con React Native",
+                "Implementar autenticación biométrica",
+                "Integrar APIs bancarias seguras",
+                "Optimizar rendimiento en dispositivos móviles"
+              ]
+            },
+            {
+              "id": "card_mobile_1_2",
+              "title": "Seguridad Móvil",
+              "items": [
+                "Implementar encriptación end-to-end",
+                "Gestionar certificados y tokens seguros",
+                "Desarrollar sistemas anti-fraude",
+                "Cumplir estándares PCI DSS"
+              ]
+            }
+          ]
+        }
+      ],
+      "status": "active",
+      "progress": 40,
+      "startDate": "2026-02-01T00:00:00.000Z",
+      "endDate": "2026-08-01T00:00:00.000Z",
+      "budget": 25000,
+      "userId": "1",
+      "collaborators": [
+        "2",
+        "4"
+      ],
+      "tasks": [
+        "4",
+        "5",
+        "7"
+      ],
+      "milestones": [
+        "3"
+      ],
+      "createdAt": "2025-10-25T00:00:00.000Z",
+      "updatedAt": "2026-02-05T00:00:00.000Z"
+    },
+    {
+      "id": "4CwLvZV",
+      "title": "test",
+      "description": "this is a test for test",
+      "category": "Desarrollo Web",
+      "areas": [
+        "Desarrollo Web"
+      ],
+      "tags": [
+        "test"
+      ],
+      "summary": "this is a test for test",
+      "academicLevel": "Estudiante de pregrado",
+      "skills": [
+        "this is a test for test"
+      ],
+      "durationQuantity": 1,
+      "durationType": "dias",
+      "benefits": "this is a test for test",
+      "roles": [
+        {
+          "id": "role_1760049197065_yx7giq6yt",
+          "name": "this is a test for test",
+          "cards": [
+            {
+              "id": "card_1760049197065_7c45qc9gr",
+              "title": "this is a test for test",
+              "items": [
+                "this is a test for test"
+              ],
+              "roleId": null,
+              "createdAt": "2025-10-09T22:33:17.065Z",
+              "updatedAt": "2025-10-09T22:33:36.433Z"
+            }
+          ],
+          "projectId": null,
+          "createdAt": "2025-10-09T22:33:17.065Z",
+          "updatedAt": "2025-10-09T22:33:36.433Z"
+        }
+      ],
+      "status": "active",
+      "progress": 0,
+      "startDate": "2025-10-09T22:33:38.044Z",
+      "endDate": "2025-11-08T22:33:38.044Z",
+      "budget": 0,
+      "userId": "1",
+      "collaborators": [],
+      "tasks": [],
+      "milestones": [],
+      "createdAt": "2025-10-09T22:33:38.044Z",
+      "updatedAt": "2025-10-09T22:33:38.044Z"
+    },
+    {
+      "id": "ZYA7RPy",
+      "title": "dfdsfsdf",
+      "description": "sdfsdfsdfsdfsdfsdf",
+      "category": "Desarrollo Web",
+      "areas": [
+        "Desarrollo Web"
+      ],
+      "tags": [
+        "sdfdsfs"
+      ],
+      "summary": "sdfsdfsdfsdfsdfsdf",
+      "academicLevel": "Estudiante de pregrado",
+      "skills": [
+        "dfsdfds"
+      ],
+      "durationQuantity": 5,
+      "durationType": "dias",
+      "benefits": "sdfsdfsdfsfsdfsdfsdf",
+      "roles": [
+        {
+          "id": "role_1760049562625_vhqhv0qc5",
+          "name": "asdsad",
+          "cards": [
+            {
+              "id": "card_1760049562625_4l4ti325j",
+              "title": "adsasdas",
+              "items": [
+                "asdasds"
+              ],
+              "roleId": null,
+              "createdAt": "2025-10-09T22:39:22.625Z",
+              "updatedAt": "2025-10-09T22:42:23.320Z"
+            },
+            {
+              "id": "card_1760049744803_1spp6n22u",
+              "title": "asadasdsa",
+              "items": [
+                "asdasd",
+                "asdasdasdasd"
+              ],
+              "roleId": null,
+              "createdAt": "2025-10-09T22:42:24.803Z",
+              "updatedAt": "2025-10-09T22:42:27.647Z"
+            }
+          ],
+          "projectId": null,
+          "createdAt": "2025-10-09T22:39:22.625Z",
+          "updatedAt": "2025-10-09T22:42:27.647Z"
+        }
+      ],
+      "status": "active",
+      "progress": 0,
+      "startDate": "2025-10-09T22:42:29.034Z",
+      "endDate": "2026-03-08T22:42:29.034Z",
+      "budget": 0,
+      "userId": "1",
+      "collaborators": [],
+      "tasks": [],
+      "milestones": [],
+      "createdAt": "2025-10-09T22:42:29.034Z",
+      "updatedAt": "2025-10-09T22:42:29.034Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Design Homepage Layout",
+      "description": "Create responsive homepage design with modern UI components and user-friendly navigation.",
+      "priority": "high",
+      "status": "completed",
+      "assignedTo": "3",
+      "projectId": "1",
+      "dueDate": "2026-02-15T00:00:00.000Z",
+      "estimatedHours": 16,
+      "actualHours": 14,
+      "tags": [
+        "design",
+        "frontend"
+      ],
+      "createdAt": "2025-10-15T00:00:00.000Z",
+      "updatedAt": "2026-02-10T00:00:00.000Z",
+      "completedAt": "2026-02-10T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "title": "Implement User Authentication",
+      "description": "Set up secure user authentication system with JWT tokens and password encryption.",
+      "priority": "high",
+      "status": "in-progress",
+      "assignedTo": "1",
+      "projectId": "1",
+      "dueDate": "2026-03-01T00:00:00.000Z",
+      "estimatedHours": 24,
+      "actualHours": 18,
+      "tags": [
+        "backend",
+        "security"
+      ],
+      "createdAt": "2025-10-20T00:00:00.000Z",
+      "updatedAt": "2026-02-15T00:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "3",
+      "title": "Payment Gateway Integration",
+      "description": "Integrate Stripe payment processing for secure online transactions.",
+      "priority": "medium",
+      "status": "pending",
+      "assignedTo": "1",
+      "projectId": "1",
+      "dueDate": "2026-04-01T00:00:00.000Z",
+      "estimatedHours": 20,
+      "actualHours": 0,
+      "tags": [
+        "backend",
+        "payments"
+      ],
+      "createdAt": "2026-02-01T00:00:00.000Z",
+      "updatedAt": "2026-02-01T00:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "4",
+      "title": "Mobile App UI Design",
+      "description": "Design intuitive user interface for mobile banking application following iOS and Android guidelines.",
+      "priority": "high",
+      "status": "in-progress",
+      "assignedTo": "4",
+      "projectId": "2",
+      "dueDate": "2026-03-15T00:00:00.000Z",
+      "estimatedHours": 32,
+      "actualHours": 20,
+      "tags": [
+        "mobile",
+        "design"
+      ],
+      "createdAt": "2026-02-05T00:00:00.000Z",
+      "updatedAt": "2026-02-20T00:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "5",
+      "title": "Biometric Authentication",
+      "description": "Implement fingerprint and face recognition for secure app access.",
+      "priority": "high",
+      "status": "pending",
+      "assignedTo": "4",
+      "projectId": "2",
+      "dueDate": "2026-05-01T00:00:00.000Z",
+      "estimatedHours": 28,
+      "actualHours": 0,
+      "tags": [
+        "mobile",
+        "security"
+      ],
+      "createdAt": "2026-02-10T00:00:00.000Z",
+      "updatedAt": "2026-02-10T00:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "6",
+      "title": "Data Collection Setup",
+      "description": "Set up data pipelines and establish connections to various data sources.",
+      "priority": "medium",
+      "status": "pending",
+      "assignedTo": "1",
+      "projectId": "3",
+      "dueDate": "2026-04-15T00:00:00.000Z",
+      "estimatedHours": 16,
+      "actualHours": 2,
+      "tags": [
+        "data",
+        "backend"
+      ],
+      "createdAt": "2026-02-25T00:00:00.000Z",
+      "updatedAt": "2026-03-01T00:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "7",
+      "title": "API Integration",
+      "description": "Set up API integrations and establish connections to various external services.",
+      "priority": "medium",
+      "status": "pending",
+      "assignedTo": "2",
+      "projectId": "2",
+      "dueDate": "2026-04-15T00:00:00.000Z",
+      "estimatedHours": 16,
+      "actualHours": 2,
+      "tags": [
+        "api",
+        "backend"
+      ],
+      "createdAt": "2026-02-25T00:00:00.000Z",
+      "updatedAt": "2026-03-01T00:00:00.000Z",
+      "completedAt": null
+    }
+  ],
+  "milestones": [
+    {
+      "id": "1",
+      "title": "MVP Release",
+      "description": "Launch minimum viable product with core e-commerce features.",
+      "dueDate": "2025-09-11T00:00:00.000Z",
+      "status": "in-progress",
+      "projectId": "1",
+      "progress": 70,
+      "deliverables": [
+        {
+          "id": "1",
+          "name": "User Registration",
+          "completed": true
+        },
+        {
+          "id": "2",
+          "name": "Product Catalog",
+          "completed": true
+        },
+        {
+          "id": "3",
+          "name": "Shopping Cart",
+          "completed": false
+        }
+      ],
+      "createdAt": "2025-10-15T00:00:00.000Z",
+      "updatedAt": "2026-02-20T00:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "2",
+      "title": "Payment System Launch",
+      "description": "Complete payment processing integration and testing.",
+      "dueDate": "2026-05-30T00:00:00.000Z",
+      "status": "pending",
+      "projectId": "1",
+      "progress": 25,
+      "deliverables": [
+        {
+          "id": "4",
+          "name": "Payment Gateway",
+          "completed": false
+        },
+        {
+          "id": "5",
+          "name": "Order Management",
+          "completed": false
+        }
+      ],
+      "createdAt": "2026-02-01T00:00:00.000Z",
+      "updatedAt": "2026-02-01T00:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "3",
+      "title": "Beta Version Release",
+      "description": "Release beta version of mobile banking app for testing.",
+      "dueDate": "2026-06-01T00:00:00.000Z",
+      "status": "completed",
+      "projectId": "2",
+      "progress": 30,
+      "deliverables": [
+        {
+          "id": "6",
+          "name": "Core Banking Features",
+          "completed": false
+        },
+        {
+          "id": "7",
+          "name": "Security Implementation",
+          "completed": false
+        }
+      ],
+      "createdAt": "2026-02-05T00:00:00.000Z",
+      "updatedAt": "2026-02-15T00:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "4",
+      "title": "Beta Version Release 2",
+      "description": "Release beta version of mobile banking app for testing.",
+      "dueDate": "2026-06-02T00:00:00.000Z",
+      "status": "pending",
+      "projectId": "2",
+      "progress": 50,
+      "deliverables": [
+        {
+          "id": "6",
+          "name": "Core Banking Features",
+          "completed": false
+        },
+        {
+          "id": "7",
+          "name": "Security Implementation",
+          "completed": false
+        }
+      ],
+      "createdAt": "2026-02-04T00:00:00.000Z",
+      "updatedAt": "2026-02-20T00:00:00.000Z",
+      "completedAt": null
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif_2_1",
+      "message": "Bob Wilson completó la integración de Face ID.",
+      "type": "task_completed",
+      "userId": "1",
+      "projectId": "2",
+      "createdAt": "2025-10-08T16:45:00.000Z"
+    },
+    {
+      "id": "notif_2_2",
+      "message": "Nueva actualización de requisitos de seguridad.",
+      "type": "requirement_update",
+      "userId": "1",
+      "projectId": "2",
+      "createdAt": "2025-10-07T11:30:00.000Z"
+    },
+    {
+      "id": "notif_2_3",
+      "message": "Revisión de código programada para mañana.",
+      "type": "review_scheduled",
+      "userId": "1",
+      "projectId": "2",
+      "createdAt": "2025-10-06T14:00:00.000Z"
+    },
+    {
+      "id": "notif_1_1",
+      "message": "Nueva tarea asignada: Implement User Authentication",
+      "type": "task_assigned",
+      "userId": "2",
+      "projectId": "1",
+      "createdAt": "2025-10-09T09:15:00.000Z"
+    },
+    {
+      "id": "notif_1_2",
+      "message": "John Doe completó el diseño de la homepage.",
+      "type": "task_completed",
+      "userId": "2",
+      "projectId": "1",
+      "createdAt": "2025-10-08T14:30:00.000Z"
+    },
+    {
+      "id": "notif_1_3",
+      "message": "Se acerca el deadline del MVP Release.",
+      "type": "milestone_reminder",
+      "userId": "2",
+      "projectId": "1",
+      "createdAt": "2025-10-07T10:00:00.000Z"
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Web Development",
+      "description": "Full-stack web application development",
+      "color": "#3b82f6",
+      "icon": "pi pi-globe",
+      "isActive": true,
+      "createdAt": "2025-10-01T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "name": "Mobile Development",
+      "description": "iOS and Android mobile application development",
+      "color": "#10b981",
+      "icon": "pi pi-mobile",
+      "isActive": true,
+      "createdAt": "2025-10-01T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "name": "Data Science",
+      "description": "Data analysis, machine learning, and business intelligence",
+      "color": "#f59e0b",
+      "icon": "pi pi-chart-bar",
+      "isActive": true,
+      "createdAt": "2025-10-01T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "name": "AI/ML",
+      "description": "Artificial intelligence and machine learning solutions",
+      "color": "#8b5cf6",
+      "icon": "pi pi-cog",
+      "isActive": true,
+      "createdAt": "2025-10-01T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "5",
+      "name": "Design",
+      "description": "UI/UX design and graphic design services",
+      "color": "#ef4444",
+      "icon": "pi pi-palette",
+      "isActive": true,
+      "createdAt": "2025-10-01T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "6",
+      "name": "Marketing",
+      "description": "Digital marketing and brand promotion",
+      "color": "#06b6d4",
+      "icon": "pi pi-megaphone",
+      "isActive": true,
+      "createdAt": "2025-10-01T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    }
+  ],
+  "collaborators": [
+    {
+      "id": "1",
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "role": "Frontend Developer",
+      "avatar": null,
+      "skills": [
+        "React",
+        "JavaScript",
+        "CSS",
+        "HTML",
+        "Git"
+      ],
+      "status": "active",
+      "joinedAt": "2025-09-15T00:00:00.000Z",
+      "bio": "Frontend developer with 5+ years experience in React and modern web technologies.",
+      "tasksAssigned": 10,
+      "tasksCompleted": 7,
+      "projectId": "1",
+      "createdAt": "2025-09-15T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "role": "Backend Developer",
+      "avatar": null,
+      "skills": [
+        "Node.js",
+        "Express",
+        "MongoDB",
+        "PostgreSQL",
+        "Docker"
+      ],
+      "status": "active",
+      "joinedAt": "2025-08-20T00:00:00.000Z",
+      "bio": "Full-stack developer specializing in backend architecture and database design.",
+      "tasksAssigned": 8,
+      "tasksCompleted": 4,
+      "projectId": "2",
+      "createdAt": "2025-08-20T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "name": "Alice Johnson",
+      "email": "alice.johnson@example.com",
+      "role": "UX Designer",
+      "avatar": null,
+      "skills": [
+        "UI/UX Design",
+        "Figma",
+        "Adobe XD",
+        "User Research",
+        "Prototyping"
+      ],
+      "status": "active",
+      "joinedAt": "2025-09-01T00:00:00.000Z",
+      "bio": "UI/UX designer focused on creating intuitive and accessible user experiences.",
+      "tasksAssigned": 6,
+      "tasksCompleted": 4,
+      "projectId": "1",
+      "createdAt": "2025-09-01T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "name": "Bob Wilson",
+      "email": "bob.wilson@example.com",
+      "role": "Mobile Developer",
+      "avatar": null,
+      "skills": [
+        "React Native",
+        "iOS",
+        "Android",
+        "Swift",
+        "Kotlin"
+      ],
+      "status": "active",
+      "joinedAt": "2025-09-10T00:00:00.000Z",
+      "bio": "Mobile developer with expertise in cross-platform and native app development.",
+      "tasksAssigned": 12,
+      "tasksCompleted": 11,
+      "projectId": "2",
+      "createdAt": "2025-09-10T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "5",
+      "name": "Ariana Lizeth",
+      "email": "ariana.lizeth@example.com",
+      "role": "UX Designer",
+      "avatar": null,
+      "skills": [
+        "UI/UX Design",
+        "Figma",
+        "Adobe XD",
+        "User Research"
+      ],
+      "status": "active",
+      "joinedAt": "2025-09-05T00:00:00.000Z",
+      "bio": "UX Designer focused on user experience and interface design.",
+      "tasksAssigned": 10,
+      "tasksCompleted": 7,
+      "projectId": "1",
+      "createdAt": "2025-09-05T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "6",
+      "name": "Dyaron Huapaya",
+      "email": "dyaron.huapaya@example.com",
+      "role": "Backend",
+      "avatar": null,
+      "skills": [
+        "Node.js",
+        "Python",
+        "Django",
+        "PostgreSQL"
+      ],
+      "status": "active",
+      "joinedAt": "2025-09-12T00:00:00.000Z",
+      "bio": "Backend developer specializing in APIs and database design.",
+      "tasksAssigned": 10,
+      "tasksCompleted": 5,
+      "projectId": "1",
+      "createdAt": "2025-09-12T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "7",
+      "name": "Gilbert Alonso",
+      "email": "gilbert.alonso@example.com",
+      "role": "Frontend",
+      "avatar": null,
+      "skills": [
+        "Vue.js",
+        "React",
+        "JavaScript",
+        "TypeScript"
+      ],
+      "status": "active",
+      "joinedAt": "2025-09-18T00:00:00.000Z",
+      "bio": "Frontend developer with expertise in modern JavaScript frameworks.",
+      "tasksAssigned": 10,
+      "tasksCompleted": 6,
+      "projectId": "1",
+      "createdAt": "2025-09-18T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "8",
+      "name": "Sebastián Pariachi",
+      "email": "sebastian.pariachi@example.com",
+      "role": "QA Tester",
+      "avatar": null,
+      "skills": [
+        "Testing",
+        "Selenium",
+        "Jest",
+        "Cypress"
+      ],
+      "status": "active",
+      "joinedAt": "2025-09-22T00:00:00.000Z",
+      "bio": "QA Tester ensuring high quality software delivery.",
+      "tasksAssigned": 10,
+      "tasksCompleted": 9,
+      "projectId": "1",
+      "createdAt": "2025-09-22T00:00:00.000Z",
+      "updatedAt": "2025-10-01T00:00:00.000Z"
+    }
+  ],
+  "projectCollaborations": [
+    {
+      "id": "pc_1_1",
+      "projectId": "1",
+      "collaboratorId": "1",
+      "role": "Frontend Developer",
+      "joinedAt": "2025-10-15T00:00:00.000Z",
+      "status": "active",
+      "contribution": 85,
+      "tasksAssigned": 3,
+      "tasksCompleted": 1,
+      "permissions": [
+        "view",
+        "edit",
+        "comment"
+      ],
+      "createdAt": "2025-10-15T00:00:00.000Z",
+      "updatedAt": "2025-10-20T00:00:00.000Z"
+    },
+    {
+      "id": "pc_1_3",
+      "projectId": "1",
+      "collaboratorId": "3",
+      "role": "UI/UX Designer",
+      "joinedAt": "2025-10-16T00:00:00.000Z",
+      "status": "active",
+      "contribution": 90,
+      "tasksAssigned": 2,
+      "tasksCompleted": 1,
+      "permissions": [
+        "view",
+        "edit",
+        "comment"
+      ],
+      "createdAt": "2025-10-16T00:00:00.000Z",
+      "updatedAt": "2025-10-20T00:00:00.000Z"
+    },
+    {
+      "id": "pc_2_2",
+      "projectId": "2",
+      "collaboratorId": "2",
+      "role": "Backend Developer",
+      "joinedAt": "2026-02-01T00:00:00.000Z",
+      "status": "active",
+      "contribution": 75,
+      "tasksAssigned": 2,
+      "tasksCompleted": 0,
+      "permissions": [
+        "view",
+        "edit",
+        "comment"
+      ],
+      "createdAt": "2026-02-01T00:00:00.000Z",
+      "updatedAt": "2026-02-05T00:00:00.000Z"
+    },
+    {
+      "id": "pc_2_4",
+      "projectId": "2",
+      "collaboratorId": "4",
+      "role": "Mobile Developer",
+      "joinedAt": "2026-02-02T00:00:00.000Z",
+      "status": "active",
+      "contribution": 80,
+      "tasksAssigned": 3,
+      "tasksCompleted": 1,
+      "permissions": [
+        "view",
+        "edit",
+        "comment"
+      ],
+      "createdAt": "2026-02-02T00:00:00.000Z",
+      "updatedAt": "2026-02-10T00:00:00.000Z"
+    }
+  ]
 }
