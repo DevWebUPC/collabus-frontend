@@ -18,13 +18,9 @@ const menuItems = [
 ];
 
 const drawer = ref(false);
-const showPlansModal = ref(false); // Nuevo estado para controlar el modal
-const toggleDrawer = () => (drawer.value = !drawer.value);
+const showPlansModal = ref(false); // Estado para controlar el modal
 
-// Computed para mostrar PlanActual solo en desktop
-const showFloatingPlan = computed(() => {
-  return route.name === 'home' && window.innerWidth > 768;
-});
+const toggleDrawer = () => (drawer.value = !drawer.value);
 
 // Función para cerrar drawer y abrir modal de planes
 const handlePlanModalOpen = () => {
@@ -42,7 +38,6 @@ const handlePlanModalClose = () => {
 
 // Función para manejar selección de plan
 const handlePlanSelect = (newPlan) => {
-  // Aquí puedes manejar la lógica de cambio de plan si es necesario
   console.log('Plan seleccionado:', newPlan);
   showPlansModal.value = false;
 };
@@ -84,7 +79,6 @@ const handleDrawerHide = () => {
 
         <!-- PlanActual en drawer móvil - disponible en todas las páginas -->
         <div class="drawer-plan">
-          <!-- Solo emitir el evento, el modal se maneja en el layout -->
           <PlanActual @plan-modal-open="handlePlanModalOpen" />
         </div>
       </div>
@@ -118,15 +112,7 @@ const handleDrawerHide = () => {
       </template>
 
       <template #end>
-        <router-link
-          to='/profile'
-          >
-          <pv-avatar
-            icon="pi pi-user"
-            class="user-avatar"
-            shape="circle"
-          />
-        </router-link>
+        <pv-avatar icon="pi pi-user" class="user-avatar" shape="circle" />
       </template>
     </pv-toolbar>
 
@@ -137,14 +123,6 @@ const handleDrawerHide = () => {
         <section class="content-container">
           <router-view />
         </section>
-      </div>
-
-      <!-- PlanActual posicionado en esquina inferior izquierda (solo desktop y solo en home) -->
-      <div class="floating-plan" v-if="showFloatingPlan">
-        <div class="card">
-          <!-- Solo emitir el evento, el modal se maneja en el layout -->
-          <PlanActual @plan-modal-open="handlePlanModalOpen" />
-        </div>
       </div>
     </main>
 
@@ -240,24 +218,6 @@ const handleDrawerHide = () => {
   min-height: 60vh;
 }
 
-/* PlanActual flotante en esquina inferior izquierda */
-.floating-plan {
-  position: fixed;
-  bottom: 100px; /* Espacio suficiente para evitar choque con footer */
-  left: 20px;
-  width: 300px;
-  z-index: 10;
-  animation: fadeInUp 0.5s ease-out;
-}
-
-.card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
 /* Footer */
 .app-footer {
   margin-top: auto;
@@ -299,27 +259,7 @@ const handleDrawerHide = () => {
   border-top: 1px solid #e5e7eb;
 }
 
-/* Animación para el PlanActual flotante */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* Responsive */
-@media (max-width: 1024px) {
-  .floating-plan {
-    width: 280px;
-    left: 15px;
-    bottom: 90px;
-  }
-}
-
 @media (max-width: 768px) {
   .header-toolbar {
     padding: 0.5rem 1rem;
@@ -336,11 +276,6 @@ const handleDrawerHide = () => {
   }
   .mobile-menu-btn {
     display: inline-flex;
-  }
-
-  /* Ocultar PlanActual flotante en móviles */
-  .floating-plan {
-    display: none;
   }
 }
 
