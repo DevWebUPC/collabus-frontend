@@ -72,11 +72,15 @@ const toggleDrawer = () => {
       </template>
 
       <template #end>
-        <pv-avatar
-          icon="pi pi-user"
-          class="user-avatar"
-          shape="circle"
-        />
+        <router-link
+          to='/profile'
+          >
+          <pv-avatar
+            icon="pi pi-user"
+            class="user-avatar"
+            shape="circle"
+          />
+        </router-link>
       </template>
     </pv-toolbar>
 
