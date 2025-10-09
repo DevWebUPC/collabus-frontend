@@ -2,9 +2,10 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import Button from 'primevue/button';
 import { useProjectsStore } from '../../application/projects.store.js';
 
+import { onMounted } from 'vue';
+	
 const { t } = useI18n();
 const router = useRouter();
 const projectsStore = useProjectsStore();
@@ -12,39 +13,15 @@ const projectsStore = useProjectsStore();
 // State
 const activeTab = ref('participating'); // Default to participating tab
 
-// Computed properties from store
-const { 
-  participatingProjects, 
-  ownedProjects, 
-  loading, 
-  error 
-} = projectsStore;
-
 // Computed
 const currentProjects = computed(() => {
-  return activeTab.value === 'participating' ? participatingProjects : ownedProjects;
+  return activeTab.value === 'participating' ? projectsStore.participatingProjects : projectsStore.ownedProjects;
 });
-
-// Helper to get current user ID
-const getCurrentUserId = () => {
-  return localStorage.getItem('userId') || '1';
-};
 
 // Methods
 const switchTab = async (tab) => {
   activeTab.value = tab;
   
-  // Load data when switching tabs
-  try {
-    if (tab === 'participating') {
-      await projectsStore.fetchParticipatingProjects();
-    } else if (tab === 'owned') {
-      const userId = getCurrentUserId();
-      await projectsStore.fetchProjectsByUserId(userId);
-    }
-  } catch (error) {
-    console.error('Error loading projects:', error);
-  }
 };
 
 const navigateToProject = (projectId) => {
@@ -63,6 +40,16 @@ const formatDate = (date) => {
     year: '2-digit'
   });
 };
+
+
+	// Load data on mount
+	onMounted(async () => {
+		try {
+			await projectsStore.fetchProjects();
+		} catch (error) {
+			console.error('Error loading projects:', error);
+		}
+	});
 </script>
 
 <template>
@@ -73,25 +60,25 @@ const formatDate = (date) => {
         :class="['tab-button', { active: activeTab === 'participating' }]"
         @click="switchTab('participating')"
       >
-        Participados
+        {{ $t('projects.participating') }}
       </button>
       <button 
         :class="['tab-button', { active: activeTab === 'owned' }]"
         @click="switchTab('owned')"
       >
-        Mis Proyectos
+        {{ $t('projects.my-projects') }}
       </button>
     </div>
 
     <!-- Projects List -->
     <div class="projects-list">
-      <div v-if="loading" class="loading-state">
+      <div v-if="projectsStore.loading" class="loading-state">
         <div class="loading-spinner"></div>
-        <span>Cargando proyectos...</span>
+        <span>{{ $t('projects.loading') }}</span>
       </div>
 
       <div v-else-if="currentProjects.length === 0" class="empty-state">
-        <p>{{ activeTab === 'participating' ? 'No tienes proyectos en participación' : 'No tienes proyectos creados' }}</p>
+        <p>{{ activeTab === 'participating' ? $t('projects.no-participating-projects') : $t('projects.no-owned-projects') }}</p>
       </div>
 
       <div v-else class="project-items">
@@ -103,7 +90,7 @@ const formatDate = (date) => {
         >
           <div class="project-info">
             <h3 class="project-title">{{ project.title || project.projectName }}</h3>
-            <p class="project-author">{{ project.userName || 'Usuario' }}</p>
+            <p class="project-author">{{ project.userName || $t('projects.user') }}</p>
             <p class="project-date">{{ formatDate(project.createdAt) }}</p>
           </div>
           <div class="project-arrow">
@@ -115,14 +102,14 @@ const formatDate = (date) => {
   </div>
 	
     <!-- Floating Action Button -->
-    <Button 
+    <pv-button 
       @click="navigateToCreateProject"
       class="fab-button"
       rounded
       severity="secondary"
     >
       <i class="pi pi-plus"></i>
-    </Button>
+    </pv-button>
 </template>
 
 <style scoped>
@@ -158,7 +145,7 @@ const formatDate = (date) => {
 }
 
 .tab-button.active {
-  background: #8b5cf6;
+  background: var(--color-primary);;
   color: white;
   box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);
 }
@@ -190,7 +177,7 @@ const formatDate = (date) => {
   width: 32px;
   height: 32px;
   border: 3px solid #e5e7eb;
-  border-top: 3px solid #8b5cf6;
+  border-top: 3px solid var(--color-primary);;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 1rem;
@@ -242,7 +229,7 @@ const formatDate = (date) => {
   margin: 0 0 0.25rem 0;
   font-size: 1rem;
   font-weight: 600;
-  color: #8b5cf6;
+  color: var(--color-primary);;
   line-height: 1.4;
 }
 
@@ -259,7 +246,7 @@ const formatDate = (date) => {
 }
 
 .project-arrow {
-  color: #8b5cf6;
+  color: var(--color-primary);;
   font-size: 0.875rem;
   margin-left: 1rem;
   transition: transform 0.2s ease;
@@ -277,7 +264,7 @@ const formatDate = (date) => {
   width: 56px !important;
   height: 56px !important;
   border-radius: 50% !important;
-  background: #8b5cf6 !important;
+  background: var(--color-primary);;
   border: none !important;
   box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4) !important;
   transition: all 0.2s ease;
@@ -290,7 +277,7 @@ const formatDate = (date) => {
 .fab-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
-  background: #7c3aed !important;
+  background: var(--color-primary);;
 }
 
 .fab-button i {
