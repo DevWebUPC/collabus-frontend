@@ -59,7 +59,7 @@
       }
     },
     "options": {
-      "my-projects": "My projects",
+      "projects": "Projects",
       "comments": "Comments"
     },
     "favorites": "Favorites",
