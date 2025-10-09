@@ -1,15 +1,14 @@
 <script setup>
 import { ref, computed, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import FooterContent from "./footer-content.vue";
 
 import PlanActual from "../../../subscription/presentation/components/PlanActual.vue";
 import PlanesModal from "../../../subscription/presentation/components/PlanesModal.vue";
 
 const { t } = useI18n();
-const route = useRoute();
-
+const router = useRouter();
 const menuItems = [
   { label: "nav.home", to: "/home", key: "home" },
   { label: "nav.projects", to: "/projects", key: "projects" },
@@ -50,6 +49,10 @@ const handleDrawerLinkClick = () => {
 // Cerrar drawer cuando se hace clic fuera (backdrop)
 const handleDrawerHide = () => {
   drawer.value = false;
+};
+
+const goToProfile = () => {
+  router.push("/profile");
 };
 </script>
 
@@ -112,7 +115,7 @@ const handleDrawerHide = () => {
       </template>
 
       <template #end>
-        <pv-avatar icon="pi pi-user" class="user-avatar" shape="circle" />
+        <pv-avatar icon="pi pi-user" class="user-avatar" shape="circle" @click="goToProfile" />
       </template>
     </pv-toolbar>
 
