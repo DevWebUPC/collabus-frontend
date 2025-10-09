@@ -4,8 +4,11 @@ import Login from "../iam/presentation/views/login.component.vue";
 import RecoveryPassword from "../iam/presentation/views/recovery-password.component.vue"
 import Register from "../iam/presentation/views/register.component.vue";
 import Onboarding from "../iam/presentation/views/onboarding.component.vue";
+import { projectRoutes } from "../projects/presentation/projects-routes.js";
+
 const pageNotFound = () =>
   import("../shared/presentation/views/page-not-found.vue");
+
 const routes = [
     { path: "/", name: "login", component: Login, meta: { title: "Login" }},
     {path: "/register", name: "register", component: Register, meta: { title: "Register" }},
@@ -13,6 +16,14 @@ const routes = [
     {path: "/create-account", name: "create-account", component: Onboarding, meta: { title: "Create Account" }},
     { path: "/home", name: "home", component: Home, meta: { title: "Home" } },
     {path: "/recovery-password", name: "recovery-password", component: RecoveryPassword, meta: { title: "Recovery Password" }},
+    
+    // Project routes
+    ...projectRoutes,
+    
+    // Placeholder routes for other modules
+    { path: "/collaborators", name: "collaborators", component: () => import("../shared/presentation/views/page-not-found.vue"), meta: { title: "Collaborators" } },
+    { path: "/notifications", name: "notifications", component: () => import("../shared/presentation/views/page-not-found.vue"), meta: { title: "Notifications" } },
+    
     { path: "/:pathMatch(.*)*", name: "not-found", component: pageNotFound, meta: { title: "Page Not Found" },},
 
 ];
