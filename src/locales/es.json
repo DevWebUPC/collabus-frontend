@@ -218,5 +218,40 @@
       "terms": "Términos de Servicio",
       "contact": "Contáctanos"
     }
+  },
+  "profile": {
+    "see-CV": "Ver CV",
+    "portfolio": "Portafolio",
+    "points": "Puntos",
+    "projects": "Proyectos",
+    "personal-description": "Descripción Personal",
+    "skills": "Habilidades",
+    "experiences": "Experiencias",
+    "experience-tab": {
+      "company": "Compañia",
+      "role": "Rol",
+      "duration": "Duracion",
+      "duration-time": {
+        "day": "día",
+        "days": "días",
+        "week": "semana",
+        "weeks": "semanas",
+        "month": "mes",
+        "months": "meses",
+        "year": "año",
+        "years": "añós"
+      }
+    },
+    "options": {
+      "projects": "Projects",
+      "comments": "Comentarios"
+    },
+    "favorites": "Favoritos",
+    "project-info": {
+      "jobs": "Puestos disponibles",
+      "area": "Áreas",
+      "duration": "Duracion",
+      "see-more": "Ver más"
+    }
   }
 }

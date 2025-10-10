@@ -221,5 +221,40 @@
       "terms": "Terms of Service",
       "contact": "Contact Us"
     }
+  },
+  "profile": {
+    "see-CV": "See CV",
+    "portfolio": "Portfolio",
+    "points": "Points",
+    "projects": "Projects",
+    "personal-description": "Personal Description",
+    "skills": "Skills",
+    "experiences": "Experiences",
+    "experience-tab": {
+      "company": "Company",
+      "role": "Role",
+      "duration": "Duration",
+      "duration-time": {
+        "day": "day",
+        "days": "days",
+        "week": "week",
+        "weeks": "weeks",
+        "month": "month",
+        "months": "months",
+        "year": "year",
+        "years": "years"
+      }
+    },
+    "options": {
+      "projects": "Projects",
+      "comments": "Comments"
+    },
+    "favorites": "Favorites",
+    "project-info": {
+      "jobs": "Available jobs",
+      "area": "Areas",
+      "duration": "Duration",
+      "see-more": "See more"
+    }
   }
 }
