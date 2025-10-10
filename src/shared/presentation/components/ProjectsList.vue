@@ -22,7 +22,7 @@ const handlePageChange = (event) => {
 
 // Handle project view
 const handleViewProject = (project) => {
-  router.push(`/projects/${project.id}`);
+  router.push(`/projects/show/${project.id}`);
 };
 
 // Handle apply to project
