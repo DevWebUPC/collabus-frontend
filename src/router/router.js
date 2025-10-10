@@ -5,6 +5,7 @@ import RecoveryPassword from "../iam/presentation/views/recovery-password.compon
 import Register from "../iam/presentation/views/register.component.vue";
 import Onboarding from "../iam/presentation/views/onboarding.component.vue";
 import ProfileView from "../profile-management/presentation/views/profile-view.vue";
+import Collaborator from "../shared/presentation/views/collaborators.vue"
 // Import dinámico para page not found
 const pageNotFound = () =>
     import("../shared/presentation/views/page-not-found.vue");
@@ -16,6 +17,7 @@ const routes = [
     { path: "/login", redirect: "/", meta: { title: "Login" } },
     { path: "/create-account", name: "create-account", component: Onboarding, meta: { title: "Create Account" } },
     { path: "/home", name: "home", component: Home, meta: { title: "Home" } },
+    { path: "/collaborators", name: "collaborators", component: Collaborator, meta: { title: "Collaborators" } },
     { path: "/profile", name: "profile", component: ProfileView, meta: { title: "Profile" } },
     { path: "/recovery-password", name: "recovery-password", component: RecoveryPassword, meta: { title: "Recovery Password" } },
     { path: "/:pathMatch(.*)*", name: "not-found", component: pageNotFound, meta: { title: "Page Not Found" } },
