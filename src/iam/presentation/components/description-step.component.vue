@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 
-defineProps({
+const props = defineProps({
   modelValue: {
     type: Object,
     required: true
@@ -11,9 +11,21 @@ defineProps({
 const emit = defineEmits(['update:modelValue', 'complete', 'prev']);
 
 // Biografía con límite de caracteres
-const bioText = ref('');
+const bioText = ref(props.modelValue.bio || '');
 
+// Actualizar el modelo cuando cambie la biografía
+watch(bioText, (newBio) => {
+  emit('update:modelValue', {
+    bio: newBio
+  });
+});
 
+// Sincronizar cuando cambien los props
+watch(() => props.modelValue.bio, (newBio) => {
+  if (newBio !== bioText.value) {
+    bioText.value = newBio || '';
+  }
+});
 </script>
 
 <template>

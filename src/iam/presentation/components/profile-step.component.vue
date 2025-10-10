@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
-defineProps({
+const props = defineProps({
   modelValue: {
     type: Object,
     required: true
@@ -10,12 +10,19 @@ defineProps({
 
 const emit = defineEmits(['update:modelValue', 'next']);
 
-
-
 // Para manejar la subida de archivos
 const fileInput = ref();
 const hasImage = ref(false);
 const currentImage = ref('');
+const username = ref(props.modelValue.username || '');
+
+// Sincronizar username
+watch(username, (newUsername) => {
+  emit('update:modelValue', {
+    username: newUsername,
+    avatar: currentImage.value
+  });
+});
 
 const onFileSelect = (event) => {
   const file = event.target.files[0];
@@ -32,12 +39,16 @@ const onFileSelect = (event) => {
       return;
     }
 
-
     // Mostrar vista previa
     const reader = new FileReader();
     reader.onload = (e) => {
       currentImage.value = e.target.result;
       hasImage.value = true;
+      // Actualizar modelo con la nueva imagen
+      emit('update:modelValue', {
+        username: username.value,
+        avatar: currentImage.value
+      });
     };
     reader.readAsDataURL(file);
   }
@@ -47,7 +58,16 @@ const chooseFile = () => {
   fileInput.value?.click();
 };
 
-
+// Sincronizar cuando cambien los props
+watch(() => props.modelValue, (newValue) => {
+  if (newValue.username !== username.value) {
+    username.value = newValue.username || '';
+  }
+  if (newValue.avatar && newValue.avatar !== currentImage.value) {
+    currentImage.value = newValue.avatar;
+    hasImage.value = true;
+  }
+}, { deep: true });
 </script>
 
 <template>
@@ -102,7 +122,7 @@ const chooseFile = () => {
           <label for="username">Nombre de Perfil</label>
           <pv-input-text
               id="username"
-              v-model="modelValue.username"
+              v-model="username"
               placeholder="Tu nombre de usuario"
               class="w-full"
           />
