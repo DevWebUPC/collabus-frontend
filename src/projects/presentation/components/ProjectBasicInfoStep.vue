@@ -1,53 +1,24 @@
 <script setup>
-import { ref, computed, toRef } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useProjectFormData } from '../composables/useProjectFormData.js'
-import { AVAILABLE_AREAS, UI_CONFIG } from '../constants/projectForm.constants.js'
+import { useProjectCreateStore } from '../../application/project-create.store.js'
 
 const { t } = useI18n()
 
-// Props validation schema
-const PROJECT_FORM_SCHEMA = {
-  projectName: 'string',
-  areas: 'array',
-  tags: 'array',
-  summary: 'string'
-}
-
-// Props
-const props = defineProps({
-  modelValue: {
-    type: Object,
-    required: true,
-    validator: (value) => {
-      if (typeof value !== 'object' || value === null) return false
-      
-      // Validate required fields exist
-      const requiredFields = ['projectName', 'areas', 'tags', 'summary']
-      const hasRequiredFields = requiredFields.every(key => key in value)
-      
-      return hasRequiredFields
-    }
-  }
-})
-
-// Emits
-const emit = defineEmits(['update:modelValue'])
+// Use the project creation store
+const store = useProjectCreateStore()
+const { searchAreas } = store
 
 // Local reactive state for inputs
 const newTag = ref('')
 const newArea = ref('')
 
-// Initialize filtered areas immediately
-const filteredAreas = ref([...AVAILABLE_AREAS])
-
-// Composables
-const modelValueRef = toRef(props, 'modelValue')
-const { updateModel } = useProjectFormData(modelValueRef, emit)
+// Initialize filtered areas
+const filteredAreas = ref([])
 
 // Computed properties
-const currentAreas = computed(() => props.modelValue.areas || [])
-const currentTags = computed(() => props.modelValue.tags || [])
+const currentAreas = computed(() => store.basicInfoData.areas || [])
+const currentTags = computed(() => store.basicInfoData.tags || [])
 
 const isNewAreaValid = computed(() => {
   const trimmed = newArea.value?.trim()
@@ -62,20 +33,12 @@ const isNewTagValid = computed(() => {
 // Area autocomplete methods
 const handleAreaSearch = (event) => {
   const query = event.query?.toLowerCase().trim() || ''
-  
-  if (!query) {
-    filteredAreas.value = [...AVAILABLE_AREAS]
-    return
-  }
-  
-  filteredAreas.value = AVAILABLE_AREAS.filter(area => 
-    area.toLowerCase().includes(query)
-  )
+  filteredAreas.value = searchAreas(query)
 }
 
 const handleDropdownClick = () => {
   // Show all areas when dropdown is clicked
-  filteredAreas.value = [...AVAILABLE_AREAS]
+  filteredAreas.value = searchAreas('')
 }
 
 // Area management methods
@@ -83,17 +46,14 @@ const addArea = () => {
   if (!isNewAreaValid.value) return
   
   const trimmedArea = newArea.value.trim()
-  updateModel({
-    areas: [...currentAreas.value, trimmedArea]
-  })
+  store.basicInfoData.areas = [...currentAreas.value, trimmedArea]
   newArea.value = ''
 }
 
 const removeArea = (index) => {
   if (index < 0 || index >= currentAreas.value.length) return
   
-  const updatedAreas = currentAreas.value.filter((_, i) => i !== index)
-  updateModel({ areas: updatedAreas })
+  store.basicInfoData.areas = currentAreas.value.filter((_, i) => i !== index)
 }
 
 // Tag management methods
@@ -101,22 +61,19 @@ const addTag = () => {
   if (!isNewTagValid.value) return
   
   const trimmedTag = newTag.value.trim()
-  updateModel({
-    tags: [...currentTags.value, trimmedTag]
-  })
+  store.basicInfoData.tags = [...currentTags.value, trimmedTag]
   newTag.value = ''
 }
 
 const removeTag = (index) => {
   if (index < 0 || index >= currentTags.value.length) return
   
-  const updatedTags = currentTags.value.filter((_, i) => i !== index)
-  updateModel({ tags: updatedTags })
+  store.basicInfoData.tags = currentTags.value.filter((_, i) => i !== index)
 }
 
 // Form field update methods
-const updateProjectName = (value) => updateModel({ projectName: value })
-const updateSummary = (value) => updateModel({ summary: value })
+const updateProjectName = (value) => { store.basicInfoData.projectName = value }
+const updateSummary = (value) => { store.basicInfoData.summary = value }
 </script>
 
 <template>
@@ -126,7 +83,7 @@ const updateSummary = (value) => updateModel({ summary: value })
       <div class="form-group">
         <label class="form-label">{{ $t('projects.create.project-name') }}</label>
         <pv-inputtext 
-          :model-value="modelValue.projectName"
+          :model-value="store.basicInfoData.projectName"
           @update:model-value="updateProjectName"
           :placeholder="$t('projects.create.project-name-placeholder')"
           class="w-full"
@@ -137,10 +94,10 @@ const updateSummary = (value) => updateModel({ summary: value })
       <div class="form-group summary-section">
         <label class="form-label">{{ $t('projects.create.summary') }}</label>
         <pv-textarea 
-          :model-value="modelValue.summary"
+          :model-value="store.basicInfoData.summary"
           @update:model-value="updateSummary"
           :placeholder="$t('projects.create.summary-placeholder')"
-          :rows="UI_CONFIG.TEXTAREA_ROWS"
+          :rows="5"
           class="w-full"
         />
       </div>

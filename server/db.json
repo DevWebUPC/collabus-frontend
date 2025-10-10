@@ -301,6 +301,130 @@
       "milestones": [],
       "createdAt": "2025-10-09T22:42:29.034Z",
       "updatedAt": "2025-10-09T22:42:29.034Z"
+    },
+    {
+      "title": "dfgdfgfdg",
+      "summary": "dfgdfgdfgdfgd",
+      "areas": [
+        "Desarrollo Web"
+      ],
+      "tags": [
+        "dgdgdfgdfg"
+      ],
+      "academicLevel": "Estudiante de posgrado",
+      "benefits": "dfgfdgdfgfdgdfg",
+      "skills": [
+        "dfgdfgfd"
+      ],
+      "durationQuantity": 1,
+      "durationType": "meses",
+      "roles": [
+        {
+          "id": 1760054376760,
+          "name": "dfgdfg",
+          "cards": [
+            {
+              "id": 1760054376761,
+              "title": "dfgdfgdf",
+              "items": [
+                "dfgdfg"
+              ]
+            }
+          ]
+        }
+      ],
+      "status": "active",
+      "progress": 0,
+      "userId": "1",
+      "collaborators": [],
+      "tasks": [],
+      "milestones": [],
+      "createdAt": "2025-10-09T23:59:53.849Z",
+      "updatedAt": "2025-10-09T23:59:53.849Z",
+      "id": "nTTOk0n"
+    },
+    {
+      "title": "AAAAAAAAAAAAAA",
+      "summary": "AAAAAAAAAAAAAA",
+      "areas": [
+        "Desarrollo Web"
+      ],
+      "tags": [
+        "AAAAAAAAAAAAAA"
+      ],
+      "academicLevel": "Estudiante de pregrado",
+      "benefits": "AAAAAAAAAAAAAA",
+      "skills": [
+        "AAAAAAAAAAAAAA"
+      ],
+      "durationQuantity": 1,
+      "durationType": "meses",
+      "roles": [
+        {
+          "id": 1760054393877,
+          "name": "AAAAAAAAAAAAAA",
+          "cards": [
+            {
+              "id": 1760054393878,
+              "title": "AAAAAAAAAAAAAA",
+              "items": [
+                "AAAAAAAAAAAAAA",
+                "AAAAAAAAAAAAAA2"
+              ]
+            }
+          ]
+        }
+      ],
+      "status": "active",
+      "progress": 0,
+      "userId": "1",
+      "collaborators": [],
+      "tasks": [],
+      "milestones": [],
+      "createdAt": "2025-10-10T00:00:35.023Z",
+      "updatedAt": "2025-10-10T00:00:35.023Z",
+      "id": "p1IEm71"
+    },
+    {
+      "title": "FGDFGFDG",
+      "summary": "DFGFDGDFGFDGFDG",
+      "areas": [
+        "DFGDFGFD"
+      ],
+      "tags": [
+        "DFGDFGFD"
+      ],
+      "academicLevel": "Estudiante de pregrado",
+      "benefits": "DFGFDGFDGFDG",
+      "skills": [
+        "FDGDFGDFG"
+      ],
+      "durationQuantity": 1,
+      "durationType": "dias",
+      "roles": [
+        {
+          "id": 1760054844921,
+          "name": "DFGDFG",
+          "cards": [
+            {
+              "id": 1760054844922,
+              "title": "DFGDFG",
+              "items": [
+                "FGDFGDF"
+              ]
+            }
+          ]
+        }
+      ],
+      "status": "active",
+      "progress": 0,
+      "userId": "1",
+      "collaborators": [],
+      "tasks": [],
+      "milestones": [],
+      "createdAt": "2025-10-10T00:07:41.849Z",
+      "updatedAt": "2025-10-10T00:07:41.849Z",
+      "id": "QQvcJJa"
     }
   ],
   "tasks": [
@@ -825,6 +949,162 @@
       "projectId": "1",
       "createdAt": "2025-09-22T00:00:00.000Z",
       "updatedAt": "2025-10-01T00:00:00.000Z"
+    }
+  ],
+  "projectAreas": [
+    {
+      "id": "1",
+      "name": "Desarrollo Web",
+      "description": "Desarrollo de aplicaciones web y sitios web",
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "name": "Desarrollo Móvil",
+      "description": "Desarrollo de aplicaciones móviles para iOS y Android",
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "name": "Ciencia de Datos",
+      "description": "Análisis de datos, machine learning y estadística",
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "name": "Inteligencia Artificial",
+      "description": "Desarrollo de sistemas de IA y aprendizaje automático",
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "5",
+      "name": "Diseño UX/UI",
+      "description": "Diseño de experiencia de usuario e interfaces",
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "6",
+      "name": "Marketing Digital",
+      "description": "Estrategias de marketing en línea y publicidad digital",
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "7",
+      "name": "Ciberseguridad",
+      "description": "Seguridad informática y protección de datos",
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "8",
+      "name": "DevOps",
+      "description": "Integración y despliegue continuo",
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "9",
+      "name": "Cloud Computing",
+      "description": "Computación en la nube y servicios distribuidos",
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "10",
+      "name": "Blockchain",
+      "description": "Tecnología blockchain y criptomonedas",
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    }
+  ],
+  "academicLevels": [
+    {
+      "id": "1",
+      "name": "Estudiante de pregrado",
+      "description": "Estudiante universitario en carrera de grado",
+      "level": 1,
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "name": "Estudiante de posgrado",
+      "description": "Estudiante de maestría o doctorado",
+      "level": 2,
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "name": "Profesional junior",
+      "description": "Profesional con 0-2 años de experiencia",
+      "level": 3,
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "name": "Profesional senior",
+      "description": "Profesional con 3-7 años de experiencia",
+      "level": 4,
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "5",
+      "name": "Especialista",
+      "description": "Especialista con 8+ años de experiencia",
+      "level": 5,
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "6",
+      "name": "Experto",
+      "description": "Experto con más de 10 años de experiencia",
+      "level": 6,
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    }
+  ],
+  "durationTypes": [
+    {
+      "id": "1",
+      "name": "Días",
+      "value": "dias",
+      "multiplier": 1,
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "name": "Semanas",
+      "value": "semanas",
+      "multiplier": 7,
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "name": "Meses",
+      "value": "meses",
+      "multiplier": 30,
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "name": "Años",
+      "value": "años",
+      "multiplier": 365,
+      "active": true,
+      "createdAt": "2025-10-01T00:00:00.000Z"
     }
   ],
   "projectCollaborations": [

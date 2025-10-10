@@ -1,34 +1,30 @@
 <script setup>
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import ProjectStepper from '../components/ProjectStepper.vue';
 import ProjectBasicInfoStep from '../components/ProjectBasicInfoStep.vue';
-import ProjectRolesStep from '../components/ProjectRolesStep.vue';
 import ProjectDetailsStep from '../components/ProjectDetailsStep.vue';
-import { useProjectCreation } from '../composables/useProjectCreation.js';
+import ProjectRolesStep from '../components/ProjectRolesStep.vue';
+import { useProjectCreateStore } from '../../application/project-create.store.js';
 
 const { t } = useI18n();
 const router = useRouter();
 
-// Use the project creation composable
+// Use the project creation store
+const store = useProjectCreateStore();
+
 const {
-  currentStep,
-  totalSteps,
-  loading,
-  errors,
-  stepLabels,
-  basicInfoData,
-  detailsData,
-  rolesData,
-  isStepValid,
-  canGoNext,
-  canGoBack,
-  isLastStep,
   nextStep,
   prevStep,
+  loadAllOptions,
   submitProject,
-  clearErrors
-} = useProjectCreation();
+} = store;
+
+// Load initial data
+onMounted(async () => {
+  await loadAllOptions();
+});
 
 // Navigation methods
 const navigateBack = () => {
@@ -57,9 +53,9 @@ const handleSubmit = async () => {
     <!-- Progress Steps -->
     <div class="steps-container">
       <ProjectStepper 
-        :current-step="currentStep"
-        :total-steps="totalSteps"
-        :step-labels="stepLabels"
+        :current-step="store.currentStep"
+        :total-steps="store.totalSteps"
+        :step-labels="store.stepLabels"
       />
     </div>
 
@@ -67,9 +63,9 @@ const handleSubmit = async () => {
     <div class="create-form-container">
       <div class="form-card">
         <!-- Error Messages -->
-        <div v-if="errors.length > 0" class="error-messages">
+        <div v-if="store.errors.length > 0" class="error-messages">
           <pv-message 
-            v-for="(error, index) in errors" 
+            v-for="(error, index) in store.errors" 
             :key="index"
             severity="error" 
             :closable="false"
@@ -81,26 +77,26 @@ const handleSubmit = async () => {
 
         <!-- Step 1: Project Basic Information -->
         <ProjectBasicInfoStep 
-          v-if="currentStep === 0"
-          v-model="basicInfoData"
+          v-if="store.currentStep === 0"
+          v-model="store.basicInfoData"
         />
 
         <!-- Step 2: Additional Details -->
-        <ProjectRolesStep 
-          v-if="currentStep === 1"
-          v-model="detailsData"
+        <ProjectDetailsStep
+          v-if="store.currentStep === 1"
+          v-model="store.detailsData"
         />
 
         <!-- Step 3: Define Roles -->
-        <ProjectDetailsStep 
-          v-if="currentStep === 2"
-          v-model="rolesData"
+        <ProjectRolesStep  
+          v-if="store.currentStep === 2"
+          v-model="store.rolesData"
         />
 
         <!-- Navigation Buttons -->
         <div class="form-actions">
           <pv-button 
-            v-if="canGoBack"
+            v-if="store.canGoBack"
             :label="$t('projects.create.back')"
             severity="secondary"
             outlined
@@ -117,7 +113,7 @@ const handleSubmit = async () => {
           />
           
           <pv-button 
-            v-if="!isLastStep"
+            v-if="!store.isLastStep"
             :label="$t('projects.create.next')"
             @click="nextStep"
             class="next-btn"
@@ -127,8 +123,8 @@ const handleSubmit = async () => {
             v-else
             :label="$t('projects.create.publish')"
             @click="handleSubmit"
-            :loading="loading"
-            :disabled="loading"
+            :loading="store.submitting"
+            :disabled="store.submitting"
             class="publish-btn"
             size="large"
           />

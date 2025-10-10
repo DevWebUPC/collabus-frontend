@@ -1,354 +1,461 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { ACADEMIC_LEVELS, DURATION_TYPES } from '../constants/projectForm.constants.js'
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useProjectCreateStore } from '../../application/project-create.store.js';
 
-const { t } = useI18n()
+const { t } = useI18n();
 
-// Props
-const props = defineProps({
-  modelValue: {
-    type: Object,
-    required: true,
-    validator: (value) => {
-      return typeof value === 'object' && value !== null
-    }
+// Use the project creation store
+const store = useProjectCreateStore()
+
+// Computed properties  
+const roles = computed(() => store.rolesData || [])
+
+// Role management methods
+const addRole = () => {
+  const newRole = {
+    id: Date.now(),
+    name: '',
+    cards: [
+      {
+        id: Date.now() + 1,
+        title: '',
+        items: ['']
+      }
+    ]
   }
-})
-
-// Emits
-const emit = defineEmits(['update:modelValue'])
-
-// Options data
-const academicLevels = ref(ACADEMIC_LEVELS)
-const durationTypes = ref(DURATION_TYPES)
-
-// Local reactive state
-const newSkill = ref('')
-
-// Computed properties
-const currentSkills = computed(() => props.modelValue.skills || [])
-
-const isNewSkillValid = computed(() => {
-  const trimmed = newSkill.value?.trim()
-  return trimmed && !currentSkills.value.includes(trimmed)
-})
-
-// Helper function to emit model updates
-const updateModel = (updates) => {
-  emit('update:modelValue', {
-    ...props.modelValue,
-    ...updates
-  })
+  store.rolesData.push(newRole)
 }
 
-// Skills management methods
-const addSkill = () => {
-  if (!isNewSkillValid.value) return
+const removeRole = (roleIndex) => {
+  if (roleIndex < 0 || roleIndex >= rolesData.length) return
+  store.rolesData.splice(roleIndex, 1)
+}
+
+const updateRoleName = (roleIndex, value) => {
+  if (roleIndex < 0 || roleIndex >= store.rolesData.length) return
+  store.rolesData[roleIndex].name = value
+}
+
+// Card management methods
+const addCard = (roleIndex) => {
+  if (roleIndex < 0 || roleIndex >= store.rolesData.length) return
   
-  const trimmedSkill = newSkill.value.trim()
-  updateModel({
-    skills: [...currentSkills.value, trimmedSkill]
-  })
-  newSkill.value = ''
-}
-
-const removeSkill = (index) => {
-  if (index < 0 || index >= currentSkills.value.length) return
+  const newCard = {
+    id: Date.now(),
+    title: '',
+    items: ['']
+  }
   
-  const updatedSkills = currentSkills.value.filter((_, i) => i !== index)
-  updateModel({ skills: updatedSkills })
+  store.rolesData[roleIndex].cards.push(newCard)
 }
 
-// Form field update methods
-const updateAcademicLevel = (value) => updateModel({ academicLevel: value })
-const updateBenefits = (value) => updateModel({ benefits: value })
-const updateDurationQuantity = (value) => {
-  // Ensure the value is a valid number
-  const numValue = value ? Number(value) : 1
-  const validValue = Math.max(1, numValue)
-  console.log('Duration quantity updated:', validValue)
-  updateModel({ durationQuantity: validValue })
+const removeCard = (roleIndex, cardIndex) => {
+  if (roleIndex < 0 || roleIndex >= store.rolesData.length) return
+  if (cardIndex < 0 || cardIndex >= store.rolesData[roleIndex].cards.length) return
+  
+  store.rolesData[roleIndex].cards.splice(cardIndex, 1)
 }
-const updateDurationType = (value) => {
-  console.log('Duration type updated:', value)
-  updateModel({ durationType: value })
+
+const updateCardTitle = (roleIndex, cardIndex, value) => {
+  if (roleIndex < 0 || roleIndex >= store.rolesData.length) return
+  if (cardIndex < 0 || cardIndex >= store.rolesData[roleIndex].cards.length) return
+  
+  store.rolesData[roleIndex].cards[cardIndex].title = value
+}
+
+// Item management methods
+const addItem = (roleIndex, cardIndex) => {
+  if (roleIndex < 0 || roleIndex >= store.rolesData.length) return
+  if (cardIndex < 0 || cardIndex >= store.rolesData[roleIndex].cards.length) return
+  
+  store.rolesData[roleIndex].cards[cardIndex].items.push('')
+}
+
+const removeItem = (roleIndex, cardIndex, itemIndex) => {
+  if (roleIndex < 0 || roleIndex >= store.rolesData.length) return
+  if (cardIndex < 0 || cardIndex >= store.rolesData[roleIndex].cards.length) return
+  if (itemIndex < 0 || itemIndex >= store.rolesData[roleIndex].cards[cardIndex].items.length) return
+  
+  store.rolesData[roleIndex].cards[cardIndex].items.splice(itemIndex, 1)
+}
+
+const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
+  if (roleIndex < 0 || roleIndex >= store.rolesData.length) return
+  if (cardIndex < 0 || cardIndex >= store.rolesData[roleIndex].cards.length) return
+  if (itemIndex < 0 || itemIndex >= store.rolesData[roleIndex].cards[cardIndex].items.length) return
+  
+  store.rolesData[roleIndex].cards[cardIndex].items[itemIndex] = value
 }
 </script>
 
 <template>
-  <div class="details-step">
-    <div class="form-grid">
-      <!-- Nivel Académico (opcional) -->
-      <div class="form-group">
-        <label class="form-label">{{ $t('projects.create.academic-level') }}</label>
-        <pv-dropdown 
-          :model-value="modelValue.academicLevel"
-          @update:model-value="updateAcademicLevel"
-          :options="academicLevels"
-          :placeholder="$t('projects.create.select-category')"
-          class="w-full"
-        />
-      </div>
+  <div class="roles-step">
+    <div class="step-header">
+      <h2 class="step-title">{{ $t('projects.create.steps.define-roles') }}</h2>
+    </div>
 
-      <!-- Beneficios -->
-      <div class="form-group benefits-section">
-        <label class="form-label">{{ $t('projects.create.benefits') }}</label>
-        <pv-textarea 
-          :model-value="modelValue.benefits"
-          @update:model-value="updateBenefits"
-          :placeholder="$t('projects.create.benefits-placeholder')"
-          rows="12"
-          class="w-full"
-        />
-      </div>
-
-      <!-- Habilidades -->
-      <div class="form-group">
-        <label class="form-label">{{ $t('projects.create.skills') }}</label>
-        <div class="skills-container">
+    <div class="roles-container">
+      <div 
+        v-for="(role, roleIndex) in roles" 
+        :key="role.id"
+        class="role-section"
+      >
+        <!-- Role Name Input -->
+        <div class="role-input-wrapper">
+          <span class="role-label">{{ $t('projects.create.role') }}</span>
           <pv-inputtext 
-            v-model="newSkill"
-            :placeholder="$t('projects.create.skills-placeholder')"
-            class="skills-input"
-            @keyup.enter="addSkill"
-          />
-          <pv-button 
-            type="button"
-            :label="$t('projects.create.add')"
-            @click="addSkill"
-            class="add-btn"
-            size="small"
-            outlined
-            :disabled="!isNewSkillValid"
+            :model-value="role.name"
+            @update:model-value="(value) => updateRoleName(roleIndex, value)"
+            :placeholder="$t('projects.create.role-placeholder')"
+            class="role-input"
           />
         </div>
-        <!-- Skills display -->
-        <div 
-          v-if="currentSkills.length > 0" 
-          class="skills-display"
-        >
-          <pv-chip 
-            v-for="(skill, index) in currentSkills" 
-            :key="`skill-${skill}-${index}`"
-            :label="`#${skill}`"
-            removable
-            @remove="() => removeSkill(index)"
-            class="skill-chip"
+
+        <!-- Role Cards -->
+        <div class="role-cards-container">
+          <div 
+            v-for="(card, cardIndex) in role.cards" 
+            :key="card.id"
+            class="role-card"
+          >
+            <!-- Card Title -->
+            <div class="card-title-section">
+              <span class="card-title-label">{{ $t('projects.create.card-title-placeholder').replace('Escribe ', '') }}</span>
+              <pv-inputtext 
+                :model-value="card.title"
+                @update:model-value="(value) => updateCardTitle(roleIndex, cardIndex, value)"
+                :placeholder="$t('projects.create.card-title-placeholder')"
+                class="card-title-input"
+              />
+            </div>
+
+            <!-- Card Items -->
+            <div class="card-items-section">
+              <div 
+                v-for="(item, itemIndex) in card.items" 
+                :key="itemIndex"
+                class="card-item-row"
+              >
+                <span class="item-number">{{ $t('projects.create.item') }}</span>
+                <pv-inputtext 
+                  :model-value="item"
+                  @update:model-value="(value) => updateItem(roleIndex, cardIndex, itemIndex, value)"
+                  :placeholder="$t('projects.create.item-placeholder')"
+                  class="item-input"
+                />
+                <pv-button 
+                  icon="pi pi-times"
+                  severity="danger"
+                  text
+                  rounded
+                  @click="removeItem(roleIndex, cardIndex, itemIndex)"
+                  class="remove-item-btn"
+                />
+              </div>
+            </div>
+
+            <!-- Add Item Button -->
+            <div class="add-item-section">
+              <pv-button 
+                :label="`+ ${$t('projects.create.add-item')}`"
+                text
+                @click="addItem(roleIndex, cardIndex)"
+                class="add-item-button"
+              />
+            </div>
+          </div>
+
+          <!-- Add Card Button -->
+          <pv-button 
+            :label="$t('projects.create.add-card')"
+            outlined
+            @click="addCard(roleIndex)"
+            class="add-card-button"
           />
         </div>
       </div>
 
-      <!-- Duración -->
-      <div class="form-group">
-        <label class="form-label">{{ $t('projects.create.duration') }}</label>
-        <div class="duration-container">
-          <pv-input-number 
-            :model-value="modelValue.durationQuantity || 1"
-            @update:model-value="updateDurationQuantity"
-            :min="1"
-            :max="999"
-            placeholder="Cantidad"
-            class="duration-quantity"
-          />
-          <pv-dropdown 
-            :model-value="modelValue.durationType || 'meses'"
-            @update:model-value="updateDurationType"
-            :options="durationTypes"
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Selecciona el tipo"
-            class="duration-type"
-          />
-        </div>
-      </div>
+      <!-- Add Role Button -->
+      <pv-button 
+        :label="$t('projects.create.add-role')"
+        @click="addRole"
+        class="add-role-button"
+      />
     </div>
   </div>
 </template>
 
 <style scoped>
-.details-step {
-  padding: 0;
-  max-width: 800px;
-  margin: 0 auto;
+.roles-step {
+  padding: 1rem 0;
 }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+.step-header {
   margin-bottom: 2rem;
 }
 
-.form-group {
+.step-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.roles-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.role-section {
   background: white;
-  border: 1px solid #E5E7EB;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
 }
 
-.form-label {
+/* Role Input */
+.role-input-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.role-label {
   display: block;
-  font-size: 14px;
-  color: #6C63FF;
   font-weight: 600;
-  margin-bottom: 12px;
+  color: #1f2937;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
 }
 
-.benefits-section {
-  grid-row: span 2;
-}
-
-.skills-container {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.skills-input {
-  flex: 1;
-}
-
-.duration-container {
-  display: flex;
-  gap: 12px;
-}
-
-.duration-quantity {
-  flex: 1;
-}
-
-.duration-type {
-  flex: 2;
-}
-
-.add-btn {
-  min-width: 80px;
-  height: 40px;
-}
-
-.skills-display {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.skill-chip {
-  background: #FEF3C7;
-  color: #D97706;
-}
-
-/* PrimeVue component styling */
-:deep(.p-inputtext),
-:deep(.p-dropdown),
-:deep(.p-inputnumber-input),
-:deep(.p-textarea) {
+.role-input {
   width: 100%;
-  border: 1px solid #D1D5DB;
+}
+
+/* Role Cards Container */
+.role-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Individual Role Card */
+.role-card {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+/* Card Title Section */
+.card-title-section {
+  margin-bottom: 1.5rem;
+}
+
+.card-title-label {
+  display: block;
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-title-input {
+  width: 100%;
+}
+
+/* Card Items Section */
+.card-items-section {
+  margin-bottom: 1rem;
+}
+
+.card-item-row,
+.add-item-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.item-number {
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 0.875rem;
+  min-width: 40px;
+  flex-shrink: 0;
+}
+
+.item-input {
+  flex: 1;
+}
+
+.remove-item-btn {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.placeholder-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Add Item Section */
+.add-item-section {
+  padding-top: 0.5rem;
+}
+
+.add-item-button {
+  color: #6C63FF;
+  font-weight: 500;
+  padding: 0.5rem 0;
+}
+
+/* Buttons */
+.add-card-button {
+  background: white;
+  border: 1px solid #6C63FF;
+  color: #6C63FF;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  width: 100%;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.add-card-button:hover {
+  background: #f8fafc;
+}
+
+.add-role-button {
+  background: #6C63FF;
+  color: white;
+  font-weight: 600;
+  padding: 0.875rem 2rem;
+  border-radius: 12px;
+  border: none;
+  margin-top: 1rem;
+}
+
+.add-role-button:hover {
+  background: #5B54FF;
+}
+
+/* Custom PrimeVue overrides */
+:deep(.p-inputtext) {
+  border: 1px solid #d1d5db;
   border-radius: 8px;
-  padding: 12px;
-  font-size: 14px;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
   transition: all 0.2s ease;
 }
 
-:deep(.p-inputnumber) {
-  width: 100%;
-}
-
-:deep(.p-inputnumber .p-inputnumber-button) {
-  background: #F3F4F6;
-  border: 1px solid #D1D5DB;
-  color: #6B7280;
-}
-
-:deep(.p-inputnumber .p-inputnumber-button:hover) {
-  background: #6C63FF;
+:deep(.p-inputtext:focus) {
   border-color: #6C63FF;
-  color: white;
-}
-
-:deep(.p-inputtext:focus),
-:deep(.p-dropdown:focus),
-:deep(.p-inputnumber:focus-within),
-:deep(.p-textarea:focus) {
-  border-color: #6C63FF;
-  box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
   outline: none;
 }
 
-:deep(.p-textarea) {
-  resize: vertical;
-  min-height: 280px;
-  font-family: inherit;
+:deep(.p-inputtext::placeholder) {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+:deep(.p-button) {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+:deep(.p-button.p-button-text) {
+  color: #6C63FF;
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+}
+
+:deep(.p-button.p-button-text:hover) {
+  background: rgba(108, 99, 255, 0.1);
 }
 
 :deep(.p-button.p-button-outlined) {
+  background: white;
   border: 1px solid #6C63FF;
   color: #6C63FF;
-  background: transparent;
 }
 
 :deep(.p-button.p-button-outlined:hover) {
+  background: #f8fafc;
+}
+
+:deep(.p-button:not(.p-button-outlined):not(.p-button-text)) {
   background: #6C63FF;
-  color: white;
-}
-
-:deep(.p-button:disabled) {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-:deep(.p-chip) {
-  background: #FEF3C7;
-  color: #D97706;
   border: none;
-  padding: 6px 12px;
-  border-radius: 16px;
-  font-size: 13px;
-}
-
-:deep(.p-chip .p-chip-remove-icon) {
-  color: #EF4444;
-  margin-left: 8px;
-}
-
-:deep(.p-dropdown-panel) {
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  border: 1px solid #E5E7EB;
-}
-
-:deep(.p-dropdown-item) {
-  padding: 12px 16px;
-  transition: background-color 0.2s ease;
-}
-
-:deep(.p-dropdown-item:hover) {
-  background: #F8FAFC;
-}
-
-:deep(.p-dropdown-item.p-highlight) {
-  background: #6C63FF;
   color: white;
 }
 
-/* Responsive design */
+:deep(.p-button:not(.p-button-outlined):not(.p-button-text):hover) {
+  background: #5B54FF;
+}
+
+:deep(.p-button.p-button-danger) {
+  color: #ef4444;
+}
+
+:deep(.p-button.p-button-danger:hover) {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+:deep(.p-button-icon) {
+  font-size: 0.875rem;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-  .form-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+  .role-section {
+    padding: 1.5rem;
+    border-radius: 16px;
   }
   
-  .benefits-section {
-    grid-row: span 1;
+  .role-card {
+    padding: 1rem;
+    border-radius: 12px;
   }
   
-  .skills-container,
-  .duration-container {
+  .card-item-row,
+  .add-item-row {
     flex-direction: column;
-    gap: 8px;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .item-number {
+    min-width: auto;
+  }
+  
+  .remove-item-btn {
+    align-self: flex-end;
+    width: auto;
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .roles-step {
+    padding: 0.5rem 0;
+  }
+  
+  .role-section {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  
+  .role-card {
+    padding: 0.75rem;
+    border-radius: 8px;
   }
 }
 </style>
