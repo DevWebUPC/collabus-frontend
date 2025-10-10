@@ -45,9 +45,17 @@ onMounted(async () => {
     </section>
 
     <div class="home-content">
-      <!-- Featured Collaborators Section -->
-      <aside class="collaborators-section">
-        <FeaturedCollaborators />
+      <!-- Left Sidebar -->
+      <aside class="left-sidebar">
+        <!-- Featured Collaborators Section -->
+        <section class="collaborators-section">
+          <FeaturedCollaborators />
+        </section>
+
+        <!-- PlanActual debajo de FeaturedCollaborators -->
+        <section class="plan-section">
+          <PlanActual @plan-modal-open="handlePlanModalOpen" />
+        </section>
       </aside>
 
       <!-- Main Content Area -->
@@ -62,11 +70,6 @@ onMounted(async () => {
       <aside class="featured-projects-section">
         <FeaturedProjects />
       </aside>
-    </div>
-
-    <!-- PlanActual posicionado en esquina inferior izquierda (solo en home) -->
-    <div class="floating-plan">
-      <PlanActual @plan-modal-open="handlePlanModalOpen" />
     </div>
 
     <!-- Modal de planes -->
@@ -114,6 +117,13 @@ onMounted(async () => {
   margin: 0 auto;
 }
 
+/* Left Sidebar */
+.left-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 /* Collaborators Section */
 .collaborators-section {
   background: white;
@@ -121,8 +131,15 @@ onMounted(async () => {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
   height: fit-content;
-  position: sticky;
-  top: 2rem;
+}
+
+/* Plan Section */
+.plan-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  height: fit-content;
 }
 
 /* Main Content */
@@ -131,6 +148,14 @@ onMounted(async () => {
   border-radius: 12px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
+  /* Propiedades para hacerlo scrollable */
+  height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+/* Projects List Section */
+.projects-list-section {
+  height: 100%;
 }
 
 /* Featured Projects Section */
@@ -142,16 +167,6 @@ onMounted(async () => {
   height: fit-content;
   position: sticky;
   top: 2rem;
-}
-
-/* PlanActual flotante en esquina inferior izquierda */
-.floating-plan {
-  position: fixed;
-  bottom: 100px;
-  left: 20px;
-  width: 300px;
-  z-index: 10;
-  animation: fadeInUp 0.5s ease-out;
 }
 
 /* Loading Overlay */
@@ -187,59 +202,40 @@ onMounted(async () => {
   width: 400px;
 }
 
-/* Animación para el PlanActual flotante */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive */
-@media (max-width: 1200px) {
-  .home-content {
-    grid-template-columns: 280px 1fr 320px;
-    gap: 1.5rem;
-    padding: 1.5rem;
-  }
-}
-
+/* Responsive - Solo mostrar ProjectsList */
 @media (max-width: 1024px) {
   .home-content {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 0;
     padding: 1rem;
   }
 
-  .collaborators-section,
+  .left-sidebar,
   .featured-projects-section {
-    position: static;
+    display: none; /* Ocultar todos los componentes excepto ProjectsList */
   }
 
-  .floating-plan {
-    width: 280px;
-    left: 15px;
-    bottom: 90px;
+  .main-content {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    height: calc(100vh - 150px); /* Altura ajustada para móvil */
+  }
+
+  .projects-list-section {
+    width: 100%;
   }
 }
 
 @media (max-width: 768px) {
   .search-section {
-    padding: 1.5rem 0;
+    padding: 1rem 0;
   }
 
   .home-content {
-    padding: 1rem;
-    gap: 1rem;
-  }
-
-  /* Ocultar PlanActual flotante en móviles */
-  .floating-plan {
-    display: none;
+    padding: 0.5rem;
   }
 
   .error-banner {
@@ -248,5 +244,28 @@ onMounted(async () => {
     right: 20px;
     left: 20px;
   }
+
+  .main-content {
+    height: calc(100vh - 120px); /* Altura más ajustada para móviles pequeños */
+  }
+}
+
+/* Personalizar la barra de scroll */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
 </style>
