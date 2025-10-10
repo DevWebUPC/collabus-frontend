@@ -132,7 +132,6 @@ const getStatusColor = (status) => {
             :label="t('home.featuredProjects.viewDetails')"
             icon="pi pi-eye"
             size="small"
-            outlined
             class="view-button"
             @click.stop="handleViewProject(project)"
           />
@@ -255,17 +254,6 @@ const getStatusColor = (status) => {
   transform: translateY(-2px);
 }
 
-.featured-project-card:before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: linear-gradient(to bottom, var(--color-primary), var(--color-primary-dark));
-  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-}
-
 /* Project Header */
 .project-header {
   display: flex;
@@ -386,6 +374,13 @@ const getStatusColor = (status) => {
   flex: 1;
   height: 32px;
   font-size: 0.75rem;
+  background: var(--color-secondary);
+  border-color: var(--color-secondary) !important;
+}
+
+.view-button:hover {
+  background: var(--color-secondary) !important;
+  border-color: var(--color-secondary) !important;
 }
 
 .apply-button {
@@ -393,12 +388,12 @@ const getStatusColor = (status) => {
   height: 32px;
   font-size: 0.75rem;
   background: var(--color-primary);
-  border-color: var(--color-primary);
+  border-color: var(--color-primary) !important;
 }
 
 .apply-button:hover {
-  background: var(--color-primary-dark);
-  border-color: var(--color-primary-dark);
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
 }
 
 /* Empty State */

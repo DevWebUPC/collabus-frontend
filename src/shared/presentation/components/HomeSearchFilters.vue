@@ -216,7 +216,6 @@ const hasActiveFilters = computed(() =>
   height: 48px;
   font-size: 1rem;
   border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
 }
 
@@ -234,7 +233,6 @@ const hasActiveFilters = computed(() =>
   width: 100%;
   height: 48px;
   border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
 }
 

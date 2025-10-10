@@ -159,7 +159,6 @@ const getStatusColor = (status) => {
           <pv-button
             :label="t('home.projects.viewMore')"
             icon="pi pi-eye"
-            outlined
             class="view-button"
             @click="handleViewProject(project)"
           />
@@ -447,18 +446,25 @@ const getStatusColor = (status) => {
 .view-button {
   flex: 1;
   height: 40px;
+  background: var(--color-secondary);
+  border-color: var(--color-secondary) !important;
+}
+
+.view-button:hover {
+  background: var(--color-secondary) !important;
+  border-color: var(--color-secondary) !important;
 }
 
 .apply-button {
   flex: 1;
   height: 40px;
   background: var(--color-primary);
-  border-color: #667eea;
+  border-color: var(--color-primary) !important;
 }
 
 .apply-button:hover {
   background: var(--color-primary) !important;
-  border-color: #5a67d8;
+  border-color: var(--color-primary) !important;
 }
 
 /* Empty State */
