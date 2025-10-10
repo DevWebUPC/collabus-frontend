@@ -147,7 +147,11 @@ export const useProfileStore = defineStore('profile', () => {
     const profileCompletion = computed(() => {
         return currentProfile.value?.getCompletionPercentage() || 0;
     });
-
+    const clearProfile = () => {
+        currentProfile.value = null;
+        localStorage.removeItem('currentProfile');
+        localStorage.removeItem('profileId');
+    };
     return {
         // State
         currentProfile,
@@ -165,6 +169,7 @@ export const useProfileStore = defineStore('profile', () => {
         updateProfile,
         initializeProfile,
         setLoading,
+        clearProfile,
         setError,
         clearError
     };
