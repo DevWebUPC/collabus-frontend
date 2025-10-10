@@ -34,7 +34,8 @@ export class Project {
     overdueTasks = [],
     overdueMilestones = [],
     createdAt = null,
-    updatedAt = null
+    updatedAt = null,
+    authorName = null
   } = {}) {
     this.id = id;
     this.title = title;
@@ -65,6 +66,7 @@ export class Project {
     this.upcomingDeadlines = upcomingDeadlines;
     this.overdueTasks = overdueTasks;
     this.overdueMilestones = overdueMilestones;
+    this.authorName = authorName;
   }
 
   // Business logic methods

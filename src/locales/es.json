@@ -7,8 +7,60 @@
     "notifications": "Notificaciones"
   },
   "home": {
-    "title": "Inicio",
-    "content": "Bienvenido a CollabUs."
+    "title": "CollabUs",
+    "subtitle": "Conecta, colabora y crea proyectos increíbles con profesionales de todo el mundo",
+    "filters": {
+      "searchPlaceholder": "Nombre o palabra clave",
+      "jobTypePlaceholder": "Tipo de puesto",
+      "areaPlaceholder": "Área",
+      "search": "Buscar",
+      "clearFilters": "Limpiar filtros",
+      "allJobs": "Todos los trabajos",
+      "developer": "Desarrollador",
+      "designer": "Diseñador",
+      "analyst": "Analista",
+      "projectManager": "Project Manager",
+      "tester": "Tester",
+      "allAreas": "Todas las áreas",
+      "technology": "Tecnología",
+      "webDevelopment": "Desarrollo Web",
+      "mobileDevelopment": "Desarrollo Móvil",
+      "dataScience": "Ciencia de Datos",
+      "design": "Diseño",
+      "marketing": "Marketing"
+    },
+    "collaborators": {
+      "title": "Colaboradores destacados",
+      "viewMore": "Ver más",
+      "projects": "proyectos",
+      "noCollaborators": "No hay colaboradores disponibles"
+    },
+    "projects": {
+      "title": "Lista de proyectos",
+      "resultsCount": "{count} proyectos encontrados",
+      "publishedBy": "Publicado por",
+      "duration": "Duración",
+      "availableRoles": "Puesto disponibles",
+      "progress": "Progreso",
+      "viewMore": "Ver más",
+      "apply": "Postular",
+      "noProjects": "No se encontraron proyectos",
+      "noProjectsMessage": "No hay proyectos que coincidan con tus filtros actuales. Intenta con diferentes criterios de búsqueda.",
+      "clearFilters": "Limpiar filtros",
+      "areas": "Áreas"
+    },
+    "featuredProjects": {
+      "title": "Proyectos Destacados",
+      "viewMore": "Ver todos",
+      "roles": "Roles",
+      "viewDetails": "Ver detalles",
+      "apply": "Postular",
+      "noFeaturedProjects": "No hay proyectos destacados disponibles",
+      "nearCompletion": "Casi completado",
+      "inProgress": "En progreso",
+      "earlyStage": "Etapa inicial",
+      "justStarted": "Recién iniciado"
+    }
   },
   "page-not-found": {
     "title": "Página no encontrada",
@@ -19,6 +71,13 @@
     "occurred": "Ocurrieron errores"
   },
   "common": {
+    "loading": "Cargando...",
+    "notSpecified": "No especificado",
+    "oneMonth": "1 mes",
+    "months": "{count} meses",
+    "unnamed": "Sin nombre",
+    "noRole": "Sin rol especificado",
+    "unknown": "Desconocido",
     "dates": {
       "yesterday": "Ayer",
       "days-ago": "días",
@@ -43,6 +102,8 @@
     "no-owned-desc": "Aún no has creado ningún proyecto.",
     "create-first": "Crea Tu Primer Proyecto",
     "completed": "completado",
+    "untitled": "Proyecto sin título",
+    "noDescription": "Sin descripción disponible",
     "my-tasks": "Mis Tareas",
     "tasks-assigned": "tareas asignadas",
     "upcoming-milestones": "Próximos Hitos",

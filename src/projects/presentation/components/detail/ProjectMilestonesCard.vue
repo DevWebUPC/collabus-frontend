@@ -146,7 +146,7 @@ const handleViewAll = () => {
 }
 
 .view-all-button {
-  background: #6366f1 !important;
+  background: var(--color-primary);
   color: white !important;
   border: none !important;
   border-radius: 8px !important;
@@ -157,7 +157,7 @@ const handleViewAll = () => {
 }
 
 .view-all-button:hover {
-  background: #5855eb !important;
+  background: var(--color-primary);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
 }

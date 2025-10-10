@@ -4,7 +4,7 @@
       <div class="pm-sheet" role="dialog" aria-modal="true" aria-label="Selecciona un plan">
         <header class="pm-header">
           <h2>Selecciona un plan</h2>
-          <button class="pm-close" @click="$emit('close')" aria-label="Cerrar">✕</button>
+          <pv-button class="pm-close" @click="$emit('close')" aria-label="Cerrar">✕</pv-button>
         </header>
 
         <div class="pm-content">
@@ -37,7 +37,7 @@
                 </ul>
               </div>
 
-              <button class="cta indigo" @click="select('Gratuito')">Seleccionar plan</button>
+              <pv-button class="cta indigo" @click="select('Gratuito')">Seleccionar plan</pv-button>
             </article>
 
             <!-- PREMIUM -->
@@ -68,7 +68,7 @@
                 </ul>
               </div>
 
-              <button class="cta orange" @click="select('Premium')">Suscribirse ahora</button>
+              <pv-button class="cta orange" @click="select('Premium')">Suscribirse ahora</pv-button>
             </article>
           </div>
         </div>

@@ -2,7 +2,7 @@
   <section class="pa-card">
     <h3 class="pa-title">Plan Actual</h3>
 
-    <button
+    <pv-button
         class="pa-circle"
         @click="openPlansModal"
         aria-label="Ver y cambiar plan"
@@ -11,7 +11,7 @@
     >
       <span class="pa-circle__title">{{ isHovered ? 'Cambiar' : 'Plan' }}</span>
       <span class="pa-circle__name">{{ isHovered ? 'de Plan' : currentPlan }}</span>
-    </button>
+    </pv-button>
 
     <p class="pa-hint">Haz clic para ver los planes</p>
   </section>
