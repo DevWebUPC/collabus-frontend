@@ -2,6 +2,7 @@
 const ProjectList = () => import('./views/project-list.vue');
 const ProjectDetail = () => import('./views/project-detail.vue');
 const ProjectCreate = () => import('./views/project-create.vue');
+const ShowProject = () => import('./views/show-project.component.vue');
 
 export const projectRoutes = [
   {
@@ -13,6 +14,15 @@ export const projectRoutes = [
       requiresAuth: true 
     }
   },
+    {
+        path: '/projects/show/:id',
+        name: 'projects-show',
+        component: ShowProject,
+        meta: {
+            title: 'Projects show',
+            requiresAuth: true
+        }
+    },
   {
     path: '/projects/create',
     name: 'project-create',

@@ -66,7 +66,7 @@ const removeTag = (index) => {
         class="tag-item"
       >
         #{{ tag }}
-        <button type="button" @click="removeTag(index)" class="remove-tag">×</button>
+        <pv-button type="button" @click="removeTag(index)" class="remove-tag">×</pv-button>
       </span>
     </div>
   </div>

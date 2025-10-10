@@ -33,6 +33,7 @@ export class ProjectAssembler {
       endDate: apiData.endDate,
       budget: apiData.budget || 0,
       userId: apiData.userId,
+      authorName: apiData.authorName || apiData.owner || 'Usuario',
       collaborators: apiData.collaborators || [],
       tasks: apiData.tasks || [],
       milestones: apiData.milestones || [],
@@ -88,7 +89,8 @@ export class ProjectAssembler {
       tasks: entity.tasks,
       milestones: entity.milestones,
       createdAt: entity.createdAt?.toISOString(),
-      updatedAt: entity.updatedAt?.toISOString()
+      updatedAt: entity.updatedAt?.toISOString(),
+      authorName: entity.authorName || entity.owner || 'Usuario'
     };
   }
 

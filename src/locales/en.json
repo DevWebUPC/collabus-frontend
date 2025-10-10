@@ -10,8 +10,60 @@
     "notifications": "Notifications"
   },
   "home": {
-    "title": "Welcome",
-    "content": "Welcome to CollabUs."
+    "title": "CollabUs",
+    "subtitle": "Connect, collaborate, and create amazing projects with professionals from around the world",
+    "filters": {
+      "searchPlaceholder": "Name or keyword",
+      "jobTypePlaceholder": "Job type",
+      "areaPlaceholder": "Area",
+      "search": "Search",
+      "clearFilters": "Clear filters",
+      "allJobs": "All jobs",
+      "developer": "Developer",
+      "designer": "Designer",
+      "analyst": "Analyst",
+      "projectManager": "Project Manager",
+      "tester": "Tester",
+      "allAreas": "All areas",
+      "technology": "Technology",
+      "webDevelopment": "Web Development",
+      "mobileDevelopment": "Mobile Development",
+      "dataScience": "Data Science",
+      "design": "Design",
+      "marketing": "Marketing"
+    },
+    "collaborators": {
+      "title": "Featured collaborators",
+      "viewMore": "View more",
+      "projects": "projects",
+      "noCollaborators": "No collaborators available"
+    },
+    "projects": {
+      "title": "Projects list",
+      "resultsCount": "{count} projects found",
+      "publishedBy": "Published by",
+      "duration": "Duration",
+      "availableRoles": "Available positions",
+      "progress": "Progress",
+      "viewMore": "View more",
+      "apply": "Apply",
+      "noProjects": "No projects found",
+      "noProjectsMessage": "No projects match your current filters. Try different search criteria.",
+      "clearFilters": "Clear filters",
+      "areas": "Areas"
+    },
+    "featuredProjects": {
+      "title": "Featured Projects",
+      "viewMore": "View all",
+      "roles": "Roles",
+      "viewDetails": "View details",
+      "apply": "Apply",
+      "noFeaturedProjects": "No featured projects available",
+      "nearCompletion": "Near completion",
+      "inProgress": "In progress",
+      "earlyStage": "Early stage",
+      "justStarted": "Just started"
+    }
   },
   "page-not-found": {
     "title": "Page Not Found",
@@ -22,6 +74,13 @@
     "occurred": "Errors occurred"
   },
   "common": {
+    "loading": "Loading...",
+    "notSpecified": "Not specified",
+    "oneMonth": "1 month",
+    "months": "{count} months",
+    "unnamed": "Unnamed",
+    "noRole": "No role specified",
+    "unknown": "Unknown",
     "dates": {
       "yesterday": "Yesterday",
       "days-ago": "days ago",
@@ -46,6 +105,8 @@
     "no-owned-desc": "You haven't created any projects yet.",
     "create-first": "Create Your First Project",
     "completed": "completed",
+    "untitled": "Untitled project",
+    "noDescription": "No description available",
     "my-tasks": "My Tasks",
     "tasks-assigned": "tasks assigned to you",
     "upcoming-milestones": "Upcoming Milestones",

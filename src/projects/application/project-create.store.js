@@ -524,7 +524,7 @@ export const useProjectCreateStore = defineStore("project-create", () => {
       // Prepare project data
       const projectData = {
         title: basicInfoData.projectName,
-        summary: basicInfoData.summary,
+        description: basicInfoData.summary,
         areas: basicInfoData.areas,
         tags: basicInfoData.tags,
         academicLevel: detailsData.academicLevel,
@@ -535,7 +535,8 @@ export const useProjectCreateStore = defineStore("project-create", () => {
         roles: rolesData,
         status: "active",
         progress: 0,
-        userId: localStorage.getItem("userId") || "1", // TODO: Get from auth store
+				userId: localStorage.getItem("userId") || "1", // TODO: Get from auth store
+				authorName: localStorage.getItem("userName") || "Usuario", // TODO: Get from auth store
         collaborators: [],
         tasks: [],
         milestones: [],

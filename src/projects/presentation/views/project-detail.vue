@@ -85,45 +85,45 @@ onUnmounted(() => {
     <div v-if="store.project && !store.loading" class="project-content">
       <!-- Tab Navigation -->
       <div class="tab-navigation">
-        <button 
+        <pv-button 
           :class="['tab-button', { active: activeTab === 'overview' }]"
           @click="activeTab = 'overview'"
         >
           {{ $t('projects.detail.tabs.overview') }}
-        </button>
-        <button 
+        </pv-button>
+        <pv-button 
           :class="['tab-button', { active: activeTab === 'tasks' }]"
           @click="activeTab = 'tasks'"
         >
           {{ $t('projects.detail.tabs.tasks') }}
-        </button>
-        <button 
+        </pv-button>
+        <pv-button 
           :class="['tab-button', { active: activeTab === 'milestones' }]"
           @click="activeTab = 'milestones'"
         >
           {{ $t('projects.detail.tabs.milestones') }}
-        </button>
-        <button 
+        </pv-button>
+        <pv-button 
           v-if="store.isOwned"
           :class="['tab-button', { active: activeTab === 'contributions' }]"
           @click="activeTab = 'contributions'"
         >
           {{ $t('projects.detail.tabs.contributions') }}
-        </button>
-        <button 
+        </pv-button>
+        <pv-button 
           v-if="store.isOwned"
           :class="['tab-button', { active: activeTab === 'applicants' }]"
           @click="activeTab = 'applicants'"
         >
           {{ $t('projects.detail.tabs.applicants') }}
-        </button>
-        <button 
+        </pv-button>
+        <pv-button 
           v-if="store.isParticipating"
           :class="['tab-button', { active: activeTab === 'feedback' }]"
           @click="activeTab = 'feedback'"
         >
           {{ $t('projects.detail.tabs.feedback') }}
-        </button>
+        </pv-button>
       </div>
 
       <!-- Tab Content -->

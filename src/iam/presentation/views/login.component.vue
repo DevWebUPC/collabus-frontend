@@ -43,14 +43,14 @@ const handlePasswordRecovery = (email) => {
       <div class="logo">
         <img src="/logo.png" alt="CollabUs Logo" class="logo-image">
       </div>
-      <button
+      <pv-button
           @click="goBack"
           class="back-button"
           text
           icon="pi pi-arrow-left"
       >
         Regresar
-      </button>
+      </pv-button>
     </div>
   </header>
 

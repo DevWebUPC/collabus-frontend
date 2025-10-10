@@ -56,18 +56,18 @@ const formatDate = (date) => {
   <div class="project-list-container">
     <!-- Tab Navigation -->
     <div class="tab-navigation">
-      <button 
+      <pv-button 
         :class="['tab-button', { active: activeTab === 'participating' }]"
         @click="switchTab('participating')"
       >
         {{ $t('projects.participating') }}
-      </button>
-      <button 
+      </pv-button>
+      <pv-button 
         :class="['tab-button', { active: activeTab === 'owned' }]"
         @click="switchTab('owned')"
       >
         {{ $t('projects.my-projects') }}
-      </button>
+      </pv-button>
     </div>
 
     <!-- Projects List -->
