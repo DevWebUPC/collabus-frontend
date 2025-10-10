@@ -6,6 +6,8 @@ import Register from "../iam/presentation/views/register.component.vue";
 import Onboarding from "../iam/presentation/views/onboarding.component.vue";
 import ProfileView from "../profile-management/presentation/views/profile-view.vue";
 import Collaborator from "../shared/presentation/views/collaborators.vue"
+import RankingDeColaboradores from "../profile-management/presentation/views/ranking-de-colaboradores.vue";
+
 // Import dinámico para page not found
 const pageNotFound = () =>
     import("../shared/presentation/views/page-not-found.vue");
@@ -14,6 +16,7 @@ const pageNotFound = () =>
 const routes = [
     { path: "/", name: "login", component: Login, meta: { title: "Login" } },
     { path: "/register", name: "register", component: Register, meta: { title: "Register" } },
+    {path: "/ranking-colaboradores", name: "ranking", component: RankingDeColaboradores, meta: { title: "Ranking" } },
     { path: "/login", redirect: "/", meta: { title: "Login" } },
     { path: "/create-account", name: "create-account", component: Onboarding, meta: { title: "Create Account" } },
     { path: "/home", name: "home", component: Home, meta: { title: "Home" } },
