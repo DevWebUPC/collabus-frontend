@@ -45,6 +45,7 @@ import {
   AutoComplete,
   Chip,
   Message,
+  Paginator
 } from "primevue";
 import router from "./router/router.js";
 import pinia from "./pinia.js";
@@ -91,6 +92,7 @@ createApp(App)
   .component("pv-autocomplete", AutoComplete)
   .component("pv-message", Message)
   .component("pv-chip", Chip)
+  .component("pv-paginator", Paginator)
   .directive("tooltip", Tooltip)
   .use(router)
   .use(pinia)

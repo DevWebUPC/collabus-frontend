@@ -107,10 +107,12 @@
         "2"
       ],
       "createdAt": "2025-10-10T00:00:00.000Z",
-      "updatedAt": "2025-10-20T00:00:00.000Z"
+      "updatedAt": "2025-10-20T00:00:00.000Z",
+      "authorName": "Alice Johnson"
     },
     {
       "id": "2",
+      "authorName": "Bob Wilson",
       "title": "Mobile Banking App",
       "description": "Secure mobile banking application with biometric authentication, transaction history, and real-time notifications.",
       "summary": "Aplicación móvil de banca segura con autenticación biométrica y notificaciones en tiempo real.",
@@ -188,146 +190,31 @@
       "updatedAt": "2026-02-05T00:00:00.000Z"
     },
     {
-      "id": "4CwLvZV",
-      "title": "test",
-      "description": "this is a test for test",
-      "category": "Desarrollo Web",
+      "title": "prueba de nuevo proyecto",
+      "summary": "prueba de nuevo proyecto\nesto debe aparecer en el home",
       "areas": [
         "Desarrollo Web"
       ],
       "tags": [
-        "test"
+        "tag"
       ],
-      "summary": "this is a test for test",
       "academicLevel": "Estudiante de pregrado",
+      "benefits": "prueba de nuevo proyecto",
       "skills": [
-        "this is a test for test"
-      ],
-      "durationQuantity": 1,
-      "durationType": "dias",
-      "benefits": "this is a test for test",
-      "roles": [
-        {
-          "id": "role_1760049197065_yx7giq6yt",
-          "name": "this is a test for test",
-          "cards": [
-            {
-              "id": "card_1760049197065_7c45qc9gr",
-              "title": "this is a test for test",
-              "items": [
-                "this is a test for test"
-              ],
-              "roleId": null,
-              "createdAt": "2025-10-09T22:33:17.065Z",
-              "updatedAt": "2025-10-09T22:33:36.433Z"
-            }
-          ],
-          "projectId": null,
-          "createdAt": "2025-10-09T22:33:17.065Z",
-          "updatedAt": "2025-10-09T22:33:36.433Z"
-        }
-      ],
-      "status": "active",
-      "progress": 0,
-      "startDate": "2025-10-09T22:33:38.044Z",
-      "endDate": "2025-11-08T22:33:38.044Z",
-      "budget": 0,
-      "userId": "1",
-      "collaborators": [],
-      "tasks": [],
-      "milestones": [],
-      "createdAt": "2025-10-09T22:33:38.044Z",
-      "updatedAt": "2025-10-09T22:33:38.044Z"
-    },
-    {
-      "id": "ZYA7RPy",
-      "title": "dfdsfsdf",
-      "description": "sdfsdfsdfsdfsdfsdf",
-      "category": "Desarrollo Web",
-      "areas": [
-        "Desarrollo Web"
-      ],
-      "tags": [
-        "sdfdsfs"
-      ],
-      "summary": "sdfsdfsdfsdfsdfsdf",
-      "academicLevel": "Estudiante de pregrado",
-      "skills": [
-        "dfsdfds"
-      ],
-      "durationQuantity": 5,
-      "durationType": "dias",
-      "benefits": "sdfsdfsdfsfsdfsdfsdf",
-      "roles": [
-        {
-          "id": "role_1760049562625_vhqhv0qc5",
-          "name": "asdsad",
-          "cards": [
-            {
-              "id": "card_1760049562625_4l4ti325j",
-              "title": "adsasdas",
-              "items": [
-                "asdasds"
-              ],
-              "roleId": null,
-              "createdAt": "2025-10-09T22:39:22.625Z",
-              "updatedAt": "2025-10-09T22:42:23.320Z"
-            },
-            {
-              "id": "card_1760049744803_1spp6n22u",
-              "title": "asadasdsa",
-              "items": [
-                "asdasd",
-                "asdasdasdasd"
-              ],
-              "roleId": null,
-              "createdAt": "2025-10-09T22:42:24.803Z",
-              "updatedAt": "2025-10-09T22:42:27.647Z"
-            }
-          ],
-          "projectId": null,
-          "createdAt": "2025-10-09T22:39:22.625Z",
-          "updatedAt": "2025-10-09T22:42:27.647Z"
-        }
-      ],
-      "status": "active",
-      "progress": 0,
-      "startDate": "2025-10-09T22:42:29.034Z",
-      "endDate": "2026-03-08T22:42:29.034Z",
-      "budget": 0,
-      "userId": "1",
-      "collaborators": [],
-      "tasks": [],
-      "milestones": [],
-      "createdAt": "2025-10-09T22:42:29.034Z",
-      "updatedAt": "2025-10-09T22:42:29.034Z"
-    },
-    {
-      "title": "dfgdfgfdg",
-      "summary": "dfgdfgdfgdfgd",
-      "areas": [
-        "Desarrollo Web"
-      ],
-      "tags": [
-        "dgdgdfgdfg"
-      ],
-      "academicLevel": "Estudiante de posgrado",
-      "benefits": "dfgfdgdfgfdgdfg",
-      "skills": [
-        "dfgdfgfd"
+        "asdasd"
       ],
       "durationQuantity": 1,
       "durationType": "meses",
       "roles": [
         {
-          "id": 1760054376760,
-          "name": "dfgdfg",
+          "id": 1760061988268,
+          "name": "rol1",
           "cards": [
             {
-              "id": 1760054376761,
-              "title": "dfgdfgdf",
+              "id": 1760061988269,
+              "title": "titulo",
               "items": [
-                "dfgdfg"
+                "card"
               ]
             }
           ]
@@ -339,37 +226,36 @@
       "collaborators": [],
       "tasks": [],
       "milestones": [],
-      "createdAt": "2025-10-09T23:59:53.849Z",
-      "updatedAt": "2025-10-09T23:59:53.849Z",
-      "id": "nTTOk0n"
+      "createdAt": "2025-10-10T02:07:16.523Z",
+      "updatedAt": "2025-10-10T02:07:16.523Z",
+      "id": "uyP0-d3"
     },
     {
-      "title": "AAAAAAAAAAAAAA",
-      "summary": "AAAAAAAAAAAAAA",
+      "title": "prueba2",
+      "summary": "test description",
       "areas": [
         "Desarrollo Web"
       ],
       "tags": [
-        "AAAAAAAAAAAAAA"
+        "tag"
       ],
       "academicLevel": "Estudiante de pregrado",
-      "benefits": "AAAAAAAAAAAAAA",
+      "benefits": "test description",
       "skills": [
-        "AAAAAAAAAAAAAA"
+        "ada"
       ],
       "durationQuantity": 1,
       "durationType": "meses",
       "roles": [
         {
-          "id": 1760054393877,
-          "name": "AAAAAAAAAAAAAA",
+          "id": 1760062036558,
+          "name": "test description",
           "cards": [
             {
-              "id": 1760054393878,
-              "title": "AAAAAAAAAAAAAA",
+              "id": 1760062036559,
+              "title": "test description",
               "items": [
-                "AAAAAAAAAAAAAA",
-                "AAAAAAAAAAAAAA2"
+                "test description"
               ]
             }
           ]
@@ -381,36 +267,36 @@
       "collaborators": [],
       "tasks": [],
       "milestones": [],
-      "createdAt": "2025-10-10T00:00:35.023Z",
-      "updatedAt": "2025-10-10T00:00:35.023Z",
-      "id": "p1IEm71"
+      "createdAt": "2025-10-10T02:09:20.633Z",
+      "updatedAt": "2025-10-10T02:09:20.633Z",
+      "id": "b8joDRR"
     },
     {
-      "title": "FGDFGFDG",
-      "summary": "DFGFDGDFGFDGFDG",
+      "title": "summary",
+      "description": "summarysummarysummary",
       "areas": [
-        "DFGDFGFD"
+        "Desarrollo Web"
       ],
       "tags": [
-        "DFGDFGFD"
+        "summary"
       ],
       "academicLevel": "Estudiante de pregrado",
-      "benefits": "DFGFDGFDGFDG",
+      "benefits": "summarysummarysummary",
       "skills": [
-        "FDGDFGDFG"
+        "summary"
       ],
       "durationQuantity": 1,
-      "durationType": "dias",
+      "durationType": "meses",
       "roles": [
         {
-          "id": 1760054844921,
-          "name": "DFGDFG",
+          "id": 1760062212314,
+          "name": "summary",
           "cards": [
             {
-              "id": 1760054844922,
-              "title": "DFGDFG",
+              "id": 1760062212315,
+              "title": "summary",
               "items": [
-                "FGDFGDF"
+                "summary"
               ]
             }
           ]
@@ -419,12 +305,13 @@
       "status": "active",
       "progress": 0,
       "userId": "1",
+      "authorName": "Usuario",
       "collaborators": [],
       "tasks": [],
       "milestones": [],
-      "createdAt": "2025-10-10T00:07:41.849Z",
-      "updatedAt": "2025-10-10T00:07:41.849Z",
-      "id": "QQvcJJa"
+      "createdAt": "2025-10-10T02:10:25.682Z",
+      "updatedAt": "2025-10-10T02:10:25.682Z",
+      "id": "DMj8Bl6"
     }
   ],
   "tasks": [
