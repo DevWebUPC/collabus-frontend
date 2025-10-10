@@ -36,10 +36,10 @@ export const useUserStore = defineStore('user', () => {
             const apiData = UserAssembler.fromRegistrationToApi(registrationData);
             const response = await usersApi.register(apiData);
 
-            // Si la respuesta es exitosa, crear el usuario localmente
+            // ✅ SOLUCIÓN: Usar el ID que devuelve el backend
             if (response.status >= 200 && response.status < 300) {
                 const newUser = {
-                    id: Date.now().toString(), // ID temporal
+                    id: response.data.id, // ✅ Usar el ID real del backend
                     ...apiData,
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString()
@@ -118,6 +118,7 @@ export const useUserStore = defineStore('user', () => {
                 throw new Error('Credenciales incorrectas');
             }
 
+            // ✅ SOLUCIÓN: Usar directamente los datos del backend
             const user = UserAssembler.fromApiToEntity(userData);
 
             // Store user in local storage
@@ -140,6 +141,8 @@ export const useUserStore = defineStore('user', () => {
         currentUser.value = null;
         localStorage.removeItem('currentUser');
         localStorage.removeItem('userId');
+        localStorage.removeItem('currentProfile'); // 👈 Limpiar perfil también
+        localStorage.removeItem('profileId'); // 👈 Limpiar ID de perfil
     };
 
     const isAuthenticated = computed(() => {
