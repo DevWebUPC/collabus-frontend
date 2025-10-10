@@ -1,9 +1,12 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '../../application/user-store.js'; // Ajusta la ruta según tu estructura
 import { Button as PvButton, InputText } from "primevue";
 
 const router = useRouter();
+const userStore = useUserStore();
+
 const fullName = ref('');
 const email = ref('');
 const password = ref('');
@@ -13,25 +16,27 @@ const goBack = () => {
   router.push('/');
 };
 
-const gotoCreateAccount = () => {
-  router.push('/create-account');
-};
-
-const handleRegister = () => {
+const handleRegister = async () => {
   if (password.value !== confirmPassword.value) {
     alert('Las contraseñas no coinciden');
     return;
   }
 
-  // Aquí iría tu lógica de registro
-  console.log('Register attempt:', {
-    fullName: fullName.value,
-    email: email.value,
-    password: password.value
-  });
+  try {
+    const registrationData = {
+      fullName: fullName.value,
+      email: email.value,
+      password: password.value
+    };
 
-  // Redirigir después del registro exitoso
-  // router.push('/dashboard');
+    await userStore.register(registrationData);
+
+    // Redirigir al onboarding después del registro exitoso
+    router.push('/create-account');
+  } catch (error) {
+    console.error('Error en registro:', error);
+    alert(error.message || 'Error en el registro');
+  }
 };
 </script>
 
@@ -122,7 +127,7 @@ const handleRegister = () => {
               type="submit"
               class="register-button w-full"
               label="Guardar"
-              @click="gotoCreateAccount"
+              :loading="userStore.loading"
           />
         </form>
 
@@ -134,6 +139,7 @@ const handleRegister = () => {
   </div>
 </template>
 
+<!-- Los estilos se mantienen igual -->
 <style scoped>
 .register-container {
   display: flex;

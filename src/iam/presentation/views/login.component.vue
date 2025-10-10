@@ -2,19 +2,18 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '../../application/user-store.js'; // Ajusta la ruta según tu estructura
 import ModalForgetPassword from '../components/modal-forget-password.component.vue';
 
 const router = useRouter();
+const userStore = useUserStore();
 const showForgotPasswordModal = ref(false);
 const email = ref('');
 const password = ref('');
+const loginError = ref('');
 
 const goBack = () => {
   window.location.href = 'https://devwebupc.github.io/landing-page/';
-};
-
-const goToHome = () => {
-  router.push('/home');
 };
 
 const openForgotPasswordModal = () => {
@@ -25,10 +24,30 @@ const goToRegister = () => {
   router.push('/register');
 };
 
-const handleLogin = () => {
-  // Aquí iría tu lógica de login
-  console.log('Login attempt:', email.value, password.value);
-  // router.push('/dashboard'); // Redirigir después del login exitoso
+const handleLogin = async () => {
+  try {
+    loginError.value = '';
+
+    // Validaciones básicas
+    if (!email.value || !password.value) {
+      loginError.value = 'Por favor, completa todos los campos';
+      return;
+    }
+
+    console.log('🔐 Attempting login for:', email.value);
+
+    // Usar el user store para hacer login
+    await userStore.login(email.value, password.value);
+
+    console.log('✅ Login successful, redirecting...');
+
+    // Redirigir al home después del login exitoso
+    router.push('/home');
+
+  } catch (error) {
+    console.error('❌ Login error:', error);
+    loginError.value = error.message || 'Error al iniciar sesión';
+  }
 };
 
 const handlePasswordRecovery = (email) => {
@@ -61,7 +80,19 @@ const handlePasswordRecovery = (email) => {
         <p class="login-subtitle">Inicia sesión en tu cuenta</p>
       </div>
 
-      <form @submit.prevent="handleLogin" class="login-form">
+      <!-- Mensaje de error -->
+      <div v-if="loginError" class="error-message">
+        <i class="pi pi-exclamation-triangle"></i>
+        {{ loginError }}
+      </div>
+
+      <!-- Loading state -->
+      <div v-if="userStore.loading" class="loading-state">
+        <div class="loading-spinner"></div>
+        <span>Iniciando sesión...</span>
+      </div>
+
+      <form @submit.prevent="handleLogin" class="login-form" :class="{ 'disabled': userStore.loading }">
         <div class="form-group">
           <label for="email">Correo Electrónico</label>
           <pv-input-text
@@ -71,6 +102,7 @@ const handlePasswordRecovery = (email) => {
               placeholder="ejemplo123@gmail.com"
               required
               class="w-full"
+              :disabled="userStore.loading"
           />
         </div>
 
@@ -83,6 +115,7 @@ const handlePasswordRecovery = (email) => {
               placeholder="Ingresa tu contraseña"
               required
               class="w-full"
+              :disabled="userStore.loading"
           />
         </div>
 
@@ -93,8 +126,9 @@ const handlePasswordRecovery = (email) => {
         <pv-button
             type="submit"
             class="login-button w-full"
-            label="Ingresar"
-            @click="goToHome"
+            :label="userStore.loading ? 'Ingresando...' : 'Ingresar'"
+            :disabled="userStore.loading || !email || !password"
+            :loading="userStore.loading"
         />
       </form>
 
@@ -196,8 +230,57 @@ const handlePasswordRecovery = (email) => {
   margin: 0;
 }
 
+/* Error Message */
+.error-message {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.error-message i {
+  font-size: 16px;
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #e5e7eb;
+  border-top: 3px solid #6C63FF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .login-form {
   margin-bottom: 20px;
+}
+
+.login-form.disabled {
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 .form-group {
@@ -226,6 +309,12 @@ const handlePasswordRecovery = (email) => {
   box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.1);
 }
 
+:deep(.p-inputtext:disabled) {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
 .forgot-password {
   text-align: right;
   margin-bottom: 20px;
@@ -252,8 +341,14 @@ const handlePasswordRecovery = (email) => {
   transition: background-color 0.3s;
 }
 
-.login-button:hover {
-  background-color: #6C63FF;
+.login-button:hover:not(:disabled) {
+  background-color: #5a52d5;
+}
+
+.login-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .register-link {

@@ -1,4 +1,24 @@
 {
+  "users": [
+    {
+      "fullName": "Baca Camargo Vitaly Arturo",
+      "email": "vitalybaca92@gmail.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-10T09:20:34.108Z",
+      "updatedAt": "2025-10-10T09:20:34.108Z",
+      "id": 1
+    },
+    {
+      "fullName": "Sebastian Pariachi",
+      "email": "u20231c426@upc.edu.pe",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-10T09:27:20.003Z",
+      "updatedAt": "2025-10-10T09:27:20.003Z",
+      "id": 2
+    }
+  ],
   "projects": [
     {
       "id": "1",
