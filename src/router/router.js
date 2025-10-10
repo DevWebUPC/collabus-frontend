@@ -7,6 +7,8 @@ import Onboarding from "../iam/presentation/views/onboarding.component.vue";
 import ProfileView from "../profile-management/presentation/views/profile-view.vue";
 import Collaborator from "../shared/presentation/views/collaborators.vue"
 import RankingDeColaboradores from "../profile-management/presentation/views/ranking-de-colaboradores.vue";
+import { projectRoutes } from "../projects/presentation/projects-routes.js";
+import Notifications from "../shared/presentation/views/notifications-view.vue";
 
 // Import dinámico para page not found
 const pageNotFound = () =>
@@ -22,8 +24,14 @@ const routes = [
     { path: "/home", name: "home", component: Home, meta: { title: "Home" } },
     { path: "/collaborators", name: "collaborators", component: Collaborator, meta: { title: "Collaborators" } },
     { path: "/profile", name: "profile", component: ProfileView, meta: { title: "Profile" } },
+    { path: "/notifications", name: "notifications", component: Notifications, meta: { title: "Notifications" } },
     { path: "/recovery-password", name: "recovery-password", component: RecoveryPassword, meta: { title: "Recovery Password" } },
     { path: "/:pathMatch(.*)*", name: "not-found", component: pageNotFound, meta: { title: "Page Not Found" } },
+        // Project routes
+    ...projectRoutes,
+    // Placeholder routes for other modules
+    { path: "/collaborators", name: "collaborators", component: () => import("../shared/presentation/views/page-not-found.vue"), meta: { title: "Collaborators" } },
+    { path: "/notifications", name: "notifications", component: () => import("../shared/presentation/views/page-not-found.vue"), meta: { title: "Notifications" } },
 ];
 
 const router = createRouter({
