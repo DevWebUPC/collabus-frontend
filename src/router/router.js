@@ -29,9 +29,6 @@ const routes = [
     { path: "/:pathMatch(.*)*", name: "not-found", component: pageNotFound, meta: { title: "Page Not Found" } },
         // Project routes
     ...projectRoutes,
-    // Placeholder routes for other modules
-    { path: "/collaborators", name: "collaborators", component: () => import("../shared/presentation/views/page-not-found.vue"), meta: { title: "Collaborators" } },
-    { path: "/notifications", name: "notifications", component: () => import("../shared/presentation/views/page-not-found.vue"), meta: { title: "Notifications" } },
 ];
 
 const router = createRouter({
