@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
-defineProps({
+const props = defineProps({
   modelValue: {
     type: Object,
     required: true
@@ -26,19 +26,38 @@ const predefinedRoles = ref([
   'Full Stack Developer'
 ]);
 
+// Inicializar con datos existentes
+const selectedRole = ref(props.modelValue.selectedRole || '');
+const customRole = ref(props.modelValue.customRole || '');
+
 const selectRole = (role) => {
+  selectedRole.value = role;
+  customRole.value = '';
+  updateModelValue();
+};
+
+const updateCustomRole = (role) => {
+  customRole.value = role;
+  selectedRole.value = '';
+  updateModelValue();
+};
+
+const updateModelValue = () => {
   emit('update:modelValue', {
-    selectedRole: role,
-    customRole: ''
+    selectedRole: selectedRole.value,
+    customRole: customRole.value
   });
 };
 
-const updateCustomRole = (customRole) => {
-  emit('update:modelValue', {
-    selectedRole: '',
-    customRole: customRole
-  });
-};
+// Sincronizar cuando cambien los props
+watch(() => props.modelValue, (newValue) => {
+  if (newValue.selectedRole !== selectedRole.value) {
+    selectedRole.value = newValue.selectedRole || '';
+  }
+  if (newValue.customRole !== customRole.value) {
+    customRole.value = newValue.customRole || '';
+  }
+}, { deep: true });
 </script>
 
 <template>

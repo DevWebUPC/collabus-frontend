@@ -6,6 +6,11 @@ import ProfileStep from "../components/profile-step.component.vue"
 import SkillsStep from "../components/skill-step.component.vue";
 import RoleStep from "../components/role-step.component.vue";
 import DescriptionStep from "../components/description-step.component.vue";
+import { useProfileStore  } from '../../../profile-management/application/profile-store.js';
+import {useUserStore} from "../../application/user-store.js";
+
+const userStore = useUserStore();
+const profileStore = useProfileStore();
 const router = useRouter();
 const currentStep = ref(1);
 
@@ -13,8 +18,8 @@ const currentStep = ref(1);
 const formData = reactive({
   profile: { avatar: null, username: '' },
   role: { selectedRole: '', customRole: '' },
-  description: { bio: ''},
-  skills: { abilities: [], experiences: [] },
+  description: { bio: '' },
+  skills: { abilities: [], experiences: [], cv: null },
 });
 
 // Navegacion entre pasos
@@ -32,10 +37,19 @@ const prevStep  = () => {
   }
 }
 
-const completeOnboarding = () => {
-  console.log("Onboarding completed with data:", formData);
-  router.push("/home");
-}
+const completeOnboarding = async () => {
+  try {
+    console.log("Onboarding data:", formData);
+
+    // Usar el profile store para completar el onboarding
+    await profileStore.completeOnboarding(formData, userStore.currentUser.id);
+
+    router.push("/home");
+  } catch (error) {
+    console.error('Error completing onboarding:', error);
+    alert(error.message || 'Error al completar el onboarding');
+  }
+};
 </script>
 
 <template>

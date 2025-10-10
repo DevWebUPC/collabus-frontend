@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
-defineProps({
+const props = defineProps({
   modelValue: {
     type: Object,
     required: true
@@ -10,25 +10,28 @@ defineProps({
 
 const emit = defineEmits(['update:modelValue', 'next', 'prev']);
 
+// Inicializar con los datos existentes
+const skills = ref([...props.modelValue.abilities]);
+const experiences = ref([...props.modelValue.experiences]);
+const cvFile = ref(props.modelValue.cv || null);
+
 // Habilidades
 const newSkill = ref('');
-const skills = ref([]);
 
 const addSkill = () => {
   if (newSkill.value.trim() && !skills.value.includes(newSkill.value.trim())) {
     skills.value.push(newSkill.value.trim());
     newSkill.value = '';
-    updateSkillsData();
+    updateModelValue();
   }
 };
 
 const removeSkill = (index) => {
   skills.value.splice(index, 1);
-  updateSkillsData();
+  updateModelValue();
 };
 
 // Experiencias
-const experiences = ref([]);
 const newExperience = ref({
   position: '',
   company: '',
@@ -39,18 +42,16 @@ const addExperience = () => {
   if (newExperience.value.position.trim() && newExperience.value.company.trim()) {
     experiences.value.push({ ...newExperience.value });
     newExperience.value = { position: '', company: '', duration: '' };
-    updateExperiencesData();
+    updateModelValue();
   }
 };
 
 const removeExperience = (index) => {
   experiences.value.splice(index, 1);
-  updateExperiencesData();
+  updateModelValue();
 };
 
 // CV
-const cvFile = ref(null);
-
 const onCvSelect = (event) => {
   const file = event.target.files[0];
   if (file) {
@@ -68,23 +69,31 @@ const onCvSelect = (event) => {
     }
 
     cvFile.value = file;
+    updateModelValue();
   }
 };
 
-// Actualizar datos
-const updateSkillsData = () => {
+// Actualizar datos del modelo
+const updateModelValue = () => {
   emit('update:modelValue', {
-    ...modelValue,
-    abilities: [...skills.value]
+    abilities: [...skills.value],
+    experiences: [...experiences.value],
+    cv: cvFile.value
   });
 };
 
-const updateExperiencesData = () => {
-  emit('update:modelValue', {
-    ...modelValue,
-    experiences: [...experiences.value]
-  });
-};
+// Sincronizar cuando cambien los props
+watch(() => props.modelValue, (newValue) => {
+  if (newValue.abilities) {
+    skills.value = [...newValue.abilities];
+  }
+  if (newValue.experiences) {
+    experiences.value = [...newValue.experiences];
+  }
+  if (newValue.cv) {
+    cvFile.value = newValue.cv;
+  }
+}, { deep: true });
 </script>
 
 <template>
