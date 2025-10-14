@@ -14,6 +14,8 @@ export class Profile {
                     experiences = [],
                     cv = null,
                     status = 'active',
+                    points = 0, // 👈 Nuevo campo - inicializado en 0
+                    projects = [], // 👈 Nuevo campo - array vacío
                     createdAt = null,
                     updatedAt = null
                 } = {}) {
@@ -27,6 +29,8 @@ export class Profile {
         this.experiences = experiences;
         this.cv = cv;
         this.status = status;
+        this.points = points; // 👈 Inicializar puntos
+        this.projects = projects; // 👈 Inicializar proyectos
         this.createdAt = createdAt ? new Date(createdAt) : new Date();
         this.updatedAt = updatedAt ? new Date(updatedAt) : new Date();
     }
@@ -48,6 +52,26 @@ export class Profile {
         if (this.avatar) completedFields++;
 
         return Math.round((completedFields / totalFields) * 100);
+    }
+
+    // 👇 Nuevos métodos para manejar puntos y proyectos
+    addPoints(pointsToAdd) {
+        this.points += pointsToAdd;
+        this.updatedAt = new Date();
+    }
+
+    addProject(project) {
+        this.projects.push(project);
+        this.updatedAt = new Date();
+    }
+
+    removeProject(projectId) {
+        this.projects = this.projects.filter(project => project.id !== projectId);
+        this.updatedAt = new Date();
+    }
+
+    getProjectsCount() {
+        return this.projects.length;
     }
 
     // Validation methods
