@@ -1,6 +1,646 @@
 {
-  "users": [],
-  "profiles": [],
+  "users": [
+    {
+      "fullName": "Baca Camargo Vitaly Arturo",
+      "email": "gutavo2005@gmail.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-14T22:56:39.817Z",
+      "updatedAt": "2025-10-14T22:56:39.817Z",
+      "id": 1
+    },
+    {
+      "fullName": "Sebastian Pariachi",
+      "email": "u20231c426@gmail.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-14T22:56:39.817Z",
+      "updatedAt": "2025-10-14T22:56:39.817Z",
+      "id": 2
+    },
+    {
+      "fullName": "Maria Gonzalez Lopez",
+      "email": "maria.gonzalez@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T10:00:00.000Z",
+      "updatedAt": "2025-10-15T10:00:00.000Z",
+      "id": 3
+    },
+    {
+      "fullName": "Carlos Rodriguez Perez",
+      "email": "carlos.rodriguez@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T10:05:00.000Z",
+      "updatedAt": "2025-10-15T10:05:00.000Z",
+      "id": 4
+    },
+    {
+      "fullName": "Ana Martinez Sanchez",
+      "email": "ana.martinez@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T10:10:00.000Z",
+      "updatedAt": "2025-10-15T10:10:00.000Z",
+      "id": 5
+    },
+    {
+      "fullName": "Luis Fernandez Garcia",
+      "email": "luis.fernandez@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T10:15:00.000Z",
+      "updatedAt": "2025-10-15T10:15:00.000Z",
+      "id": 6
+    },
+    {
+      "fullName": "Elena Torres Ramirez",
+      "email": "elena.torres@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T10:20:00.000Z",
+      "updatedAt": "2025-10-15T10:20:00.000Z",
+      "id": 7
+    },
+    {
+      "fullName": "Javier Herrera Diaz",
+      "email": "javier.herrera@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T10:25:00.000Z",
+      "updatedAt": "2025-10-15T10:25:00.000Z",
+      "id": 8
+    },
+    {
+      "fullName": "Sofia Castro Mendez",
+      "email": "sofia.castro@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T10:30:00.000Z",
+      "updatedAt": "2025-10-15T10:30:00.000Z",
+      "id": 9
+    },
+    {
+      "fullName": "Diego Morales Silva",
+      "email": "diego.morales@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T10:35:00.000Z",
+      "updatedAt": "2025-10-15T10:35:00.000Z",
+      "id": 10
+    },
+    {
+      "fullName": "Laura Jimenez Ortega",
+      "email": "laura.jimenez@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T10:40:00.000Z",
+      "updatedAt": "2025-10-15T10:40:00.000Z",
+      "id": 11
+    },
+    {
+      "fullName": "Pedro Vargas Rios",
+      "email": "pedro.vargas@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T10:45:00.000Z",
+      "updatedAt": "2025-10-15T10:45:00.000Z",
+      "id": 12
+    },
+    {
+      "fullName": "Carmen Reyes Flores",
+      "email": "carmen.reyes@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T10:50:00.000Z",
+      "updatedAt": "2025-10-15T10:50:00.000Z",
+      "id": 13
+    },
+    {
+      "fullName": "Ricardo Soto Navarro",
+      "email": "ricardo.soto@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T10:55:00.000Z",
+      "updatedAt": "2025-10-15T10:55:00.000Z",
+      "id": 14
+    },
+    {
+      "fullName": "Isabel Chavez Cruz",
+      "email": "isabel.chavez@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T11:00:00.000Z",
+      "updatedAt": "2025-10-15T11:00:00.000Z",
+      "id": 15
+    },
+    {
+      "fullName": "Fernando Mendoza Leon",
+      "email": "fernando.mendoza@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T11:05:00.000Z",
+      "updatedAt": "2025-10-15T11:05:00.000Z",
+      "id": 16
+    },
+    {
+      "fullName": "Patricia Vega Ruiz",
+      "email": "patricia.vega@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T11:10:00.000Z",
+      "updatedAt": "2025-10-15T11:10:00.000Z",
+      "id": 17
+    },
+    {
+      "fullName": "Roberto Delgado Marin",
+      "email": "roberto.delgado@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T11:15:00.000Z",
+      "updatedAt": "2025-10-15T11:15:00.000Z",
+      "id": 18
+    },
+    {
+      "fullName": "Gabriela Paredes Luna",
+      "email": "gabriela.paredes@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T11:20:00.000Z",
+      "updatedAt": "2025-10-15T11:20:00.000Z",
+      "id": 19
+    },
+    {
+      "fullName": "Miguel Angel Cordova",
+      "email": "miguel.cordova@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T11:25:00.000Z",
+      "updatedAt": "2025-10-15T11:25:00.000Z",
+      "id": 20
+    },
+    {
+      "fullName": "Daniela Romero Salas",
+      "email": "daniela.romero@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T11:30:00.000Z",
+      "updatedAt": "2025-10-15T11:30:00.000Z",
+      "id": 21
+    },
+    {
+      "fullName": "Alejandro Nunez Campos",
+      "email": "alejandro.nunez@email.com",
+      "password": "123123",
+      "status": "active",
+      "createdAt": "2025-10-15T11:35:00.000Z",
+      "updatedAt": "2025-10-15T11:35:00.000Z",
+      "id": 22
+    }
+  ],
+  "profiles": [
+    {
+      "userId": 1,
+      "username": "Vitaly Baca",
+      "role": "Data Scientist",
+      "bio": "122",
+      "abilities": ["Java", "Vue"],
+      "experiences": [
+        {
+          "position": "1",
+          "company": "1",
+          "duration": "1"
+        }
+      ],
+      "status": "active",
+      "points": 0,
+      "projects": [],
+      "createdAt": "2025-10-14T22:57:35.048Z",
+      "updatedAt": "2025-10-14T22:57:35.048Z",
+      "id": 1
+    },
+    {
+      "userId": 2,
+      "username": "Sebas",
+      "role": "Ing. Software",
+      "bio": "hola",
+      "abilities": ["Java", "Vue"],
+      "experiences": [
+        {
+          "position": "2",
+          "company": "2",
+          "duration": "2"
+        }
+      ],
+      "status": "active",
+      "points": 0,
+      "projects": [],
+      "createdAt": "2025-10-14T22:57:35.048Z",
+      "updatedAt": "2025-10-14T22:57:35.048Z",
+      "id": 2
+    },
+    {
+      "userId": 3,
+      "username": "MariaG",
+      "role": "Frontend Developer",
+      "bio": "Desarrolladora frontend con experiencia en React y Vue",
+      "abilities": ["JavaScript", "React", "Vue", "CSS"],
+      "experiences": [
+        {
+          "position": "Frontend Developer",
+          "company": "Tech Solutions",
+          "duration": "2 años"
+        }
+      ],
+      "status": "active",
+      "points": 450,
+      "projects": [],
+      "createdAt": "2025-10-15T10:00:00.000Z",
+      "updatedAt": "2025-10-15T10:00:00.000Z",
+      "id": 3
+    },
+    {
+      "userId": 4,
+      "username": "CarlosR",
+      "role": "Backend Engineer",
+      "bio": "Ingeniero backend especializado en microservicios",
+      "abilities": ["Java", "Spring Boot", "MySQL", "Docker"],
+      "experiences": [
+        {
+          "position": "Backend Engineer",
+          "company": "Banking Corp",
+          "duration": "3 años"
+        }
+      ],
+      "status": "active",
+      "points": 680,
+      "projects": [],
+      "createdAt": "2025-10-15T10:05:00.000Z",
+      "updatedAt": "2025-10-15T10:05:00.000Z",
+      "id": 4
+    },
+    {
+      "userId": 5,
+      "username": "AnaM",
+      "role": "UX/UI Designer",
+      "bio": "Diseñadora de experiencias de usuario creativa y detallista",
+      "abilities": ["Figma", "Adobe XD", "User Research", "Prototyping"],
+      "experiences": [
+        {
+          "position": "UX Designer",
+          "company": "Design Studio",
+          "duration": "2 años"
+        }
+      ],
+      "status": "active",
+      "points": 320,
+      "projects": [],
+      "createdAt": "2025-10-15T10:10:00.000Z",
+      "updatedAt": "2025-10-15T10:10:00.000Z",
+      "id": 5
+    },
+    {
+      "userId": 6,
+      "username": "LuisF",
+      "role": "Full Stack Developer",
+      "bio": "Desarrollador full stack con pasión por el código limpio",
+      "abilities": ["JavaScript", "Node.js", "React", "MongoDB"],
+      "experiences": [
+        {
+          "position": "Full Stack Developer",
+          "company": "Startup XYZ",
+          "duration": "4 años"
+        }
+      ],
+      "status": "active",
+      "points": 780,
+      "projects": [],
+      "createdAt": "2025-10-15T10:15:00.000Z",
+      "updatedAt": "2025-10-15T10:15:00.000Z",
+      "id": 6
+    },
+    {
+      "userId": 7,
+      "username": "ElenaT",
+      "role": "Data Analyst",
+      "bio": "Analista de datos con experiencia en business intelligence",
+      "abilities": ["Python", "SQL", "Tableau", "Excel"],
+      "experiences": [
+        {
+          "position": "Data Analyst",
+          "company": "Retail Analytics",
+          "duration": "2 años"
+        }
+      ],
+      "status": "active",
+      "points": 540,
+      "projects": [],
+      "createdAt": "2025-10-15T10:20:00.000Z",
+      "updatedAt": "2025-10-15T10:20:00.000Z",
+      "id": 7
+    },
+    {
+      "userId": 8,
+      "username": "JavierH",
+      "role": "DevOps Engineer",
+      "bio": "Ingeniero DevOps enfocado en automatización y CI/CD",
+      "abilities": ["AWS", "Kubernetes", "Jenkins", "Terraform"],
+      "experiences": [
+        {
+          "position": "DevOps Engineer",
+          "company": "Cloud Tech",
+          "duration": "3 años"
+        }
+      ],
+      "status": "active",
+      "points": 890,
+      "projects": [],
+      "createdAt": "2025-10-15T10:25:00.000Z",
+      "updatedAt": "2025-10-15T10:25:00.000Z",
+      "id": 8
+    },
+    {
+      "userId": 9,
+      "username": "SofiaC",
+      "role": "Product Manager",
+      "bio": "Product manager con visión estratégica y orientación al usuario",
+      "abilities": ["Product Strategy", "Agile", "User Stories", "Roadmapping"],
+      "experiences": [
+        {
+          "position": "Product Manager",
+          "company": "FinTech Inc",
+          "duration": "5 años"
+        }
+      ],
+      "status": "active",
+      "points": 950,
+      "projects": [],
+      "createdAt": "2025-10-15T10:30:00.000Z",
+      "updatedAt": "2025-10-15T10:30:00.000Z",
+      "id": 9
+    },
+    {
+      "userId": 10,
+      "username": "DiegoM",
+      "role": "Mobile Developer",
+      "bio": "Desarrollador móvil especializado en aplicaciones nativas",
+      "abilities": ["Swift", "Kotlin", "React Native", "Firebase"],
+      "experiences": [
+        {
+          "position": "Mobile Developer",
+          "company": "App Factory",
+          "duration": "3 años"
+        }
+      ],
+      "status": "active",
+      "points": 610,
+      "projects": [],
+      "createdAt": "2025-10-15T10:35:00.000Z",
+      "updatedAt": "2025-10-15T10:35:00.000Z",
+      "id": 10
+    },
+    {
+      "userId": 11,
+      "username": "LauraJ",
+      "role": "QA Engineer",
+      "bio": "Ingeniera de calidad con enfoque en testing automatizado",
+      "abilities": ["Selenium", "Jest", "Cypress", "Test Planning"],
+      "experiences": [
+        {
+          "position": "QA Engineer",
+          "company": "Software Corp",
+          "duration": "2 años"
+        }
+      ],
+      "status": "active",
+      "points": 430,
+      "projects": [],
+      "createdAt": "2025-10-15T10:40:00.000Z",
+      "updatedAt": "2025-10-15T10:40:00.000Z",
+      "id": 11
+    },
+    {
+      "userId": 12,
+      "username": "PedroV",
+      "role": "Database Administrator",
+      "bio": "Administrador de bases de datos con expertise en optimización",
+      "abilities": ["PostgreSQL", "MySQL", "MongoDB", "Performance Tuning"],
+      "experiences": [
+        {
+          "position": "DBA",
+          "company": "Data Systems",
+          "duration": "4 años"
+        }
+      ],
+      "status": "active",
+      "points": 720,
+      "projects": [],
+      "createdAt": "2025-10-15T10:45:00.000Z",
+      "updatedAt": "2025-10-15T10:45:00.000Z",
+      "id": 12
+    },
+    {
+      "userId": 13,
+      "username": "CarmenR",
+      "role": "Marketing Digital",
+      "bio": "Especialista en marketing digital y growth hacking",
+      "abilities": ["SEO", "Google Ads", "Social Media", "Analytics"],
+      "experiences": [
+        {
+          "position": "Digital Marketer",
+          "company": "Marketing Agency",
+          "duration": "3 años"
+        }
+      ],
+      "status": "active",
+      "points": 380,
+      "projects": [],
+      "createdAt": "2025-10-15T10:50:00.000Z",
+      "updatedAt": "2025-10-15T10:50:00.000Z",
+      "id": 13
+    },
+    {
+      "userId": 14,
+      "username": "RicardoS",
+      "role": "Security Analyst",
+      "bio": "Analista de seguridad con enfoque en aplicaciones web",
+      "abilities": ["Penetration Testing", "OWASP", "Network Security", "Vulnerability Assessment"],
+      "experiences": [
+        {
+          "position": "Security Analyst",
+          "company": "CyberSecure",
+          "duration": "3 años"
+        }
+      ],
+      "status": "active",
+      "points": 670,
+      "projects": [],
+      "createdAt": "2025-10-15T10:55:00.000Z",
+      "updatedAt": "2025-10-15T10:55:00.000Z",
+      "id": 14
+    },
+    {
+      "userId": 15,
+      "username": "IsabelC",
+      "role": "Cloud Architect",
+      "bio": "Arquitecta cloud con experiencia en soluciones escalables",
+      "abilities": ["AWS", "Azure", "Microservices", "Serverless"],
+      "experiences": [
+        {
+          "position": "Cloud Architect",
+          "company": "Cloud Solutions",
+          "duration": "5 años"
+        }
+      ],
+      "status": "active",
+      "points": 920,
+      "projects": [],
+      "createdAt": "2025-10-15T11:00:00.000Z",
+      "updatedAt": "2025-10-15T11:00:00.000Z",
+      "id": 15
+    },
+    {
+      "userId": 16,
+      "username": "FernandoM",
+      "role": "Scrum Master",
+      "bio": "Scrum master certificado con experiencia en equipos ágiles",
+      "abilities": ["Agile Coaching", "Sprint Planning", "Retrospectives", "Team Facilitation"],
+      "experiences": [
+        {
+          "position": "Scrum Master",
+          "company": "Tech Enterprise",
+          "duration": "4 años"
+        }
+      ],
+      "status": "active",
+      "points": 580,
+      "projects": [],
+      "createdAt": "2025-10-15T11:05:00.000Z",
+      "updatedAt": "2025-10-15T11:05:00.000Z",
+      "id": 16
+    },
+    {
+      "userId": 17,
+      "username": "PatriciaV",
+      "role": "Business Analyst",
+      "bio": "Analista de negocio con fuerte enfoque en requerimientos",
+      "abilities": ["Requirements Gathering", "Process Modeling", "Stakeholder Management", "Documentation"],
+      "experiences": [
+        {
+          "position": "Business Analyst",
+          "company": "Consulting Firm",
+          "duration": "3 años"
+        }
+      ],
+      "status": "active",
+      "points": 490,
+      "projects": [],
+      "createdAt": "2025-10-15T11:10:00.000Z",
+      "updatedAt": "2025-10-15T11:10:00.000Z",
+      "id": 17
+    },
+    {
+      "userId": 18,
+      "username": "RobertoD",
+      "role": "AI Engineer",
+      "bio": "Ingeniero de IA especializado en machine learning",
+      "abilities": ["Python", "TensorFlow", "PyTorch", "NLP"],
+      "experiences": [
+        {
+          "position": "AI Engineer",
+          "company": "AI Labs",
+          "duration": "3 años"
+        }
+      ],
+      "status": "active",
+      "points": 860,
+      "projects": [],
+      "createdAt": "2025-10-15T11:15:00.000Z",
+      "updatedAt": "2025-10-15T11:15:00.000Z",
+      "id": 18
+    },
+    {
+      "userId": 19,
+      "username": "GabrielaP",
+      "role": "Technical Writer",
+      "bio": "Escritora técnica especializada en documentación de software",
+      "abilities": ["Technical Documentation", "API Documentation", "User Guides", "Markdown"],
+      "experiences": [
+        {
+          "position": "Technical Writer",
+          "company": "Software Company",
+          "duration": "2 años"
+        }
+      ],
+      "status": "active",
+      "points": 310,
+      "projects": [],
+      "createdAt": "2025-10-15T11:20:00.000Z",
+      "updatedAt": "2025-10-15T11:20:00.000Z",
+      "id": 19
+    },
+    {
+      "userId": 20,
+      "username": "MiguelC",
+      "role": "System Administrator",
+      "bio": "Administrador de sistemas con expertise en Linux",
+      "abilities": ["Linux", "Bash", "Networking", "Monitoring"],
+      "experiences": [
+        {
+          "position": "System Admin",
+          "company": "IT Services",
+          "duration": "4 años"
+        }
+      ],
+      "status": "active",
+      "points": 590,
+      "projects": [],
+      "createdAt": "2025-10-15T11:25:00.000Z",
+      "updatedAt": "2025-10-15T11:25:00.000Z",
+      "id": 20
+    },
+    {
+      "userId": 21,
+      "username": "DanielaR",
+      "role": "Frontend Developer",
+      "bio": "Desarrolladora frontend con pasión por la accesibilidad",
+      "abilities": [],
+      "experiences": [
+        {
+          "position": "Frontend Developer",
+          "company": "Web Agency",
+          "duration": "2 años"
+        }
+      ],
+      "status": "active",
+      "points": 470,
+      "projects": [],
+      "createdAt": "2025-10-15T11:30:00.000Z",
+      "updatedAt": "2025-10-15T11:30:00.000Z",
+      "id": 21
+    },
+    {
+      "userId": 22,
+      "username": "AlejandroN",
+      "role": "Backend Developer",
+      "bio": "Desarrollador backend con experiencia en APIs REST",
+      "abilities": ["Node.js", "Express", "MongoDB", "Redis"],
+      "experiences": [
+        {
+          "position": "Backend Developer",
+          "company": "API Company",
+          "duration": "3 años"
+        }
+      ],
+      "status": "active",
+      "points": 640,
+      "projects": [],
+      "createdAt": "2025-10-15T11:35:00.000Z",
+      "updatedAt": "2025-10-15T11:35:00.000Z",
+      "id": 22
+    }
+  ],
   "projects": [
     {
       "id": "1",
@@ -314,6 +954,197 @@
       "createdAt": "2025-10-10T02:10:25.682Z",
       "updatedAt": "2025-10-10T02:10:25.682Z",
       "id": "DMj8Bl6"
+    },
+    {
+      "title": "12As",
+      "description": "213123\n213123123saS",
+      "areas": [
+        "213"
+      ],
+      "tags": [
+        "2131"
+      ],
+      "academicLevel": "Estudiante de pregrado",
+      "benefits": "213\ndasd\nasdas",
+      "skills": [
+        "123",
+        "23"
+      ],
+      "durationQuantity": 12,
+      "durationType": "años",
+      "roles": [
+        {
+          "id": 1760475670670,
+          "name": "1223123",
+          "cards": [
+            {
+              "id": 1760475670671,
+              "title": "21313",
+              "items": [
+                "123123",
+                "123123"
+              ]
+            },
+            {
+              "id": 1760475828364,
+              "title": "123123",
+              "items": [
+                "123123",
+                "13123"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 1760475834428,
+          "name": "213123",
+          "cards": [
+            {
+              "id": 1760475834429,
+              "title": "123123",
+              "items": [
+                "123123",
+                "123123132"
+              ]
+            }
+          ]
+        }
+      ],
+      "status": "active",
+      "progress": 0,
+      "userId": "1",
+      "authorName": "Usuario",
+      "collaborators": [],
+      "tasks": [],
+      "milestones": [],
+      "createdAt": "2025-10-14T21:04:01.172Z",
+      "updatedAt": "2025-10-14T21:04:01.172Z",
+      "id": "Oce2-hF"
+    },
+    {
+      "title": "q234",
+      "description": "qweqwe\nqweqweqweqw\nqweqweqweqwewqe",
+      "areas": [
+        "weqwe",
+        "qweqwe"
+      ],
+      "tags": [
+        "wqeqwe"
+      ],
+      "academicLevel": "Estudiante de posgrado",
+      "benefits": "qweqweqweqweqwe\nqwe\nwqe\nwqeweq",
+      "skills": [
+        "wqewqe"
+      ],
+      "durationQuantity": 1,
+      "durationType": "meses",
+      "roles": [
+        {
+          "id": 1760475841196,
+          "name": "666",
+          "cards": [
+            {
+              "id": 1760475841197,
+              "title": "1212312",
+              "items": [
+                "123123"
+              ]
+            },
+            {
+              "id": 1760476576243,
+              "title": "213123",
+              "items": [
+                "123123"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 1760476582107,
+          "name": "123123",
+          "cards": [
+            {
+              "id": 1760476582108,
+              "title": "213123",
+              "items": [
+                "123123"
+              ]
+            }
+          ]
+        }
+      ],
+      "status": "active",
+      "progress": 0,
+      "userId": "1",
+      "authorName": "Usuario",
+      "collaborators": [],
+      "tasks": [],
+      "milestones": [],
+      "createdAt": "2025-10-14T21:16:35.956Z",
+      "updatedAt": "2025-10-14T21:16:35.956Z",
+      "id": "h2oyIWy"
+    },
+    {
+      "title": "aserasdasdasd",
+      "description": "dasdasdsasdasda",
+      "areas": [
+        "asdasd"
+      ],
+      "tags": [
+        "sadasd"
+      ],
+      "academicLevel": "Profesional junior",
+      "benefits": "sdasd\nsdasdasd",
+      "skills": [
+        "1"
+      ],
+      "durationQuantity": 1,
+      "durationType": "meses",
+      "roles": [
+        {
+          "id": 1760476595998,
+          "name": "6666666",
+          "cards": [
+            {
+              "id": 1760476595999,
+              "title": "12213",
+              "items": [
+                "12123"
+              ]
+            },
+            {
+              "id": 1760476930627,
+              "title": "213123asdasd",
+              "items": [
+                "12asdasd"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 1760476932907,
+          "name": "23123",
+          "cards": [
+            {
+              "id": 1760476932908,
+              "title": "12123123",
+              "items": [
+                "123123"
+              ]
+            }
+          ]
+        }
+      ],
+      "status": "active",
+      "progress": 0,
+      "userId": "1",
+      "authorName": "Usuario",
+      "collaborators": [],
+      "tasks": [],
+      "milestones": [],
+      "createdAt": "2025-10-14T21:22:39.547Z",
+      "updatedAt": "2025-10-14T21:22:39.547Z",
+      "id": "o5nVNlv"
     }
   ],
   "tasks": [
