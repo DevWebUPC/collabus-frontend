@@ -1,4 +1,3 @@
-// stores/profile.store.js
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { ProfileApi } from '../infrastructure/profile-api.js';
@@ -58,23 +57,27 @@ export const useProfileStore = defineStore('profile', () => {
         }
     };
 
-    // Get profile by user ID
-    const getProfileByUserId = async (userId) => {
+    // Get profile by user ID - ACTUALIZADO
+    const getProfileByUserId = async (userId, forceRefresh = false) => {
         try {
             setLoading(true);
             clearError();
+
+            console.log('🔄 Cargando perfil desde API para userId:', userId);
 
             const response = await profileApi.getByUserId(userId);
             const profiles = response.data;
 
             if (!profiles || profiles.length === 0) {
+                console.log('❌ No se encontró perfil para userId:', userId);
                 return null;
             }
 
             const profile = ProfileAssembler.fromApiToEntity(profiles[0]);
-            currentProfile.value = profile;
+            console.log('✅ Perfil cargado desde API:', profile);
 
-            // Update local storage
+            // Actualizar el perfil actual y localStorage
+            currentProfile.value = profile;
             localStorage.setItem('currentProfile', JSON.stringify(profile));
             localStorage.setItem('profileId', profile.id);
 
@@ -121,16 +124,19 @@ export const useProfileStore = defineStore('profile', () => {
         }
     };
 
-    // Initialize profile
     const initializeProfile = () => {
         const storedProfile = localStorage.getItem('currentProfile');
         if (storedProfile) {
             try {
-                currentProfile.value = JSON.parse(storedProfile);
+                const parsedProfile = JSON.parse(storedProfile);
+                console.log('📂 Perfil cargado desde localStorage:', parsedProfile);
+                currentProfile.value = parsedProfile;
+
+                // Verificar si el perfil de localStorage está desactualizado
+                // Podemos marcar que necesita recarga en el próximo getProfileByUserId
             } catch (e) {
                 console.error('Error parsing stored profile:', e);
-                localStorage.removeItem('currentProfile');
-                localStorage.removeItem('profileId');
+                clearProfile();
             }
         }
     };
@@ -147,11 +153,13 @@ export const useProfileStore = defineStore('profile', () => {
     const profileCompletion = computed(() => {
         return currentProfile.value?.getCompletionPercentage() || 0;
     });
+
     const clearProfile = () => {
         currentProfile.value = null;
         localStorage.removeItem('currentProfile');
         localStorage.removeItem('profileId');
     };
+
     return {
         // State
         currentProfile,
