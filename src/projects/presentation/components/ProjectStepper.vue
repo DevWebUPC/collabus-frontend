@@ -19,11 +19,11 @@ const props = defineProps({
 <template>
   <div class="stepper-container">
     <div class="steps-indicator">
-      <div 
-        v-for="step in totalSteps" 
-        :key="step"
-        class="step-dot"
-        :class="{ 
+      <div
+          v-for="step in totalSteps"
+          :key="step"
+          class="step-dot"
+          :class="{
           'active': step - 1 === currentStep,
           'completed': step - 1 < currentStep
         }"

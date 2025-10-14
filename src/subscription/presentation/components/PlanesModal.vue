@@ -4,7 +4,7 @@
       <div class="pm-sheet" role="dialog" aria-modal="true" aria-label="Selecciona un plan">
         <header class="pm-header">
           <h2>Selecciona un plan</h2>
-          <pv-button class="pm-close" @click="$emit('close')" aria-label="Cerrar">✕</pv-button>
+          <button class="pm-close" @click="$emit('close')" aria-label="Cerrar">✕</button>
         </header>
 
         <div class="pm-content">
@@ -95,9 +95,14 @@ function select(name){ emit('select', name) }
 .pm-header{display:flex;align-items:center;justify-content:center;position:relative;
   padding:22px 56px;border-bottom:1px solid #f0f0f5}
 .pm-header h2{margin:0;font-size:32px;color:#6c63ff;font-weight:900;letter-spacing:.2px}
-.pm-close{position:absolute;right:18px;top:18px;width:40px;height:40px;border-radius:12px;border:none;
-  background:#f4f4fe;cursor:pointer;font-size:18px}
-.pm-close:hover{background:#ececff}
+.pm-close{
+  position:absolute;
+  right:18px;top:18px;width:40px;height:40px;
+  border-radius:12px;border:none;
+  background: #6c63ff;
+  cursor:pointer;font-size:18px}
+.pm-close:hover{background: #5147fd
+}
 
 /* Contenedor con scroll */
 .pm-content{overflow-y:auto;padding:22px;flex:1}

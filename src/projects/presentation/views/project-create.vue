@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, computed } from 'vue'; // Añade computed
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import ProjectStepper from '../components/ProjectStepper.vue';
@@ -10,8 +10,6 @@ import { useProjectCreateStore } from '../../application/project-create.store.js
 
 const { t } = useI18n();
 const router = useRouter();
-
-// Use the project creation store
 const store = useProjectCreateStore();
 
 const {
@@ -33,11 +31,20 @@ const navigateBack = () => {
 
 const handleSubmit = async () => {
   const newProject = await submitProject();
-  
+
   if (newProject) {
-    // Navigate to project list or project detail
     router.push('/projects');
   }
+};
+
+// Debug helper para ver el estado
+const debugState = () => {
+  console.log('Current Step:', store.currentStep);
+  console.log('Is Step Valid:', store.isStepValid);
+  console.log('Can Go Next:', store.canGoNext);
+  console.log('Basic Info Data:', store.basicInfoData);
+  console.log('Details Data:', store.detailsData);
+  console.log('Roles Data:', store.rolesData);
 };
 </script>
 
@@ -47,15 +54,24 @@ const handleSubmit = async () => {
     <div class="page-header">
       <div class="header-content">
         <h1 class="page-title">{{ $t('projects.create.title') }}</h1>
+        <!-- Botón de debug temporal -->
+        <pv-button
+            @click="debugState"
+            severity="secondary"
+            size="small"
+            style="margin-left: 1rem;"
+        >
+          Debug
+        </pv-button>
       </div>
     </div>
 
     <!-- Progress Steps -->
     <div class="steps-container">
-      <ProjectStepper 
-        :current-step="store.currentStep"
-        :total-steps="store.totalSteps"
-        :step-labels="store.stepLabels"
+      <ProjectStepper
+          :current-step="store.currentStep"
+          :total-steps="store.totalSteps"
+          :step-labels="store.stepLabels"
       />
     </div>
 
@@ -64,69 +80,83 @@ const handleSubmit = async () => {
       <div class="form-card">
         <!-- Error Messages -->
         <div v-if="store.errors.length > 0" class="error-messages">
-          <pv-message 
-            v-for="(error, index) in store.errors" 
-            :key="index"
-            severity="error" 
-            :closable="false"
-            class="error-message"
+          <pv-message
+              v-for="(error, index) in store.errors"
+              :key="index"
+              severity="error"
+              :closable="false"
+              class="error-message"
           >
             {{ error }}
           </pv-message>
         </div>
 
+        <!-- Mensajes de validación del paso actual -->
+        <div v-if="!store.isStepValid && store.currentStep === 0" class="validation-message">
+          <pv-message severity="warn" :closable="false">
+            Completa toda la información básica del proyecto para continuar
+          </pv-message>
+        </div>
+
+        <div v-if="!store.isStepValid && store.currentStep === 1" class="validation-message">
+          <pv-message severity="warn" :closable="false">
+            Completa los detalles del proyecto para continuar
+          </pv-message>
+        </div>
+
         <!-- Step 1: Project Basic Information -->
-        <ProjectBasicInfoStep 
-          v-if="store.currentStep === 0"
-          v-model="store.basicInfoData"
+        <ProjectBasicInfoStep
+            v-if="store.currentStep === 0"
+            v-model="store.basicInfoData"
         />
 
         <!-- Step 2: Additional Details -->
         <ProjectDetailsStep
-          v-if="store.currentStep === 1"
-          v-model="store.detailsData"
+            v-if="store.currentStep === 1"
+            v-model="store.detailsData"
         />
 
         <!-- Step 3: Define Roles -->
-        <ProjectRolesStep  
-          v-if="store.currentStep === 2"
-          v-model="store.rolesData"
+        <ProjectRolesStep
+            v-if="store.currentStep === 2"
+            v-model="store.rolesData"
         />
 
         <!-- Navigation Buttons -->
         <div class="form-actions">
-          <pv-button 
-            v-if="store.canGoBack"
-            :label="$t('projects.create.back')"
-            severity="secondary"
-            outlined
-            @click="prevStep"
-            class="back-btn"
+          <pv-button
+              v-if="store.canGoBack"
+              :label="$t('projects.create.back')"
+              severity="secondary"
+              outlined
+              @click="prevStep"
+              class="back-btn"
           />
-          <pv-button 
-            v-else
-            :label="$t('projects.create.cancel')"
-            severity="secondary"
-            outlined
-            @click="navigateBack"
-            class="cancel-btn"
+          <pv-button
+              v-else
+              :label="$t('projects.create.cancel')"
+              severity="secondary"
+              outlined
+              @click="navigateBack"
+              class="cancel-btn"
           />
-          
-          <pv-button 
-            v-if="!store.isLastStep"
-            :label="$t('projects.create.next')"
-            @click="nextStep"
-            class="next-btn"
-            size="large"
+
+          <pv-button
+              v-if="!store.isLastStep"
+              :label="$t('projects.create.next')"
+              @click="nextStep"
+              :disabled="!store.isStepValid || store.submitting"
+              class="next-btn"
+              size="large"
           />
-          <pv-button 
-            v-else
-            :label="$t('projects.create.publish')"
-            @click="handleSubmit"
-            :loading="store.submitting"
-            :disabled="store.submitting"
-            class="publish-btn"
-            size="large"
+          <pv-button
+              v-else
+              :label="$t('projects.create.publish')"
+              @click="handleSubmit"
+              :loading="store.submitting"
+              :disabled="store.submitting || !store.isStepValid"
+              class="publish-btn"
+              size="large"
           />
         </div>
       </div>
@@ -642,39 +672,39 @@ const handleSubmit = async () => {
   .project-create-container {
     padding: 1rem;
   }
-  
+
   .form-card {
     padding: 1.5rem;
   }
-  
+
   .form-grid-step1,
   .form-grid-step3 {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .skills-input-container,
   .area-input-container,
   .tags-input-container {
     flex-direction: column;
   }
-  
+
   .duration-container {
     flex-direction: column;
   }
-  
+
   .role-input-container,
   .card-header {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .card-item {
     flex-direction: column;
     align-items: stretch;
     gap: 0.5rem;
   }
-  
+
   .form-actions {
     flex-direction: column;
   }
@@ -684,12 +714,12 @@ const handleSubmit = async () => {
   .project-create-container {
     padding: 0.5rem;
   }
-  
+
   .form-card {
     padding: 1rem;
     border-radius: 12px;
   }
-  
+
   .step-content {
     min-height: 400px;
   }
