@@ -29,6 +29,14 @@ export class ProfileApi extends BaseEndpoint {
     }
 
     /**
+     * Get all profiles
+     * @returns {Promise} API response
+     */
+    getAll() {
+        return this.http.get(this.endpointPath);
+    }
+
+    /**
      * Create a new profile
      * @param {Object} profileData - Profile data
      * @returns {Promise} API response
