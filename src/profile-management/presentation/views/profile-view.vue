@@ -67,12 +67,12 @@ const transformProfileData = (storeProfile) => {
     name: storeProfile.username || 'Usuario',
     roles: storeProfile.role ? [storeProfile.role] : ['Developer'],
     mainRole: storeProfile.role || 'Full Stack Developer',
-    points: 0,
-    projects: [],
+    points: storeProfile.points || 0, // 👈 Usar puntos reales
+    projects: storeProfile.projects || [], // 👈 Usar proyectos reales
     comments: [],
     description: storeProfile.bio || 'Sin descripción',
     skills: storeProfile.abilities || [],
-    avatar: storeProfile.avatar || null, // ← Añade esta línea
+    avatar: storeProfile.avatar || null,
     experiences: (storeProfile.experiences || []).map(exp => ({
       company: exp.company || 'Empresa',
       role: exp.position || 'Rol',
@@ -90,7 +90,6 @@ const loadUserProfile = async () => {
   try {
     isLoadingProfile.value = true;
 
-    // Obtener el ID del usuario autenticado
     const currentUser = userStore.currentUser;
     console.log('👤 Usuario del store:', currentUser);
 
@@ -105,20 +104,13 @@ const loadUserProfile = async () => {
 
     console.log('📥 Buscando perfil para userId:', userId);
 
-    // Verificar si ya tenemos el perfil cargado y es del mismo usuario
-    if (profileStore.currentProfile && profileStore.currentProfile.userId === userId) {
-      console.log('✅ Perfil ya está cargado');
-      return;
-    }
-
-    // Cargar el perfil del usuario autenticado
+    // Siempre recargar el perfil desde la API, sin importar si ya está cargado
     await profileStore.getProfileByUserId(userId);
 
     console.log('✅ Perfil cargado exitosamente:', profileStore.currentProfile);
 
   } catch (error) {
     console.error('❌ Error cargando perfil:', error);
-    // No lanzar error aquí para evitar que la UI se rompa
   } finally {
     isLoadingProfile.value = false;
   }
