@@ -3,7 +3,8 @@ import WelcomeHeader from '../components/welcome-header.component.vue'
 import SearchFilters from '../../../profile-management/presentation/components/search-filters.component.vue'
 import PersonalStats from '../../../profile-management/presentation/components/personal-stasts.component.vue'
 import RankingCard from '../../../profile-management/presentation/components/ranking-card-button.component.vue'
-import CollaboratorsList from '../../../profile-management/presentation/components/collaborators-list.component.vue' // Añade esta importación
+import CollaboratorsList from '../../../profile-management/presentation/components/collaborators-list.component.vue'
+import { useProfileStore } from '../../../profile-management/application/profile-store.js'
 
 export default {
   name: 'Collaborators',
@@ -12,7 +13,7 @@ export default {
     SearchFilters,
     PersonalStats,
     RankingCard,
-    CollaboratorsList // Registra el componente
+    CollaboratorsList
   },
   data() {
     return {
@@ -20,17 +21,42 @@ export default {
         score: 220,
         ranking: 500,
         activeProjects: 2
-      }
+      },
+      filteredCollaborators: [],
+      isSearching: false
     }
   },
   methods: {
-    handleSearch(filters) {
+    async handleSearch(filters) {
       console.log('Filtros de búsqueda:', filters)
-      // Lógica de búsqueda aquí - puedes filtrar la lista de colaboradores
+      this.isSearching = true
+
+      try {
+        const profileStore = useProfileStore()
+        const filteredProfiles = await profileStore.searchProfiles(filters)
+
+        // Mapear los perfiles filtrados al formato que espera el componente
+        this.filteredCollaborators = filteredProfiles.map(profile => ({
+          id: profile.id,
+          name: profile.username,
+          position: profile.role,
+          score: profile.points,
+          skills: profile.abilities
+        }))
+
+        console.log('Resultados filtrados:', this.filteredCollaborators.length)
+      } catch (error) {
+        console.error('Error en búsqueda:', error)
+        this.filteredCollaborators = []
+      } finally {
+        this.isSearching = false
+      }
     },
-    handleClear() {
+
+    async handleClear() {
       console.log('Filtros limpiados')
-      // Lógica para limpiar aquí
+      this.filteredCollaborators = []
+      this.isSearching = false
     }
   }
 }
@@ -44,6 +70,12 @@ export default {
           @clear="handleClear"
       />
     </div>
+
+    <!-- Estado de búsqueda -->
+    <div v-if="isSearching" class="search-state">
+      Buscando colaboradores...
+    </div>
+
     <div class="layout-grid">
       <div class="left-column hidden-on-responsive">
         <WelcomeHeader />
@@ -51,7 +83,10 @@ export default {
 
       <!-- COLUMNA CENTRAL -->
       <div class="center-column">
-        <CollaboratorsList />
+        <CollaboratorsList
+            :collaborators="filteredCollaborators"
+            :is-filtered="filteredCollaborators.length > 0"
+        />
       </div>
 
       <div class="right-column hidden-on-responsive">
@@ -72,6 +107,13 @@ export default {
   margin: 0 auto;
 }
 
+.search-state {
+  text-align: center;
+  padding: 1rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
 .layout-grid {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
@@ -88,10 +130,9 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  /* Añadir scroll */
-  max-height: 80vh; /* Altura máxima del 80% del viewport */
-  overflow-y: auto; /* Scroll vertical */
-  padding-right: 0.5rem; /* Espacio para el scroll */
+  max-height: 80vh;
+  overflow-y: auto;
+  padding-right: 0.5rem;
 }
 
 /* Personalizar la barra de scroll */
@@ -113,7 +154,6 @@ export default {
   background: #a8a8a8;
 }
 
-/* MEJORAS PARA LA COLUMNA DERECHA */
 .right-column {
   display: flex;
   flex-direction: column;
@@ -127,13 +167,11 @@ export default {
   width: 100%;
 }
 
-/* Asegurar que los componentes hijos ocupen todo el ancho disponible */
 .stats-ranking-container > * {
   width: 100%;
   margin: 0;
 }
 
-/* Clase para ocultar elementos en responsive */
 .hidden-on-responsive {
   display: block;
 }
@@ -148,18 +186,16 @@ export default {
   .center-column {
     grid-column: auto;
     order: 1;
-    max-height: none; /* Quitar altura máxima en responsive */
-    overflow-y: visible; /* Quitar scroll en responsive */
+    max-height: none;
+    overflow-y: visible;
     padding-right: 0;
   }
 
-  /* OCULTAR COMPONENTES EN TABLETS GRANDES */
   .hidden-on-responsive {
     display: none !important;
   }
 }
 
-/* Media query para tablets (1024px) - YA OCULTOS */
 @media (max-width: 1024px) {
   .layout-grid {
     grid-template-columns: 1fr;
@@ -170,11 +206,8 @@ export default {
     grid-column: auto;
     order: 1;
   }
-
-  /* Los componentes ya están ocultos desde 1200px */
 }
 
-/* Media query para dispositivos móviles (768px) - YA OCULTOS */
 @media (max-width: 768px) {
   .collaborators-container {
     padding: 0.5rem;
@@ -183,7 +216,5 @@ export default {
   .layout-grid {
     gap: 1rem;
   }
-
-  /* Los componentes ya están ocultos desde 1200px */
 }
 </style>

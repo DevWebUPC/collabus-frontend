@@ -1,88 +1,73 @@
 <script>
 import CollaboratorItem from '../components/colaborador-item.component.vue';
+import { useProfileStore } from '../../application/profile-store.js';
 
 export default {
   name: "CollaboratorsList",
   components: {
     CollaboratorItem
   },
+  props: {
+    collaborators: {
+      type: Array,
+      default: () => []
+    },
+    isFiltered: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
-      collaborators: [
-        {
-          id: 1,
-          name: 'Roberto Tello',
-          position: 'Gerente de Proyectos',
-          score: 120,
-          skills: ['Gestión de Proyectos', 'Serum'],
-        },
-        {
-          id: 2,
-          name: 'Mariana Paredes',
-          position: 'Desarrollador Full Stack',
-          score: 110,
-          skills: ['SEO', 'Google Ads'],
-        },
-        {
-          id: 3,
-          name: 'Luis Gutiérrez',
-          position: 'Ingeniero de Datos',
-          score: 105,
-          skills: ['Spring Boot', 'Java'],
-        },
-        {
-          id: 4,
-          name: 'Camila Rodríguez',
-          position: 'Analista de Marketing Digital',
-          score: 100,
-          skills: ['Python', 'SQL'],
-        },
-        {
-          id: 5,
-          name: 'Valeria Torres',
-          position: 'UX Researcher',
-          score: 90,
-          skills: ['Design Thinking', 'Prototipado'],
-        },
-        {
-          id: 6,
-          name: 'Andrés Ramírez',
-          position: 'Serum Master',
-          score: 85,
-          skills: ['SEO', 'Kenban'],
-        },
-        {
-          id: 7,
-          name: 'Natalia Silva',
-          position: 'Arquitecta de Software',
-          score: 80,
-          skills: ['Spring Boot', 'AWS'],
-        },
-        {
-          id: 8,
-          name: 'Fernando Aguilar',
-          position: 'Diseñador UI',
-          score: 75,
-          skills: ['Figma', 'Adobe'],
-        },
-        {
-          id: 9,
-          name: 'Lucía Castro',
-          position: 'Ingeniera de QA',
-          score: 70,
-          skills: ['Cypress', 'Selenium'],
-        },
-        {
-          id: 10,
-          name: 'Mateo Vargas',
-          position: 'Data Scientist',
-          score: 68,
-          skills: ['Machine Learning', 'SQL'],
+      localCollaborators: [],
+      loading: false,
+      error: null
+    }
+  },
+  watch: {
+    collaborators: {
+      handler(newCollaborators) {
+        if (newCollaborators && newCollaborators.length > 0) {
+          this.localCollaborators = newCollaborators;
         }
-      ]
+      },
+      immediate: true
+    }
+  },
+  async mounted() {
+    // Solo cargar todos los colaboradores si no hay una búsqueda activa
+    if (!this.isFiltered && this.collaborators.length === 0) {
+      await this.loadCollaborators();
     }
   },
   methods: {
+    async loadCollaborators() {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const profileStore = useProfileStore();
+
+        // Obtener todos los perfiles desde la API
+        await profileStore.fetchAllProfiles();
+
+        // Mapear los perfiles al formato que espera el componente
+        this.localCollaborators = profileStore.allProfiles.map(profile => ({
+          id: profile.id,
+          name: profile.username,
+          position: profile.role,
+          score: profile.points,
+          skills: profile.abilities
+        }));
+
+      } catch (err) {
+        console.error('Error loading collaborators:', err);
+        this.error = 'Error al cargar los colaboradores';
+      } finally {
+        this.loading = false;
+      }
+    },
+
     getInitials(name) {
       return name
           .split(' ')
@@ -90,9 +75,11 @@ export default {
           .join('')
           .toUpperCase();
     },
+
     handleViewProfile(collaboratorId) {
       console.log('Ver perfil del colaborador:', collaboratorId);
-      // Aquí puedes implementar la navegación al perfil
+      // Navegar al perfil del colaborador
+      this.$router.push(`/profile/${collaboratorId}`);
     }
   }
 }
@@ -101,13 +88,35 @@ export default {
 <template>
   <div class="collaborators-list-container">
     <h1>Lista de Colaboradores</h1>
-    <div class="collaborators-grid">
+
+    <!-- Estado de carga -->
+    <div v-if="loading" class="loading-state">
+      Cargando colaboradores...
+    </div>
+
+    <!-- Estado de error -->
+    <div v-else-if="error" class="error-state">
+      {{ error }}
+      <button @click="loadCollaborators" class="retry-btn">Reintentar</button>
+    </div>
+
+    <!-- Lista de colaboradores -->
+    <div v-else class="collaborators-grid">
+      <div v-if="isFiltered && localCollaborators.length === 0" class="empty-search-state">
+        No se encontraron colaboradores que coincidan con tu búsqueda
+      </div>
+
       <CollaboratorItem
-          v-for="collaborator in collaborators"
+          v-for="collaborator in localCollaborators"
           :key="collaborator.id"
           :collaborator="collaborator"
           @view-profile="handleViewProfile"
       />
+
+      <!-- Mensaje cuando no hay colaboradores (solo para carga inicial) -->
+      <div v-if="!isFiltered && localCollaborators.length === 0" class="empty-state">
+        No se encontraron colaboradores
+      </div>
     </div>
   </div>
 </template>
@@ -134,13 +143,37 @@ export default {
   gap: 1rem;
 }
 
-/* Loading state */
-.collaborators-grid:empty::before {
-  content: "Cargando colaboradores...";
-  display: block;
+.loading-state,
+.error-state,
+.empty-state,
+.empty-search-state {
   text-align: center;
-  font-size: 1.2rem;
   padding: 3rem;
+  font-size: 1.2rem;
+  color: #6b7280;
+}
+
+.error-state {
+  color: #e53e3e;
+}
+
+.empty-search-state {
+  color: #6b7280;
+  font-style: italic;
+}
+
+.retry-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #6C63FF;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.retry-btn:hover {
+  background: #5a52d5;
 }
 
 /* Responsive */
