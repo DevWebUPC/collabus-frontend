@@ -40,27 +40,27 @@ const updateRoleName = (roleIndex, value) => {
 // Card management methods
 const addCard = (roleIndex) => {
   if (roleIndex < 0 || roleIndex >= store.rolesData.length) return
-  
+
   const newCard = {
     id: Date.now(),
     title: '',
     items: ['']
   }
-  
+
   store.rolesData[roleIndex].cards.push(newCard)
 }
 
 const removeCard = (roleIndex, cardIndex) => {
   if (roleIndex < 0 || roleIndex >= store.rolesData.length) return
   if (cardIndex < 0 || cardIndex >= store.rolesData[roleIndex].cards.length) return
-  
+
   store.rolesData[roleIndex].cards.splice(cardIndex, 1)
 }
 
 const updateCardTitle = (roleIndex, cardIndex, value) => {
   if (roleIndex < 0 || roleIndex >= store.rolesData.length) return
   if (cardIndex < 0 || cardIndex >= store.rolesData[roleIndex].cards.length) return
-  
+
   store.rolesData[roleIndex].cards[cardIndex].title = value
 }
 
@@ -68,7 +68,7 @@ const updateCardTitle = (roleIndex, cardIndex, value) => {
 const addItem = (roleIndex, cardIndex) => {
   if (roleIndex < 0 || roleIndex >= store.rolesData.length) return
   if (cardIndex < 0 || cardIndex >= store.rolesData[roleIndex].cards.length) return
-  
+
   store.rolesData[roleIndex].cards[cardIndex].items.push('')
 }
 
@@ -76,7 +76,7 @@ const removeItem = (roleIndex, cardIndex, itemIndex) => {
   if (roleIndex < 0 || roleIndex >= store.rolesData.length) return
   if (cardIndex < 0 || cardIndex >= store.rolesData[roleIndex].cards.length) return
   if (itemIndex < 0 || itemIndex >= store.rolesData[roleIndex].cards[cardIndex].items.length) return
-  
+
   store.rolesData[roleIndex].cards[cardIndex].items.splice(itemIndex, 1)
 }
 
@@ -84,7 +84,7 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
   if (roleIndex < 0 || roleIndex >= store.rolesData.length) return
   if (cardIndex < 0 || cardIndex >= store.rolesData[roleIndex].cards.length) return
   if (itemIndex < 0 || itemIndex >= store.rolesData[roleIndex].cards[cardIndex].items.length) return
-  
+
   store.rolesData[roleIndex].cards[cardIndex].items[itemIndex] = value
 }
 </script>
@@ -96,91 +96,91 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
     </div>
 
     <div class="roles-container">
-      <div 
-        v-for="(role, roleIndex) in roles" 
-        :key="role.id"
-        class="role-section"
+      <div
+          v-for="(role, roleIndex) in roles"
+          :key="role.id"
+          class="role-section"
       >
         <!-- Role Name Input -->
         <div class="role-input-wrapper">
           <span class="role-label">{{ $t('projects.create.role') }}</span>
-          <pv-inputtext 
-            :model-value="role.name"
-            @update:model-value="(value) => updateRoleName(roleIndex, value)"
-            :placeholder="$t('projects.create.role-placeholder')"
-            class="role-input"
+          <pv-inputtext
+              :model-value="role.name"
+              @update:model-value="(value) => updateRoleName(roleIndex, value)"
+              :placeholder="$t('projects.create.role-placeholder')"
+              class="role-input"
           />
         </div>
 
         <!-- Role Cards -->
         <div class="role-cards-container">
-          <div 
-            v-for="(card, cardIndex) in role.cards" 
-            :key="card.id"
-            class="role-card"
+          <div
+              v-for="(card, cardIndex) in role.cards"
+              :key="card.id"
+              class="role-card"
           >
             <!-- Card Title -->
             <div class="card-title-section">
               <span class="card-title-label">{{ $t('projects.create.card-title-placeholder').replace('Escribe ', '') }}</span>
-              <pv-inputtext 
-                :model-value="card.title"
-                @update:model-value="(value) => updateCardTitle(roleIndex, cardIndex, value)"
-                :placeholder="$t('projects.create.card-title-placeholder')"
-                class="card-title-input"
+              <pv-inputtext
+                  :model-value="card.title"
+                  @update:model-value="(value) => updateCardTitle(roleIndex, cardIndex, value)"
+                  :placeholder="$t('projects.create.card-title-placeholder')"
+                  class="card-title-input"
               />
             </div>
 
             <!-- Card Items -->
             <div class="card-items-section">
-              <div 
-                v-for="(item, itemIndex) in card.items" 
-                :key="itemIndex"
-                class="card-item-row"
+              <div
+                  v-for="(item, itemIndex) in card.items"
+                  :key="itemIndex"
+                  class="card-item-row"
               >
                 <span class="item-number">{{ $t('projects.create.item') }}</span>
-                <pv-inputtext 
-                  :model-value="item"
-                  @update:model-value="(value) => updateItem(roleIndex, cardIndex, itemIndex, value)"
-                  :placeholder="$t('projects.create.item-placeholder')"
-                  class="item-input"
+                <pv-inputtext
+                    :model-value="item"
+                    @update:model-value="(value) => updateItem(roleIndex, cardIndex, itemIndex, value)"
+                    :placeholder="$t('projects.create.item-placeholder')"
+                    class="item-input"
                 />
-                <pv-button 
-                  icon="pi pi-times"
-                  severity="danger"
-                  text
-                  rounded
-                  @click="removeItem(roleIndex, cardIndex, itemIndex)"
-                  class="remove-item-btn"
+                <pv-button
+                    icon="pi pi-times"
+                    severity="danger"
+                    text
+                    rounded
+                    @click="removeItem(roleIndex, cardIndex, itemIndex)"
+                    class="remove-item-btn"
                 />
               </div>
             </div>
 
             <!-- Add Item Button -->
             <div class="add-item-section">
-              <pv-button 
-                :label="`+ ${$t('projects.create.add-item')}`"
-                text
-                @click="addItem(roleIndex, cardIndex)"
-                class="add-item-button"
+              <pv-button
+                  :label="`+ ${$t('projects.create.add-item')}`"
+                  text
+                  @click="addItem(roleIndex, cardIndex)"
+                  class="add-item-button"
               />
             </div>
           </div>
 
           <!-- Add Card Button -->
-          <pv-button 
-            :label="$t('projects.create.add-card')"
-            outlined
-            @click="addCard(roleIndex)"
-            class="add-card-button"
+          <pv-button
+              :label="$t('projects.create.add-card')"
+              outlined
+              @click="addCard(roleIndex)"
+              class="add-card-button"
           />
         </div>
       </div>
 
       <!-- Add Role Button -->
-      <pv-button 
-        :label="$t('projects.create.add-role')"
-        @click="addRole"
-        class="add-role-button"
+      <pv-button
+          :label="$t('projects.create.add-role')"
+          @click="addRole"
+          class="add-role-button"
       />
     </div>
   </div>
@@ -419,23 +419,23 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
     padding: 1.5rem;
     border-radius: 16px;
   }
-  
+
   .role-card {
     padding: 1rem;
     border-radius: 12px;
   }
-  
+
   .card-item-row,
   .add-item-row {
     flex-direction: column;
     align-items: stretch;
     gap: 0.5rem;
   }
-  
+
   .item-number {
     min-width: auto;
   }
-  
+
   .remove-item-btn {
     align-self: flex-end;
     width: auto;
@@ -447,12 +447,12 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
   .roles-step {
     padding: 0.5rem 0;
   }
-  
+
   .role-section {
     padding: 1rem;
     border-radius: 12px;
   }
-  
+
   .role-card {
     padding: 0.75rem;
     border-radius: 8px;
