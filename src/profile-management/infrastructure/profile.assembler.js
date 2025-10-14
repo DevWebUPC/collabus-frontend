@@ -1,4 +1,3 @@
-// infrastructure/profile.assembler.js
 import { Profile } from '../domain/model/profile.entity.js';
 
 /**
@@ -25,6 +24,8 @@ export class ProfileAssembler {
             experiences: apiData.experiences || [],
             cv: apiData.cv || null,
             status: apiData.status || 'active',
+            points: apiData.points || 0, // 👈 Incluir puntos
+            projects: apiData.projects || [], // 👈 Incluir proyectos
             createdAt: apiData.createdAt,
             updatedAt: apiData.updatedAt
         });
@@ -49,6 +50,8 @@ export class ProfileAssembler {
             experiences: entity.experiences,
             cv: entity.cv,
             status: entity.status,
+            points: entity.points, // 👈 Incluir puntos
+            projects: entity.projects, // 👈 Incluir proyectos
             createdAt: entity.createdAt?.toISOString(),
             updatedAt: entity.updatedAt?.toISOString()
         };
@@ -71,6 +74,8 @@ export class ProfileAssembler {
             experiences: onboardingData.skills?.experiences || [],
             cv: onboardingData.skills?.cv || null,
             status: 'active',
+            points: 0, // 👈 Inicializar en 0 para nuevo perfil
+            projects: [], // 👈 Inicializar array vacío para nuevo perfil
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         };
