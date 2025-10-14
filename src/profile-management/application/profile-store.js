@@ -5,6 +5,7 @@ import { ProfileAssembler } from '../infrastructure/profile.assembler.js';
 
 export const useProfileStore = defineStore('profile', () => {
     // State
+    const allProfiles = ref([]);
     const currentProfile = ref(null);
     const loading = ref(false);
     const error = ref(null);
@@ -24,6 +25,87 @@ export const useProfileStore = defineStore('profile', () => {
     const clearError = () => {
         error.value = null;
     };
+
+    const fetchAllProfiles = async () => {
+        try {
+            setLoading(true);
+            clearError();
+
+            console.log('🔄 Cargando todos los perfiles desde API');
+
+            const response = await profileApi.getAll(); // Necesitarás implementar este método
+            const profiles = response.data;
+
+            if (!profiles || profiles.length === 0) {
+                console.log('❌ No se encontraron perfiles');
+                allProfiles.value = [];
+                return [];
+            }
+
+            const profileEntities = profiles.map(profileData =>
+                ProfileAssembler.fromApiToEntity(profileData)
+            );
+
+            console.log('✅ Perfiles cargados desde API:', profileEntities.length);
+            allProfiles.value = profileEntities;
+
+            return profileEntities;
+        } catch (err) {
+            const errorMessage = err.response?.data?.message || err.message || 'Error al obtener los perfiles';
+            setError(errorMessage);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const searchProfiles = async (filters) => {
+        try {
+            setLoading(true);
+            clearError();
+
+            console.log('🔍 Buscando perfiles con filtros:', filters);
+
+            // Implementar búsqueda según los filtros
+            let filteredProfiles = [...allProfiles.value];
+
+            if (filters.query) {
+                const query = filters.query.toLowerCase();
+                filteredProfiles = filteredProfiles.filter(profile =>
+                    profile.username.toLowerCase().includes(query) ||
+                    profile.abilities.some(skill => skill.toLowerCase().includes(query))
+                );
+            }
+
+            if (filters.role) {
+                filteredProfiles = filteredProfiles.filter(profile =>
+                    profile.role.toLowerCase().includes(filters.role.toLowerCase())
+                );
+            }
+
+            if (filters.minScore) {
+                filteredProfiles = filteredProfiles.filter(profile =>
+                    profile.points >= parseInt(filters.minScore)
+                );
+            }
+
+            if (filters.maxScore) {
+                filteredProfiles = filteredProfiles.filter(profile =>
+                    profile.points <= parseInt(filters.maxScore)
+                );
+            }
+
+            console.log('✅ Resultados de búsqueda:', filteredProfiles.length);
+            return filteredProfiles;
+        } catch (err) {
+            const errorMessage = err.response?.data?.message || err.message || 'Error al buscar perfiles';
+            setError(errorMessage);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     // Complete onboarding - CORREGIDO
     const completeOnboarding = async (onboardingData, userId) => {
@@ -164,6 +246,7 @@ export const useProfileStore = defineStore('profile', () => {
         // State
         currentProfile,
         loading,
+        allProfiles,
         error,
 
         // Computed
@@ -179,6 +262,8 @@ export const useProfileStore = defineStore('profile', () => {
         setLoading,
         clearProfile,
         setError,
-        clearError
+        clearError,
+        fetchAllProfiles,
+        searchProfiles,
     };
 });
