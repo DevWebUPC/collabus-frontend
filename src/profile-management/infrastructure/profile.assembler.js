@@ -24,8 +24,9 @@ export class ProfileAssembler {
             experiences: apiData.experiences || [],
             cv: apiData.cv || null,
             status: apiData.status || 'active',
-            points: apiData.points || 0, // 👈 Incluir puntos
-            projects: apiData.projects || [], // 👈 Incluir proyectos
+            points: apiData.points || 0,
+            projects: apiData.projects || [],
+            pointsGivenBy: apiData.pointsGivenBy || [],
             createdAt: apiData.createdAt,
             updatedAt: apiData.updatedAt
         });
@@ -48,10 +49,11 @@ export class ProfileAssembler {
             bio: entity.bio,
             abilities: entity.abilities,
             experiences: entity.experiences,
-            cv: entity.cv,
+            cv: entity.cv, // ✅ Ahora el CV está en formato Base64
             status: entity.status,
-            points: entity.points, // 👈 Incluir puntos
-            projects: entity.projects, // 👈 Incluir proyectos
+            points: entity.points,
+            projects: entity.projects,
+            pointsGivenBy: entity.pointsGivenBy,
             createdAt: entity.createdAt?.toISOString(),
             updatedAt: entity.updatedAt?.toISOString()
         };
@@ -72,10 +74,10 @@ export class ProfileAssembler {
             bio: onboardingData.description?.bio || '',
             abilities: onboardingData.skills?.abilities || [],
             experiences: onboardingData.skills?.experiences || [],
-            cv: onboardingData.skills?.cv || null,
+            cv: onboardingData.skills?.cv || null, // ✅ Ahora el CV está en Base64
             status: 'active',
-            points: 0, // 👈 Inicializar en 0 para nuevo perfil
-            projects: [], // 👈 Inicializar array vacío para nuevo perfil
+            points: 0,
+            projects: [],
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         };
@@ -91,13 +93,27 @@ export class ProfileAssembler {
     }
 
     /**
-     * Transform profile update data to API format
-     * @param {Object} updateData - Profile update data
+     * Transform update data to API format
+     * @param {Object} updateData - Update form data
      * @returns {Object} API formatted update data
      */
     static fromUpdateToApi(updateData) {
-        const apiData = { ...updateData };
-        apiData.updatedAt = new Date().toISOString();
-        return apiData;
+        const updateObj = {
+            username: updateData.username,
+            role: updateData.role,
+            bio: updateData.bio,
+            abilities: updateData.abilities,
+            experiences: updateData.experiences,
+            points: updateData.points,
+            pointsGivenBy: updateData.pointsGivenBy,
+            updatedAt: new Date().toISOString()
+        };
+
+        // Incluir CV si está presente
+        if (updateData.cv) {
+            updateObj.cv = updateData.cv;
+        }
+
+        return updateObj;
     }
 }
