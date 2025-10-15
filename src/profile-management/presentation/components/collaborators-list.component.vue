@@ -1,6 +1,7 @@
 <script>
 import CollaboratorItem from '../components/colaborador-item.component.vue';
 import { useProfileStore } from '../../application/profile-store.js';
+import { useUserStore } from '../../../iam/application/user-store.js'; // 👈 Añadir user store
 
 export default {
   name: "CollaboratorsList",
@@ -35,7 +36,6 @@ export default {
     }
   },
   async mounted() {
-    // Solo cargar todos los colaboradores si no hay una búsqueda activa
     if (!this.isFiltered && this.collaborators.length === 0) {
       await this.loadCollaborators();
     }
@@ -47,18 +47,23 @@ export default {
 
       try {
         const profileStore = useProfileStore();
+        const userStore = useUserStore(); // 👈 Obtener user store
 
-        // Obtener todos los perfiles desde la API
         await profileStore.fetchAllProfiles();
 
-        // Mapear los perfiles al formato que espera el componente
-        this.localCollaborators = profileStore.allProfiles.map(profile => ({
-          id: profile.id,
-          name: profile.username,
-          position: profile.role,
-          score: profile.points,
-          skills: profile.abilities
-        }));
+        // 👇 Filtrar para excluir el perfil del usuario actual
+        this.localCollaborators = profileStore.allProfiles
+            .filter(profile => {
+              // Excluir el perfil del usuario logueado
+              return profile.userId !== userStore.currentUser?.id;
+            })
+            .map(profile => ({
+              id: profile.id,
+              name: profile.username,
+              position: profile.role,
+              score: profile.points,
+              skills: profile.abilities
+            }));
 
       } catch (err) {
         console.error('Error loading collaborators:', err);
@@ -78,13 +83,11 @@ export default {
 
     handleViewProfile(collaboratorId) {
       console.log('Ver perfil del colaborador:', collaboratorId);
-      // Navegar al perfil del colaborador
       this.$router.push(`/profile/${collaboratorId}`);
     }
   }
 }
 </script>
-
 <template>
   <div class="collaborators-list-container">
     <h1>Lista de Colaboradores</h1>
