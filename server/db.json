@@ -205,7 +205,10 @@
       "username": "Vitaly Baca",
       "role": "Data Scientist",
       "bio": "122",
-      "abilities": ["Java", "Vue"],
+      "abilities": [
+        "Java",
+        "Vue"
+      ],
       "experiences": [
         {
           "position": "1",
@@ -225,7 +228,10 @@
       "username": "Sebas",
       "role": "Ing. Software",
       "bio": "hola",
-      "abilities": ["Java", "Vue"],
+      "abilities": [
+        "Java",
+        "Vue"
+      ],
       "experiences": [
         {
           "position": "2",
@@ -245,7 +251,12 @@
       "username": "MariaG",
       "role": "Frontend Developer",
       "bio": "Desarrolladora frontend con experiencia en React y Vue",
-      "abilities": ["JavaScript", "React", "Vue", "CSS"],
+      "abilities": [
+        "JavaScript",
+        "React",
+        "Vue",
+        "CSS"
+      ],
       "experiences": [
         {
           "position": "Frontend Developer",
@@ -265,7 +276,12 @@
       "username": "CarlosR",
       "role": "Backend Engineer",
       "bio": "Ingeniero backend especializado en microservicios",
-      "abilities": ["Java", "Spring Boot", "MySQL", "Docker"],
+      "abilities": [
+        "Java",
+        "Spring Boot",
+        "MySQL",
+        "Docker"
+      ],
       "experiences": [
         {
           "position": "Backend Engineer",
@@ -285,7 +301,12 @@
       "username": "AnaM",
       "role": "UX/UI Designer",
       "bio": "Diseñadora de experiencias de usuario creativa y detallista",
-      "abilities": ["Figma", "Adobe XD", "User Research", "Prototyping"],
+      "abilities": [
+        "Figma",
+        "Adobe XD",
+        "User Research",
+        "Prototyping"
+      ],
       "experiences": [
         {
           "position": "UX Designer",
@@ -305,7 +326,12 @@
       "username": "LuisF",
       "role": "Full Stack Developer",
       "bio": "Desarrollador full stack con pasión por el código limpio",
-      "abilities": ["JavaScript", "Node.js", "React", "MongoDB"],
+      "abilities": [
+        "JavaScript",
+        "Node.js",
+        "React",
+        "MongoDB"
+      ],
       "experiences": [
         {
           "position": "Full Stack Developer",
@@ -325,7 +351,12 @@
       "username": "ElenaT",
       "role": "Data Analyst",
       "bio": "Analista de datos con experiencia en business intelligence",
-      "abilities": ["Python", "SQL", "Tableau", "Excel"],
+      "abilities": [
+        "Python",
+        "SQL",
+        "Tableau",
+        "Excel"
+      ],
       "experiences": [
         {
           "position": "Data Analyst",
@@ -345,7 +376,12 @@
       "username": "JavierH",
       "role": "DevOps Engineer",
       "bio": "Ingeniero DevOps enfocado en automatización y CI/CD",
-      "abilities": ["AWS", "Kubernetes", "Jenkins", "Terraform"],
+      "abilities": [
+        "AWS",
+        "Kubernetes",
+        "Jenkins",
+        "Terraform"
+      ],
       "experiences": [
         {
           "position": "DevOps Engineer",
@@ -365,7 +401,12 @@
       "username": "SofiaC",
       "role": "Product Manager",
       "bio": "Product manager con visión estratégica y orientación al usuario",
-      "abilities": ["Product Strategy", "Agile", "User Stories", "Roadmapping"],
+      "abilities": [
+        "Product Strategy",
+        "Agile",
+        "User Stories",
+        "Roadmapping"
+      ],
       "experiences": [
         {
           "position": "Product Manager",
@@ -385,7 +426,12 @@
       "username": "DiegoM",
       "role": "Mobile Developer",
       "bio": "Desarrollador móvil especializado en aplicaciones nativas",
-      "abilities": ["Swift", "Kotlin", "React Native", "Firebase"],
+      "abilities": [
+        "Swift",
+        "Kotlin",
+        "React Native",
+        "Firebase"
+      ],
       "experiences": [
         {
           "position": "Mobile Developer",
@@ -405,7 +451,12 @@
       "username": "LauraJ",
       "role": "QA Engineer",
       "bio": "Ingeniera de calidad con enfoque en testing automatizado",
-      "abilities": ["Selenium", "Jest", "Cypress", "Test Planning"],
+      "abilities": [
+        "Selenium",
+        "Jest",
+        "Cypress",
+        "Test Planning"
+      ],
       "experiences": [
         {
           "position": "QA Engineer",
@@ -425,7 +476,12 @@
       "username": "PedroV",
       "role": "Database Administrator",
       "bio": "Administrador de bases de datos con expertise en optimización",
-      "abilities": ["PostgreSQL", "MySQL", "MongoDB", "Performance Tuning"],
+      "abilities": [
+        "PostgreSQL",
+        "MySQL",
+        "MongoDB",
+        "Performance Tuning"
+      ],
       "experiences": [
         {
           "position": "DBA",
@@ -445,7 +501,12 @@
       "username": "CarmenR",
       "role": "Marketing Digital",
       "bio": "Especialista en marketing digital y growth hacking",
-      "abilities": ["SEO", "Google Ads", "Social Media", "Analytics"],
+      "abilities": [
+        "SEO",
+        "Google Ads",
+        "Social Media",
+        "Analytics"
+      ],
       "experiences": [
         {
           "position": "Digital Marketer",
@@ -465,7 +526,12 @@
       "username": "RicardoS",
       "role": "Security Analyst",
       "bio": "Analista de seguridad con enfoque en aplicaciones web",
-      "abilities": ["Penetration Testing", "OWASP", "Network Security", "Vulnerability Assessment"],
+      "abilities": [
+        "Penetration Testing",
+        "OWASP",
+        "Network Security",
+        "Vulnerability Assessment"
+      ],
       "experiences": [
         {
           "position": "Security Analyst",
@@ -485,7 +551,12 @@
       "username": "IsabelC",
       "role": "Cloud Architect",
       "bio": "Arquitecta cloud con experiencia en soluciones escalables",
-      "abilities": ["AWS", "Azure", "Microservices", "Serverless"],
+      "abilities": [
+        "AWS",
+        "Azure",
+        "Microservices",
+        "Serverless"
+      ],
       "experiences": [
         {
           "position": "Cloud Architect",
@@ -505,7 +576,12 @@
       "username": "FernandoM",
       "role": "Scrum Master",
       "bio": "Scrum master certificado con experiencia en equipos ágiles",
-      "abilities": ["Agile Coaching", "Sprint Planning", "Retrospectives", "Team Facilitation"],
+      "abilities": [
+        "Agile Coaching",
+        "Sprint Planning",
+        "Retrospectives",
+        "Team Facilitation"
+      ],
       "experiences": [
         {
           "position": "Scrum Master",
@@ -525,7 +601,12 @@
       "username": "PatriciaV",
       "role": "Business Analyst",
       "bio": "Analista de negocio con fuerte enfoque en requerimientos",
-      "abilities": ["Requirements Gathering", "Process Modeling", "Stakeholder Management", "Documentation"],
+      "abilities": [
+        "Requirements Gathering",
+        "Process Modeling",
+        "Stakeholder Management",
+        "Documentation"
+      ],
       "experiences": [
         {
           "position": "Business Analyst",
@@ -545,7 +626,12 @@
       "username": "RobertoD",
       "role": "AI Engineer",
       "bio": "Ingeniero de IA especializado en machine learning",
-      "abilities": ["Python", "TensorFlow", "PyTorch", "NLP"],
+      "abilities": [
+        "Python",
+        "TensorFlow",
+        "PyTorch",
+        "NLP"
+      ],
       "experiences": [
         {
           "position": "AI Engineer",
@@ -565,7 +651,12 @@
       "username": "GabrielaP",
       "role": "Technical Writer",
       "bio": "Escritora técnica especializada en documentación de software",
-      "abilities": ["Technical Documentation", "API Documentation", "User Guides", "Markdown"],
+      "abilities": [
+        "Technical Documentation",
+        "API Documentation",
+        "User Guides",
+        "Markdown"
+      ],
       "experiences": [
         {
           "position": "Technical Writer",
@@ -585,7 +676,12 @@
       "username": "MiguelC",
       "role": "System Administrator",
       "bio": "Administrador de sistemas con expertise en Linux",
-      "abilities": ["Linux", "Bash", "Networking", "Monitoring"],
+      "abilities": [
+        "Linux",
+        "Bash",
+        "Networking",
+        "Monitoring"
+      ],
       "experiences": [
         {
           "position": "System Admin",
@@ -625,7 +721,12 @@
       "username": "AlejandroN",
       "role": "Backend Developer",
       "bio": "Desarrollador backend con experiencia en APIs REST",
-      "abilities": ["Node.js", "Express", "MongoDB", "Redis"],
+      "abilities": [
+        "Node.js",
+        "Express",
+        "MongoDB",
+        "Redis"
+      ],
       "experiences": [
         {
           "position": "Backend Developer",
@@ -954,197 +1055,6 @@
       "createdAt": "2025-10-10T02:10:25.682Z",
       "updatedAt": "2025-10-10T02:10:25.682Z",
       "id": "DMj8Bl6"
-    },
-    {
-      "title": "12As",
-      "description": "213123\n213123123saS",
-      "areas": [
-        "213"
-      ],
-      "tags": [
-        "2131"
-      ],
-      "academicLevel": "Estudiante de pregrado",
-      "benefits": "213\ndasd\nasdas",
-      "skills": [
-        "123",
-        "23"
-      ],
-      "durationQuantity": 12,
-      "durationType": "años",
-      "roles": [
-        {
-          "id": 1760475670670,
-          "name": "1223123",
-          "cards": [
-            {
-              "id": 1760475670671,
-              "title": "21313",
-              "items": [
-                "123123",
-                "123123"
-              ]
-            },
-            {
-              "id": 1760475828364,
-              "title": "123123",
-              "items": [
-                "123123",
-                "13123"
-              ]
-            }
-          ]
-        },
-        {
-          "id": 1760475834428,
-          "name": "213123",
-          "cards": [
-            {
-              "id": 1760475834429,
-              "title": "123123",
-              "items": [
-                "123123",
-                "123123132"
-              ]
-            }
-          ]
-        }
-      ],
-      "status": "active",
-      "progress": 0,
-      "userId": "1",
-      "authorName": "Usuario",
-      "collaborators": [],
-      "tasks": [],
-      "milestones": [],
-      "createdAt": "2025-10-14T21:04:01.172Z",
-      "updatedAt": "2025-10-14T21:04:01.172Z",
-      "id": "Oce2-hF"
-    },
-    {
-      "title": "q234",
-      "description": "qweqwe\nqweqweqweqw\nqweqweqweqwewqe",
-      "areas": [
-        "weqwe",
-        "qweqwe"
-      ],
-      "tags": [
-        "wqeqwe"
-      ],
-      "academicLevel": "Estudiante de posgrado",
-      "benefits": "qweqweqweqweqwe\nqwe\nwqe\nwqeweq",
-      "skills": [
-        "wqewqe"
-      ],
-      "durationQuantity": 1,
-      "durationType": "meses",
-      "roles": [
-        {
-          "id": 1760475841196,
-          "name": "666",
-          "cards": [
-            {
-              "id": 1760475841197,
-              "title": "1212312",
-              "items": [
-                "123123"
-              ]
-            },
-            {
-              "id": 1760476576243,
-              "title": "213123",
-              "items": [
-                "123123"
-              ]
-            }
-          ]
-        },
-        {
-          "id": 1760476582107,
-          "name": "123123",
-          "cards": [
-            {
-              "id": 1760476582108,
-              "title": "213123",
-              "items": [
-                "123123"
-              ]
-            }
-          ]
-        }
-      ],
-      "status": "active",
-      "progress": 0,
-      "userId": "1",
-      "authorName": "Usuario",
-      "collaborators": [],
-      "tasks": [],
-      "milestones": [],
-      "createdAt": "2025-10-14T21:16:35.956Z",
-      "updatedAt": "2025-10-14T21:16:35.956Z",
-      "id": "h2oyIWy"
-    },
-    {
-      "title": "aserasdasdasd",
-      "description": "dasdasdsasdasda",
-      "areas": [
-        "asdasd"
-      ],
-      "tags": [
-        "sadasd"
-      ],
-      "academicLevel": "Profesional junior",
-      "benefits": "sdasd\nsdasdasd",
-      "skills": [
-        "1"
-      ],
-      "durationQuantity": 1,
-      "durationType": "meses",
-      "roles": [
-        {
-          "id": 1760476595998,
-          "name": "6666666",
-          "cards": [
-            {
-              "id": 1760476595999,
-              "title": "12213",
-              "items": [
-                "12123"
-              ]
-            },
-            {
-              "id": 1760476930627,
-              "title": "213123asdasd",
-              "items": [
-                "12asdasd"
-              ]
-            }
-          ]
-        },
-        {
-          "id": 1760476932907,
-          "name": "23123",
-          "cards": [
-            {
-              "id": 1760476932908,
-              "title": "12123123",
-              "items": [
-                "123123"
-              ]
-            }
-          ]
-        }
-      ],
-      "status": "active",
-      "progress": 0,
-      "userId": "1",
-      "authorName": "Usuario",
-      "collaborators": [],
-      "tasks": [],
-      "milestones": [],
-      "createdAt": "2025-10-14T21:22:39.547Z",
-      "updatedAt": "2025-10-14T21:22:39.547Z",
-      "id": "o5nVNlv"
     }
   ],
   "tasks": [
