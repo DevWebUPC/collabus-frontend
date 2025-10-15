@@ -5,6 +5,7 @@ import PersonalStats from '../../../profile-management/presentation/components/p
 import RankingCard from '../../../profile-management/presentation/components/ranking-card-button.component.vue'
 import CollaboratorsList from '../../../profile-management/presentation/components/collaborators-list.component.vue'
 import { useProfileStore } from '../../../profile-management/application/profile-store.js'
+import { useUserStore } from '../../../iam/application/user-store.js' // 👈 Añadir user store
 
 export default {
   name: 'Collaborators',
@@ -33,18 +34,25 @@ export default {
 
       try {
         const profileStore = useProfileStore()
+        const userStore = useUserStore() // 👈 Obtener user store
+
         const filteredProfiles = await profileStore.searchProfiles(filters)
 
-        // Mapear los perfiles filtrados al formato que espera el componente
-        this.filteredCollaborators = filteredProfiles.map(profile => ({
-          id: profile.id,
-          name: profile.username,
-          position: profile.role,
-          score: profile.points,
-          skills: profile.abilities
-        }))
+        // 👇 Filtrar para excluir el perfil del usuario actual
+        this.filteredCollaborators = filteredProfiles
+            .filter(profile => {
+              // Excluir el perfil del usuario logueado
+              return profile.userId !== userStore.currentUser?.id;
+            })
+            .map(profile => ({
+              id: profile.id,
+              name: profile.username,
+              position: profile.role,
+              score: profile.points,
+              skills: profile.abilities
+            }))
 
-        console.log('Resultados filtrados:', this.filteredCollaborators.length)
+        console.log('Resultados filtrados (excluyendo usuario actual):', this.filteredCollaborators.length)
       } catch (error) {
         console.error('Error en búsqueda:', error)
         this.filteredCollaborators = []
@@ -61,7 +69,6 @@ export default {
   }
 }
 </script>
-
 <template>
   <div class="collaborators-container">
     <div class="search-section">
