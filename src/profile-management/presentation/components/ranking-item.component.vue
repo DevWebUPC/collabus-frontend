@@ -1,7 +1,7 @@
 <!-- components/ranking-item.component.vue -->
 <template>
   <div class="ranking-item">
-    <div class="ranking-number">
+    <div class="ranking-number" :class="getRankClass(rank)">
       {{ rank }}
     </div>
 
@@ -19,18 +19,21 @@
         <p class="collaborator-role">{{ collaborator.role }}</p>
         <div class="skills-tags">
           <span
-              v-for="skill in collaborator.skills"
+              v-for="skill in limitedSkills"
               :key="skill"
               class="skill-tag"
           >
             {{ skill }}
           </span>
+          <span v-if="collaborator.skills.length > 3" class="skill-tag-more">
+            +{{ collaborator.skills.length - 3 }} más
+          </span>
         </div>
       </div>
 
       <div class="score-section">
-        <div class="score-value">Puntuación: {{ collaborator.score }}pts</div>
-        <button class="profile-btn">Ver Perfil</button>
+        <div class="score-value">{{ collaborator.score }} pts</div>
+        <button class="profile-btn" @click="viewProfile">Ver Perfil</button>
       </div>
     </div>
   </div>
@@ -49,10 +52,26 @@ export default {
       required: true
     }
   },
+  computed: {
+    limitedSkills() {
+      return this.collaborator.skills.slice(0, 3);
+    }
+  },
   methods: {
     getAvatarUrl(id, name) {
       const seed = name.replace(/\s+/g, '-').toLowerCase();
       return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&radius=50&size=50`;
+    },
+
+    getRankClass(rank) {
+      if (rank === 1) return 'rank-first';
+      if (rank === 2) return 'rank-second';
+      if (rank === 3) return 'rank-third';
+      return '';
+    },
+
+    viewProfile() {
+      this.$emit('view-profile', this.collaborator.id);
     }
   }
 }
@@ -83,6 +102,25 @@ export default {
   background: #f0f0ff;
   border-radius: 8px;
   padding: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.rank-first {
+  background: linear-gradient(135deg, #FFD700, #FFEC8B);
+  color: #B8860B;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+.rank-second {
+  background: linear-gradient(135deg, #C0C0C0, #E8E8E8);
+  color: #696969;
+  box-shadow: 0 4px 12px rgba(192, 192, 192, 0.3);
+}
+
+.rank-third {
+  background: linear-gradient(135deg, #CD7F32, #E8B886);
+  color: #8B4513;
+  box-shadow: 0 4px 12px rgba(205, 127, 50, 0.3);
 }
 
 .avatar-container {
@@ -131,6 +169,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  align-items: center;
 }
 
 .skill-tag {
@@ -148,6 +187,16 @@ export default {
   background: #6C63FF;
   color: white;
   transform: translateY(-1px);
+}
+
+.skill-tag-more {
+  background: #6C63FF;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .score-section {
