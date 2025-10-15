@@ -4,30 +4,32 @@ import Login from "../iam/presentation/views/login.component.vue";
 import RecoveryPassword from "../iam/presentation/views/recovery-password.component.vue";
 import Register from "../iam/presentation/views/register.component.vue";
 import Onboarding from "../iam/presentation/views/onboarding.component.vue";
-import ProfileView from "../profile-management/presentation/views/profile-view.vue";
-import Collaborator from "../shared/presentation/views/collaborators.vue"
+import Collaborator from "../shared/presentation/views/collaborators.vue";
 import RankingDeColaboradores from "../profile-management/presentation/views/ranking-de-colaboradores.vue";
 import { projectRoutes } from "../projects/presentation/projects-routes.js";
+import { profileRoutes } from "../profile-management/presentation/profile-routes.js";
 import Notifications from "../shared/presentation/views/notifications-view.vue";
 
 // Import dinámico para page not found
 const pageNotFound = () =>
     import("../shared/presentation/views/page-not-found.vue");
 
-
 const routes = [
     { path: "/", name: "login", component: Login, meta: { title: "Login" } },
     { path: "/register", name: "register", component: Register, meta: { title: "Register" } },
-    {path: "/ranking-colaboradores", name: "ranking", component: RankingDeColaboradores, meta: { title: "Ranking" } },
+    { path: "/ranking-colaboradores", name: "ranking", component: RankingDeColaboradores, meta: { title: "Ranking" } },
     { path: "/login", redirect: "/", meta: { title: "Login" } },
     { path: "/create-account", name: "create-account", component: Onboarding, meta: { title: "Create Account" } },
     { path: "/home", name: "home", component: Home, meta: { title: "Home" } },
     { path: "/collaborators", name: "collaborators", component: Collaborator, meta: { title: "Collaborators" } },
-    { path: "/profile", name: "profile", component: ProfileView, meta: { title: "Profile" } },
     { path: "/notifications", name: "notifications", component: Notifications, meta: { title: "Notifications" } },
     { path: "/recovery-password", name: "recovery-password", component: RecoveryPassword, meta: { title: "Recovery Password" } },
     { path: "/:pathMatch(.*)*", name: "not-found", component: pageNotFound, meta: { title: "Page Not Found" } },
-        // Project routes
+
+    // Profile routes - 👈 NUEVAS RUTAS
+    ...profileRoutes,
+
+    // Project routes
     ...projectRoutes,
 ];
 
