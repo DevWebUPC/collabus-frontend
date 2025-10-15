@@ -1,3 +1,4 @@
+<!-- profile-management/presentation/views/profile-view.vue -->
 <script setup lang="js">
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
@@ -9,13 +10,12 @@ import ProfileStats from '../components/profile-stats.component.vue';
 import ProfileDescription from '../components/profile-description.component.vue';
 import ProfileSkills from '../components/profile-skills.component.vue';
 import ProfileExperiences from '../components/profile-experiences.component.vue';
-import ProfileTabs from '../components/profile-tabs.component.vue';
+import ProfileTabs from '../components/profile-tabs.component.vue'; // 👈 Agregar esta importación
 
 const profileStore = useProfileStore();
 const authStore = useAuthStore();
 const userStore = useUserStore();
 const router = useRouter();
-const experiencesOpen = ref(false);
 const isLoadingProfile = ref(false);
 
 // 👇 Watch para detectar cambios en el usuario autenticado
@@ -67,22 +67,19 @@ const transformProfileData = (storeProfile) => {
     name: storeProfile.username || 'Usuario',
     roles: storeProfile.role ? [storeProfile.role] : ['Developer'],
     mainRole: storeProfile.role || 'Full Stack Developer',
-    points: storeProfile.points || 0, // 👈 Usar puntos reales
-    projects: storeProfile.projects || [], // 👈 Usar proyectos reales
+    points: storeProfile.points || 0,
+    projects: storeProfile.projects || [],
     comments: [],
     description: storeProfile.bio || 'Sin descripción',
     skills: storeProfile.abilities || [],
     avatar: storeProfile.avatar || null,
+    cv: storeProfile.cv || null,
     experiences: (storeProfile.experiences || []).map(exp => ({
       company: exp.company || 'Empresa',
       role: exp.position || 'Rol',
       duration: exp.duration || 'No especificado'
     }))
   };
-};
-
-const toggleExperiences = (isOpen) => {
-  experiencesOpen.value = isOpen;
 };
 
 // 👇 Función centralizada para cargar el perfil
@@ -169,174 +166,504 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="profile-container">
-    <!-- Botón de logout en la esquina superior derecha -->
-    <div class="logout-container">
-      <pv-button
-          @click="handleLogout"
-          class="logout-button"
-          icon="pi pi-sign-out"
-          label="Cerrar Sesión"
-          severity="secondary"
-          text
-      />
-    </div>
-
-    <!-- Mostrar loading state -->
-    <div v-if="isLoadingProfile || profileStore.loading" class="loading-container">
-      <pv-progressspinner />
-      <p>Cargando perfil...</p>
-    </div>
-
-    <!-- Mostrar error -->
-    <div v-else-if="profileStore.error" class="error-container">
-      <pv-message severity="error">
-        {{ profileStore.error }}
-      </pv-message>
-      <pv-button
-          @click="loadUserProfile"
-          label="Reintentar"
-          class="mt-2"
-      />
-    </div>
-
-    <!-- Mostrar contenido cuando no hay perfil pero sí usuario -->
-    <div v-else-if="userStore.isAuthenticated && !profileStore.currentProfile" class="no-profile-container">
-      <pv-message severity="warn">
-        No se encontró un perfil para este usuario.
-      </pv-message>
-      <pv-button
-          @click="router.push('/create-account')"
-          label="Completar Perfil"
-          class="mt-2"
-      />
-    </div>
-
-    <!-- Mostrar contenido del perfil -->
-    <template v-else-if="profileStore.currentProfile">
-      <!-- Header siempre visible -->
-      <ProfileHeader :profile-data="profileData" />
-
-      <!-- Contenido principal - oculto en móvil -->
-      <div class="main-content col-12 md:col-9 gap-1 hidden-on-mobile">
-        <ProfileStats :profile-data="profileData" />
-        <ProfileDescription :profile-data="profileData" />
-        <ProfileSkills :profile-data="profileData" />
-        <ProfileExperiences
-            :profile-data="profileData"
-            @toggle-experiences="toggleExperiences"
+  <div class="profile-view-container">
+    <!-- Header Section -->
+    <div class="profile-header-section">
+      <div class="header-content">
+        <div class="header-title">
+          <h1 class="profile-title">Mi Perfil</h1>
+          <p class="profile-subtitle">Gestiona tu información y proyectos</p>
+        </div>
+        <pv-button
+            @click="handleLogout"
+            class="logout-button"
+            icon="pi pi-sign-out"
+            label="Cerrar Sesión"
+            severity="secondary"
+            outlined
         />
       </div>
-    </template>
-
-    <!-- Mensaje cuando no hay usuario autenticado -->
-    <div v-else class="not-authenticated">
-      <pv-message severity="error">
-        No estás autenticado. Por favor inicia sesión.
-      </pv-message>
-      <pv-button
-          @click="router.push('/login')"
-          label="Ir al Login"
-          class="mt-2"
-      />
     </div>
-  </div>
 
-  <!-- Tabs siempre visibles (solo si hay perfil) -->
-  <ProfileTabs v-if="profileStore.currentProfile" :profile-data="profileData" />
+    <!-- Loading State -->
+    <div v-if="isLoadingProfile || profileStore.loading" class="loading-container">
+      <div class="loading-content">
+        <pv-progressspinner class="loading-spinner" />
+        <p class="loading-text">Cargando tu perfil...</p>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="profileStore.error" class="error-container">
+      <pv-card class="error-card">
+        <template #content>
+          <div class="error-content">
+            <i class="pi pi-exclamation-triangle error-icon"></i>
+            <h3>Error al cargar el perfil</h3>
+            <p>{{ profileStore.error }}</p>
+            <pv-button
+                @click="loadUserProfile"
+                label="Reintentar"
+                class="retry-button"
+                icon="pi pi-refresh"
+            />
+          </div>
+        </template>
+      </pv-card>
+    </div>
+
+    <!-- No Profile State -->
+    <div v-else-if="userStore.isAuthenticated && !profileStore.currentProfile" class="no-profile-container">
+      <pv-card class="no-profile-card">
+        <template #content>
+          <div class="no-profile-content">
+            <i class="pi pi-user-edit no-profile-icon"></i>
+            <h3>Perfil Incompleto</h3>
+            <p>No se encontró un perfil completo para este usuario.</p>
+            <pv-button
+                @click="router.push('/create-account')"
+                label="Completar Perfil"
+                class="complete-profile-button"
+                icon="pi pi-user-plus"
+            />
+          </div>
+        </template>
+      </pv-card>
+    </div>
+
+    <!-- Profile Content -->
+    <div v-else-if="profileStore.currentProfile" class="profile-content">
+      <div class="profile-main-section">
+        <div class="profile-layout">
+          <!-- Left Column - Profile Header -->
+          <div class="left-column">
+            <ProfileHeader :profile-data="profileData" />
+          </div>
+
+          <!-- Right Column - Profile Details -->
+          <div class="right-column">
+            <div class="content-grid">
+              <div class="stats-section">
+                <ProfileStats :profile-data="profileData" :is-public="false" />
+              </div>
+
+              <div class="description-section">
+                <ProfileDescription :profile-data="profileData" />
+              </div>
+
+              <div class="skills-section">
+                <ProfileSkills :profile-data="profileData" />
+              </div>
+
+              <div class="experiences-section">
+                <ProfileExperiences :profile-data="profileData" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- Not Authenticated State -->
+    <div v-else class="not-authenticated">
+      <pv-card class="auth-card">
+        <template #content>
+          <div class="auth-content">
+            <i class="pi pi-lock auth-icon"></i>
+            <h3>Acceso Restringido</h3>
+            <p>Debes iniciar sesión para ver esta página.</p>
+            <pv-button
+                @click="router.push('/login')"
+                label="Ir al Login"
+                class="login-button"
+                icon="pi pi-sign-in"
+            />
+          </div>
+        </template>
+      </pv-card>
+    </div>
+    <ProfileTabs :profile-data="profileData" :is-public="false" />
+
+  </div>
 </template>
 
 <style scoped>
-.profile-container {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  align-items: center;
-  margin-bottom: 2rem;
+.profile-view-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
   position: relative;
-  min-height: 400px;
+  min-height: calc(100vh - 120px);
 }
 
-.logout-container {
+/* Header Section */
+.profile-header-section {
+  background: linear-gradient(135deg, #6C63FF 0%, #8B84FF 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(108, 99, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-header-section::before {
+  content: '';
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 1000;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.header-title {
+  flex: 1;
+}
+
+.profile-title {
+  color: white;
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  margin: 0;
+  font-weight: 400;
 }
 
 .logout-button {
-  color: #6b7280 !important;
-  border: 1px solid #d1d5db !important;
-  background: white !important;
-  padding: 0.5rem 1rem !important;
-  border-radius: 6px !important;
-  font-size: 0.875rem !important;
-  transition: all 0.2s ease-in-out !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
 }
 
 .logout-button:hover {
-  color: #dc2626 !important;
-  border-color: #dc2626 !important;
-  background: #fef2f2 !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.loading-container,
-.error-container,
-.no-profile-container,
-.not-authenticated {
+/* Loading State */
+.loading-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  padding: 2rem;
-  width: 100%;
+  align-items: center;
+  padding: 4rem 2rem;
+  min-height: 400px;
+}
+
+.loading-content {
   text-align: center;
 }
 
-/* En pantallas grandes */
-@media (min-width: 768px) {
-  .profile-container {
-    flex-direction: row;
-    align-items: flex-start;
-  }
+.loading-spinner {
+  width: 60px !important;
+  height: 60px !important;
+}
 
-  .hidden-on-mobile {
-    display: block;
+.loading-spinner :deep(.p-progress-spinner-circle) {
+  stroke: #6C63FF;
+}
+
+.loading-text {
+  margin-top: 1.5rem;
+  color: #6b7280;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* Error State */
+.error-container {
+  padding: 2rem;
+}
+
+.error-card {
+  max-width: 500px;
+  margin: 0 auto;
+  border-left: 6px solid #ef4444;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.error-content {
+  text-align: center;
+  padding: 2rem;
+}
+
+.error-icon {
+  font-size: 4rem;
+  color: #ef4444;
+  margin-bottom: 1.5rem;
+}
+
+.error-content h3 {
+  color: #1f2937;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.error-content p {
+  color: #6b7280;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.retry-button {
+  background: #6C63FF !important;
+  border-color: #6C63FF !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+}
+
+/* No Profile State */
+.no-profile-container {
+  padding: 2rem;
+}
+
+.no-profile-card {
+  max-width: 500px;
+  margin: 0 auto;
+  border-left: 6px solid #f59e0b;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.no-profile-content {
+  text-align: center;
+  padding: 2rem;
+}
+
+.no-profile-icon {
+  font-size: 4rem;
+  color: #f59e0b;
+  margin-bottom: 1.5rem;
+}
+
+.no-profile-content h3 {
+  color: #1f2937;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.no-profile-content p {
+  color: #6b7280;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.complete-profile-button {
+  background: #6C63FF !important;
+  border-color: #6C63FF !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+}
+
+/* Not Authenticated State */
+.not-authenticated {
+  padding: 2rem;
+}
+
+.auth-card {
+  max-width: 500px;
+  margin: 0 auto;
+  border-left: 6px solid #6C63FF;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.auth-content {
+  text-align: center;
+  padding: 2rem;
+}
+
+.auth-icon {
+  font-size: 4rem;
+  color: #6C63FF;
+  margin-bottom: 1.5rem;
+}
+
+.auth-content h3 {
+  color: #1f2937;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.auth-content p {
+  color: #6b7280;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.login-button {
+  background: #6C63FF !important;
+  border-color: #6C63FF !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+}
+
+/* Profile Content */
+.profile-content {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.profile-main-section {
+  padding: 0;
+}
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 0;
+  min-height: 600px;
+}
+
+/* Left Column */
+.left-column {
+  background: #f8fafc;
+  border-right: 1px solid #e5e7eb;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Right Column */
+.right-column {
+  padding: 2rem;
+  background: white;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+/* Tabs Section */
+.tabs-section {
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  padding: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .profile-layout {
+    grid-template-columns: 340px 1fr;
   }
 }
 
-/* En pantallas pequeñas */
-@media (max-width: 767px) {
-  .hidden-on-mobile {
-    display: none !important;
+@media (max-width: 1024px) {
+  .profile-layout {
+    grid-template-columns: 1fr;
   }
 
-  .logout-container {
-    position: relative;
-    top: 0;
-    right: 0;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1rem;
+  .left-column {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-view-container {
+    padding: 0.5rem;
+  }
+
+  .profile-header-section {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .profile-title {
+    font-size: 1.75rem;
+  }
+
+  .profile-subtitle {
+    font-size: 1rem;
   }
 
   .logout-button {
-    font-size: 0.8rem !important;
-    padding: 0.4rem 0.8rem !important;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .left-column,
+  .right-column {
+    padding: 1.5rem;
+  }
+
+  .tabs-section {
+    padding: 1.5rem;
   }
 }
 
-.color-text {
-  color: #6C63FF;
+@media (max-width: 480px) {
+  .profile-header-section {
+    padding: 1rem;
+  }
+
+  .profile-title {
+    font-size: 1.5rem;
+  }
+
+  .left-column,
+  .right-column {
+    padding: 1rem;
+  }
+
+  .tabs-section {
+    padding: 1rem;
+  }
 }
-.color-bg {
-  background-color: #6C63FF;
+
+/* Animation for smooth transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
 }
-.color-border {
-  border-color: #6C63FF;
-}
-.color-bg-white {
-  background-color: #fff;
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
