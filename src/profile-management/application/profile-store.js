@@ -59,7 +59,7 @@ export const useProfileStore = defineStore('profile', () => {
         }
     };
 
-    const searchProfiles = async (filters) => {
+    const searchProfiles = async (filters, excludeCurrentUser=true) => {
         try {
             setLoading(true);
             clearError();
@@ -68,6 +68,13 @@ export const useProfileStore = defineStore('profile', () => {
 
             // Implementar búsqueda según los filtros
             let filteredProfiles = [...allProfiles.value];
+
+            // 👇 Excluir usuario actual por defecto
+            if (excludeCurrentUser && currentProfile.value) {
+                filteredProfiles = filteredProfiles.filter(profile =>
+                    profile.userId !== currentProfile.value.userId
+                );
+            }
 
             if (filters.query) {
                 const query = filters.query.toLowerCase();
@@ -105,7 +112,6 @@ export const useProfileStore = defineStore('profile', () => {
             setLoading(false);
         }
     };
-
 
     // Complete onboarding - CORREGIDO
     const completeOnboarding = async (onboardingData, userId) => {
@@ -173,6 +179,7 @@ export const useProfileStore = defineStore('profile', () => {
         }
     };
 
+
     // Update profile
     const updateProfile = async (profileData) => {
         try {
@@ -184,7 +191,8 @@ export const useProfileStore = defineStore('profile', () => {
             }
 
             const apiData = ProfileAssembler.fromUpdateToApi(profileData);
-            const response = await profileApi.update(currentProfile.value.id, apiData);
+            // Cambiar de update a patch
+            const response = await profileApi.patch(currentProfile.value.id, apiData);
 
             if (response.status >= 200 && response.status < 300) {
                 const updatedProfile = ProfileAssembler.fromApiToEntity(response.data);
@@ -192,6 +200,42 @@ export const useProfileStore = defineStore('profile', () => {
                 // Update current profile
                 currentProfile.value = updatedProfile;
                 localStorage.setItem('currentProfile', JSON.stringify(updatedProfile));
+
+                return updatedProfile;
+            } else {
+                throw new Error('Error al actualizar el perfil');
+            }
+        } catch (err) {
+            const errorMessage = err.response?.data?.message || err.message || 'Error al actualizar el perfil';
+            setError(errorMessage);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const updateProfileById = async (profileId, profileData) => {
+        try {
+            setLoading(true);
+            clearError();
+
+            const apiData = ProfileAssembler.fromUpdateToApi(profileData);
+            const response = await profileApi.patch(profileId, apiData);
+
+            if (response.status >= 200 && response.status < 300) {
+                const updatedProfile = ProfileAssembler.fromApiToEntity(response.data);
+
+                // Actualizar en la lista de todos los perfiles
+                const index = allProfiles.value.findIndex(p => p.id === profileId);
+                if (index !== -1) {
+                    allProfiles.value[index] = updatedProfile;
+                }
+
+                // Si es el perfil actual, actualizarlo también
+                if (currentProfile.value && currentProfile.value.id === profileId) {
+                    currentProfile.value = updatedProfile;
+                    localStorage.setItem('currentProfile', JSON.stringify(updatedProfile));
+                }
 
                 return updatedProfile;
             } else {
@@ -264,6 +308,7 @@ export const useProfileStore = defineStore('profile', () => {
         setError,
         clearError,
         fetchAllProfiles,
+        updateProfileById,
         searchProfiles,
     };
 });
