@@ -14,6 +14,9 @@ export class Profile {
                     experiences = [],
                     cv = null,
                     status = 'active',
+                    points = 0, // 👈 Nuevo campo - inicializado en 0
+                    projects = [], // 👈 Nuevo campo - array vacío
+                    pointsGivenBy = [],
                     createdAt = null,
                     updatedAt = null
                 } = {}) {
@@ -27,6 +30,9 @@ export class Profile {
         this.experiences = experiences;
         this.cv = cv;
         this.status = status;
+        this.points = points; // 👈 Inicializar puntos
+        this.projects = projects; // 👈 Inicializar proyectos
+        this.pointsGivenBy = pointsGivenBy;
         this.createdAt = createdAt ? new Date(createdAt) : new Date();
         this.updatedAt = updatedAt ? new Date(updatedAt) : new Date();
     }
@@ -34,6 +40,30 @@ export class Profile {
     // Business logic methods
     isComplete() {
         return this.username && this.role && this.bio;
+    }
+
+    hasUserGivenPoint(userId) {
+        return this.pointsGivenBy?.includes(userId) || false;
+    }
+
+    toggleUserPoint(userId) {
+        if (!this.pointsGivenBy) {
+            this.pointsGivenBy = [];
+        }
+
+        const userIndex = this.pointsGivenBy.indexOf(userId);
+
+        if (userIndex === -1) {
+            // Agregar punto
+            this.pointsGivenBy.push(userId);
+            this.points += 1;
+            return true; // Punto agregado
+        } else {
+            // Quitar punto
+            this.pointsGivenBy.splice(userId, 1);
+            this.points = Math.max(0, this.points - 1);
+            return false; // Punto quitado
+        }
     }
 
     getCompletionPercentage() {
@@ -48,6 +78,26 @@ export class Profile {
         if (this.avatar) completedFields++;
 
         return Math.round((completedFields / totalFields) * 100);
+    }
+
+    // 👇 Nuevos métodos para manejar puntos y proyectos
+    addPoints(pointsToAdd) {
+        this.points += pointsToAdd;
+        this.updatedAt = new Date();
+    }
+
+    addProject(project) {
+        this.projects.push(project);
+        this.updatedAt = new Date();
+    }
+
+    removeProject(projectId) {
+        this.projects = this.projects.filter(project => project.id !== projectId);
+        this.updatedAt = new Date();
+    }
+
+    getProjectsCount() {
+        return this.projects.length;
     }
 
     // Validation methods
@@ -76,7 +126,19 @@ export class Profile {
 
     // Profile methods
     hasCV() {
-        return !!this.cv;
+        return !!this.cv && !!this.cv.data;
+    }
+
+
+    getCVInfo() {
+        if (!this.cv) return null;
+
+        return {
+            fileName: this.cv.fileName,
+            fileType: this.cv.fileType,
+            fileSize: this.cv.fileSize,
+            uploadedAt: this.cv.uploadedAt
+        };
     }
 
     getSkillsCount() {

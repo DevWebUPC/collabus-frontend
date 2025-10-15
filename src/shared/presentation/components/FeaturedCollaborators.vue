@@ -1,32 +1,55 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useHomeStore } from '../../application/home.store.js';
+import { useProfileStore } from '../../../profile-management/application/profile-store.js'; // Ajusta la ruta según tu estructura
 
 const { t } = useI18n();
-const homeStore = useHomeStore();
+const profileStore = useProfileStore();
 
 // Computed properties
-const featuredCollaborators = computed(() => homeStore.featuredCollaborators);
-const isLoading = computed(() => homeStore.isLoadingCollaborators);
+const featuredCollaborators = computed(() => {
+  // Ordenar por puntos descendente y tomar los primeros 3
+  return [...profileStore.allProfiles]
+      .sort((a, b) => b.points - a.points)
+      .slice(0, 3)
+      .map(profile => ({
+        id: profile.id,
+        name: profile.username,
+        role: profile.role,
+        profilePicture: profile.avatar,
+        skills: profile.abilities,
+        points: profile.points,
+      }));
+});
+
+const isLoading = computed(() => profileStore.loading);
+
+// onMounted: cargar perfiles si no hay ninguno
+onMounted(async () => {
+  if (profileStore.allProfiles.length === 0) {
+    await profileStore.fetchAllProfiles();
+  }
+});
 
 // Handle view more collaborators
 const handleViewMore = () => {
-  // Navigate to collaborators page or show modal
-  console.log('View more collaborators');
+  // Navigate to ranking page
+  window.location.href = '/ranking-colaboradores'; // O usa vue-router si está configurado
 };
 
 // Handle collaborator profile view
 const handleViewProfile = (collaborator) => {
   console.log('View collaborator profile:', collaborator);
+  // Navegar al perfil del colaborador
+  window.location.href = `/profile/${collaborator.id}`;
 };
 
-// Get rating stars
+// Get rating stars (mantenemos por compatibilidad)
 const getRatingStars = (rating) => {
   return Array.from({ length: 5 }, (_, index) => index < Math.floor(rating));
 };
 
-// Format rating
+// Format rating (mantenemos por compatibilidad)
 const formatRating = (rating) => {
   return rating ? rating.toFixed(1) : '0.0';
 };
@@ -37,11 +60,11 @@ const formatRating = (rating) => {
     <div class="section-header">
       <h2 class="section-title">{{ t('home.collaborators.title') }}</h2>
       <pv-button
-        :label="t('home.collaborators.viewMore')"
-        icon="pi pi-arrow-right"
-        class="view-more-btn"
-        text
-        @click="handleViewMore"
+          :label="t('home.collaborators.viewMore')"
+          icon="pi pi-arrow-right"
+          class="view-more-btn"
+          text
+          @click="handleViewMore"
       />
     </div>
 
@@ -60,39 +83,44 @@ const formatRating = (rating) => {
     <!-- Collaborators List -->
     <div v-else class="collaborators-list">
       <div
-        v-for="collaborator in featuredCollaborators"
-        :key="collaborator.id"
-        class="collaborator-card"
-        @click="handleViewProfile(collaborator)"
+          v-for="collaborator in featuredCollaborators"
+          :key="collaborator.id"
+          class="collaborator-card"
+          @click="handleViewProfile(collaborator)"
       >
         <div class="collaborator-avatar">
           <pv-avatar
-            :image="collaborator.profilePicture"
-            :label="collaborator.name?.charAt(0) || 'U'"
-            size="large"
-            shape="circle"
-            class="avatar"
+              :image="collaborator.profilePicture"
+              :label="collaborator.name?.charAt(0) || 'U'"
+              size="large"
+              shape="circle"
+              class="avatar"
           />
           <div v-if="collaborator.isOnline" class="online-indicator"></div>
         </div>
 
         <div class="collaborator-info">
           <h3 class="collaborator-name">{{ collaborator.name || t('common.unnamed') }}</h3>
-          <p class="collaborator-role">{{ collaborator.role || collaborator.profession || t('common.noRole') }}</p>
+          <p class="collaborator-role">{{ collaborator.role || t('common.noRole') }}</p>
+
+          <!-- Puntos del colaborador -->
+          <div class="points-section">
+            <span class="points-badge">{{ collaborator.points}} pts</span>
+          </div>
 
           <!-- Skills -->
           <div v-if="collaborator.skills?.length" class="skills-section">
             <div class="skill-tags">
               <span
-                v-for="skill in collaborator.skills.slice(0, 2)"
-                :key="skill"
-                class="skill-tag"
+                  v-for="skill in collaborator.skills.slice(0, 2)"
+                  :key="skill"
+                  class="skill-tag"
               >
                 {{ skill }}
               </span>
               <span
-                v-if="collaborator.skills.length > 2"
-                class="skill-tag more-skills"
+                  v-if="collaborator.skills.length > 2"
+                  class="skill-tag more-skills"
               >
                 +{{ collaborator.skills.length - 2 }}
               </span>
@@ -260,31 +288,20 @@ const formatRating = (rating) => {
   line-height: 1.2;
 }
 
-/* Rating Section */
-.rating-section {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+/* Points Section */
+.points-section {
+  margin-top: 0.25rem;
 }
 
-.stars {
-  display: flex;
-  gap: 2px;
-}
-
-.star-icon {
+.points-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: linear-gradient(135deg, #FFD700, #FFEC8B);
+  color: #B8860B;
   font-size: 0.75rem;
-  color: var(--color-warning);
-}
-
-.star-icon.pi-star {
-  color: var(--color-gray-300);
-}
-
-.rating-value {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--color-gray-700);
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  border: 1px solid #FFD700;
 }
 
 /* Skills Section */
@@ -312,28 +329,6 @@ const formatRating = (rating) => {
 .skill-tag.more-skills {
   background: var(--color-gray-100);
   color: var(--color-gray-500);
-}
-
-/* Stats Section */
-.stats-section {
-  margin-top: 0.25rem;
-}
-
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  color: #64748b;
-  font-size: 0.75rem;
-}
-
-.stat-icon {
-  font-size: 0.75rem;
-}
-
-.stat-value {
-  font-weight: 600;
-  color: #374151;
 }
 
 /* Empty State */

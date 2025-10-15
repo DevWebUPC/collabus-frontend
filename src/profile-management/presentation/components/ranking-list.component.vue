@@ -6,19 +6,38 @@
       <p class="ranking-subtitle" style="color: white;">Colabora con los mejores y ten buen éxito en tus proyectos</p>
     </div>
 
-    <div class="ranking-content">
+    <!-- Estados de carga y error -->
+    <div v-if="loading" class="loading-state">
+      <div class="spinner"></div>
+      Cargando ranking...
+    </div>
+
+    <div v-else-if="error" class="error-state">
+      {{ error }}
+      <button @click="loadRanking" class="retry-btn">Reintentar</button>
+    </div>
+
+    <!-- Contenido del ranking -->
+    <div v-else class="ranking-content">
       <RankingItem
           v-for="(collaborator, index) in rankedCollaborators"
           :key="collaborator.id"
           :rank="index + 1"
           :collaborator="collaborator"
+          @view-profile="handleViewProfile"
       />
+
+      <!-- Mensaje cuando no hay colaboradores -->
+      <div v-if="rankedCollaborators.length === 0" class="empty-state">
+        No se encontraron colaboradores para el ranking
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import RankingItem from './ranking-item.component.vue'
+import { useProfileStore } from '../../application/profile-store.js'
 
 export default {
   name: "RankingList",
@@ -27,78 +46,52 @@ export default {
   },
   data() {
     return {
-      rankedCollaborators: [
-        {
-          id: 1,
-          name: "Christian Gonzalez",
-          role: "Arquitecto de Software",
-          score: 2000,
-          skills: ["C#", ".NET", "Azure"]
-        },
-        {
-          id: 2,
-          name: "Diana Briceño",
-          role: "Desarrollador Full Stack",
-          score: 1992,
-          skills: ["JavaScript", "React", "Node.js"]
-        },
-        {
-          id: 3,
-          name: "Mario Baca",
-          role: "Desarrollador de Videojuegos",
-          score: 1550,
-          skills: ["C++", "Unity", "Unreal Engine"]
-        },
-        {
-          id: 4,
-          name: "Jesli Bautista",
-          role: "Analista de datos",
-          score: 1460,
-          skills: ["Python", "SQL", "Power BI"]
-        },
-        {
-          id: 5,
-          name: "Mike Shinoda",
-          role: "UX Researcher",
-          score: 1330,
-          skills: ["Figma", "User Testing", "Prototyping"]
-        },
-        {
-          id: 6,
-          name: "Brand Delson",
-          role: "Scrum Master",
-          score: 1200,
-          skills: ["Agile", "JIRA", "Leadership"]
-        },
-        {
-          id: 7,
-          name: "Luis Cardenas",
-          role: "Ingeniero de telecomunicaciones",
-          score: 1100,
-          skills: ["Networking", "Cisco", "5G"]
-        },
-        {
-          id: 8,
-          name: "Didier Meza",
-          role: "Diseñador UI",
-          score: 1050,
-          skills: ["Figma", "Adobe XD", "Illustrator"]
-        },
-        {
-          id: 9,
-          name: "Dayron Rios",
-          role: "Ingeniería de QA",
-          score: 1020,
-          skills: ["Testing", "Selenium", "Jest"]
-        },
-        {
-          id: 10,
-          name: "Vitaly Baca",
-          role: "Data Scientist",
-          score: 1000,
-          skills: ["Python", "Machine Learning", "TensorFlow"]
-        }
-      ]
+      loading: false,
+      error: null,
+      rankedCollaborators: []
+    }
+  },
+  async mounted() {
+    await this.loadRanking()
+  },
+  methods: {
+    async loadRanking() {
+      this.loading = true
+      this.error = null
+
+      try {
+        const profileStore = useProfileStore()
+
+        // Cargar todos los perfiles desde la API
+        await profileStore.fetchAllProfiles()
+
+        // Ordenar por puntos (descendente) y tomar los primeros 10
+        const topProfiles = [...profileStore.allProfiles]
+            .sort((a, b) => b.points - a.points)
+            .slice(0, 10)
+            .map(profile => ({
+              id: profile.id,
+              name: profile.username,
+              role: profile.role,
+              score: profile.points,
+              skills: profile.abilities,
+              userId: profile.userId
+            }))
+
+        this.rankedCollaborators = topProfiles
+        console.log('✅ Ranking cargado:', this.rankedCollaborators.length, 'colaboradores')
+
+      } catch (err) {
+        console.error('Error loading ranking:', err)
+        this.error = 'Error al cargar el ranking de colaboradores'
+      } finally {
+        this.loading = false
+      }
+    },
+
+    handleViewProfile(collaboratorId) {
+      console.log('Ver perfil del colaborador:', collaboratorId)
+      this.$router.push(`/profile/${collaboratorId}`)
     }
   }
 }
@@ -156,6 +149,58 @@ export default {
   padding: 0;
 }
 
+/* Estados de carga y error */
+.loading-state,
+.error-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.loading-state {
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.error-state {
+  color: #e53e3e;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #6C63FF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.retry-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #6C63FF;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.retry-btn:hover {
+  background: #5a52d5;
+}
+
 @media (max-width: 768px) {
   .ranking-list-container {
     border-radius: 12px;
@@ -173,6 +218,13 @@ export default {
   .ranking-subtitle {
     font-size: 1rem;
     color: white;
+  }
+
+  .loading-state,
+  .error-state,
+  .empty-state {
+    padding: 2rem 1rem;
+    font-size: 1rem;
   }
 }
 </style>

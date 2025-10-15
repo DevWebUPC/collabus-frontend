@@ -5,25 +5,25 @@ const emit = defineEmits(['search', 'clear'])
 
 const searchQuery = ref('')
 const selectedRole = ref('')
-const score = ref('')
 const minScore = ref('')
 const maxScore = ref('')
+const isSearching = ref(false)
 
-const search = () => {
+const search = async () => {
+  isSearching.value = true
   const filters = {
     query: searchQuery.value,
     role: selectedRole.value,
-    score: score.value,
     minScore: minScore.value,
     maxScore: maxScore.value
   }
-  emit('search', filters)
+  await emit('search', filters)
+  isSearching.value = false
 }
 
 const clearFilters = () => {
   searchQuery.value = ''
   selectedRole.value = ''
-  score.value = ''
   minScore.value = ''
   maxScore.value = ''
   emit('clear')
@@ -66,7 +66,6 @@ const clearFilters = () => {
         </datalist>
       </div>
 
-
       <!-- Mínimo -->
       <div class="filter-group">
         <label for="min-score">Puntuación mínima</label>
@@ -93,10 +92,10 @@ const clearFilters = () => {
 
       <!-- Botones -->
       <div class="filter-actions">
-        <button class="search-btn" @click="search">
-          Buscar
+        <button class="search-btn" @click="search" :disabled="isSearching">
+          {{ isSearching ? 'Buscando...' : 'Buscar' }}
         </button>
-        <button class="clear-btn" @click="clearFilters">
+        <button class="clear-btn" @click="clearFilters" :disabled="isSearching">
           Limpiar
         </button>
       </div>

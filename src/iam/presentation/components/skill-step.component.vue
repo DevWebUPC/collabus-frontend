@@ -10,10 +10,14 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'next', 'prev']);
 
+// Referencia al input file
+const cvInput = ref(null);
+
 // Inicializar con los datos existentes
 const skills = ref([...props.modelValue.abilities]);
 const experiences = ref([...props.modelValue.experiences]);
 const cvFile = ref(props.modelValue.cv || null);
+const cvFileName = ref(props.modelValue.cvFileName || '');
 
 // Habilidades
 const newSkill = ref('');
@@ -51,26 +55,65 @@ const removeExperience = (index) => {
   updateModelValue();
 };
 
-// CV
-const onCvSelect = (event) => {
+// CV - MEJORADO: Convertir a Base64
+const onCvSelect = async (event) => {
   const file = event.target.files[0];
   if (file) {
     // Validar que sea PDF o DOC
-    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+
     if (!allowedTypes.includes(file.type)) {
       alert('Por favor, selecciona un archivo PDF o DOC');
+      event.target.value = '';
       return;
     }
 
     // Validar tamaño (5MB)
-    if (file.size > 5000000) {
+    if (file.size > 5 * 1024 * 1024) {
       alert('El archivo debe ser menor a 5MB');
+      event.target.value = '';
       return;
     }
 
-    cvFile.value = file;
-    updateModelValue();
+    try {
+      // Convertir archivo a Base64
+      const base64String = await fileToBase64(file);
+
+      cvFile.value = {
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+        data: base64String,
+        uploadedAt: new Date().toISOString()
+      };
+
+      cvFileName.value = file.name;
+      updateModelValue();
+    } catch (error) {
+      console.error('Error converting file to Base64:', error);
+      alert('Error al procesar el archivo');
+      event.target.value = '';
+    }
   }
+};
+
+// Función para convertir File a Base64
+const fileToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+};
+
+// Función para abrir el selector de archivos
+const openFileSelector = () => {
+  cvInput.value?.click();
 };
 
 // Actualizar datos del modelo
@@ -78,7 +121,8 @@ const updateModelValue = () => {
   emit('update:modelValue', {
     abilities: [...skills.value],
     experiences: [...experiences.value],
-    cv: cvFile.value
+    cv: cvFile.value,
+    cvFileName: cvFileName.value
   });
 };
 
@@ -92,6 +136,7 @@ watch(() => props.modelValue, (newValue) => {
   }
   if (newValue.cv) {
     cvFile.value = newValue.cv;
+    cvFileName.value = newValue.cvFileName || '';
   }
 }, { deep: true });
 </script>
@@ -197,19 +242,19 @@ watch(() => props.modelValue, (newValue) => {
           </div>
         </div>
 
-        <!-- Sección de CV -->
+        <!-- Sección de CV - CORREGIDO -->
         <div class="cv-section">
           <h3 class="section-title">Subir CV</h3>
           <div class="cv-upload">
             <pv-button
-                @click="$refs.cvInput?.click()"
+                @click="openFileSelector"
                 class="cv-upload-btn"
-                label="Seleccionar archivo"
+                :label="cvFile ? 'Cambiar archivo' : 'Seleccionar archivo'"
                 severity="secondary"
                 outlined
             />
-            <span class="cv-file-name" v-if="cvFile">
-              {{ cvFile.name }}
+            <span class="cv-file-name" v-if="cvFileName">
+              📄 {{ cvFileName }} ({{ (cvFile?.fileSize / 1024 / 1024).toFixed(2) }} MB)
             </span>
             <input
                 ref="cvInput"
@@ -219,6 +264,9 @@ watch(() => props.modelValue, (newValue) => {
                 class="hidden-file-input"
             />
           </div>
+          <p class="file-hint">
+            Formatos aceptados: PDF, DOC, DOCX (máx. 5MB)
+          </p>
         </div>
       </div>
     </template>

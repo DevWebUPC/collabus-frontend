@@ -1,8 +1,8 @@
-<!-- views/ranking-de-colaboradores.vue -->
 <script>
 import SearchBarComponent from "../components/search-filters.component.vue";
 import RankingList from "../components/ranking-list.component.vue";
 import HeaderPresentation from "../../../shared/presentation/components/header-presentation.vue";
+import { useProfileStore } from "../../application/profile-store.js";
 
 export default {
   name: "ranking-de-colaboradores",
@@ -11,17 +11,47 @@ export default {
     RankingList,
     HeaderPresentation
   },
+  data() {
+    return {
+      searchResults: null
+    }
+  },
   methods: {
     goBack() {
       this.$router.go(-1);
     },
-    handleSearch(filters) {
+
+    async handleSearch(filters) {
       console.log('Buscando con filtros:', filters);
-      // Implementar lógica de filtrado
+
+      try {
+        const profileStore = useProfileStore();
+        const filteredProfiles = await profileStore.searchProfiles(filters);
+
+        // Ordenar resultados de búsqueda por puntos
+        this.searchResults = filteredProfiles
+            .sort((a, b) => b.points - a.points)
+            .slice(0, 10)
+            .map(profile => ({
+              id: profile.id,
+              name: profile.username,
+              role: profile.role,
+              score: profile.points,
+              skills: profile.abilities,
+              userId: profile.userId
+            }));
+
+        console.log('Resultados de búsqueda en ranking:', this.searchResults);
+
+      } catch (error) {
+        console.error('Error en búsqueda:', error);
+        this.searchResults = [];
+      }
     },
+
     handleClear() {
       console.log('Limpiando filtros');
-      // Implementar lógica para limpiar filtros
+      this.searchResults = null;
     }
   }
 }
@@ -41,16 +71,14 @@ export default {
 
     <!-- Contenido del ranking -->
     <div class="ranking-content">
-      <SearchBarComponent
-          @search="handleSearch"
-          @clear="handleClear"
-      />
-
       <!-- Layout de dos columnas: Ranking izquierda, Collabus derecha -->
       <div class="main-layout">
         <!-- Columna izquierda - Ranking -->
         <div class="left-column">
-          <RankingList />
+          <RankingList
+              v-if="!searchResults"
+              key="default-ranking"
+          />
         </div>
 
         <!-- Columna derecha - Collabus -->
