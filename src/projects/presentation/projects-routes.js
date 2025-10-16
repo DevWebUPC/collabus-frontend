@@ -3,7 +3,7 @@ const ProjectList = () => import('./views/project-list.vue');
 const ProjectDetail = () => import('./views/project-detail.vue');
 const ProjectCreate = () => import('./views/project-create.vue');
 const ShowProject = () => import('./views/show-project.component.vue');
-
+const ProjectApplication = () => import('./components/ProjectApplication.vue');
 export const projectRoutes = [
   {
     path: '/projects',
@@ -41,5 +41,16 @@ export const projectRoutes = [
       requiresAuth: true 
     },
     props: true
-  }
+  },
+    {
+        path: '/projects/:id/apply',
+        name: 'project-apply',
+        component: ProjectApplication,
+        meta: {
+            title: 'Apply to Project',
+            requiresAuth: true
+        },
+        props: true
+    }
 ];
+
