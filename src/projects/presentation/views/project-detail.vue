@@ -4,7 +4,11 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useProjectDetailStore } from '../../application/project-detail.store.js';
 import { watch } from 'vue';
-
+import ProjectProgressCard from '../components/detail/ProjectProgressCard.vue';
+import CollaboratorsCard from '../components/detail/CollaboratorsCard.vue';
+import RecentNotificationsCard from '../components/detail/RecentNotificationsCard.vue';
+import UpcomingMilestonesCard from '../components/detail/UpcomingMilestonesCard.vue';
+import UrgentTasksCard from '../components/detail/UrgentTasksCard.vue';
 
 import EmptyTabContent from '../components/detail/EmptyTabContent.vue';
 import { useUserStore } from '../../../iam/application/user-store.js';
@@ -17,7 +21,6 @@ const { t } = useI18n();
 
 // State
 const activeTab = ref('overview');
-
 
 // Methods
 const navigateBack = () => {
@@ -162,19 +165,36 @@ watch(
       <div class="tab-content">
         <!-- Overview Tab -->
         <div v-if="activeTab === 'overview'" class="overview-content">
-
-          <!-- Content based on ownership -->
           <template v-if="store.isOwned">
-            <!-- For Owned Projects: Special 3-column layout -->
-            <div class="owned-project-layout">
-              <!-- First row: 3 columns -->
+            <!-- Layout corregido según la imagen -->
+            <div class="dashboard-layout">
+              <!-- Fila 1: 3 columnas -->
+              <div class="dashboard-row">
+                <!-- Columna izquierda: Progreso y Colaboradores -->
+                <div class="left-section">
+                  <ProjectProgressCard />
+                  <CollaboratorsCard />
+                </div>
 
+                <!-- Columna central: Notificaciones -->
+                <div class="center-section">
+                  <RecentNotificationsCard />
+                </div>
+
+                <!-- Columna derecha: Hitos y Tareas -->
+                <div class="right-section">
+                  <UpcomingMilestonesCard />
+                  <UrgentTasksCard />
+                </div>
+              </div>
             </div>
           </template>
 
           <template v-else>
             <!-- For Participating Projects: My Tasks and Milestones -->
-
+            <div class="participating-content">
+              <p>Contenido para proyectos en los que participas</p>
+            </div>
           </template>
         </div>
 
@@ -323,54 +343,35 @@ watch(
   min-height: 400px;
 }
 
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+/* Nuevo layout corregido */
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .dashboard-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-}
-
-/* Owned project layout styles */
-.owned-project-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin-top: 2rem;
-}
-
-.dashboard-three-columns {
-  display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
+  align-items: start;
 }
 
-.left-column {
+.left-section {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.right-column {
+.center-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.right-section {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-}
-
-.collaborators-row {
-  margin-top: 1.5rem;
-}
-
-.collaborators-left-column {
-  grid-column: 1;
-}
-
-.empty-right-space {
-  grid-column: 2;
 }
 
 /* Cards - basic styles for layout only */
@@ -391,17 +392,14 @@ watch(
   margin-bottom: 1rem;
 }
 
-/* Specific styling for owned project layout */
-.owned-project-layout :deep(.p-card) {
+/* Ajustes específicos para el layout */
+.left-section :deep(.p-card),
+.right-section :deep(.p-card) {
   height: fit-content;
 }
 
-.left-column :deep(.p-card) {
-  margin-bottom: 0;
-}
-
-.collaborators-row :deep(.p-card) {
-  margin-top: 0;
+.center-section :deep(.p-card) {
+  height: 100%;
 }
 
 /* Custom Button Styles to match design */
@@ -426,33 +424,20 @@ watch(
   box-shadow: 0 0 0 2px var(--color-primary-200);
 }
 
-/* Layout and responsive styles */
-
 /* Responsive */
 @media (max-width: 768px) {
   .project-detail-container {
     padding: 0.5rem;
   }
 
-  .dashboard-grid,
-  .dashboard-row,
-  .dashboard-three-columns {
+  .dashboard-row {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
 
-  .left-column,
-  .right-column {
+  .left-section,
+  .right-section {
     gap: 1rem;
-  }
-
-  .collaborators-row {
-    margin-top: 1rem;
-  }
-
-  .owned-project-layout {
-    gap: 1rem;
-    margin-top: 1rem;
   }
 
   .tab-navigation {
@@ -462,25 +447,16 @@ watch(
   .tab-button {
     min-width: 120px;
   }
-
-  /* Responsive adjustments are handled by individual components */
 }
 
 @media (max-width: 1024px) {
-  .dashboard-three-columns {
+  .dashboard-row {
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
   }
 
-  .right-column {
+  .center-section {
     grid-column: span 2;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-
-  .left-column {
-    grid-column: 1;
   }
 }
 
