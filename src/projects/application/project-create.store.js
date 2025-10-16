@@ -529,6 +529,36 @@ export const useProjectCreateStore = defineStore("project-create", () => {
                 throw new Error("Please fix validation errors before submitting");
             }
 
+            // Obtener el perfil del usuario actual para el nombre del autor
+            const userId = localStorage.getItem("userId") || "1";
+            let authorName = "Usuario"; // Valor por defecto
+
+            try {
+                // Importar y usar el store de perfiles para obtener el nombre real
+                const { useProfileStore } = await import('../../profile-management/application/profile-store.js');
+                const profileStore = useProfileStore();
+
+                // Obtener el perfil del usuario actual
+                const userProfile = await profileStore.getProfileByUserId(userId);
+                if (userProfile && userProfile.username) {
+                    authorName = userProfile.username;
+                }
+            } catch (profileError) {
+                console.warn("No se pudo obtener el perfil del usuario:", profileError);
+                // Si falla, intentar obtener del localStorage como fallback
+                const storedProfile = localStorage.getItem("currentProfile");
+                if (storedProfile) {
+                    try {
+                        const parsedProfile = JSON.parse(storedProfile);
+                        if (parsedProfile && parsedProfile.username) {
+                            authorName = parsedProfile.username;
+                        }
+                    } catch (e) {
+                        console.warn("Error al parsear perfil almacenado:", e);
+                    }
+                }
+            }
+
             // Prepare project data
             const projectData = {
                 title: basicInfoData.projectName,
@@ -543,8 +573,8 @@ export const useProjectCreateStore = defineStore("project-create", () => {
                 roles: rolesData,
                 status: "active",
                 progress: 0,
-                userId: localStorage.getItem("userId") || "1", // TODO: Get from auth store
-                authorName: localStorage.getItem("userName") || "Usuario", // TODO: Get from auth store
+                userId: userId,
+                authorName: authorName, // Usar el nombre real del perfil
                 collaborators: [],
                 tasks: [],
                 milestones: [],
