@@ -221,11 +221,16 @@ onMounted(async () => {
   try {
     isLoading.value = true;
 
+    // ✅ AGREGAR ESTA LÍNEA: Inicializar usuario desde localStorage
+    userStore.initializeUser();
+
     // Verificar si el usuario está autenticado
     if (!userStore.currentUser?.id) {
       errors.value = ['Debes iniciar sesión para postular a un proyecto'];
-      // Opcional: redirigir al login
-      // router.push({ name: 'login' });
+      // Opcional: redirigir al login después de unos segundos
+      setTimeout(() => {
+        router.push({ name: 'login' });
+      }, 2000);
       return;
     }
 
@@ -251,8 +256,7 @@ onMounted(async () => {
   } finally {
     isLoading.value = false;
   }
-});
-</script>
+});</script>
 
 <template>
   <div class="project-application">
