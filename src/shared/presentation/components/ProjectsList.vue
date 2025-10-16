@@ -3,13 +3,20 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useHomeStore } from '../../application/home.store.js';
+import {useUserStore} from "../../../iam/application/user-store.js";
 
+const userStore = useUserStore();
 const { t } = useI18n();
 const router = useRouter();
 const homeStore = useHomeStore();
 
 // Computed properties
-const projects = computed(() => homeStore.paginatedProjects);
+const projects = computed(() => {
+  const currentUserId = userStore.currentUser?.id?.toString();
+  return homeStore.paginatedProjects.filter(project =>
+      project.userId !== currentUserId
+  );
+});
 const isLoading = computed(() => homeStore.isLoadingProjects);
 const totalProjects = computed(() => homeStore.filteredProjects.length);
 const currentPage = computed(() => homeStore.currentPage);
@@ -139,7 +146,7 @@ const getStatusColor = (status) => {
               {{ t('home.projects.duration') }}: {{ project.durationQuantity }} {{ project.durationType }}
             </span>
           </div>
-          
+
           <!-- Tags/Keywords -->
           <div v-if="project.tags?.length" class="tags-section">
             <div class="project-tags">
