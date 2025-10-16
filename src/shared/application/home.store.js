@@ -1,14 +1,10 @@
+
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { ProjectsApi } from '../../projects/infrastructure/projects-api.js';
-import { CollaboratorsApi } from '../../projects/infrastructure/collaborators-api.js';
 import { ProjectAssembler } from '../../projects/infrastructure/project.assembler.js';
-import { CollaboratorAssembler } from '../../projects/infrastructure/collaborator.assembler.js';
 
 export const useHomeStore = defineStore('home', () => {
-    // State - Featured collaborators data
-    const featuredCollaborators = ref([]);
-
     // State - Projects data
     const allProjects = ref([]);
     const featuredProjects = ref([]);
@@ -19,7 +15,6 @@ export const useHomeStore = defineStore('home', () => {
     const areaFilter = ref('');
 
     // State - Loading states
-    const isLoadingCollaborators = ref(false);
     const isLoadingProjects = ref(false);
     const isLoadingFeaturedProjects = ref(false);
 
@@ -33,7 +28,6 @@ export const useHomeStore = defineStore('home', () => {
 
     // API instances
     const projectsApi = new ProjectsApi();
-    const collaboratorsApi = new CollaboratorsApi();
 
     // Computed - Filtered projects based on current filters
     const filteredProjects = computed(() => {
@@ -64,14 +58,12 @@ export const useHomeStore = defineStore('home', () => {
 
     // Computed - Check if any data is loading
     const isLoading = computed(() =>
-        isLoadingCollaborators.value ||
         isLoadingProjects.value ||
         isLoadingFeaturedProjects.value
     );
 
     // Actions
     const setLoading = (value) => {
-        isLoadingCollaborators.value = value;
         isLoadingProjects.value = value;
         isLoadingFeaturedProjects.value = value;
     };
@@ -88,35 +80,12 @@ export const useHomeStore = defineStore('home', () => {
         try {
             clearError();
             await Promise.all([
-                loadFeaturedCollaborators(),
                 loadAllProjects(),
                 loadFeaturedProjects()
             ]);
         } catch (err) {
             console.error('Error initializing home:', err);
             setError('Error loading home data');
-        }
-    };
-
-    const loadFeaturedCollaborators = async () => {
-        try {
-            isLoadingCollaborators.value = true;
-            clearError();
-
-            const response = await collaboratorsApi.getAll();
-
-            if (response.data && Array.isArray(response.data)) {
-                // Transform API data to entities and get top 3
-                featuredCollaborators.value = response.data
-                    .map(collaboratorData => CollaboratorAssembler.fromApiToEntity(collaboratorData))
-                    .slice(0, 3);
-            }
-        } catch (err) {
-            console.error('Error loading featured collaborators:', err);
-            setError('Error loading featured collaborators');
-            featuredCollaborators.value = [];
-        } finally {
-            isLoadingCollaborators.value = false;
         }
     };
 
@@ -221,13 +190,11 @@ export const useHomeStore = defineStore('home', () => {
 
     // Reset state
     const reset = () => {
-        featuredCollaborators.value = [];
         allProjects.value = [];
         featuredProjects.value = [];
         searchFilter.value = '';
         jobTypeFilter.value = '';
         areaFilter.value = '';
-        isLoadingCollaborators.value = false;
         isLoadingProjects.value = false;
         isLoadingFeaturedProjects.value = false;
         error.value = null;
@@ -237,13 +204,11 @@ export const useHomeStore = defineStore('home', () => {
 
     return {
         // State
-        featuredCollaborators,
         allProjects,
         featuredProjects,
         searchFilter,
         jobTypeFilter,
         areaFilter,
-        isLoadingCollaborators,
         isLoadingProjects,
         isLoadingFeaturedProjects,
         error,
@@ -259,7 +224,6 @@ export const useHomeStore = defineStore('home', () => {
 
         // Actions
         initializeHome,
-        loadFeaturedCollaborators,
         loadAllProjects,
         loadFeaturedProjects,
         updateSearchFilter,
