@@ -161,37 +161,6 @@ const formatApplicationDate = (dateString) => {
 };
 
 // En ApplicantsCard.vue - agregar método temporal para testing
-const testNotification = async () => {
-  try {
-    console.log('🧪 Probando notificación...');
-
-    const testNotification = {
-      id: `test_${Date.now()}`,
-      type: 'new_application',
-      title: 'Notificación de prueba 🎯',
-      message: 'Esta es una notificación de prueba',
-      date: new Date().toISOString(),
-      read: false,
-      applicationId: 'test',
-      applicantName: 'Usuario de Prueba',
-      applicantEmail: 'test@example.com',
-      roleId: '1',
-      projectId: projectDetailStore.project?.id
-    };
-
-    const { useProjectsStore } = await import('../../../application/projects.store.js');
-    const projectsStore = useProjectsStore();
-
-    await projectsStore.addNotification(projectDetailStore.project.id, testNotification);
-    console.log('✅ Notificación de prueba creada');
-
-    // Recargar
-    await reloadProjectDetail();
-
-  } catch (error) {
-    console.error('❌ Error en prueba:', error);
-  }
-};
 
 </script>
 
@@ -201,12 +170,6 @@ const testNotification = async () => {
     <div class="card-header">
       <h2 class="card-title">Postulantes al proyecto</h2>
       <div class="header-actions">
-        <pv-button
-            label="Test Notif"
-            severity="secondary"
-            @click="testNotification"
-            class="test-btn"
-        />
         <!-- Filtro de roles -->
         <div class="role-filter">
           <label for="role-select" class="filter-label">Filtrar por puesto</label>
