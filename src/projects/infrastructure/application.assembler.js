@@ -15,7 +15,7 @@ export class ApplicationAssembler {
 
         return new Application({
             id: apiData.id,
-            projectId: apiData.projectId,
+            projectId: Number(apiData.projectId),
             projectTitle: apiData.projectTitle || '',
             applicantId: apiData.applicantId,
             applicantName: apiData.applicantName || '',
@@ -24,7 +24,7 @@ export class ApplicationAssembler {
             applicantPhone: apiData.applicantPhone || '',
             roleId: apiData.roleId,
             roleName: apiData.roleName || '',
-            cvFile: apiData.cvFile || null, // Guardar el archivo base64
+            cvFile: apiData.cvFile || null,
             cvFileName: apiData.cvFileName || '',
             cvUrl: apiData.cvUrl || '',
             message: apiData.message || '',
@@ -50,8 +50,7 @@ export class ApplicationAssembler {
 
         return {
             id: entity.id,
-            projectId: entity.projectId,
-            projectTitle: entity.projectTitle,
+            projectId: Number(entity.projectId),            projectTitle: entity.projectTitle,
             applicantId: entity.applicantId,
             applicantName: entity.applicantName,
             applicantEmail: entity.applicantEmail,
@@ -99,8 +98,7 @@ export class ApplicationAssembler {
      */
     static fromFormToApi(formData, userId) {
         return {
-            projectId: formData.projectId,
-            applicantId: userId,
+            projectId: Number(formData.projectId),            applicantId: userId,
             applicantName: formData.applicantName,
             applicantEmail: formData.applicantEmail,
             applicantPortfolio: formData.applicantPortfolio,

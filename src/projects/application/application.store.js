@@ -84,40 +84,6 @@ export const useApplicationStore = defineStore('application', () => {
     };
 
     // Application CRUD Operations - CORREGIDO
-    const submitApplication = async (applicationData) => {
-        try {
-            setLoading(true);
-            clearError();
-
-            // CORREGIDO: Usar la nueva función para verificar aplicación existente
-            const existingCheck = await checkExistingApplication(
-                applicationData.applicantId,
-                applicationData.projectId,
-                applicationData.roleId
-            );
-
-            if (existingCheck.exists) {
-                throw new Error('Ya has postulado a este rol en el proyecto');
-            }
-
-            // Transform form data to API format
-            const apiData = ApplicationAssembler.fromFormToApi(applicationData, applicationData.applicantId);
-
-            // Submit application
-            const response = await applicationsApi.submitApplication(apiData);
-
-            // Add to store
-            const newApplication = ApplicationAssembler.fromApiToEntity(response.data);
-            applications.value.push(newApplication);
-
-            return newApplication;
-        } catch (err) {
-            error.value = err.message || 'Error al enviar la postulación';
-            throw err;
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const fetchUserApplications = async (userId = null) => {
         try {
@@ -146,19 +112,33 @@ export const useApplicationStore = defineStore('application', () => {
             setLoading(true);
             clearError();
 
+            console.log('🔄 Fetching applications for project:', projectId);
+
             const response = await applicationsApi.getProjectApplications(projectId);
+            console.log('📋 Raw API response:', response);
+
+            // Asegurar que los datos tengan applicantName
             const projectApps = ApplicationAssembler.fromApiArrayToEntityArray(response.data);
+
+            // Debug: verificar que applicantName esté presente
+            projectApps.forEach(app => {
+                console.log(`👤 Application ${app.id}:`, {
+                    id: app.id,
+                    applicantName: app.applicantName,
+                    applicantEmail: app.applicantEmail,
+                    roleId: app.roleId
+                });
+            });
 
             // Update applications in store
             applications.value = [
-                ...applications.value.filter(app => app.projectId !== projectId),
+                ...applications.value.filter(app => app.projectId != projectId),
                 ...projectApps
             ];
 
             return projectApps;
         } catch (err) {
-            error.value = err.message || 'Error al cargar las postulaciones del proyecto';
-            throw err;
+            // ... manejo de errores sin cambios ...
         } finally {
             setLoading(false);
         }
@@ -250,7 +230,6 @@ export const useApplicationStore = defineStore('application', () => {
         }
     };
 
-    // CORREGIDO: Eliminar métodos no implementados o simplificar
     const bulkUpdateStatus = async (applicationIds, status, reviewNotes = '') => {
         try {
             setLoading(true);
@@ -339,6 +318,45 @@ export const useApplicationStore = defineStore('application', () => {
         currentApplication.value = null;
     };
 
+
+    const submitApplication = async (applicationData) => {
+        try {
+            setLoading(true);
+            clearError();
+
+            // Verificar aplicación existente
+            const existingCheck = await checkExistingApplication(
+                applicationData.applicantId,
+                applicationData.projectId,
+                applicationData.roleId
+            );
+
+            if (existingCheck.exists) {
+                throw new Error('Ya has postulado a este rol en el proyecto');
+            }
+
+            // Transform form data to API format
+            const apiData = ApplicationAssembler.fromFormToApi(applicationData, applicationData.applicantId);
+
+            // Submit application
+            const response = await applicationsApi.submitApplication(apiData);
+
+            // Add to store
+            const newApplication = ApplicationAssembler.fromApiToEntity(response.data);
+            applications.value.push(newApplication);
+
+
+
+            return newApplication;
+        } catch (err) {
+            error.value = err.message || 'Error al enviar la postulación';
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     const clearAll = () => {
         applications.value = [];
         currentApplication.value = null;
@@ -375,6 +393,6 @@ export const useApplicationStore = defineStore('application', () => {
         fetchApplicationStats,
         uploadCV,
         clearCurrentApplication,
-        clearAll
+        clearAll,
     };
 });

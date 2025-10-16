@@ -3,6 +3,8 @@ export class Application {
                     id = null,
                     projectId = null,
                     applicantId = null,
+                    applicantName = "",
+                    applicantEmail = "",
                     roleId = null,
                     portfolioLink = '',
                     phone = '',
@@ -17,6 +19,8 @@ export class Application {
         this.id = id;
         this.projectId = projectId;
         this.applicantId = applicantId;
+        this.applicantName = applicantName;
+        this.applicantEmail = applicantEmail;
         this.roleId = roleId;
         this.portfolioLink = portfolioLink;
         this.phone = phone;

@@ -26,7 +26,7 @@ export class ApplicationsApi extends BaseEndpoint {
      * @returns {Promise} API response
      */
     getUserApplications(userId) {
-        return this.http.get(`${this.endpointPath}/user/${userId}`);
+        return this.http.get(`${this.endpointPath}?applicantId=${userId}`);
     }
 
     /**
@@ -35,7 +35,8 @@ export class ApplicationsApi extends BaseEndpoint {
      * @returns {Promise} API response
      */
     getProjectApplications(projectId) {
-        return this.http.get(`${this.endpointPath}/project/${projectId}`);
+        // Asegúrate de que este endpoint funcione correctamente
+        return this.http.get(`${this.endpointPath}?projectId=${projectId}`);
     }
 
     /**
