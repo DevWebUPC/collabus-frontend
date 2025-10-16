@@ -3,18 +3,13 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useProjectDetailStore } from '../../application/project-detail.store.js';
+import { watch } from 'vue';
 
-// Import modular components
-import ProjectProgressCard from '../components/detail/ProjectProgressCard.vue';
-import ProjectStatsCard from '../components/detail/ProjectStatsCard.vue';
-import ProjectOverallProgressCard from '../components/detail/ProjectOverallProgressCard.vue';
-import ProjectTasksCard from '../components/detail/ProjectTasksCard.vue';
-import ProjectMilestonesCard from '../components/detail/ProjectMilestonesCard.vue';
-import ProjectNotificationsCard from '../components/detail/ProjectNotificationsCard.vue';
-import ProjectUrgentTasksCard from '../components/detail/ProjectUrgentTasksCard.vue';
-import ProjectCollaboratorsCard from '../components/detail/ProjectCollaboratorsCard.vue';
+
 import EmptyTabContent from '../components/detail/EmptyTabContent.vue';
+import { useUserStore } from '../../../iam/application/user-store.js';
 
+const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
 const store = useProjectDetailStore();
@@ -30,8 +25,9 @@ const navigateBack = () => {
 };
 
 onMounted(async () => {
-  console.log('Project ID:', route.params.id);
-  
+  console.log('🎯 Project Detail mounted - ID:', route.params.id);
+  console.log('👤 Current user ID:', userStore.currentUser?.id);
+
   const projectId = route.params.id;
   if (!projectId) {
     router.push({ name: 'projects' });
@@ -39,11 +35,17 @@ onMounted(async () => {
   }
 
   try {
-    // Load all project detail data
+    // ✅ SOLUCIÓN: Resetear y forzar recarga completa
+    console.log('🔄 Forcing project reload...');
+    store.reset();
     await store.loadProjectDetail(projectId);
-    console.log('Project loaded:', store.project);
+
+    console.log('✅ Project loaded:', store.project);
+    console.log('🏷️ isOwned:', store.isOwned);
+    console.log('🤝 isParticipating:', store.isParticipating);
+
   } catch (err) {
-    console.error('Error loading project:', err);
+    console.error('❌ Error loading project:', err);
     router.push({ name: 'projects' });
   }
 });
@@ -53,6 +55,36 @@ onUnmounted(() => {
   console.log('Clearing project detail store on unmount');
   store.reset();
 });
+
+watch(
+    () => route.params.id,
+    async (newId, oldId) => {
+      if (newId && newId !== oldId) {
+        console.log('🔄 Route changed - New project ID:', newId);
+        try {
+          store.reset();
+          await store.loadProjectDetail(newId);
+        } catch (err) {
+          console.error('Error loading new project:', err);
+        }
+      }
+    }
+);
+
+// ✅ SOLUCIÓN: Watcher para cambios en el usuario
+watch(
+    () => userStore.currentUser,
+    async (newUser) => {
+      if (newUser && store.project) {
+        console.log('🔄 User changed, reloading project...');
+        try {
+          await store.loadProjectDetail(store.project.id);
+        } catch (err) {
+          console.error('Error reloading project after user change:', err);
+        }
+      }
+    }
+);
 </script>
 
 <template>
@@ -60,11 +92,11 @@ onUnmounted(() => {
     <!-- Header -->
     <div class="page-header">
       <div class="header-actions">
-        <pv-button 
-          icon="pi pi-arrow-left"
-          text
-          @click="navigateBack"
-          class="back-btn"
+        <pv-button
+            icon="pi pi-arrow-left"
+            text
+            @click="navigateBack"
+            class="back-btn"
         />
         <h1 class="page-title">{{ store.project?.title || 'Cargando...' }}</h1>
       </div>
@@ -85,42 +117,42 @@ onUnmounted(() => {
     <div v-if="store.project && !store.loading" class="project-content">
       <!-- Tab Navigation -->
       <div class="tab-navigation">
-        <pv-button 
-          :class="['tab-button', { active: activeTab === 'overview' }]"
-          @click="activeTab = 'overview'"
+        <pv-button
+            :class="['tab-button', { active: activeTab === 'overview' }]"
+            @click="activeTab = 'overview'"
         >
           {{ $t('projects.detail.tabs.overview') }}
         </pv-button>
-        <pv-button 
-          :class="['tab-button', { active: activeTab === 'tasks' }]"
-          @click="activeTab = 'tasks'"
+        <pv-button
+            :class="['tab-button', { active: activeTab === 'tasks' }]"
+            @click="activeTab = 'tasks'"
         >
           {{ $t('projects.detail.tabs.tasks') }}
         </pv-button>
-        <pv-button 
-          :class="['tab-button', { active: activeTab === 'milestones' }]"
-          @click="activeTab = 'milestones'"
+        <pv-button
+            :class="['tab-button', { active: activeTab === 'milestones' }]"
+            @click="activeTab = 'milestones'"
         >
           {{ $t('projects.detail.tabs.milestones') }}
         </pv-button>
-        <pv-button 
-          v-if="store.isOwned"
-          :class="['tab-button', { active: activeTab === 'contributions' }]"
-          @click="activeTab = 'contributions'"
+        <pv-button
+            v-if="store.isOwned"
+            :class="['tab-button', { active: activeTab === 'contributions' }]"
+            @click="activeTab = 'contributions'"
         >
           {{ $t('projects.detail.tabs.contributions') }}
         </pv-button>
-        <pv-button 
-          v-if="store.isOwned"
-          :class="['tab-button', { active: activeTab === 'applicants' }]"
-          @click="activeTab = 'applicants'"
+        <pv-button
+            v-if="store.isOwned"
+            :class="['tab-button', { active: activeTab === 'applicants' }]"
+            @click="activeTab = 'applicants'"
         >
           {{ $t('projects.detail.tabs.applicants') }}
         </pv-button>
-        <pv-button 
-          v-if="store.isParticipating"
-          :class="['tab-button', { active: activeTab === 'feedback' }]"
-          @click="activeTab = 'feedback'"
+        <pv-button
+            v-if="store.isParticipating"
+            :class="['tab-button', { active: activeTab === 'feedback' }]"
+            @click="activeTab = 'feedback'"
         >
           {{ $t('projects.detail.tabs.feedback') }}
         </pv-button>
@@ -130,104 +162,51 @@ onUnmounted(() => {
       <div class="tab-content">
         <!-- Overview Tab -->
         <div v-if="activeTab === 'overview'" class="overview-content">
-          <!-- Top Row: Progress and Stats -->
-          <div  v-if="!store.isOwned" class="dashboard-grid">
-            <ProjectProgressCard 
-              :project="store.project" 
-              :stats="store.projectStats"
-            />
-            <ProjectStatsCard 
-              :project="store.project" 
-              :stats="store.projectStats"
-            />
-          </div>
 
           <!-- Content based on ownership -->
           <template v-if="store.isOwned">
             <!-- For Owned Projects: Special 3-column layout -->
             <div class="owned-project-layout">
               <!-- First row: 3 columns -->
-              <div class="dashboard-three-columns">
-                <!-- Left column: Overall Progress -->
-                <div class="left-column">
-                  <ProjectOverallProgressCard 
-                    :project="store.project" 
-                    :stats="store.projectStats"
-                  />
-
-                  <ProjectCollaboratorsCard 
-                    v-if="store.hasCollaboratorsData"
-                    :collaborators="store.collaborators"
-                  />
-                </div>
-                
-                <!-- Center column: Notifications -->
-                <ProjectNotificationsCard 
-                  v-if="store.hasNotificationsData"
-                  :notifications="store.projectNotifications"
-                />
-                
-                <!-- Right column: Milestones and Urgent Tasks -->
-                <div class="right-column">
-                  <ProjectMilestonesCard 
-                    v-if="store.hasMilestonesData"
-                    :milestones="store.upcomingMilestones"
-                  />
-                  <ProjectUrgentTasksCard 
-                    v-if="store.urgentTasks.length > 0"
-                    :urgentTasks="store.urgentTasks"
-                  />
-                </div>
-              </div>
 
             </div>
           </template>
 
           <template v-else>
             <!-- For Participating Projects: My Tasks and Milestones -->
-            <div v-if="store.hasTasksData || store.hasMilestonesData" class="dashboard-row">
-              <ProjectTasksCard 
-                v-if="store.hasTasksData"
-                :tasks="store.myTasks"
-                :title="$t('projects.detail.sections.my-tasks')"
-              />
-              <ProjectMilestonesCard 
-                v-if="store.hasMilestonesData"
-                :milestones="store.upcomingMilestones"
-              />
-            </div>
+
           </template>
         </div>
 
         <!-- Other tabs content -->
-        <EmptyTabContent 
-          v-else-if="activeTab === 'tasks'" 
-          tab-name="tasks" 
-          icon="pi-check-square"
+        <EmptyTabContent
+            v-else-if="activeTab === 'tasks'"
+            tab-name="tasks"
+            icon="pi-check-square"
         />
 
-        <EmptyTabContent 
-          v-else-if="activeTab === 'milestones'" 
-          tab-name="milestones" 
-          icon="pi-flag"
+        <EmptyTabContent
+            v-else-if="activeTab === 'milestones'"
+            tab-name="milestones"
+            icon="pi-flag"
         />
 
-        <EmptyTabContent 
-          v-else-if="activeTab === 'contributions'" 
-          tab-name="contributions" 
-          icon="pi-dollar"
+        <EmptyTabContent
+            v-else-if="activeTab === 'contributions'"
+            tab-name="contributions"
+            icon="pi-dollar"
         />
 
-        <EmptyTabContent 
-          v-else-if="activeTab === 'applicants'" 
-          tab-name="applicants" 
-          icon="pi-users"
+        <EmptyTabContent
+            v-else-if="activeTab === 'applicants'"
+            tab-name="applicants"
+            icon="pi-users"
         />
 
-        <EmptyTabContent 
-          v-else-if="activeTab === 'feedback'" 
-          tab-name="feedback" 
-          icon="pi-comments"
+        <EmptyTabContent
+            v-else-if="activeTab === 'feedback'"
+            tab-name="feedback"
+            icon="pi-comments"
         />
       </div>
     </div>
@@ -454,36 +433,36 @@ onUnmounted(() => {
   .project-detail-container {
     padding: 0.5rem;
   }
-  
+
   .dashboard-grid,
   .dashboard-row,
   .dashboard-three-columns {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .left-column,
   .right-column {
     gap: 1rem;
   }
-  
+
   .collaborators-row {
     margin-top: 1rem;
   }
-  
+
   .owned-project-layout {
     gap: 1rem;
     margin-top: 1rem;
   }
-  
+
   .tab-navigation {
     overflow-x: auto;
   }
-  
+
   .tab-button {
     min-width: 120px;
   }
-  
+
   /* Responsive adjustments are handled by individual components */
 }
 
@@ -492,14 +471,14 @@ onUnmounted(() => {
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
   }
-  
+
   .right-column {
     grid-column: span 2;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
   }
-  
+
   .left-column {
     grid-column: 1;
   }
