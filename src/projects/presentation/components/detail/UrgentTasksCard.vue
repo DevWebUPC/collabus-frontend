@@ -21,16 +21,7 @@
 </template>
 
 <script setup>
-defineProps({
-  tasks: {
-    type: Array,
-    default: () => [
-      { id: 1, name: 'Diseñar login page', dueDate: '17/11/2025' },
-      { id: 2, name: 'Configurar base de datos', dueDate: '20/11/2025' },
-      { id: 3, name: 'Redacción de landing page', dueDate: '25/11/2025' }
-    ]
-  }
-});
+
 </script>
 
 <style scoped>

@@ -15,18 +15,7 @@
 </template>
 
 <script setup>
-defineProps({
-  notifications: {
-    type: Array,
-    default: () => [
-      { id: 1, text: 'Ariana completó Diseño UI (Tareas).', time: 'Hace 2h' },
-      { id: 2, text: 'Hito Entrega de prototipo alcanzado (Hito).', time: 'Hace 4h' },
-      { id: 3, text: 'Juan Pérez donó $50 (Contribuciones-Donaciones).', time: 'Hace 6h' },
-      { id: 4, text: 'María seleccionó Reward Básico (Contribuciones-Reward).', time: 'Hace 1d' },
-      { id: 5, text: 'Carlos R. postuló como Frontend Developer (postulacion).', time: 'Hace 1d' }
-    ]
-  }
-});
+
 </script>
 
 <style scoped>

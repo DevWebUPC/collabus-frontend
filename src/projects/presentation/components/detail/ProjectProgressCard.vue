@@ -29,16 +29,7 @@
 </template>
 
 <script setup>
-defineProps({
-  tasksProgress: {
-    type: Number,
-    default: 65
-  },
-  milestonesProgress: {
-    type: Number,
-    default: 63
-  }
-});
+
 </script>
 
 <style scoped>

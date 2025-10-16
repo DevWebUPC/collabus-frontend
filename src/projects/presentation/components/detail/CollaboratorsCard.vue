@@ -26,17 +26,7 @@
 </template>
 
 <script setup>
-defineProps({
-  collaborators: {
-    type: Array,
-    default: () => [
-      { id: 1, name: 'Ariana Lizeth', role: 'UX Designer', progress: 70 },
-      { id: 2, name: 'Dyaron Huapeya', role: 'Backend', progress: 50 },
-      { id: 3, name: 'Gilbert Alonso', role: 'Frontend', progress: 60 },
-      { id: 4, name: 'Sebastián Pariachi', role: 'QA Tester', progress: 90 }
-    ]
-  }
-});
+
 </script>
 
 <style scoped>

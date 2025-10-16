@@ -18,16 +18,7 @@
 </template>
 
 <script setup>
-defineProps({
-  milestones: {
-    type: Array,
-    default: () => [
-      { id: 1, name: 'Entrega de Prototipo', date: '30 Nov 2025' },
-      { id: 2, name: 'Demo de cliente', date: '15 Dic 2025' },
-      { id: 3, name: 'Diagrama de Base de datos', date: '20 Dic 2025' }
-    ]
-  }
-});
+
 </script>
 
 <style scoped>
