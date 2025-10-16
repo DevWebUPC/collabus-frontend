@@ -158,7 +158,6 @@ export const useProjectsStore = defineStore('projects', () => {
             // Store additional detail data for UI components (non-derived data)
             projectEntity._detailData = {
                 stats: projectDetailData.stats,
-                notifications: projectDetailData.notifications,
             };
 
             // Update projects array
@@ -222,6 +221,10 @@ export const useProjectsStore = defineStore('projects', () => {
             setLoading(false);
         }
     };
+
+
+
+
 
     const createProject = async (projectData) => {
         try {
@@ -318,6 +321,8 @@ export const useProjectsStore = defineStore('projects', () => {
     const fetchProject = async (id) => {
         return await fetchProjectById(id);
     };
+
+
 
     return {
         // State
