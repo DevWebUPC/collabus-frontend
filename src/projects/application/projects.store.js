@@ -5,39 +5,39 @@ import { ProjectAssembler } from '../infrastructure/project.assembler.js';
 import { CategoryAssembler } from '../infrastructure/category.assembler.js';
 
 export const useProjectsStore = defineStore('projects', () => {
-  // State
-  const projects = ref([]);
-  const categories = ref([]);
-  const loading = ref(false);
-  const error = ref(null);
+    // State
+    const projects = ref([]);
+    const categories = ref([]);
+    const loading = ref(false);
+    const error = ref(null);
 
-  // API instances
-  const projectsApi = new ProjectsApi();
+    // API instances
+    const projectsApi = new ProjectsApi();
 
-  // Use ref instead of computed for participatingProjects and ownedProjects
-  const participatingProjects = ref([]);
-  const ownedProjects = ref([]);
+    // Use ref instead of computed for participatingProjects and ownedProjects
+    const participatingProjects = ref([]);
+    const ownedProjects = ref([]);
 
-  // Actions
-  const setLoading = (value) => {
-    loading.value = value;
-  };
+    // Actions
+    const setLoading = (value) => {
+        loading.value = value;
+    };
 
-  const setError = (errorMessage) => {
-    error.value = errorMessage;
-  };
+    const setError = (errorMessage) => {
+        error.value = errorMessage;
+    };
 
-  const clearError = () => {
-    error.value = null;
-  };
+    const clearError = () => {
+        error.value = null;
+    };
 
-  // Helper to get current user ID (should be replaced with actual auth implementation)
-  const getCurrentUserId = () => {
-    // TODO: Implement actual user authentication
-    return localStorage.getItem("userId") || "1";
-  };
+    // Helper to get current user ID (should be replaced with actual auth implementation)
+    const getCurrentUserId = () => {
+        // TODO: Implement actual user authentication
+        return localStorage.getItem("userId") || "1";
+    };
 
-  // Helper to update participatingProjects and ownedProjects based on projects
+    // Helper to update participatingProjects and ownedProjects based on projects
     const updateProjectRefs = () => {
         const userId = getCurrentUserId();
 
@@ -63,282 +63,288 @@ export const useProjectsStore = defineStore('projects', () => {
         });
     };
 
-  // Project Actions
-  const fetchProjects = async () => {
-    try {
-      setLoading(true);
-      clearError();
+    // Project Actions
+    const fetchProjects = async () => {
+        try {
+            setLoading(true);
+            clearError();
 
-      const response = await projectsApi.getAll();
-      projects.value = ProjectAssembler.fromApiArrayToEntityArray(
-        response.data
-			);
+            const response = await projectsApi.getAll();
+            projects.value = ProjectAssembler.fromApiArrayToEntityArray(
+                response.data
+            );
 
-			updateProjectRefs();
-    } catch (err) {
-      setError("Failed to fetch projects");
-      console.error("Error fetching projects:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchParticipatingProjects = async () => {
-    try {
-      setLoading(true);
-      clearError();
-
-      const userId = getCurrentUserId();
-      const response = await projectsApi.getParticipatingProjects(userId);
-      const participatingProjectsData =
-        ProjectAssembler.fromApiArrayToEntityArray(response.data);
-
-      // Update projects array with participating projects
-      participatingProjectsData.forEach((project) => {
-        const existingIndex = projects.value.findIndex(
-          (p) => p.id === project.id
-        );
-        if (existingIndex >= 0) {
-          projects.value[existingIndex] = project;
-        } else {
-          projects.value.push(project);
+            updateProjectRefs();
+        } catch (err) {
+            setError("Failed to fetch projects");
+            console.error("Error fetching projects:", err);
+        } finally {
+            setLoading(false);
         }
-      });
-    } catch (err) {
-      setError("Failed to fetch participating projects");
-      console.error("Error fetching participating projects:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  const fetchOwnedProjects = async () => {
-    try {
-      setLoading(true);
-      clearError();
+    const fetchParticipatingProjects = async () => {
+        try {
+            setLoading(true);
+            clearError();
 
-      const userId = getCurrentUserId();
-      const response = await projectsApi.getOwnedProjects(userId);
-      const ownedProjectsData = ProjectAssembler.fromApiArrayToEntityArray(
-        response.data
-      );
+            const userId = getCurrentUserId();
+            const response = await projectsApi.getParticipatingProjects(userId);
+            const participatingProjectsData =
+                ProjectAssembler.fromApiArrayToEntityArray(response.data);
 
-      // Update projects array with owned projects
-      ownedProjectsData.forEach((project) => {
-        const existingIndex = projects.value.findIndex(
-          (p) => p.id === project.id
-        );
-        if (existingIndex >= 0) {
-          projects.value[existingIndex] = project;
-        } else {
-          projects.value.push(project);
+            // Update projects array with participating projects
+            participatingProjectsData.forEach((project) => {
+                const existingIndex = projects.value.findIndex(
+                    (p) => p.id === project.id
+                );
+                if (existingIndex >= 0) {
+                    projects.value[existingIndex] = project;
+                } else {
+                    projects.value.push(project);
+                }
+            });
+        } catch (err) {
+            setError("Failed to fetch participating projects");
+            console.error("Error fetching participating projects:", err);
+        } finally {
+            setLoading(false);
         }
-      });
-    } catch (err) {
-      setError("Failed to fetch owned projects");
-      console.error("Error fetching owned projects:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  const fetchProjectById = async (id) => {
-    try {
-      setLoading(true);
-      clearError();
+    const fetchOwnedProjects = async () => {
+        try {
+            setLoading(true);
+            clearError();
 
-      // Fetch project data
-      const response = await projectsApi.getById(id);
-      const projectDetailData = ProjectAssembler.getProjectDetailData(
-        response.data
-      );
-      const projectEntity = projectDetailData.project;
+            const userId = getCurrentUserId();
+            const response = await projectsApi.getOwnedProjects(userId);
+            const ownedProjectsData = ProjectAssembler.fromApiArrayToEntityArray(
+                response.data
+            );
 
-      // Store additional detail data for UI components (non-derived data)
-      projectEntity._detailData = {
-        stats: projectDetailData.stats,
-        notifications: projectDetailData.notifications,
-      };
-
-      // Update projects array
-      const existingIndex = projects.value.findIndex((p) => p.id === id);
-      if (existingIndex >= 0) {
-        projects.value[existingIndex] = projectEntity;
-      } else {
-        projects.value.push(projectEntity);
-      }
-
-      return projectEntity;
-    } catch (err) {
-      setError("Failed to fetch project");
-      console.error("Error fetching project:", err);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const addToOwnedProjects = async (projectId, userId) => {
-    try {
-      await projectsApi.addToOwnedProjects(userId, projectId);
-      console.log(
-        `Project ${projectId} added to owned projects for user ${userId}`
-      );
-    } catch (err) {
-      console.error("Error adding project to owned list:", err);
-      // Don't throw the error to avoid breaking the project creation flow
-    }
-  };
-
-  const fetchProjectsByUserId = async (userId) => {
-    try {
-      setLoading(true);
-      clearError();
-
-      const response = await projectsApi.getProjectsByUserId(userId);
-      const userProjects = ProjectAssembler.fromApiArrayToEntityArray(
-        response.data
-      );
-
-      // Update projects array with user projects
-      userProjects.forEach((project) => {
-        const existingIndex = projects.value.findIndex(
-          (p) => p.id === project.id
-        );
-        if (existingIndex >= 0) {
-          projects.value[existingIndex] = project;
-        } else {
-          projects.value.push(project);
+            // Update projects array with owned projects
+            ownedProjectsData.forEach((project) => {
+                const existingIndex = projects.value.findIndex(
+                    (p) => p.id === project.id
+                );
+                if (existingIndex >= 0) {
+                    projects.value[existingIndex] = project;
+                } else {
+                    projects.value.push(project);
+                }
+            });
+        } catch (err) {
+            setError("Failed to fetch owned projects");
+            console.error("Error fetching owned projects:", err);
+        } finally {
+            setLoading(false);
         }
-      });
+    };
 
-      return userProjects;
-    } catch (err) {
-      setError("Failed to fetch user projects");
-      console.error("Error fetching user projects:", err);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchProjectById = async (id) => {
+        try {
+            setLoading(true);
+            clearError();
 
-  const createProject = async (projectData) => {
-    try {
-      setLoading(true);
-      clearError();
+            // Fetch project data
+            const response = await projectsApi.getById(id);
 
-      const apiData = ProjectAssembler.fromEntityToApi(projectData);
-      const response = await projectsApi.create(apiData);
-      const newProject = ProjectAssembler.fromApiToEntity(response.data);
+            const projectDetailData = ProjectAssembler.getProjectDetailData(
+                response.data
+            );
+            const projectEntity = projectDetailData.project;
 
-      projects.value.push(newProject);
+            // Store additional detail data for UI components (non-derived data)
+            projectEntity._detailData = {
+                stats: projectDetailData.stats,
+                notifications: projectDetailData.notifications,
+            };
 
-      // Add the project to the user's owned projects
-      if (newProject.id && newProject.userId) {
-        await addToOwnedProjects(newProject.id, newProject.userId);
-      }
+            // Update projects array
+            const existingIndex = projects.value.findIndex((p) => p.id === id);
+            if (existingIndex >= 0) {
+                projects.value[existingIndex] = projectEntity;
+            } else {
+                projects.value.push(projectEntity);
+            }
 
-      return newProject;
-    } catch (err) {
-      setError("Failed to create project");
-      console.error("Error creating project:", err);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
+            return projectEntity;
+        } catch (err) {
+            setError("Failed to fetch project");
+            console.error("Error fetching project:", err);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  const updateProject = async (id, projectData) => {
-    try {
-      setLoading(true);
-      clearError();
+    const addToOwnedProjects = async (projectId, userId) => {
+        try {
+            await projectsApi.addToOwnedProjects(userId, projectId);
+            console.log(
+                `Project ${projectId} added to owned projects for user ${userId}`
+            );
+        } catch (err) {
+            console.error("Error adding project to owned list:", err);
+            // Don't throw the error to avoid breaking the project creation flow
+        }
+    };
 
-      const apiData = ProjectAssembler.fromEntityToApi(projectData);
-      const response = await projectsApi.update(id, apiData);
-      const updatedProject = ProjectAssembler.fromApiToEntity(response.data);
+    const fetchProjectsByUserId = async (userId) => {
+        try {
+            setLoading(true);
+            clearError();
 
-      const index = projects.value.findIndex((p) => p.id === id);
-      if (index >= 0) {
-        projects.value[index] = updatedProject;
-      }
+            const response = await projectsApi.getProjectsByUserId(userId);
+            const userProjects = ProjectAssembler.fromApiArrayToEntityArray(
+                response.data
+            );
 
-      return updatedProject;
-    } catch (err) {
-      setError("Failed to update project");
-      console.error("Error updating project:", err);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
+            // Update projects array with user projects
+            userProjects.forEach((project) => {
+                const existingIndex = projects.value.findIndex(
+                    (p) => p.id === project.id
+                );
+                if (existingIndex >= 0) {
+                    projects.value[existingIndex] = project;
+                } else {
+                    projects.value.push(project);
+                }
+            });
 
-  const deleteProject = async (id) => {
-    try {
-      setLoading(true);
-      clearError();
+            return userProjects;
+        } catch (err) {
+            setError("Failed to fetch user projects");
+            console.error("Error fetching user projects:", err);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
 
-      await projectsApi.delete(id);
-      projects.value = projects.value.filter((p) => p.id !== id);
-    } catch (err) {
-      setError("Failed to delete project");
-      console.error("Error deleting project:", err);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
+    const createProject = async (projectData) => {
+        try {
+            setLoading(true);
+            clearError();
 
-  // Category Actions
-  const fetchCategories = async () => {
-    try {
-      setLoading(true);
-      clearError();
+            const apiData = ProjectAssembler.fromEntityToApi(projectData);
+            const response = await projectsApi.create(apiData);
+            const newProject = ProjectAssembler.fromApiToEntity(response.data);
 
-      const response = await categoriesApi.getAll();
-      categories.value = CategoryAssembler.fromApiArrayToEntityArray(
-        response.data
-      );
-    } catch (err) {
-      setError("Failed to fetch categories");
-      console.error("Error fetching categories:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+            projects.value.push(newProject);
 
-  // Reset state
-  const reset = () => {
-    projects.value = [];
-    categories.value = [];
-    loading.value = false;
-    error.value = null;
-  };
+            // Add the project to the user's owned projects
+            if (newProject.id && newProject.userId) {
+                await addToOwnedProjects(newProject.id, newProject.userId);
+            }
 
-  return {
-    // State
-    projects,
-    categories,
-    loading,
-    error,
+            return newProject;
+        } catch (err) {
+            setError("Failed to create project");
+            console.error("Error creating project:", err);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    // Computed
-    participatingProjects,
-    ownedProjects,
+    const updateProject = async (id, projectData) => {
+        try {
+            setLoading(true);
+            clearError();
 
-    // Actions
-    fetchProjects,
-    fetchParticipatingProjects,
-    fetchOwnedProjects,
-    fetchProjectsByUserId,
-    fetchProjectById,
-    createProject,
-    updateProject,
-    deleteProject,
-    addToOwnedProjects,
-    fetchCategories,
-    setLoading,
-    setError,
-    clearError,
-    reset,
-  };
+            const apiData = ProjectAssembler.fromEntityToApi(projectData);
+            const response = await projectsApi.update(id, apiData);
+            const updatedProject = ProjectAssembler.fromApiToEntity(response.data);
+
+            const index = projects.value.findIndex((p) => p.id === id);
+            if (index >= 0) {
+                projects.value[index] = updatedProject;
+            }
+
+            return updatedProject;
+        } catch (err) {
+            setError("Failed to update project");
+            console.error("Error updating project:", err);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const deleteProject = async (id) => {
+        try {
+            setLoading(true);
+            clearError();
+
+            await projectsApi.delete(id);
+            projects.value = projects.value.filter((p) => p.id !== id);
+        } catch (err) {
+            setError("Failed to delete project");
+            console.error("Error deleting project:", err);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Category Actions
+    const fetchCategories = async () => {
+        try {
+            setLoading(true);
+            clearError();
+
+            const response = await categoriesApi.getAll();
+            categories.value = CategoryAssembler.fromApiArrayToEntityArray(
+                response.data
+            );
+        } catch (err) {
+            setError("Failed to fetch categories");
+            console.error("Error fetching categories:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Reset state
+    const reset = () => {
+        projects.value = [];
+        categories.value = [];
+        loading.value = false;
+        error.value = null;
+    };
+
+    const fetchProject = async (id) => {
+        return await fetchProjectById(id);
+    };
+
+    return {
+        // State
+        projects,
+        categories,
+        loading,
+        error,
+
+        // Computed
+        participatingProjects,
+        ownedProjects,
+
+        // Actions
+        fetchProjects,
+        fetchParticipatingProjects,
+        fetchProject,
+        fetchOwnedProjects,
+        fetchProjectsByUserId,
+        fetchProjectById,
+        createProject,
+        updateProject,
+        deleteProject,
+        addToOwnedProjects,
+        fetchCategories,
+        setLoading,
+        setError,
+        clearError,
+        reset,
+    };
 });
