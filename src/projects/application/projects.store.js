@@ -1,13 +1,8 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { ProjectsApi } from '../infrastructure/projects-api.js';
-import { TasksApi } from '../infrastructure/tasks-api.js';
-import { CategoriesApi } from '../infrastructure/categories-api.js';
-import { MilestonesApi } from '../infrastructure/milestones-api.js';
 import { ProjectAssembler } from '../infrastructure/project.assembler.js';
-import { TaskAssembler } from '../infrastructure/task.assembler.js';
 import { CategoryAssembler } from '../infrastructure/category.assembler.js';
-import { MilestoneAssembler } from '../infrastructure/milestone.assembler.js';
 
 export const useProjectsStore = defineStore('projects', () => {
   // State
@@ -43,14 +38,31 @@ export const useProjectsStore = defineStore('projects', () => {
   };
 
   // Helper to update participatingProjects and ownedProjects based on projects
-  const updateProjectRefs = () => {
-    const userId = getCurrentUserId();
-    participatingProjects.value = projects.value.filter(
-      (p) => p.userId !== userId
-    );
-    ownedProjects.value = projects.value.filter((p) => p.userId === userId);
-	};
-	
+    const updateProjectRefs = () => {
+        const userId = getCurrentUserId();
+
+        // - Owned projects: proyectos donde el userId del proyecto coincide con el usuario actual
+        // - Participating projects: proyectos donde el userId del proyecto NO coincide con el usuario actual
+        //   PERO solo si el usuario actual está en la lista de colaboradores
+        ownedProjects.value = projects.value.filter((p) => p.userId === userId);
+
+        participatingProjects.value = projects.value.filter((p) => {
+            // No mostrar proyectos propios en participating
+            if (p.userId === userId) return false;
+
+            // ✅ SOLUCIÓN: Solo mostrar proyectos donde el usuario actual sea colaborador
+            // Si no hay sistema de colaboradores aún, entonces participating estará vacío
+            if (p.collaborators && Array.isArray(p.collaborators)) {
+                return p.collaborators.some(collab =>
+                    collab.userId === userId || collab.id === userId
+                );
+            }
+
+            // Por defecto, no mostrar en participating hasta que se implemente colaboración
+            return false;
+        });
+    };
+
   // Project Actions
   const fetchProjects = async () => {
     try {
@@ -61,7 +73,7 @@ export const useProjectsStore = defineStore('projects', () => {
       projects.value = ProjectAssembler.fromApiArrayToEntityArray(
         response.data
 			);
-			
+
 			updateProjectRefs();
     } catch (err) {
       setError("Failed to fetch projects");
