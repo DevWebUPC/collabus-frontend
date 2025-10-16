@@ -314,5 +314,47 @@
       "duration": "Duracion",
       "see-more": "Ver más"
     }
+  },
+  "application": {
+    "title": "Postular a un proyecto",
+    "subtitle": "Estás postulando a: {project}",
+    "personalInfo": "Información Personal",
+    "fullName": "Nombre Completo",
+    "email": "Correo Electrónico",
+    "portfolio": "Portafolio/LinkedIn",
+    "phone": "Número de teléfono",
+    "roleSelection": "Selección de Puesto",
+    "selectRole": "Selecciona uno de los puestos",
+    "cvUpload": "Adjuntar CV",
+    "uploadCV": "Adjuntar CV (PDF)",
+    "chooseFile": "Elegir archivo",
+    "fileHint": "Solo se aceptan archivos PDF (máximo 10MB)",
+    "presentation": "Mensaje de Presentación",
+    "message": "Mensaje/Presentación",
+    "acceptTerms": "Acepto los términos y el tratamiento de mis datos",
+    "submit": "Enviar Postulación",
+    "vacancies": "{count} vacantes",
+    "noRolesAvailable": "No hay roles disponibles para este proyecto",
+    "projectNotFound": "Proyecto no encontrado",
+    "projectNotFoundMessage": "El proyecto al que intentas postular no existe o no está disponible.",
+    "placeholders": {
+      "fullName": "Ingresa tu nombre completo",
+      "email": "correo.ejemplo.com",
+      "portfolio": "https://tu-portafolio.com",
+      "phone": "+51 999-999-999",
+      "selectRole": "Selecciona puesto",
+      "message": "Cuéntanos por qué eres el candidato ideal para este proyecto..."
+    },
+    "errors": {
+      "invalidFileType": "Solo se permiten archivos PDF",
+      "submissionFailed": "Error al enviar la postulación. Intenta nuevamente."
+    }
+  },
+  "common": {
+    "optional": "opcional",
+    "cancel": "Cancelar",
+    "goBack": "Volver",
+    "loading": "Cargando...",
+    "unknown": "Desconocido"
   }
 }

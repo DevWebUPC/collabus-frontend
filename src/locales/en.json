@@ -317,5 +317,47 @@
       "duration": "Duration",
       "see-more": "See more"
     }
+  },
+  "application": {
+    "title": "Apply to Project",
+    "subtitle": "You are applying to: {project}",
+    "personalInfo": "Personal Information",
+    "fullName": "Full Name",
+    "email": "Email",
+    "portfolio": "Portfolio/LinkedIn",
+    "phone": "Phone Number",
+    "roleSelection": "Role Selection",
+    "selectRole": "Select one of the positions",
+    "cvUpload": "Attach CV",
+    "uploadCV": "Attach CV (PDF)",
+    "chooseFile": "Choose file",
+    "fileHint": "Only PDF files are accepted (max 10MB)",
+    "presentation": "Presentation Message",
+    "message": "Message/Presentation",
+    "acceptTerms": "I accept the terms and the treatment of my data",
+    "submit": "Submit Application",
+    "vacancies": "{count} vacancies",
+    "noRolesAvailable": "No available roles for this project",
+    "projectNotFound": "Project not found",
+    "projectNotFoundMessage": "The project you are trying to apply to does not exist or is not available.",
+    "placeholders": {
+      "fullName": "Enter your full name",
+      "email": "email.example.com",
+      "portfolio": "https://your-portfolio.com",
+      "phone": "+51 999-999-999",
+      "selectRole": "Select position",
+      "message": "Tell us why you are the ideal candidate for this project..."
+    },
+    "errors": {
+      "invalidFileType": "Only PDF files are allowed",
+      "submissionFailed": "Error submitting application. Please try again."
+    }
+  },
+  "common": {
+    "optional": "optional",
+    "cancel": "Cancel",
+    "goBack": "Go Back",
+    "loading": "Loading...",
+    "unknown": "Unknown"
   }
 }
