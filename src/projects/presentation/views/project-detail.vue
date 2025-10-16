@@ -9,6 +9,7 @@ import CollaboratorsCard from '../components/detail/CollaboratorsCard.vue';
 import RecentNotificationsCard from '../components/detail/RecentNotificationsCard.vue';
 import UpcomingMilestonesCard from '../components/detail/UpcomingMilestonesCard.vue';
 import UrgentTasksCard from '../components/detail/UrgentTasksCard.vue';
+import ApplicantsCard from '../components/detail/ApplicantsCard.vue';
 
 import EmptyTabContent from '../components/detail/EmptyTabContent.vue';
 import { useUserStore } from '../../../iam/application/user-store.js';
@@ -217,11 +218,8 @@ watch(
             icon="pi-dollar"
         />
 
-        <EmptyTabContent
-            v-else-if="activeTab === 'applicants'"
-            tab-name="applicants"
-            icon="pi-users"
-        />
+        <ApplicantsCard v-else-if="activeTab === 'applicants'" />
+
 
         <EmptyTabContent
             v-else-if="activeTab === 'feedback'"

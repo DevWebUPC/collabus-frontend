@@ -67,10 +67,7 @@ const validateForm = () => {
     errors.push('Project ID is required');
   }
 
-  // REMOVER ESTA VALIDACIÓN - applicantId se asigna automáticamente
-  // if (!app.applicantId) {
-  //   errors.push('Applicant ID is required');
-  // }
+
 
   if (!app.roleId) {
     errors.push('Role selection is required');
@@ -84,10 +81,6 @@ const validateForm = () => {
     errors.push('Email is required');
   } else if (!isValidEmail(app.applicantEmail)) {
     errors.push('Valid email is required');
-  }
-
-  if (!app.cvFile) {
-    errors.push('CV file is required');
   }
 
   if (!app.message?.trim()) {
@@ -187,16 +180,46 @@ const handleSubmit = async () => {
   try {
     application.value.projectTitle = project.value?.title;
 
+    console.log('👤 Datos del solicitante:', {
+      applicantId: application.value.applicantId,
+      applicantName: application.value.applicantName,
+      applicantEmail: application.value.applicantEmail,
+      projectId: application.value.projectId,
+      roleId: application.value.roleId
+    });
+
     // Asignar el nombre del rol seleccionado
     const selectedRole = availableRoles.value.find(r => r.id == application.value.roleId);
     if (selectedRole) {
       application.value.roleName = selectedRole.name;
     }
 
-    // Submit application using the store
-    await applicationStore.submitApplication(application.value);
+    // ✅ AGREGADO: Debug para notificaciones
+    console.log('🎯 PREPARANDO ENVÍO - Datos para notificación:', {
+      projectId: application.value.projectId,
+      applicantName: application.value.applicantName,
+      roleName: application.value.roleName
+    });
 
-    console.log('Application submitted successfully');
+    // Submit application using the store
+    const newApplication = await applicationStore.submitApplication(application.value);
+
+    console.log('✅ Application submitted successfully');
+    console.log('📋 Aplicación creada:', newApplication);
+
+    // ✅ VERIFICACIÓN: Confirmar que la notificación se creó
+    setTimeout(async () => {
+      try {
+        console.log('🔍 Verificando notificación...');
+        // Recargar el proyecto para ver las notificaciones
+        const { useProjectsStore } = await import('../../application/projects.store.js');
+        const projectsStore = useProjectsStore();
+        await projectsStore.fetchProjectById(application.value.projectId);
+        console.log('✅ Verificación completada');
+      } catch (verifyError) {
+        console.error('❌ Error en verificación:', verifyError);
+      }
+    }, 1000);
 
     router.push({
       name: 'home',
