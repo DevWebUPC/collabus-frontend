@@ -4,6 +4,8 @@ import { ApplicationsApi } from '../infrastructure/applications-api.js';
 import { ApplicationAssembler } from '../infrastructure/application.assembler.js';
 import { useUserStore } from '../../iam/application/user-store.js';
 import { useProjectDetailStore } from './project-detail.store.js';
+import { useProjectsStore } from './projects.store.js';
+
 /**
  * Application Store
  * Manages application state and business logic
@@ -19,6 +21,7 @@ export const useApplicationStore = defineStore('application', () => {
     const applicationsApi = new ApplicationsApi();
     const userStore = useUserStore();
     const projectDetailStore = useProjectDetailStore();
+    const projectsStore = useProjectsStore();
 
     // Getters
     const userApplications = computed(() => {
@@ -170,6 +173,7 @@ export const useApplicationStore = defineStore('application', () => {
         }
     };
 
+    // application.store.js - MODIFICAR updateApplicationStatus
     const updateApplicationStatus = async (applicationId, status, reviewNotes = '') => {
         try {
             setLoading(true);
@@ -210,12 +214,13 @@ export const useApplicationStore = defineStore('application', () => {
                         // Agregar colaborador al proyecto
                         await projectDetailStore.addCollaborator(collaboratorData);
 
-                        // ✅ ACTUALIZACIÓN: Recargar el proyecto para reflejar cambios inmediatamente
-                        await projectDetailStore.fetchProjectById(projectDetailStore.project.id);
+                        // ✅ NUEVO: Forzar recarga de proyectos para actualizar las listas
+                        await projectsStore.fetchProjects();
+
+                        console.log('✅ Projects reloaded after adding collaborator');
                     }
                 } catch (collabError) {
                     console.error('Error adding collaborator:', collabError);
-                    // No lanzamos error aquí para no interrumpir el flujo principal
                 }
             }
 
