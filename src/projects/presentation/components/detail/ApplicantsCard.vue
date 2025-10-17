@@ -5,6 +5,7 @@ import {useProjectDetailStore} from "../../../application/project-detail.store.j
 
 const applicationStore = useApplicationStore();
 const projectDetailStore = useProjectDetailStore();
+const isProcessing = ref(false);
 
 // Estados
 const isLoading = ref(false);
@@ -15,7 +16,6 @@ const availableRoles = ref([
 ]);
 
 const selectedRole = ref('Todos los roles');
-
 
 // Cargar aplicaciones cuando el componente se monta
 onMounted(async () => {
@@ -92,7 +92,7 @@ const loadAvailableRoles = () => {
   console.log('📋 Available roles for filter:', availableRoles.value);
 };
 
-// Computed: Aplicaciones filtradas - CORREGIDO
+// Computed: Aplicaciones filtradas - ✅ CORREGIDO: Solo mostrar aplicaciones pendientes
 const filteredApplicants = computed(() => {
   if (!projectDetailStore.project?.id) {
     console.log('❌ No project ID for filtering');
@@ -103,11 +103,15 @@ const filteredApplicants = computed(() => {
   console.log('🔍 Filtering applications:', projectApps);
   console.log('🎯 Selected role:', selectedRole.value);
 
+  // ✅ SOLUCIÓN: Filtrar solo aplicaciones con estado "pending"
+  const pendingApps = projectApps.filter(app => app.status === 'pending');
+  console.log('⏳ Pending applications:', pendingApps);
+
   if (selectedRole.value === 'Todos los roles') {
-    return projectApps;
+    return pendingApps;
   }
 
-  const filtered = projectApps.filter(application => {
+  const filtered = pendingApps.filter(application => {
     // CORREGIDO: Comparar convirtiendo ambos a string o ambos a número
     const role = projectDetailStore.project?.roles.find(r =>
         String(r.id) === String(application.roleId)
@@ -144,8 +148,6 @@ const applicantsData = computed(() => {
   return data;
 });
 
-
-
 const formatApplicationDate = (dateString) => {
   if (!dateString) return 'Fecha no disponible';
 
@@ -161,8 +163,58 @@ const formatApplicationDate = (dateString) => {
   }
 };
 
-// En ApplicantsCard.vue - agregar método temporal para testing
+const acceptApplicant = async (applicant) => {
+  if (!applicant.application) {
+    console.error('❌ No application data found');
+    return;
+  }
 
+  try {
+    isProcessing.value = true;
+    console.log('✅ Accepting applicant:', applicant);
+
+    // 1. Actualizar estado de la aplicación a "accepted"
+    await applicationStore.updateApplicationStatus(
+        applicant.application.id,
+        'accepted',
+        'Aplicante aceptado en el proyecto'
+    );
+
+    // 2. Recargar aplicaciones para reflejar el cambio (la aplicación aceptada desaparecerá de la lista)
+    await loadProjectApplications();
+
+    // 3. Mostrar mensaje de éxito
+    console.log('🎉 Applicant accepted and added as collaborator!');
+
+  } catch (error) {
+    console.error('❌ Error accepting applicant:', error);
+  } finally {
+    isProcessing.value = false;
+  }
+};
+
+const rejectApplicant = async (applicant) => {
+  if (!applicant.application) return;
+
+  try {
+    isProcessing.value = true;
+
+    await applicationStore.updateApplicationStatus(
+        applicant.application.id,
+        'rejected',
+        'Aplicante rechazado'
+    );
+
+    // ✅ ACTUALIZACIÓN: Recargar aplicaciones inmediatamente (la aplicación rechazada desaparecerá de la lista)
+    await loadProjectApplications();
+    console.log('✅ Applicant rejected successfully!');
+
+  } catch (error) {
+    console.error('❌ Error rejecting applicant:', error);
+  } finally {
+    isProcessing.value = false;
+  }
+};
 </script>
 
 <template>
@@ -243,6 +295,7 @@ const formatApplicationDate = (dateString) => {
                   severity="secondary"
                   size="small"
                   class="reject-btn"
+                  @click="rejectApplicant(applicant)"
                   :disabled="applicant.application.status !== 'pending'"
               />
               <pv-button
@@ -261,11 +314,12 @@ const formatApplicationDate = (dateString) => {
                   severity="primary"
                   size="small"
                   class="accept-btn"
+                  @click="acceptApplicant(applicant)"
                   :disabled="applicant.application.status !== 'pending'"
               />
             </div>
 
-            <!-- Estado actual -->
+            <!-- Estado actual - ✅ ESTO YA NO SE MOSTRARÁ PORQUE SOLO HAY PENDIENTES -->
             <div v-if="applicant.application.status !== 'pending'" class="application-status">
               <span :class="['status-badge', applicant.application.status]">
                 {{ applicant.application.status === 'accepted' ? 'Aceptado' :
@@ -281,14 +335,15 @@ const formatApplicationDate = (dateString) => {
     <!-- Mensaje si no hay postulantes -->
     <div v-if="!isLoading && applicantsData.length === 0" class="empty-state">
       <i class="pi pi-users empty-icon"></i>
-      <p>No hay postulantes para el rol seleccionado</p>
-      <small>Los postulantes aparecerán aquí cuando envíen sus aplicaciones</small>
+      <p>No hay postulantes pendientes para el rol seleccionado</p>
+      <small>Los postulantes pendientes aparecerán aquí</small>
     </div>
 
   </div>
 </template>
 
 <style scoped>
+/* Los estilos se mantienen igual */
 .applicants-card {
   background: white;
   border-radius: 12px;
