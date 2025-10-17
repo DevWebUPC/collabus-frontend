@@ -10,6 +10,7 @@ import RecentNotificationsCard from '../components/detail/RecentNotificationsCar
 import UpcomingMilestonesCard from '../components/detail/UpcomingMilestonesCard.vue';
 import UrgentTasksCard from '../components/detail/UrgentTasksCard.vue';
 import ApplicantsCard from '../components/detail/ApplicantsCard.vue';
+import ProjectTasksView from '../../../task-management/presentation/view/ProjectTasksView.vue';
 
 import EmptyTabContent from '../components/detail/EmptyTabContent.vue';
 import { useUserStore } from '../../../iam/application/user-store.js';
@@ -200,11 +201,8 @@ watch(
         </div>
 
         <!-- Other tabs content -->
-        <EmptyTabContent
-            v-else-if="activeTab === 'tasks'"
-            tab-name="tasks"
-            icon="pi-check-square"
-        />
+        <ProjectTasksView v-else-if="activeTab === 'tasks'" />
+
 
         <EmptyTabContent
             v-else-if="activeTab === 'milestones'"
