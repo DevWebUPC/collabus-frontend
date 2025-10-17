@@ -42,24 +42,27 @@ export const useProjectsStore = defineStore('projects', () => {
         const userId = getCurrentUserId();
 
         // - Owned projects: proyectos donde el userId del proyecto coincide con el usuario actual
-        // - Participating projects: proyectos donde el userId del proyecto NO coincide con el usuario actual
-        //   PERO solo si el usuario actual está en la lista de colaboradores
-        ownedProjects.value = projects.value.filter((p) => p.userId === userId);
+        ownedProjects.value = projects.value.filter((p) => String(p.userId) === String(userId));
 
+        // ✅ CORREGIDO: Participating projects - proyectos donde el usuario actual es colaborador
         participatingProjects.value = projects.value.filter((p) => {
-            // No mostrar proyectos propios en participating
-            if (p.userId === userId) return false;
+            // No incluir proyectos propios
+            if (String(p.userId) === String(userId)) return false;
 
-            // ✅ SOLUCIÓN: Solo mostrar proyectos donde el usuario actual sea colaborador
-            // Si no hay sistema de colaboradores aún, entonces participating estará vacío
+            // ✅ SOLUCIÓN: Verificar si el usuario actual está en la lista de colaboradores
             if (p.collaborators && Array.isArray(p.collaborators)) {
                 return p.collaborators.some(collab =>
-                    collab.userId === userId || collab.id === userId
+                    String(collab.applicantId) === String(userId)
                 );
             }
 
-            // Por defecto, no mostrar en participating hasta que se implemente colaboración
             return false;
+        });
+
+        console.log('🔄 Updated project refs:', {
+            owned: ownedProjects.value.length,
+            participating: participatingProjects.value.length,
+            userId: userId
         });
     };
 
