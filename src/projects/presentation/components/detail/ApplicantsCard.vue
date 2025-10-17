@@ -16,6 +16,7 @@ const availableRoles = ref([
 
 const selectedRole = ref('Todos los roles');
 
+
 // Cargar aplicaciones cuando el componente se monta
 onMounted(async () => {
   console.log('🚀 ApplicantsCard mounted');
@@ -249,7 +250,12 @@ const formatApplicationDate = (dateString) => {
                   severity="secondary"
                   size="small"
                   class="view-btn"
-              />
+                  @click="$router.push({
+                  name: 'project-applicant',
+                  params: {
+                  applicationId: applicant.application.id
+                }
+                 })"/>
               <pv-button
                   label="Aceptar"
                   severity="primary"
