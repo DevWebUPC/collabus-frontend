@@ -742,8 +742,164 @@
       "id": 22
     }
   ],
-  "projects": [],
-  "applications": [],
+  "projects": [
+    {
+      "title": "prueba",
+      "description": "prueba preuab",
+      "areas": [
+        "Desarrollo Web"
+      ],
+      "tags": [
+        "prueba"
+      ],
+      "academicLevel": "Estudiante de pregrado",
+      "benefits": "prueba \nprueba",
+      "skills": [
+        "prueba"
+      ],
+      "durationQuantity": 1,
+      "durationType": "meses",
+      "roles": [
+        {
+          "id": 1760636758828,
+          "name": "prueba1",
+          "cards": [
+            {
+              "id": 1760636758829,
+              "title": "prueba",
+              "items": [
+                "prueba"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 1760636802707,
+          "name": "prueba",
+          "cards": [
+            {
+              "id": 1760636802708,
+              "title": "prueba",
+              "items": [
+                "prueba"
+              ]
+            }
+          ]
+        }
+      ],
+      "status": "active",
+      "progress": 0,
+      "userId": "1",
+      "authorName": "Vitaly Baca",
+      "collaborators": [],
+      "tasks": [],
+      "milestones": [],
+      "createdAt": "2025-10-16T17:46:54.022Z",
+      "updatedAt": "2025-10-16T17:46:54.022Z",
+      "id": 1,
+      "notifications": []
+    },
+    {
+      "title": "prueba 123",
+      "description": "asdasd asda",
+      "areas": [
+        "Desarrollo Web"
+      ],
+      "tags": [
+        "12"
+      ],
+      "academicLevel": "Estudiante de posgrado",
+      "benefits": "sadasd asd",
+      "skills": [
+        "asd"
+      ],
+      "durationQuantity": 1,
+      "durationType": "meses",
+      "roles": [
+        {
+          "id": 1760639474190,
+          "name": "sad",
+          "cards": [
+            {
+              "id": 1760639474191,
+              "title": "asdasd",
+              "items": [
+                "asd"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 1760639496812,
+          "name": "asdas",
+          "cards": [
+            {
+              "id": 1760639496813,
+              "title": "asdasd",
+              "items": [
+                "sasadasd"
+              ]
+            }
+          ]
+        }
+      ],
+      "status": "active",
+      "progress": 0,
+      "userId": "4",
+      "authorName": "CarlosR",
+      "collaborators": [],
+      "tasks": [],
+      "milestones": [],
+      "createdAt": "2025-10-16T18:31:43.191Z",
+      "updatedAt": "2025-10-16T18:31:43.191Z",
+      "id": 2,
+      "notifications": []
+    }
+  ],
+  "applications": [
+    {
+      "projectId": 1,
+      "applicantId": 2,
+      "applicantName": "Sebastian Pariachi",
+      "applicantEmail": "u20231c426@gmail.com",
+      "applicantPortfolio": "",
+      "applicantPhone": "",
+      "roleId": 1760636758828,
+      "message": "d",
+      "acceptedTerms": true,
+      "cvFile": null,
+      "cvFileName": "",
+      "id": 1
+    },
+    {
+      "projectId": 1,
+      "applicantId": 4,
+      "applicantName": "Carlos Rodriguez Perez",
+      "applicantEmail": "carlos.rodriguez@email.com",
+      "applicantPortfolio": "https://aulavirtual.upc.edu.pe/",
+      "applicantPhone": "+51936266002",
+      "roleId": 1760636802707,
+      "message": "sas",
+      "acceptedTerms": true,
+      "cvFile": null,
+      "cvFileName": "",
+      "id": 2
+    },
+    {
+      "projectId": 1,
+      "applicantId": 6,
+      "applicantName": "Luis Fernandez Garcia",
+      "applicantEmail": "luis.fernandez@email.com",
+      "applicantPortfolio": "https://chatgpt.com/",
+      "applicantPhone": "+51936266002",
+      "roleId": 1760636802707,
+      "message": "asdadasd",
+      "acceptedTerms": true,
+      "cvFile": null,
+      "cvFileName": "",
+      "id": 3
+    }
+  ],
   "categories": [
     {
       "id": "1",
@@ -803,180 +959,6 @@
       "icon": "pi pi-megaphone",
       "isActive": true,
       "createdAt": "2025-10-01T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    }
-  ],
-  "collaborators": [
-    {
-      "id": "1",
-      "name": "John Doe",
-      "email": "john.doe@example.com",
-      "role": "Frontend Developer",
-      "avatar": null,
-      "skills": [
-        "React",
-        "JavaScript",
-        "CSS",
-        "HTML",
-        "Git"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-15T00:00:00.000Z",
-      "bio": "Frontend developer with 5+ years experience in React and modern web technologies.",
-      "tasksAssigned": 10,
-      "tasksCompleted": 7,
-      "projectId": "1",
-      "createdAt": "2025-09-15T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "2",
-      "name": "Jane Smith",
-      "email": "jane.smith@example.com",
-      "role": "Backend Developer",
-      "avatar": null,
-      "skills": [
-        "Node.js",
-        "Express",
-        "MongoDB",
-        "PostgreSQL",
-        "Docker"
-      ],
-      "status": "active",
-      "joinedAt": "2025-08-20T00:00:00.000Z",
-      "bio": "Full-stack developer specializing in backend architecture and database design.",
-      "tasksAssigned": 8,
-      "tasksCompleted": 4,
-      "projectId": "2",
-      "createdAt": "2025-08-20T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "3",
-      "name": "Alice Johnson",
-      "email": "alice.johnson@example.com",
-      "role": "UX Designer",
-      "avatar": null,
-      "skills": [
-        "UI/UX Design",
-        "Figma",
-        "Adobe XD",
-        "User Research",
-        "Prototyping"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-01T00:00:00.000Z",
-      "bio": "UI/UX designer focused on creating intuitive and accessible user experiences.",
-      "tasksAssigned": 6,
-      "tasksCompleted": 4,
-      "projectId": "1",
-      "createdAt": "2025-09-01T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "4",
-      "name": "Bob Wilson",
-      "email": "bob.wilson@example.com",
-      "role": "Mobile Developer",
-      "avatar": null,
-      "skills": [
-        "React Native",
-        "iOS",
-        "Android",
-        "Swift",
-        "Kotlin"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-10T00:00:00.000Z",
-      "bio": "Mobile developer with expertise in cross-platform and native app development.",
-      "tasksAssigned": 12,
-      "tasksCompleted": 11,
-      "projectId": "2",
-      "createdAt": "2025-09-10T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "5",
-      "name": "Ariana Lizeth",
-      "email": "ariana.lizeth@example.com",
-      "role": "UX Designer",
-      "avatar": null,
-      "skills": [
-        "UI/UX Design",
-        "Figma",
-        "Adobe XD",
-        "User Research"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-05T00:00:00.000Z",
-      "bio": "UX Designer focused on user experience and interface design.",
-      "tasksAssigned": 10,
-      "tasksCompleted": 7,
-      "projectId": "1",
-      "createdAt": "2025-09-05T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "6",
-      "name": "Dyaron Huapaya",
-      "email": "dyaron.huapaya@example.com",
-      "role": "Backend",
-      "avatar": null,
-      "skills": [
-        "Node.js",
-        "Python",
-        "Django",
-        "PostgreSQL"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-12T00:00:00.000Z",
-      "bio": "Backend developer specializing in APIs and database design.",
-      "tasksAssigned": 10,
-      "tasksCompleted": 5,
-      "projectId": "1",
-      "createdAt": "2025-09-12T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "7",
-      "name": "Gilbert Alonso",
-      "email": "gilbert.alonso@example.com",
-      "role": "Frontend",
-      "avatar": null,
-      "skills": [
-        "Vue.js",
-        "React",
-        "JavaScript",
-        "TypeScript"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-18T00:00:00.000Z",
-      "bio": "Frontend developer with expertise in modern JavaScript frameworks.",
-      "tasksAssigned": 10,
-      "tasksCompleted": 6,
-      "projectId": "1",
-      "createdAt": "2025-09-18T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "8",
-      "name": "Sebastián Pariachi",
-      "email": "sebastian.pariachi@example.com",
-      "role": "QA Tester",
-      "avatar": null,
-      "skills": [
-        "Testing",
-        "Selenium",
-        "Jest",
-        "Cypress"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-22T00:00:00.000Z",
-      "bio": "QA Tester ensuring high quality software delivery.",
-      "tasksAssigned": 10,
-      "tasksCompleted": 9,
-      "projectId": "1",
-      "createdAt": "2025-09-22T00:00:00.000Z",
       "updatedAt": "2025-10-01T00:00:00.000Z"
     }
   ],
