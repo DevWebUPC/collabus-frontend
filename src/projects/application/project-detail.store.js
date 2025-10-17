@@ -24,13 +24,22 @@ export const useProjectDetailStore = defineStore("project-detail", () => {
     const isParticipating = computed(() => {
         if (!project.value) return false;
         const userId = getCurrentUserId();
-        return project.value.userId !== userId;
+
+        // ✅ SOLUCIÓN: Verificar si el usuario actual es colaborador del proyecto
+        if (project.value.collaborators && Array.isArray(project.value.collaborators)) {
+            return project.value.collaborators.some(collab =>
+                String(collab.applicantId) === String(userId)
+            );
+        }
+
+        return false;
     });
+
 
     const isOwned = computed(() => {
         if (!project.value) return false;
         const userId = getCurrentUserId();
-        return project.value.userId === userId;
+        return String(project.value.userId) === String(userId);
     });
 
     // Basic project stats from project data
