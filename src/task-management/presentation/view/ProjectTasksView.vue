@@ -2,7 +2,7 @@
   <div class="tasks-container">
     <!-- Header con botón Crear -->
     <div class="tasks-header">
-      <pv-button class="create-button">
+      <pv-button class="create-button" @click="showCreateForm = true">
         + Crear
       </pv-button>
     </div>
@@ -32,15 +32,46 @@
 
     <!-- Línea separadora -->
     <div class="separator"></div>
+
+    <!-- Modal de creación de tareas -->
+    <pv-dialog
+        v-model:visible="showCreateForm"
+        modal
+        :style="{ width: '70vw', maxWidth: '800px' }"
+        header="Crear Nueva Tarea"
+    >
+      <TaskCreateForm
+          @cancel="showCreateForm = false"
+          @created="handleTaskCreated"
+      />
+    </pv-dialog>
   </div>
 </template>
 
 <script>
+import { ref } from 'vue'
+import TaskCreateForm from './TaskCreateForm.vue'
+
 export default {
-  name: 'ProjectTasksView'
+  name: 'ProjectTasksView',
+  components: {
+    TaskCreateForm
+  },
+  setup() {
+    const showCreateForm = ref(false)
+
+    const handleTaskCreated = (taskData) => {
+      console.log('Tarea creada:', taskData)
+      showCreateForm.value = false
+    }
+
+    return {
+      showCreateForm,
+      handleTaskCreated
+    }
+  }
 }
 </script>
-
 <style scoped>
 .tasks-container {
   padding: 1.5rem;
