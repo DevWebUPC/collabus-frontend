@@ -94,7 +94,6 @@ export class Project {
         return diffDays > 0 ? diffDays : 0;
     }
 
-    // Role management methods
     addRole(roleData = {}) {
         const newRole = new Role({
             ...roleData,
@@ -131,7 +130,6 @@ export class Project {
         return this.roles.find(role => role.id === roleId);
     }
 
-    // Skills management
     addSkill(skill) {
         if (skill.trim() && !this.skills.includes(skill.trim())) {
             this.skills.push(skill.trim());
@@ -151,7 +149,6 @@ export class Project {
         return false;
     }
 
-    // Tags management
     addTag(tag) {
         if (tag.trim() && !this.tags.includes(tag.trim())) {
             this.tags.push(tag.trim());
@@ -171,7 +168,6 @@ export class Project {
         return false;
     }
 
-    // Areas management
     addArea(area) {
         if (area.trim() && !this.areas.includes(area.trim())) {
             this.areas.push(area.trim());
@@ -191,16 +187,42 @@ export class Project {
         return false;
     }
 
-    addCollaborator(collaborator) {
-        if (!this.collaborators.find(c => c.id === collaborator.id)) {
-            this.collaborators.push(collaborator);
-            this.updatedAt = new Date();
+    addCollaborator(collaboratorData) {
+        const { applicantId, applicantName, role, roleId } = collaboratorData;
+
+        // Verificar si el colaborador ya existe
+        const existingCollaborator = this.collaborators.find(c => c.applicantId === applicantId && c.roleId === roleId);
+        if (existingCollaborator) {
+            return false; // Ya existe
         }
+
+        const newCollaborator = {
+            id: Date.now().toString(), // ID temporal
+            applicantId: applicantId,
+            name: applicantName,
+            role: role,
+            roleId: roleId,
+            progress: 0,
+            joinedAt: new Date().toISOString()
+        };
+
+        this.collaborators.push(newCollaborator);
+        this.updatedAt = new Date();
+        return true;
     }
 
     removeCollaborator(collaboratorId) {
-        this.collaborators = this.collaborators.filter(c => c.id !== collaboratorId);
-        this.updatedAt = new Date();
+        const index = this.collaborators.findIndex(c => c.id === collaboratorId);
+        if (index > -1) {
+            this.collaborators.splice(index, 1);
+            this.updatedAt = new Date();
+            return true;
+        }
+        return false;
+    }
+
+    getCollaboratorByApplicantId(applicantId, roleId) {
+        return this.collaborators.find(c => c.applicantId === applicantId && c.roleId === roleId);
     }
 
     updateProgress(newProgress) {
@@ -219,7 +241,6 @@ export class Project {
         this.updatedAt = new Date();
     }
 
-    // Método para marcar notificación como leída
     markNotificationAsRead(notificationId) {
         const notification = this.notifications.find(n => n.id === notificationId);
         if (notification) {
