@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { ApplicationsApi } from '../infrastructure/applications-api.js';
 import { ApplicationAssembler } from '../infrastructure/application.assembler.js';
 import { useUserStore } from '../../iam/application/user-store.js';
-
+import { useProjectDetailStore } from './project-detail.store.js';
 /**
  * Application Store
  * Manages application state and business logic
@@ -18,6 +18,7 @@ export const useApplicationStore = defineStore('application', () => {
     // API instance
     const applicationsApi = new ApplicationsApi();
     const userStore = useUserStore();
+    const projectDetailStore = useProjectDetailStore();
 
     // Getters
     const userApplications = computed(() => {
@@ -176,7 +177,6 @@ export const useApplicationStore = defineStore('application', () => {
 
             const reviewerId = userStore.currentUser?.id;
 
-            // CORREGIDO: Usar updateApplication en lugar de updateApplicationStatus
             const updateData = {
                 status: status,
                 reviewNotes: reviewNotes,
@@ -185,6 +185,45 @@ export const useApplicationStore = defineStore('application', () => {
             };
 
             const response = await applicationsApi.updateApplication(applicationId, updateData);
+
+            // ✅ SOLUCIÓN COMPLETA: Si se acepta la aplicación, agregar como colaborador
+            if (status === 'accepted') {
+                try {
+                    const application = applications.value.find(app => app.id === applicationId);
+                    if (application && projectDetailStore.project) {
+                        // Buscar el nombre del rol
+                        const role = projectDetailStore.project.roles.find(r =>
+                            String(r.id) === String(application.roleId)
+                        );
+
+                        const collaboratorData = {
+                            applicantId: application.applicantId,
+                            applicantName: application.applicantName,
+                            role: role?.name || 'Colaborador',
+                            roleId: application.roleId,
+                            progress: 0,
+                            joinedAt: new Date().toISOString()
+                        };
+
+                        console.log('🎉 Adding collaborator:', collaboratorData);
+
+                        // Agregar colaborador al proyecto
+                        await projectDetailStore.addCollaborator(collaboratorData);
+
+                        // ✅ ACTUALIZACIÓN: Recargar el proyecto para reflejar cambios inmediatamente
+                        await projectDetailStore.fetchProjectById(projectDetailStore.project.id);
+                    }
+                } catch (collabError) {
+                    console.error('Error adding collaborator:', collabError);
+                    // No lanzamos error aquí para no interrumpir el flujo principal
+                }
+            }
+
+            // ✅ ACTUALIZACIÓN: Si se rechaza, también actualizar inmediatamente
+            if (status === 'rejected') {
+                // Recargar aplicaciones para reflejar el cambio de estado
+                await fetchProjectApplications(projectDetailStore.project.id);
+            }
 
             // Update in store
             const application = applications.value.find(app => app.id === applicationId);
