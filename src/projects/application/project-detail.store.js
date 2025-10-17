@@ -101,6 +101,65 @@ export const useProjectDetailStore = defineStore("project-detail", () => {
         }
     };
 
+    const addCollaborator = async (collaboratorData) => {
+        try {
+            if (!project.value) {
+                throw new Error('No project loaded');
+            }
+
+            console.log('🔄 Adding collaborator to project:', project.value.id, collaboratorData);
+
+            // Agregar colaborador localmente
+            const success = project.value.addCollaborator(collaboratorData);
+            if (!success) {
+                throw new Error('Collaborator already exists');
+            }
+
+            // ✅ SOLUCIÓN: Actualizar en la API con TODOS los datos del colaborador
+            const updateData = {
+                collaborators: project.value.collaborators
+            };
+
+            console.log('📤 Sending update to API:', updateData);
+            await projectsApi.update(project.value.id, updateData);
+
+            console.log('✅ Collaborator added successfully:', collaboratorData);
+            return true;
+        } catch (err) {
+            setError('Failed to add collaborator: ' + err.message);
+            console.error('Error adding collaborator:', err);
+            throw err;
+        }
+    };
+
+    const removeCollaborator = async (collaboratorId) => {
+        try {
+            if (!project.value) {
+                throw new Error('No project loaded');
+            }
+
+            // Remover colaborador localmente
+            const success = project.value.removeCollaborator(collaboratorId);
+            if (!success) {
+                throw new Error('Collaborator not found');
+            }
+
+            // Actualizar en la API
+            const updateData = {
+                collaborators: project.value.collaborators
+            };
+
+            await projectsApi.update(project.value.id, updateData);
+
+            console.log('✅ Collaborator removed:', collaboratorId);
+            return true;
+        } catch (err) {
+            setError('Failed to remove collaborator: ' + err.message);
+            console.error('Error removing collaborator:', err);
+            throw err;
+        }
+    };
+
     // Reset state
     const reset = () => {
         project.value = null;
@@ -127,5 +186,7 @@ export const useProjectDetailStore = defineStore("project-detail", () => {
         clearError,
         reset,
         getCurrentUserId,
+        addCollaborator,
+        removeCollaborator
     };
 });
