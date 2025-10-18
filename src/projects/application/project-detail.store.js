@@ -16,30 +16,41 @@ export const useProjectDetailStore = defineStore("project-detail", () => {
     // ✅ SOLUCIÓN: Siempre leer userId del localStorage directamente
     const getCurrentUserId = () => {
         const userId = localStorage.getItem("userId");
-        console.log('🆔 UserId from localStorage:', userId);
-        return userId || "1";
+        console.log('🆔 UserId from localStorage:', userId, 'Type:', typeof userId);
+
+        // ✅ SOLUCIÓN: Normalizar a string para comparaciones consistentes
+        if (userId) {
+            return String(userId);
+        }
+
+        // ✅ SOLUCIÓN: Si no hay userId, usar uno por defecto O redirigir a login
+        console.warn('⚠️ No userId found in localStorage, using default');
+        return "1"; // O podrías redirigir al login
     };
 
     // Computed properties - ✅ ACTUALIZADO para usar función
     const isParticipating = computed(() => {
-        if (!project.value) return false;
+        if (!project.value || !project.value.collaborators) return false;
+
         const userId = getCurrentUserId();
+        console.log('🔍 Checking participation - User:', userId, 'Collaborators:', project.value.collaborators);
 
-        // ✅ SOLUCIÓN: Verificar si el usuario actual es colaborador del proyecto
-        if (project.value.collaborators && Array.isArray(project.value.collaborators)) {
-            return project.value.collaborators.some(collab =>
-                String(collab.applicantId) === String(userId)
-            );
-        }
-
-        return false;
+        return project.value.collaborators.some(collab => {
+            const collaboratorId = String(collab.applicantId);
+            const isParticipant = collaboratorId === userId;
+            console.log(`   - Collaborator ${collaboratorId} vs User ${userId}: ${isParticipant}`);
+            return isParticipant;
+        });
     });
 
 
     const isOwned = computed(() => {
         if (!project.value) return false;
         const userId = getCurrentUserId();
-        return String(project.value.userId) === String(userId);
+        const projectOwnerId = String(project.value.userId);
+        const owned = projectOwnerId === userId;
+        console.log('🏷️ Ownership check - Project Owner:', projectOwnerId, 'User:', userId, 'Owned:', owned);
+        return owned;
     });
 
     // Basic project stats from project data
