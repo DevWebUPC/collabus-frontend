@@ -270,6 +270,7 @@ onMounted(() => {
         <!-- Acciones -->
         <div class="task-actions">
           <pv-button
+              v-if="!isOverdue(task.dueDate) || task.completed"
               label="Ver Tarea"
               icon="pi pi-eye"
               severity="secondary"
@@ -278,7 +279,7 @@ onMounted(() => {
               class="view-btn"
           />
           <pv-button
-              v-if="!task.completed"
+              v-if="!task.completed && !isOverdue(task.dueDate)"
               label="Hacer Tarea"
               icon="pi pi-play"
               severity="primary"
