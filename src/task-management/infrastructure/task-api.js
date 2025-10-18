@@ -45,17 +45,42 @@ export class TasksApi extends BaseEndpoint {
 
     /**
      * Get a specific task by ID
-     * @param {string} taskId - Task ID
      * @param {string} projectId - Project ID
+     * @param {string} taskId - Task ID
      * @returns {Promise} API response
      */
-    getTask(projectId, taskId) {
-        return this.http.get(`${this.endpointPath}/${projectId}`)
-            .then(response => {
-                const tasks = response.data.tasks || [];
-                const task = tasks.find(t => t.id === taskId);
-                return { data: task };
+    async getTask(projectId, taskId) {
+        try {
+            console.log(`🔍 Buscando tarea ${taskId} en proyecto ${projectId}`);
+
+            // Obtener el proyecto
+            const projectResponse = await this.http.get(`${this.endpointPath}/${projectId}`);
+            const project = projectResponse.data;
+
+            console.log('📋 Tareas del proyecto:', project.tasks);
+
+            if (!project.tasks || !Array.isArray(project.tasks)) {
+                console.log('❌ No hay tareas en el proyecto');
+                return { data: null };
+            }
+
+            // Buscar la tarea específica
+            const task = project.tasks.find(t => {
+                console.log(`🔍 Comparando: ${t.id} (${typeof t.id}) con ${taskId} (${typeof taskId})`);
+                return String(t.id) === String(taskId);
             });
+
+            if (!task) {
+                console.log('❌ Tarea no encontrada');
+                throw new Error('Task not found');
+            }
+
+            console.log('✅ Tarea encontrada:', task);
+            return { data: task };
+        } catch (error) {
+            console.error('❌ Error en getTask:', error);
+            throw error;
+        }
     }
 
 
