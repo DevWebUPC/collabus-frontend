@@ -43,9 +43,27 @@ const handleViewAllTasks = () => {
   activeTab.value = 'tasks';
 };
 
+// Manejar navegación a tasks desde MyTaskCard
+const handleViewAllTasksFromMyTaskCard = () => {
+  console.log('🎯 Navegando a pestaña Tasks desde MyTaskCard');
+  activeTab.value = 'tasks';
+};
+
+// Setup event listeners
+const setupEventListeners = () => {
+  window.addEventListener('view-all-tasks', handleViewAllTasksFromMyTaskCard);
+};
+
+const cleanupEventListeners = () => {
+  window.removeEventListener('view-all-tasks', handleViewAllTasksFromMyTaskCard);
+};
+
 onMounted(async () => {
   console.log('🎯 Project Detail mounted - ID:', route.params.id);
   console.log('👤 Current user ID:', userStore.currentUser?.id);
+
+  // Setup event listeners
+  setupEventListeners();
 
   const projectId = route.params.id;
   if (!projectId) {
@@ -73,6 +91,7 @@ onMounted(async () => {
 onUnmounted(() => {
   console.log('Clearing project detail store on unmount');
   store.reset();
+  cleanupEventListeners();
 });
 
 watch(
@@ -214,7 +233,7 @@ watch(
                   <!-- Columna izquierda: Progreso y Mis Tareas -->
                   <div class="left-section">
                     <ProjectProgressCardParticipating />
-                    <MyTaskCard></MyTaskCard>
+                    <MyTaskCard />
                   </div>
 
                   <!-- Columna derecha: Próximos Hitos y Actividad Reciente -->
@@ -236,7 +255,6 @@ watch(
         <ParticipatingTasksView
             v-else-if="activeTab === 'tasks' && !store.isOwned"
         />
-
 
         <EmptyTabContent
             v-else-if="activeTab === 'milestones'"
@@ -262,6 +280,7 @@ watch(
   </div>
 </template>
 
+<!-- Los estilos se mantienen igual -->
 <style scoped>
 /* Tus estilos existentes se mantienen igual */
 .project-detail-container {
@@ -271,8 +290,6 @@ watch(
   background: #f8f9fa;
   min-height: 100vh;
 }
-
-
 
 .page-header {
   margin-bottom: 2rem;
