@@ -8,6 +8,7 @@ import Collaborator from "../shared/presentation/views/collaborators.vue";
 import RankingDeColaboradores from "../profile-management/presentation/views/ranking-de-colaboradores.vue";
 import { projectRoutes } from "../projects/presentation/projects-routes.js";
 import { profileRoutes } from "../profile-management/presentation/profile-routes.js";
+import {taskRoutes} from "../task-management/presentation/task-routes.js";
 import Notifications from "../shared/presentation/views/notifications-view.vue";
 
 // Import dinámico para page not found
@@ -31,6 +32,9 @@ const routes = [
 
     // Project routes
     ...projectRoutes,
+
+    // Task routes
+    ...taskRoutes,
 ];
 
 const router = createRouter({
