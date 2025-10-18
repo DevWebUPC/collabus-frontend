@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useProjectDetailStore } from '../../application/project-detail.store.js';
 import { watch } from 'vue';
+// My Projects
 import ProjectProgressCard from '../components/detail/my-projects/ProjectProgressCard.vue';
 import CollaboratorsCard from '../components/detail/my-projects/CollaboratorsCard.vue';
 import RecentNotificationsCard from '../components/detail/my-projects/RecentNotificationsCard.vue';
@@ -11,6 +12,11 @@ import UpcomingMilestonesCard from '../components/detail/my-projects/UpcomingMil
 import UrgentTasksCard from '../components/detail/my-projects/UrgentTasksCard.vue';
 import ApplicantsCard from '../components/detail/my-projects/ApplicantsCard.vue';
 import ProjectTasksView from '../../../task-management/presentation/view/ProjectTasksView.vue';
+// Participating
+import MyTaskCard from "../components/detail/participating/MyTaskCard.vue";
+import ProjectProgressCardParticipating from "../components/detail/participating/ProjectProgressCardParticipating.vue";
+import RecentActivityCard from "../components/detail/participating/RecentActivityCard.vue";
+import UpcomingMilestonesCardParticipating from "../components/detail/participating/UpcomingMilestonesCardParticipating.vue";
 
 import EmptyTabContent from '../components/detail/EmptyTabContent.vue';
 import { useUserStore } from '../../../iam/application/user-store.js';
@@ -201,7 +207,21 @@ watch(
           <template v-else>
             <!-- For Participating Projects: My Tasks and Milestones -->
             <div class="participating-content">
-              <p>Contenido para proyectos en los que participas</p>
+              <div class="dashboard-layout">
+                <div class="dashboard-row">
+                  <!-- Columna izquierda: Progreso y Mis Tareas -->
+                  <div class="left-section">
+                    <ProjectProgressCardParticipating />
+                    <MyTaskCard></MyTaskCard>
+                  </div>
+
+                  <!-- Columna derecha: Próximos Hitos y Actividad Reciente -->
+                  <div class="right-section">
+                    <RecentActivityCard />
+                    <UpcomingMilestonesCardParticipating />
+                  </div>
+                </div>
+              </div>
             </div>
           </template>
         </div>
@@ -254,8 +274,62 @@ watch(
   min-height: 100vh;
 }
 
+
+
 .page-header {
   margin-bottom: 2rem;
+}
+
+.overview-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-height: 400px;
+}
+
+/* Layout centrado para proyectos participados */
+.participating-content {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.participating-content .dashboard-layout {
+  width: 100%;
+  max-width: 1000px; /* Ancho máximo para centrar el contenido */
+  margin: 0 auto; /* Centrar horizontalmente */
+}
+
+.participating-content .dashboard-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+  gap: 2rem;
+  align-items: start;
+}
+
+.participating-content .left-section,
+.participating-content .right-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Asegurar que las cards tengan altura consistente */
+.participating-content :deep(.p-card) {
+  height: fit-content;
+  min-height: 200px; /* Altura mínima para consistencia */
+}
+
+/* Responsive para participating */
+@media (max-width: 768px) {
+  .participating-content .dashboard-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .participating-content .dashboard-layout {
+    max-width: 100%;
+  }
 }
 
 .header-actions {
