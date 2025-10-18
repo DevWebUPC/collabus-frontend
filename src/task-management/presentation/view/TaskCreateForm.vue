@@ -20,6 +20,19 @@
         </div>
       </div>
 
+      <div class ="formr.section">
+        <label class="section-label">Asignar a</label>
+        <pv-dropdown
+            v-model="task.assignedTo"
+            :options="collaborators"
+            option-label="name"
+            option-value="id"
+            placeholder="Seleccionar colaborador"
+            class="w-full"
+            :loading="loadingCollaborators"
+        />
+      </div>
+
       <!-- Descripción -->
       <div class="form-section">
         <label class="section-label">Descripción</label>
@@ -125,7 +138,7 @@
     <!-- Action Buttons -->
     <div class="form-actions">
       <pv-button label="Cancelar" text @click="$emit('cancel')" />
-      <pv-button label="Crear Tarea" @click="createTask" />
+      <pv-button label="Crear Tarea" @click="createTask" :disabled="!isFormValid" />
     </div>
 
     <!-- Modales -->
@@ -141,7 +154,9 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useProjectDetailStore } from '../../../projects/application/project-detail.store.js'
+import { useTaskStore } from '../../application/task-store.js'
 import AddFileModal from '../components/AddFileModal.component.vue'
 import AddLinkModalComponent from '../components/AddLinkModal.component.vue'
 
@@ -153,19 +168,95 @@ export default {
   },
   emits: ['cancel', 'created'],
   setup(props, { emit }) {
+    const projectDetailStore = useProjectDetailStore()
+    const taskStore = useTaskStore()
+
     const showFileModal = ref(false)
     const showLinkModal = ref(false)
+    const loadingCollaborators = ref(false)
 
     const task = ref({
       title: '',
       dueDate: null,
       description: '',
+      assignedTo: null, // NUEVO: ID del colaborador seleccionado
       checklist: [],
       tools: [],
       comment: '',
       attachments: []
     })
 
+    const collaborators = ref([])
+
+    // Computed para validar el formulario
+    const isFormValid = computed(() => {
+      return task.value.title.trim() !== '' &&
+          task.value.assignedTo !== null &&
+          task.value.dueDate !== null
+    })
+
+    // Cargar colaboradores del proyecto
+    const loadCollaborators = async () => {
+      try {
+        loadingCollaborators.value = true
+        // Usar los colaboradores del store del proyecto
+        if (projectDetailStore.project?.collaborators) {
+          collaborators.value = projectDetailStore.project.collaborators.map(collab => ({
+            id: collab.applicantId,
+            name: collab.name,
+            role: collab.role
+          }))
+          console.log('👥 Colaboradores cargados:', collaborators.value)
+        }
+      } catch (error) {
+        console.error('Error cargando colaboradores:', error)
+      } finally {
+        loadingCollaborators.value = false
+      }
+    }
+
+    const createTask = async () => {
+      try {
+        console.log('📝 Creando tarea:', task.value);
+
+        // Obtener información del colaborador seleccionado
+        const selectedCollaborator = collaborators.value.find(c => c.id === task.value.assignedTo);
+
+        if (!selectedCollaborator) {
+          console.error('❌ No se encontró el colaborador seleccionado');
+          return;
+        }
+
+        // Preparar datos para la tarea
+        const taskData = {
+          title: task.value.title,
+          description: task.value.description,
+          dueDate: task.value.dueDate,
+          assignedTo: task.value.assignedTo,
+          assignedToName: selectedCollaborator.name,
+          role: selectedCollaborator.role,
+          checklist: task.value.checklist,
+          tools: task.value.tools,
+          comment: task.value.comment,
+          attachments: task.value.attachments,
+          projectId: projectDetailStore.project.id,
+          createdBy: localStorage.getItem('userId') || '1'
+        }
+
+        console.log('🚀 Enviando tarea a store:', taskData);
+
+        // Usar el store de tareas para crear la tarea
+        const newTask = await taskStore.createTask(taskData);
+
+        console.log('✅ Tarea creada exitosamente:', newTask);
+        emit('created', newTask);
+
+      } catch (error) {
+        console.error('❌ Error creando tarea:', error);
+      }
+    }
+
+    // Métodos existentes sin cambios
     const addChecklistItem = () => {
       task.value.checklist.push({
         id: Date.now(),
@@ -217,23 +308,26 @@ export default {
       }
     }
 
-    const createTask = () => {
-      console.log('Creando tarea:', task.value)
-      emit('created', task.value)
-    }
+    // Cargar colaboradores cuando el componente se monta
+    onMounted(() => {
+      loadCollaborators()
+    })
 
     return {
       showFileModal,
       showLinkModal,
       task,
+      collaborators,
+      loadingCollaborators,
+      isFormValid,
+      createTask,
       addChecklistItem,
       removeChecklistItem,
       addTool,
       removeTool,
       handleFilesAdded,
       handleLinkAdded,
-      removeAttachment,
-      createTask
+      removeAttachment
     }
   }
 }
