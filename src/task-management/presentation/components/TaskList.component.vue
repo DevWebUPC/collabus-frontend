@@ -1,3 +1,4 @@
+<!-- TaskList.component.vue (actualizado) -->
 <template>
   <div class="task-list">
     <!-- Encabezados de la tabla -->
@@ -35,45 +36,44 @@
           <div class="due-date">
             {{ formatDate(task.dueDate) }}
           </div>
-          <div
-              v-if="isOverdue(task)"
-              class="overdue-badge"
-          >
-            Vencido
-          </div>
         </div>
 
         <div class="task-col estado">
           <span
               class="status-badge"
-              :class="getStatusClass(task.status)"
+              :class="getStatusClass(getActualStatus(task))"
           >
-            {{ getStatusText(task.status) }}
+            {{ getStatusText(getActualStatus(task)) }}
           </span>
         </div>
 
         <div class="task-col acciones">
           <div class="action-buttons">
+            <!-- Solo mostrar botón "Ver Tarea" para tareas NO retrasadas -->
             <pv-button
+                v-if="getActualStatus(task) !== 'retrasado'"
                 label="Ver Tarea"
                 class="view-task-btn"
                 :disabled="true"
             />
-            <pv-button
-                v-if="task.status === 'retrasado'"
-                icon="pi pi-trash"
-                text
-                severity="danger"
-                class="action-btn delete-btn"
-                @click="$emit('delete', task)"
-            />
-            <pv-button
-                v-if="task.status === 'retrasado'"
-                icon="pi pi-calendar"
-                text
-                class="action-btn date-btn"
-                @click="$emit('updateDate', task)"
-            />
+
+            <!-- Solo mostrar botones para tareas retrasadas -->
+            <template v-if="getActualStatus(task) === 'retrasado'">
+              <div class="vertical-buttons">
+                <pv-button
+                    label="Eliminar"
+                    severity="danger"
+                    class="action-btn delete-btn"
+                    @click="$emit('delete', task)"
+                />
+                <pv-button
+                    label="Cambiar Fecha"
+                    severity="secondary"
+                    class="action-btn date-btn"
+                    @click="$emit('updateDate', task)"
+                />
+              </div>
+            </template>
           </div>
         </div>
       </div>
@@ -127,7 +127,6 @@ export default {
       const statusClasses = {
         'completed': 'status-completed',
         'pending': 'status-pending',
-        'in_progress': 'status-in-progress',
         'retrasado': 'status-overdue'
       }
       return statusClasses[status] || 'status-pending'
@@ -137,16 +136,42 @@ export default {
       const statusTexts = {
         'completed': 'Completado',
         'pending': 'Pendiente',
-        'in_progress': 'En Progreso',
         'retrasado': 'Retrasado'
       }
       return statusTexts[status] || 'Pendiente'
+    },
+
+    /**
+     * Determinar el estado real de la tarea considerando la fecha de vencimiento
+     */
+    getActualStatus(task) {
+      if (task.status === 'completed') return 'completed';
+
+      // ✅ USAR EL MÉTODO DE LA ENTIDAD EN LUGAR DE CÁLCULO MANUAL
+      if (task.isOverdue && task.isOverdue()) {
+        return 'retrasado';
+      }
+
+      // ✅ VERIFICAR DIRECTAMENTE SI LA FECHA ESTÁ VENCIDA
+      if (task.dueDate) {
+        const dueDate = new Date(task.dueDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Solo comparar fechas, no horas
+
+        if (dueDate < today) {
+          return 'retrasado';
+        }
+      }
+
+      return task.status || 'pending';
+
     }
   }
 }
 </script>
 
 <style scoped>
+/* Los estilos permanecen iguales */
 .task-list {
   width: 100%;
 }
@@ -230,15 +255,6 @@ export default {
   color: #374151;
 }
 
-.overdue-badge {
-  font-size: 0.7rem;
-  color: #dc2626;
-  background: #fef2f2;
-  padding: 0.125rem 0.5rem;
-  border-radius: 12px;
-  font-weight: 500;
-}
-
 .status-badge {
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
@@ -259,10 +275,6 @@ export default {
   color: #92400e;
 }
 
-.status-in-progress {
-  background: #dbeafe;
-  color: #1e40af;
-}
 
 .status-overdue {
   background: #fecaca;
@@ -276,6 +288,13 @@ export default {
   align-items: center;
 }
 
+.vertical-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
 .view-task-btn {
   background: #9ca3af !important;
   color: white !important;
@@ -286,6 +305,7 @@ export default {
   font-weight: 500;
   cursor: not-allowed;
   opacity: 0.6;
+  width: 100%;
 }
 
 .view-task-btn:hover {
@@ -294,28 +314,37 @@ export default {
 }
 
 .action-btn {
-  width: 32px;
-  height: 32px;
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
 }
 
 .delete-btn {
-  color: #ef4444;
+  background: #ef4444 !important;
+  color: white !important;
 }
 
 .delete-btn:hover {
-  background: #fecaca;
+  background: #dc2626 !important;
+  transform: translateY(-1px);
 }
 
 .date-btn {
-  color: #f59e0b;
+  background: #8b5cf6 !important;
+  color: white !important;
 }
 
 .date-btn:hover {
-  background: #fef3c7;
+  background: #7c3aed !important;
+  transform: translateY(-1px);
 }
 
 .empty-state {
@@ -372,7 +401,16 @@ export default {
     flex-wrap: wrap;
   }
 
+  .vertical-buttons {
+    width: 100%;
+  }
+
   .view-task-btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .action-btn {
     width: 100%;
     margin-bottom: 0.5rem;
   }
