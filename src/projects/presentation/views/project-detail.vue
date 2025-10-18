@@ -11,12 +11,14 @@ import RecentNotificationsCard from '../components/detail/my-projects/RecentNoti
 import UpcomingMilestonesCard from '../components/detail/my-projects/UpcomingMilestonesCard.vue';
 import UrgentTasksCard from '../components/detail/my-projects/UrgentTasksCard.vue';
 import ApplicantsCard from '../components/detail/my-projects/ApplicantsCard.vue';
-import ProjectTasksView from '../../../task-management/presentation/view/ProjectTasksView.vue';
 // Participating
 import MyTaskCard from "../components/detail/participating/MyTaskCard.vue";
 import ProjectProgressCardParticipating from "../components/detail/participating/ProjectProgressCardParticipating.vue";
 import RecentActivityCard from "../components/detail/participating/RecentActivityCard.vue";
 import UpcomingMilestonesCardParticipating from "../components/detail/participating/UpcomingMilestonesCardParticipating.vue";
+// Task Management
+import ProjectTasksView from '../../../task-management/presentation/view/ProjectTasksView.vue';
+import ParticipatingTasksView from "../../../task-management/presentation/view/ParticipatingTasksView.vue";
 
 import EmptyTabContent from '../components/detail/EmptyTabContent.vue';
 import { useUserStore } from '../../../iam/application/user-store.js';
@@ -231,14 +233,10 @@ watch(
             v-else-if="activeTab === 'tasks' && store.isOwned"
         />
 
-        <div v-else-if="activeTab === 'tasks' && !store.isOwned" class="participating-tasks">
-          <EmptyTabContent
-              tab-name="tasks"
-              icon="pi-tasks"
-              :message="$t('projects.detail.participatingTasksMessage')"
-          />
-          <!-- O puedes crear un componente específico para las tareas de participantes -->
-        </div>
+        <ParticipatingTasksView
+            v-else-if="activeTab === 'tasks' && !store.isOwned"
+        />
+
 
         <EmptyTabContent
             v-else-if="activeTab === 'milestones'"
