@@ -4,12 +4,12 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useProjectDetailStore } from '../../application/project-detail.store.js';
 import { watch } from 'vue';
-import ProjectProgressCard from '../components/detail/ProjectProgressCard.vue';
-import CollaboratorsCard from '../components/detail/CollaboratorsCard.vue';
-import RecentNotificationsCard from '../components/detail/RecentNotificationsCard.vue';
-import UpcomingMilestonesCard from '../components/detail/UpcomingMilestonesCard.vue';
-import UrgentTasksCard from '../components/detail/UrgentTasksCard.vue';
-import ApplicantsCard from '../components/detail/ApplicantsCard.vue';
+import ProjectProgressCard from '../components/detail/my-projects/ProjectProgressCard.vue';
+import CollaboratorsCard from '../components/detail/my-projects/CollaboratorsCard.vue';
+import RecentNotificationsCard from '../components/detail/my-projects/RecentNotificationsCard.vue';
+import UpcomingMilestonesCard from '../components/detail/my-projects/UpcomingMilestonesCard.vue';
+import UrgentTasksCard from '../components/detail/my-projects/UrgentTasksCard.vue';
+import ApplicantsCard from '../components/detail/my-projects/ApplicantsCard.vue';
 import ProjectTasksView from '../../../task-management/presentation/view/ProjectTasksView.vue';
 
 import EmptyTabContent from '../components/detail/EmptyTabContent.vue';

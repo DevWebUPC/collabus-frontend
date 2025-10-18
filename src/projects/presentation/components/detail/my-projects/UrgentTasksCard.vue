@@ -48,7 +48,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useProjectDetailStore } from '../../../application/project-detail.store.js';
+import { useProjectDetailStore } from '../../../../application/project-detail.store.js';
 
 const route = useRoute();
 const store = useProjectDetailStore();

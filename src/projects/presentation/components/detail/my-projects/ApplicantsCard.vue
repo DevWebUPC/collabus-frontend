@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
-import { useApplicationStore } from '../../../application/application.store.js';
-import {useProjectDetailStore} from "../../../application/project-detail.store.js";
+import { useApplicationStore } from '../../../../application/application.store.js';
+import {useProjectDetailStore} from "../../../../application/project-detail.store.js";
 
 const applicationStore = useApplicationStore();
 const projectDetailStore = useProjectDetailStore();

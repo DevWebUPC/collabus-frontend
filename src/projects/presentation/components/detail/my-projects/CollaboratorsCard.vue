@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { useProjectDetailStore } from '../../../application/project-detail.store.js';
+import { useProjectDetailStore } from '../../../../application/project-detail.store.js';
 import { computed } from 'vue';
 
 const projectDetailStore = useProjectDetailStore();
