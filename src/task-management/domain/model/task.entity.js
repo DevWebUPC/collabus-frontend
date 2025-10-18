@@ -30,6 +30,10 @@ export class Task {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate ? new Date(dueDate) : null;
+        let finalStatus = status;
+        if (status !== 'completed' && this.dueDate && new Date() > this.dueDate) {
+            finalStatus = 'retrasado';
+        }
         this.status = status;
         this.priority = priority;
         this.projectId = projectId;
@@ -64,6 +68,33 @@ export class Task {
         this.updatedAt = updatedAt ? new Date(updatedAt) : new Date();
         this.completedAt = completedAt ? new Date(completedAt) : null;
     }
+    /**
+     * Actualizar estado automáticamente basado en fecha de vencimiento
+     */
+    updateStatusBasedOnDueDate() {
+        if (this.status === 'completed') return;
+
+        const now = new Date();
+        const dueDate = new Date(this.dueDate);
+
+        if (this.dueDate && dueDate < now) {
+            // Si la fecha es pasada, marcar como retrasado
+            this.status = 'retrasado';
+            this.updatedAt = new Date();
+        } else if (this.status === 'retrasado' && this.dueDate && dueDate >= now) {
+            // Si ya no está vencida, volver a pendiente
+            this.status = 'pending';
+            this.updatedAt = new Date();
+        }
+    }
+
+    /**
+     * Validar y actualizar estado antes de guardar
+     */
+    validateAndUpdateStatus() {
+        this.updateStatusBasedOnDueDate();
+        return this.validate();
+    }
 
     /**
      * Generate a simple unique ID
@@ -76,8 +107,16 @@ export class Task {
     // Business logic methods
 
     isOverdue() {
-        if (!this.dueDate) return false;
-        return new Date() > this.dueDate && this.status !== 'completed';
+        if (!this.dueDate || this.status === 'completed') return false;
+
+        const now = new Date();
+        const dueDate = new Date(this.dueDate);
+
+        // Solo comparar fechas (ignorar horas)
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const due = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate());
+
+        return due < today;
     }
 
     isCompleted() {
