@@ -22,16 +22,14 @@
       </div>
     </div>
 
-    <!-- Encabezados de la tabla -->
-    <div class="table-headers">
-      <div class="header-col colaborador">Colaborador</div>
-      <div class="header-col tarea">Tarea</div>
-      <div class="header-col vencimiento">Vencimiento</div>
-      <div class="header-col estado">Estado</div>
-    </div>
-
-    <!-- Línea separadora -->
-    <div class="separator"></div>
+    <!-- Componente TaskList -->
+    <TaskList
+        :tasks="projectTasks"
+        @view="viewTask"
+        @delete="deleteTask"
+        @updateDate="updateDueDate"
+        @create="showCreateForm = true"
+    />
 
     <!-- Modal de creación de tareas -->
     <pv-dialog
@@ -49,37 +47,63 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useProjectDetailStore } from '../../../projects/application/project-detail.store.js'
+import { useTaskStore } from '../../application/task-store.js'
 import TaskCreateForm from './TaskCreateForm.vue'
+import TaskList from '../components/TaskList.component.vue'
 
 export default {
   name: 'ProjectTasksView',
   components: {
-    TaskCreateForm
+    TaskCreateForm,
+    TaskList
   },
   setup() {
     const showCreateForm = ref(false)
     const projectDetailStore = useProjectDetailStore()
+    const taskStore = useTaskStore()
 
-    const handleTaskCreated = async (taskData) => {
-      console.log('✅ Tarea creada exitosamente:', taskData)
-      showCreateForm.value = false
+    const projectTasks = computed(() => {
+      if (!projectDetailStore.project?.id) return []
+      return taskStore.getProjectTasks(projectDetailStore.project.id)
+    })
 
-      // Recargar las tareas del proyecto
+    onMounted(async () => {
       if (projectDetailStore.project?.id) {
-        // Aquí podrías recargar la lista de tareas si es necesario
-        console.log('🔄 Tarea agregada al proyecto')
+        await taskStore.loadProjectTasks(projectDetailStore.project.id)
+      }
+    })
+
+    const viewTask = (task) => {
+      console.log('Ver tarea:', task)
+      // Aquí puedes implementar la lógica para ver la tarea
+    }
+
+    const deleteTask = async (task) => {
+      if (confirm(`¿Eliminar "${task.title}"?`)) {
+        await taskStore.deleteTask(projectDetailStore.project.id, task.id)
       }
     }
 
-    // Verificar si hay colaboradores al cargar
-    onMounted(() => {
-      console.log('👥 Colaboradores disponibles:', projectDetailStore.project?.collaborators)
-    })
+    const updateDueDate = (task) => {
+      console.log('Actualizar fecha para:', task)
+      // Aquí puedes implementar la lógica para actualizar fecha
+    }
+
+    const handleTaskCreated = async () => {
+      showCreateForm.value = false
+      if (projectDetailStore.project?.id) {
+        await taskStore.loadProjectTasks(projectDetailStore.project.id)
+      }
+    }
 
     return {
       showCreateForm,
+      projectTasks,
+      viewTask,
+      deleteTask,
+      updateDueDate,
       handleTaskCreated
     }
   }
@@ -136,72 +160,5 @@ export default {
 .dropdown-arrow {
   font-size: 0.75rem;
   color: #6b7280;
-}
-
-.table-headers {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr 1fr;
-  gap: 1rem;
-  padding: 0.75rem 0;
-  background: #f8f9fa;
-  border-radius: 6px;
-  margin-bottom: 0.5rem;
-}
-
-.header-col {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #374151;
-  text-align: left;
-  padding: 0 1rem;
-}
-
-.header-col.colaborador {
-  grid-column: 1;
-}
-
-.header-col.tarea {
-  grid-column: 2;
-}
-
-.header-col.vencimiento {
-  grid-column: 3;
-}
-
-.header-col.estado {
-  grid-column: 4;
-}
-
-.separator {
-  height: 1px;
-  background: #e5e7eb;
-  margin: 0.5rem 0;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .tasks-container {
-    padding: 1rem;
-  }
-
-  .filters-container {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .filter-item {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .table-headers {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-    padding: 1rem;
-  }
-
-  .header-col {
-    padding: 0.25rem 0;
-  }
 }
 </style>
