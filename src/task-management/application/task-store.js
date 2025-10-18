@@ -248,17 +248,17 @@ export const useTaskStore = defineStore('task', {
         /**
          * Load a specific task by ID
          */
-        async loadTask(taskId) {
+        async loadTask(projectId, taskId) {  // ✅ AGREGAR projectId como parámetro
             try {
                 this.setLoading(true);
                 this.clearError();
 
                 const tasksApi = new TasksApi();
-                const response = await tasksApi.getTask(taskId);
+                const response = await tasksApi.getTask(projectId, taskId);  // ✅ Pasar projectId
 
                 this.currentTask = TaskAssembler.fromApiToEntity(response.data);
 
-                console.log(`✅ Loaded task: ${this.currentTask.title}`);
+                console.log(`✅ Loaded task: ${this.currentTask?.title}`);
                 return this.currentTask;
             } catch (error) {
                 const errorMsg = `Error loading task: ${error.message}`;
