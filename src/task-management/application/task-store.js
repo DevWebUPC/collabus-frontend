@@ -146,6 +146,27 @@ export const useTaskStore = defineStore('task', {
         },
 
         /**
+         * Actualizar estados de tareas vencidas automáticamente
+         */
+        updateOverdueTasksStatus() {
+            const now = new Date();
+
+            this.tasks.forEach(task => {
+                if (task.status !== 'completed' &&
+                    task.dueDate &&
+                    new Date(task.dueDate) < now) {
+                    task.status = 'retrasado';
+                }
+            });
+
+            // Limpiar caches ya que los estados han cambiado
+            this.projectTasks.clear();
+            this.collaboratorTasks.clear();
+        },
+
+
+
+        /**
          * Set error
          */
         setError(error) {
@@ -172,14 +193,16 @@ export const useTaskStore = defineStore('task', {
 
                 const tasks = TaskAssembler.fromApiArrayToEntityArray(response.data);
 
-                // Actualizar cache de proyecto
-                this.projectTasks.set(projectId, tasks);
-
-                // Actualizar lista global de tareas
+                // Actualizar estados de tareas vencidas
                 this.tasks = [
                     ...this.tasks.filter(task => task.projectId !== projectId),
                     ...tasks
                 ];
+
+                this.updateOverdueTasksStatus();
+
+                // Actualizar cache de proyecto
+                this.projectTasks.set(projectId, tasks);
 
                 console.log(`✅ Loaded ${tasks.length} tasks for project ${projectId}`);
                 return tasks;
@@ -298,6 +321,9 @@ export const useTaskStore = defineStore('task', {
         /**
          * Update a task
          */
+        /**
+         * Update a task
+         */
         async updateTask(projectId, taskId, updateData) {
             try {
                 this.setLoading(true);
@@ -307,6 +333,9 @@ export const useTaskStore = defineStore('task', {
                 const response = await tasksApi.updateTask(projectId, taskId, updateData);
 
                 const updatedTask = TaskAssembler.fromApiToEntity(response.data);
+
+                // ✅ ACTUALIZAR ESTADO BASADO EN FECHA ANTES DE GUARDAR
+                updatedTask.updateStatusBasedOnDueDate();
 
                 // Actualizar en la lista global
                 const index = this.tasks.findIndex(task => task.id === taskId);
@@ -318,6 +347,9 @@ export const useTaskStore = defineStore('task', {
                 if (this.currentTask && this.currentTask.id === taskId) {
                     this.currentTask = updatedTask;
                 }
+
+                // ✅ EJECUTAR ACTUALIZACIÓN DE ESTADOS VENCIDOS
+                this.updateOverdueTasksStatus();
 
                 // Invalidar caches relevantes
                 this.projectTasks.delete(updatedTask.projectId);
@@ -411,21 +443,17 @@ export const useTaskStore = defineStore('task', {
                 const tasksApi = new TasksApi();
                 await tasksApi.deleteTask(projectId, taskId);
 
-                // Eliminar de la lista global
+                // ✅ ELIMINAR INMEDIATAMENTE de la lista global
                 this.tasks = this.tasks.filter(task => task.id !== taskId);
 
-                // Limpiar current task si es el mismo
+                // ✅ LIMPIAR current task si es el mismo
                 if (this.currentTask && this.currentTask.id === taskId) {
                     this.currentTask = null;
                 }
 
-                // Invalidar caches relevantes
-                this.projectTasks.delete(projectId);
-                this.collaboratorTasks.forEach((_, key) => {
-                    if (key.includes(projectId)) {
-                        this.collaboratorTasks.delete(key);
-                    }
-                });
+                // ✅ INVALIDAR CACHES COMPLETAMENTE
+                this.projectTasks.clear();
+                this.collaboratorTasks.clear();
 
                 console.log(`✅ Deleted task: ${taskId}`);
                 return true;
