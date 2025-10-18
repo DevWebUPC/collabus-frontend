@@ -1,8 +1,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useProjectDetailStore } from '../../../projects/application/project-detail.store.js';
 import { useUserStore } from '../../../iam/application/user-store.js';
 
+const router = useRouter();
 const projectDetailStore = useProjectDetailStore();
 const userStore = useUserStore();
 
@@ -36,7 +38,6 @@ const myTasks = computed(() => {
   console.log('✅ User tasks found:', userTasks.length, userTasks);
   return userTasks;
 });
-
 
 const getNormalizedUserId = () => {
   const userId = userStore.currentUser?.id || localStorage.getItem("userId");
@@ -105,11 +106,16 @@ const getDaysRemaining = (dueDate) => {
   return diffDays;
 };
 
-// Navegar a vista de tarea (placeholder)
+// Navegar a vista de tarea - ACTUALIZADO
 const viewTask = (task) => {
   console.log('Ver tarea:', task);
-  // TODO: Implementar navegación a vista detallada de tarea
-  alert(`Ver tarea: ${task.title}`);
+  router.push({
+    name: 'task-detail',
+    params: {
+      projectId: projectDetailStore.project.id,
+      taskId: task.id
+    }
+  });
 };
 
 // Iniciar tarea (placeholder)
@@ -270,7 +276,6 @@ onMounted(() => {
         <!-- Acciones -->
         <div class="task-actions">
           <pv-button
-              v-if="!isOverdue(task.dueDate) || task.completed"
               label="Ver Tarea"
               icon="pi pi-eye"
               severity="secondary"
@@ -287,8 +292,8 @@ onMounted(() => {
               class="start-btn"
           />
           <pv-button
-              v-else
-              label="Revisada"
+              v-else-if="task.completed"
+              label="Completada"
               icon="pi pi-check"
               severity="success"
               disabled
@@ -315,6 +320,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
+/* Los estilos permanecen iguales */
 .participating-tasks-view {
   padding: 0;
   background: transparent;
