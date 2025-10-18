@@ -1,6 +1,7 @@
 // task-management/presentation/task-routes.js
 const ProjectTasksView = () => import('./view/ProjectTasksView.vue');
-const TaskCreateView = () => import('./view/TaskCreateForm.vue'); // Si necesitas vista separada
+const TaskCreateView = () => import('./view/TaskCreateForm.vue');
+const TaskDetail = () => import('./view/TaskDetail.vue');
 
 export const taskRoutes = [
     {
@@ -19,6 +20,16 @@ export const taskRoutes = [
         component: TaskCreateView,
         meta: {
             title: 'Create Task',
+            requiresAuth: true
+        },
+        props: true
+    },
+    {
+        path: '/projects/:projectId/tasks/:taskId',
+        name: 'task-detail',
+        component: TaskDetail,
+        meta: {
+            title: 'Task Detail',
             requiresAuth: true
         },
         props: true
