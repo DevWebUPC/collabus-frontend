@@ -207,7 +207,18 @@ watch(
         </div>
 
         <!-- Other tabs content -->
-        <ProjectTasksView v-else-if="activeTab === 'tasks'" />
+        <ProjectTasksView
+            v-else-if="activeTab === 'tasks' && store.isOwned"
+        />
+
+        <div v-else-if="activeTab === 'tasks' && !store.isOwned" class="participating-tasks">
+          <EmptyTabContent
+              tab-name="tasks"
+              icon="pi-tasks"
+              :message="$t('projects.detail.participatingTasksMessage')"
+          />
+          <!-- O puedes crear un componente específico para las tareas de participantes -->
+        </div>
 
         <EmptyTabContent
             v-else-if="activeTab === 'milestones'"
