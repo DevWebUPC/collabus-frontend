@@ -49,7 +49,8 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useProjectDetailStore } from '../../../projects/application/project-detail.store.js'
 import TaskCreateForm from './TaskCreateForm.vue'
 
 export default {
@@ -59,11 +60,23 @@ export default {
   },
   setup() {
     const showCreateForm = ref(false)
+    const projectDetailStore = useProjectDetailStore()
 
-    const handleTaskCreated = (taskData) => {
-      console.log('Tarea creada:', taskData)
+    const handleTaskCreated = async (taskData) => {
+      console.log('✅ Tarea creada exitosamente:', taskData)
       showCreateForm.value = false
+
+      // Recargar las tareas del proyecto
+      if (projectDetailStore.project?.id) {
+        // Aquí podrías recargar la lista de tareas si es necesario
+        console.log('🔄 Tarea agregada al proyecto')
+      }
     }
+
+    // Verificar si hay colaboradores al cargar
+    onMounted(() => {
+      console.log('👥 Colaboradores disponibles:', projectDetailStore.project?.collaborators)
+    })
 
     return {
       showCreateForm,
@@ -72,6 +85,7 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 .tasks-container {
   padding: 1.5rem;
