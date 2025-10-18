@@ -29,6 +29,12 @@ const navigateBack = () => {
   router.push({ name: 'projects' });
 };
 
+// Manejar navegación a tasks desde UrgentTasksCard
+const handleViewAllTasks = () => {
+  console.log('🎯 Navegando a pestaña Tasks desde UrgentTasksCard');
+  activeTab.value = 'tasks';
+};
+
 onMounted(async () => {
   console.log('🎯 Project Detail mounted - ID:', route.params.id);
   console.log('👤 Current user ID:', userStore.currentUser?.id);
@@ -186,7 +192,7 @@ watch(
                 <!-- Columna derecha: Hitos y Tareas -->
                 <div class="right-section">
                   <UpcomingMilestonesCard />
-                  <UrgentTasksCard />
+                  <UrgentTasksCard @view-all-tasks="handleViewAllTasks" />
                 </div>
               </div>
             </div>
@@ -203,7 +209,6 @@ watch(
         <!-- Other tabs content -->
         <ProjectTasksView v-else-if="activeTab === 'tasks'" />
 
-
         <EmptyTabContent
             v-else-if="activeTab === 'milestones'"
             tab-name="milestones"
@@ -218,7 +223,6 @@ watch(
 
         <ApplicantsCard v-else-if="activeTab === 'applicants'" />
 
-
         <EmptyTabContent
             v-else-if="activeTab === 'feedback'"
             tab-name="feedback"
@@ -230,6 +234,7 @@ watch(
 </template>
 
 <style scoped>
+/* Tus estilos existentes se mantienen igual */
 .project-detail-container {
   max-width: 1200px;
   margin: 0 auto;
