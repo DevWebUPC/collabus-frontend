@@ -20,60 +20,65 @@
 
         <!-- Tasks List -->
         <div v-else class="tasks-container">
-          <div
-              v-for="task in myTasks"
-              :key="task.id"
-              class="task-item"
-              :class="{
-              'overdue': isOverdue(task.dueDate) && !task.completed,
-              'completed': task.completed
-            }"
-          >
-            <div class="task-info">
-              <div class="task-header">
-                <h4 class="task-title">{{ task.title }}</h4>
-                <span v-if="task.completed" class="status-badge completed">
-                  <i class="pi pi-check-circle"></i>
-                  Completada
-                </span>
-                <span v-else-if="isOverdue(task.dueDate)" class="status-badge overdue">
-                  <i class="pi pi-exclamation-triangle"></i>
-                  Vencida
-                </span>
-                <span v-else class="status-badge pending">
-                  <i class="pi pi-clock"></i>
-                  Pendiente
-                </span>
-              </div>
-
-              <p class="task-description">{{ task.description || 'Sin descripción' }}</p>
-
-              <div class="task-meta">
-                <div class="meta-item">
-                  <i class="pi pi-calendar"></i>
-                  <span class="meta-text">
-                    {{ formatDate(task.dueDate) }}
-                    <span v-if="!task.completed && getDaysRemaining(task.dueDate) !== null"
-                          class="days-remaining"
-                          :class="{ 'overdue': isOverdue(task.dueDate) }">
-                      ({{ isOverdue(task.dueDate) ? Math.abs(getDaysRemaining(task.dueDate)) + ' días de retraso' : getDaysRemaining(task.dueDate) + ' días restantes' }})
-                    </span>
+          <div class="tasks-scroll-container">
+            <div
+                v-for="task in myTasks"
+                :key="task.id"
+                class="task-item"
+                :class="{
+                'overdue': isOverdue(task.dueDate) && !task.completed,
+                'completed': task.completed
+              }"
+            >
+              <div class="task-info">
+                <div class="task-header">
+                  <h4 class="task-title">{{ task.title }}</h4>
+                  <span v-if="task.completed" class="status-badge completed">
+                    <i class="pi pi-check-circle"></i>
+                    Completada
+                  </span>
+                  <span v-else-if="isOverdue(task.dueDate)" class="status-badge overdue">
+                    <i class="pi pi-exclamation-triangle"></i>
+                    Vencida
+                  </span>
+                  <span v-else class="status-badge pending">
+                    <i class="pi pi-clock"></i>
+                    Pendiente
                   </span>
                 </div>
 
-                <div class="meta-item">
-                  <i class="pi pi-briefcase"></i>
-                  <span class="meta-text">{{ task.role || 'Sin rol específico' }}</span>
+                <p class="task-description">{{ task.description || 'Sin descripción' }}</p>
+
+                <div class="task-meta">
+                  <div class="meta-item">
+                    <i class="pi pi-calendar"></i>
+                    <span class="meta-text">
+                      {{ formatDate(task.dueDate) }}
+                      <span v-if="!task.completed && getDaysRemaining(task.dueDate) !== null"
+                            class="days-remaining"
+                            :class="{ 'overdue': isOverdue(task.dueDate) }">
+                        ({{ isOverdue(task.dueDate) ? Math.abs(getDaysRemaining(task.dueDate)) + ' días de retraso' : getDaysRemaining(task.dueDate) + ' días restantes' }})
+                      </span>
+                    </span>
+                  </div>
+
+                  <div class="meta-item">
+                    <i class="pi pi-briefcase"></i>
+                    <span class="meta-text">{{ task.role || 'Sin rol específico' }}</span>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
 
+          <!-- Botón general Ver Tareas -->
+          <div class="view-all-tasks-btn-container">
             <pv-button
-                label="Ver Tarea"
+                label="Ver Tareas"
                 icon="pi pi-arrow-right"
-                text
                 @click="viewAllTasks"
-                class="view-task-btn"
+                class="view-all-tasks-btn"
+                outlined
             />
           </div>
         </div>
@@ -180,7 +185,7 @@ onMounted(() => {
 .tasks-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  height: 100%;
 }
 
 /* Estados de carga y vacío */
@@ -192,6 +197,7 @@ onMounted(() => {
   padding: 2rem;
   gap: 1rem;
   color: var(--color-gray-600);
+  height: 200px;
 }
 
 .empty-state {
@@ -202,6 +208,7 @@ onMounted(() => {
   padding: 2rem;
   text-align: center;
   color: var(--color-gray-500);
+  height: 200px;
 }
 
 .empty-icon {
@@ -224,7 +231,37 @@ onMounted(() => {
 .tasks-container {
   display: flex;
   flex-direction: column;
+  height: 100%;
   gap: 1rem;
+}
+
+.tasks-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 400px; /* Altura máxima antes de mostrar scroll */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-right: 0.25rem;
+}
+
+/* Personalizar scrollbar */
+.tasks-scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tasks-scroll-container::-webkit-scrollbar-track {
+  background: var(--color-gray-100);
+  border-radius: 3px;
+}
+
+.tasks-scroll-container::-webkit-scrollbar-thumb {
+  background: var(--color-gray-300);
+  border-radius: 3px;
+}
+
+.tasks-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-400);
 }
 
 .task-item {
@@ -236,6 +273,7 @@ onMounted(() => {
   border-radius: 8px;
   border-left: 4px solid var(--color-primary);
   transition: all 0.2s ease;
+  flex-shrink: 0; /* Evita que las tareas se compriman */
 }
 
 .task-item:hover {
@@ -345,20 +383,33 @@ onMounted(() => {
   color: var(--color-red-600);
 }
 
-.view-task-btn {
-  color: var(--color-primary);
-  font-size: 0.8rem;
-  font-weight: 500;
-  white-space: nowrap;
-  margin-left: 1rem;
+/* Contenedor y botón Ver Tareas */
+.view-all-tasks-btn-container {
+  display: flex;
+  justify-content: center;
+  margin-top: auto; /* Empuja el botón hacia abajo */
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-gray-200);
+  flex-shrink: 0; /* Evita que el botón se comprima */
 }
 
-.view-task-btn:hover {
-  background: var(--color-primary-50);
+.view-all-tasks-btn {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  font-weight: 500;
+}
+
+.view-all-tasks-btn:hover {
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
+  .tasks-scroll-container {
+    max-height: 350px; /* Altura menor en móviles */
+  }
+
   .task-item {
     flex-direction: column;
     gap: 1rem;
@@ -368,11 +419,6 @@ onMounted(() => {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
-  }
-
-  .view-task-btn {
-    align-self: flex-end;
-    margin-left: 0;
   }
 }
 </style>
