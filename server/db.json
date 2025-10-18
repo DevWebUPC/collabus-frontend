@@ -791,8 +791,28 @@
       "progress": 0,
       "userId": "1",
       "authorName": "Vitaly Baca",
-      "collaborators": [],
-      "tasks": [],
+      "collaborators": [
+        {
+          "id": "1760755114175",
+          "applicantId": 2,
+          "name": "Sebastian Pariachi",
+          "role": "prueba1",
+          "roleId": 1760636758828,
+          "progress": 0,
+          "joinedAt": "2025-10-18T02:38:34.175Z"
+        },
+        {
+          "id": "1760755122629",
+          "applicantId": 6,
+          "name": "Luis Fernandez Garcia",
+          "role": "prueba",
+          "roleId": 1760636802707,
+          "progress": 0,
+          "joinedAt": "2025-10-18T02:38:42.629Z"
+        }
+      ],
+      "tasks": [
+      ],
       "milestones": [],
       "createdAt": "2025-10-16T17:46:54.022Z",
       "updatedAt": "2025-10-16T17:46:54.022Z",
@@ -869,7 +889,11 @@
       "acceptedTerms": true,
       "cvFile": null,
       "cvFileName": "",
-      "id": 1
+      "id": 1,
+      "status": "accepted",
+      "reviewNotes": "Aplicante aceptado en el proyecto",
+      "reviewerId": 1,
+      "reviewedAt": "2025-10-18T02:38:34.078Z"
     },
     {
       "projectId": 1,
@@ -883,7 +907,11 @@
       "acceptedTerms": true,
       "cvFile": null,
       "cvFileName": "",
-      "id": 2
+      "id": 2,
+      "status": "rejected",
+      "reviewNotes": "Aplicante rechazado",
+      "reviewerId": 1,
+      "reviewedAt": "2025-10-18T02:38:35.375Z"
     },
     {
       "projectId": 1,
@@ -897,7 +925,11 @@
       "acceptedTerms": true,
       "cvFile": null,
       "cvFileName": "",
-      "id": 3
+      "id": 3,
+      "status": "accepted",
+      "reviewNotes": "Aplicante aceptado en el proyecto",
+      "reviewerId": 1,
+      "reviewedAt": "2025-10-18T02:38:42.602Z"
     }
   ],
   "categories": [
