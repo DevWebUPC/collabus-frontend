@@ -1,4 +1,4 @@
-<!-- CollaboratorsCard.vue - VERSIÓN ACTUALIZADA Y REACTIVA -->
+<!-- CollaboratorsCard.vue - VERSIÓN SIMPLIFICADA -->
 <template>
   <pv-card class="collaborators-card">
     <template #title>
@@ -12,18 +12,17 @@
       </div>
 
       <div v-else class="collaborators-list">
-        <div v-for="collaborator in collaborators" :key="collaborator.id" class="collaborator-item">
+        <div v-for="collaborator in collaboratorsWithProgress" :key="collaborator.id" class="collaborator-item">
           <div class="collaborator-info">
             <span class="collaborator-name">{{ collaborator.name }}</span>
             <span class="collaborator-role">{{ collaborator.role }}</span>
           </div>
           <div class="collaborator-progress">
-            <span class="progress-label">Progreso</span>
             <div class="progress-bar-container">
               <div class="progress-bar">
-                <div class="progress-fill" :style="{ width: collaborator.progress + '%' }"></div>
+                <div class="progress-fill" :style="{ width: collaborator.calculatedProgress + '%' }"></div>
               </div>
-              <span class="progress-value">{{ collaborator.progress }}%</span>
+              <span class="progress-value">{{ collaborator.calculatedProgress }}%</span>
             </div>
           </div>
         </div>
@@ -43,7 +42,42 @@ const collaborators = computed(() => {
   return projectDetailStore.project?.collaborators || [];
 });
 
-console.log('👥 CollaboratorsCard loaded with:', collaborators.value);
+// ✅ Calcular progreso real basado en tareas
+const collaboratorsWithProgress = computed(() => {
+  if (!collaborators.value.length || !projectDetailStore.project?.tasks) {
+    return collaborators.value;
+  }
+
+  return collaborators.value.map(collaborator => {
+    // Filtrar tareas asignadas a este colaborador
+    const collaboratorTasks = projectDetailStore.project.tasks.filter(
+        task => task.assignedTo === collaborator.applicantId
+    );
+
+    const totalTasks = collaboratorTasks.length;
+
+    if (totalTasks === 0) {
+      return {
+        ...collaborator,
+        calculatedProgress: 0
+      };
+    }
+
+    // Calcular progreso basado en el campo progress de cada tarea
+    const totalProgress = collaboratorTasks.reduce((sum, task) => {
+      return sum + (task.progress || 0);
+    }, 0);
+
+    const calculatedProgress = Math.round(totalProgress / totalTasks);
+
+    return {
+      ...collaborator,
+      calculatedProgress
+    };
+  });
+});
+
+console.log('👥 CollaboratorsCard loaded with progress:', collaboratorsWithProgress.value);
 </script>
 
 <style scoped>
@@ -61,7 +95,7 @@ console.log('👥 CollaboratorsCard loaded with:', collaborators.value);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
+  padding: 0.75rem 0;
   border-bottom: 1px solid var(--color-gray-200);
 }
 
@@ -72,11 +106,13 @@ console.log('👥 CollaboratorsCard loaded with:', collaborators.value);
 .collaborator-info {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .collaborator-name {
   font-weight: 500;
   color: var(--color-gray-800);
+  margin-bottom: 0.25rem;
 }
 
 .collaborator-role {
@@ -86,14 +122,8 @@ console.log('👥 CollaboratorsCard loaded with:', collaborators.value);
 
 .collaborator-progress {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.25rem;
-}
-
-.collaborator-progress .progress-label {
-  font-size: 0.7rem;
-  color: var(--color-gray-600);
+  align-items: center;
+  min-width: 100px;
 }
 
 .collaborator-progress .progress-bar-container {
@@ -108,18 +138,24 @@ console.log('👥 CollaboratorsCard loaded with:', collaborators.value);
   background: var(--color-gray-200);
   border-radius: 3px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
+/* ✅ BARRA MORADA */
 .collaborator-progress .progress-fill {
   height: 100%;
-  background: var(--color-primary);
+  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
   border-radius: 3px;
+  transition: width 0.3s ease;
+  box-shadow: 0 1px 2px rgba(139, 92, 246, 0.3);
 }
 
 .collaborator-progress .progress-value {
-  font-size: 0.7rem;
-  color: var(--color-gray-600);
-  min-width: 2rem;
+  font-size: 0.8rem;
+  color: var(--color-gray-700);
+  min-width: 2.5rem;
+  font-weight: 600;
+  text-align: right;
 }
 
 .empty-state {
@@ -142,5 +178,26 @@ console.log('👥 CollaboratorsCard loaded with:', collaborators.value);
 .empty-state small {
   font-size: 0.8rem;
   color: var(--color-gray-400);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .collaborator-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .collaborator-progress {
+    width: 100%;
+  }
+
+  .collaborator-progress .progress-bar-container {
+    width: 100%;
+  }
+
+  .collaborator-progress .progress-bar {
+    flex: 1;
+  }
 }
 </style>
