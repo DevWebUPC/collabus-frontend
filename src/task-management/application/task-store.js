@@ -371,25 +371,80 @@ export const useTaskStore = defineStore('task', {
         /**
          * Update task status
          */
-        async updateTaskStatus(taskId, status, progress = null) {
-            const updateData = TaskAssembler.toStatusUpdateApi(taskId, status, progress);
-            return await this.updateTask(taskId, updateData);
+        async updateTaskStatus(projectId, taskId, status, progress = null) {
+            try {
+                console.log(`🔄 Updating task status: ${taskId}, status: ${status}, progress: ${progress}`);
+
+                const updateData = TaskAssembler.toStatusUpdateApi(taskId, status, progress);
+                const updatedTask = await this.updateTask(projectId, taskId, updateData);
+
+                // ✅ FORZAR ACTUALIZACIÓN INMEDIATA EN EL STORE
+                if (status === 'completed') {
+                    // Actualizar en la lista global
+                    const index = this.tasks.findIndex(task => task.id === taskId);
+                    if (index !== -1) {
+                        this.tasks[index] = updatedTask;
+                    }
+
+                    // Invalidar caches
+                    this.projectTasks.delete(projectId);
+                    this.collaboratorTasks.clear();
+
+                    console.log('🎯 Tarea completada - store actualizado');
+                }
+
+                return updatedTask;
+            } catch (error) {
+                console.error(`❌ Error updating task status for task ${taskId}:`, error);
+                throw error;
+            }
         },
 
         /**
          * Update task progress
          */
-        async updateTaskProgress(taskId, progress) {
+        async updateTaskProgress(projectId, taskId, progress) {
             const updateData = TaskAssembler.toProgressUpdateApi(taskId, progress);
-            return await this.updateTask(taskId, updateData);
+            return await this.updateTask(projectId, taskId, updateData); // ✅ Pasar projectId
         },
 
         /**
          * Update task checklist
          */
-        async updateTaskChecklist(taskId, checklist) {
-            const updateData = TaskAssembler.toChecklistUpdateApi(taskId, checklist);
-            return await this.updateTask(taskId, updateData);
+        async updateTaskChecklist(projectId, taskId, checklist) {
+            try {
+                this.setLoading(true);
+                this.clearError();
+
+                const tasksApi = new TasksApi();
+                const response = await tasksApi.updateTask(projectId, taskId, {
+                    checklist: checklist,
+                    updatedAt: new Date().toISOString()
+                });
+
+                const updatedTask = TaskAssembler.fromApiToEntity(response.data);
+
+                // Actualizar en la lista global
+                const index = this.tasks.findIndex(task => task.id === taskId);
+                if (index !== -1) {
+                    this.tasks[index] = updatedTask;
+                }
+
+                // Actualizar current task si es el mismo
+                if (this.currentTask && this.currentTask.id === taskId) {
+                    this.currentTask = updatedTask;
+                }
+
+                console.log(`✅ Updated task checklist: ${updatedTask.title}`);
+                return updatedTask;
+            } catch (error) {
+                const errorMsg = `Error updating task checklist: ${error.message}`;
+                this.setError(errorMsg);
+                console.error('❌', errorMsg);
+                throw error;
+            } finally {
+                this.setLoading(false);
+            }
         },
 
         /**

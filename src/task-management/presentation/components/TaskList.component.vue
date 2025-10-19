@@ -1,4 +1,4 @@
-<!-- TaskList.component.vue (actualizado) -->
+<!-- TaskList.component.vue (ACTUALIZADO) -->
 <template>
   <div class="task-list">
     <!-- Encabezados de la tabla -->
@@ -49,12 +49,13 @@
 
         <div class="task-col acciones">
           <div class="action-buttons">
-            <!-- Solo mostrar botón "Ver Tarea" para tareas NO retrasadas -->
+            <!-- Botón "Ver Tarea" - HABILITADO cuando hay submission -->
             <pv-button
                 v-if="getActualStatus(task) !== 'retrasado'"
-                label="Ver Tarea"
-                class="view-task-btn"
-                :disabled="true"
+                :label="taskHasSubmission(task) ? 'Ver Entrega' : 'Ver Tarea'"
+                :class="['view-task-btn', { 'has-submission': taskHasSubmission(task) }]"
+                :disabled="!taskHasSubmission(task)"
+                @click="handleViewTask(task)"
             />
 
             <!-- Solo mostrar botones para tareas retrasadas -->
@@ -100,9 +101,13 @@ export default {
     tasks: {
       type: Array,
       default: () => []
+    },
+    taskHasSubmission: {
+      type: Function,
+      default: () => false
     }
   },
-  emits: ['delete', 'updateDate', 'create'],
+  emits: ['delete', 'updateDate', 'create', 'view', 'view-submission'],
   methods: {
     formatDate(dateString) {
       if (!dateString) return 'Sin fecha'
@@ -164,7 +169,19 @@ export default {
       }
 
       return task.status || 'pending';
+    },
 
+    /**
+     * Manejar el clic en "Ver Tarea" - redirige a submission si existe
+     */
+    handleViewTask(task) {
+      if (this.taskHasSubmission(task)) {
+        // Si hay submission, emitir evento para ver la entrega
+        this.$emit('view-submission', task);
+      } else {
+        // Si no hay submission, emitir evento para ver la tarea normal
+        this.$emit('view', task);
+      }
     }
   }
 }
@@ -275,7 +292,6 @@ export default {
   color: #92400e;
 }
 
-
 .status-overdue {
   background: #fecaca;
   color: #991b1b;
@@ -295,22 +311,40 @@ export default {
   width: 100%;
 }
 
+/* Botón "Ver Tarea" - ESTILOS ACTUALIZADOS */
 .view-task-btn {
-  background: #9ca3af !important;
-  color: white !important;
-  border: none !important;
   border-radius: 6px;
   padding: 0.5rem 1rem;
   font-size: 0.8rem;
   font-weight: 500;
-  cursor: not-allowed;
-  opacity: 0.6;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
   width: 100%;
 }
 
-.view-task-btn:hover {
+/* Estado deshabilitado (sin submission) */
+.view-task-btn:disabled {
+  background: #9ca3af !important;
+  color: white !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.view-task-btn:disabled:hover {
   background: #9ca3af !important;
   transform: none !important;
+}
+
+/* Estado habilitado (con submission) */
+.view-task-btn.has-submission:not(:disabled) {
+  background: var(--color-primary) !important;
+  color: white !important;
+}
+
+.view-task-btn.has-submission:not(:disabled):hover {
+  background: var(--color-primary-dark) !important;
+  transform: translateY(-1px);
 }
 
 .action-btn {

@@ -2,6 +2,8 @@
 const ProjectTasksView = () => import('./view/ProjectTasksView.vue');
 const TaskCreateView = () => import('./view/TaskCreateForm.vue');
 const TaskDetail = () => import('./view/TaskDetail.vue');
+const TaskExecutionView = () => import('./view/TaskExecutionView.vue');
+const TaskSubmissionView = () => import('./view/TaskSubmissionView.vue'); // NUEVO
 
 export const taskRoutes = [
     {
@@ -34,4 +36,24 @@ export const taskRoutes = [
         },
         props: true
     },
+    {
+        path: '/projects/:projectId/tasks/:taskId/execute',
+        name: 'task-execution',
+        component: TaskExecutionView,
+        meta: {
+            title: 'Execute Task',
+            requiresAuth: true
+        },
+        props: true
+    },
+    {
+        path: '/projects/:projectId/tasks/:taskId/submission',
+        name: 'task-submission',
+        component: TaskSubmissionView,
+        meta: {
+            title: 'Task Submission',
+            requiresAuth: true
+        },
+        props: true
+    }
 ];

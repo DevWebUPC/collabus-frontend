@@ -61,18 +61,22 @@ export class TasksApi extends BaseEndpoint {
 
             if (!project.tasks || !Array.isArray(project.tasks)) {
                 console.log('❌ No hay tareas en el proyecto');
-                return { data: null };
+                throw new Error('No tasks found in project');
             }
+
+            // ✅ FIX: Normalizar IDs para comparación
+            const normalizedTaskId = String(taskId);
 
             // Buscar la tarea específica
             const task = project.tasks.find(t => {
-                console.log(`🔍 Comparando: ${t.id} (${typeof t.id}) con ${taskId} (${typeof taskId})`);
-                return String(t.id) === String(taskId);
+                const normalizedExistingId = String(t.id);
+                console.log(`🔍 Comparando: ${normalizedExistingId} con ${normalizedTaskId}`);
+                return normalizedExistingId === normalizedTaskId;
             });
 
             if (!task) {
-                console.log('❌ Tarea no encontrada');
-                throw new Error('Task not found');
+                console.log('❌ Tarea no encontrada. Tareas disponibles:', project.tasks.map(t => t.id));
+                throw new Error(`Task not found: ${taskId}`);
             }
 
             console.log('✅ Tarea encontrada:', task);
@@ -126,28 +130,49 @@ export class TasksApi extends BaseEndpoint {
      * @returns {Promise} API response
      */
     async updateTask(projectId, taskId, updateData) {
-        // Obtener el proyecto actual
-        const projectResponse = await this.http.get(`${this.endpointPath}/${projectId}`);
-        const project = projectResponse.data;
+        try {
+            console.log(`🔄 Updating task ${taskId} in project ${projectId}`, updateData);
 
-        // Encontrar y actualizar la tarea
-        const taskIndex = project.tasks.findIndex(t => t.id === taskId);
-        if (taskIndex === -1) {
-            throw new Error('Task not found');
+            // Obtener el proyecto actual
+            const projectResponse = await this.http.get(`${this.endpointPath}/${projectId}`);
+            const project = projectResponse.data;
+
+            if (!project.tasks || !Array.isArray(project.tasks)) {
+                throw new Error('No tasks found in project');
+            }
+
+            // ✅ FIX: Normalizar IDs para comparación
+            const normalizedTaskId = String(taskId);
+
+            // Encontrar y actualizar la tarea
+            const taskIndex = project.tasks.findIndex(t => {
+                const normalizedExistingId = String(t.id);
+                return normalizedExistingId === normalizedTaskId;
+            });
+
+            if (taskIndex === -1) {
+                console.error('❌ Task not found. Available tasks:', project.tasks.map(t => ({ id: t.id, type: typeof t.id })));
+                throw new Error(`Task not found: ${taskId}`);
+            }
+
+            // Actualizar la tarea
+            project.tasks[taskIndex] = {
+                ...project.tasks[taskIndex],
+                ...updateData,
+                updatedAt: new Date().toISOString()
+            };
+
+            // Actualizar el proyecto completo
+            await this.http.patch(`${this.endpointPath}/${projectId}`, {
+                tasks: project.tasks
+            });
+
+            console.log('✅ Task updated successfully:', project.tasks[taskIndex]);
+            return { data: project.tasks[taskIndex] };
+        } catch (error) {
+            console.error('❌ Error in updateTask:', error);
+            throw error;
         }
-
-        project.tasks[taskIndex] = {
-            ...project.tasks[taskIndex],
-            ...updateData,
-            updatedAt: new Date().toISOString()
-        };
-
-        // Actualizar el proyecto
-        await this.http.patch(`${this.endpointPath}/${projectId}`, {
-            tasks: project.tasks
-        });
-
-        return { data: project.tasks[taskIndex] };
     }
 
     /**

@@ -119,12 +119,17 @@ const viewTask = (task) => {
 };
 
 // Iniciar tarea (placeholder)
+// En el método startTask
 const startTask = (task) => {
   console.log('Iniciar tarea:', task);
-  // TODO: Implementar lógica para iniciar tarea
-  alert(`Iniciar tarea: ${task.title}`);
+  router.push({
+    name: 'task-execution',
+    params: {
+      projectId: projectDetailStore.project.id,
+      taskId: task.id
+    }
+  });
 };
-
 // Cambiar filtro
 const setFilter = (filter) => {
   activeFilter.value = filter;
