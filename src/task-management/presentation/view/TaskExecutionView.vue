@@ -17,7 +17,6 @@ const links = ref(['']);
 const attachments = ref([]);
 const notes = ref('');
 const loading = ref(false);
-const showProgressDialog = ref(false);
 
 // ✅ VERIFICAR AUTENTICACIÓN AL INICIAR
 const checkAuthentication = () => {
@@ -120,6 +119,58 @@ const updateProgressAutomatically = async () => {
   }
 };
 
+// ✅ NUEVA FUNCIÓN: CARGAR DATOS GUARDADOS PREVIAMENTE
+const loadSavedSubmission = async () => {
+  try {
+    const taskId = route.params.taskId;
+    const collaboratorId = getCollaboratorId();
+
+    if (!collaboratorId) return;
+
+    console.log('🔍 Buscando submission guardada para task:', taskId);
+
+    // Cargar submissions de esta tarea
+    await taskSubmissionStore.loadSubmissionsByTask(taskId);
+
+    // Buscar submission existente
+    const existingSubmission = taskSubmissionStore.getSubmissionByTaskAndCollaborator(taskId, collaboratorId);
+
+    if (existingSubmission) {
+      console.log('📦 Submission encontrada:', existingSubmission);
+
+      // ✅ CARGAR DATOS GUARDADOS EN EL FORMULARIO
+      if (existingSubmission.links && existingSubmission.links.length > 0) {
+        links.value = [...existingSubmission.links];
+      } else {
+        links.value = [''];
+      }
+
+      if (existingSubmission.attachments && existingSubmission.attachments.length > 0) {
+        attachments.value = [...existingSubmission.attachments];
+      }
+
+      if (existingSubmission.notes) {
+        notes.value = existingSubmission.notes;
+      }
+
+      // ✅ MARCAR OPCIONES DE ENTREGA SI HAY DATOS
+      if (existingSubmission.links && existingSubmission.links.length > 0) {
+        deliveryOptions.value[1].completed = true;
+      }
+
+      if (existingSubmission.attachments && existingSubmission.attachments.length > 0) {
+        deliveryOptions.value[0].completed = true;
+      }
+
+      console.log('✅ Datos guardados cargados en el formulario');
+    } else {
+      console.log('📭 No se encontró submission guardada');
+    }
+  } catch (error) {
+    console.error('❌ Error al cargar submission guardada:', error);
+  }
+};
+
 // Archivos a entregar
 const deliveryOptions = ref([
   { id: 1, type: 'file', label: 'Subir archivo', completed: false },
@@ -157,44 +208,9 @@ const removeAttachment = (index) => {
   attachments.value.splice(index, 1);
 };
 
-// ✅ FUNCIÓN MEJORADA PARA GUARDAR PROGRESO
-const saveProgress = async () => {
-  const collaboratorId = getCollaboratorId();
-  if (!collaboratorId) {
-    alert('Usuario no autenticado. Por favor, inicie sesión nuevamente.');
-    router.push('/login');
-    return;
-  }
-
-  try {
-    loading.value = true;
-
-    const taskId = route.params.taskId;
-    const projectId = route.params.projectId;
-
-    // Calcular progreso basado en checklist completada
-    const completedItems = checklistItems.value.filter(item => item.completed).length;
-    const totalItems = checklistItems.value.length;
-    const progress = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
-
-    console.log('🔄 Guardando progreso:', { taskId, progress });
-
-    await taskStore.updateTaskProgress(
-        projectId,
-        taskId,
-        progress
-    );
-
-    // Mostrar diálogo de confirmación
-    showProgressDialog.value = true;
-
-    console.log('✅ Progreso guardado correctamente');
-  } catch (error) {
-    console.error('❌ Error al guardar progreso:', error);
-    alert('Error al guardar el progreso: ' + error.message);
-  } finally {
-    loading.value = false;
-  }
+// ✅ FUNCIÓN MEJORADA PARA VOLVER
+const goBack = () => {
+  router.go(-1);
 };
 
 // Marcar como completado
@@ -289,6 +305,9 @@ const loadTask = async () => {
       throw new Error('Task not found');
     }
 
+    // ✅ CARGAR DATOS GUARDADOS DESPUÉS DE CARGAR LA TAREA
+    await loadSavedSubmission();
+
     console.log('✅ Task loaded successfully:', task.value);
   } catch (error) {
     console.error('❌ Error loading task:', error);
@@ -316,7 +335,7 @@ onMounted(() => {
     <div class="header-section">
       <pv-button
           icon="pi pi-arrow-left"
-          @click="router.go(-1)"
+          @click="goBack"
           text
           rounded
           severity="secondary"
@@ -503,14 +522,6 @@ onMounted(() => {
     <div class="action-buttons">
       <div class="task-actions">
         <pv-button
-            label="Guardar Progreso"
-            icon="pi pi-save"
-            @click="saveProgress"
-            :disabled="loading"
-            severity="help"
-            class="save-btn"
-        />
-        <pv-button
             label="Marcar como Completado"
             icon="pi pi-check"
             @click="submitTask"
@@ -520,27 +531,6 @@ onMounted(() => {
         />
       </div>
     </div>
-
-    <!-- Diálogo de progreso guardado -->
-    <pv-dialog
-        v-model:visible="showProgressDialog"
-        modal
-        header="Progreso Guardado"
-        :style="{ width: '400px' }"
-    >
-      <div class="progress-dialog-content">
-        <i class="pi pi-check-circle" style="font-size: 3rem; color: var(--green-500);"></i>
-        <p>Tu progreso ha sido guardado exitosamente.</p>
-      </div>
-      <template #footer>
-        <pv-button
-            label="Aceptar"
-            @click="showProgressDialog = false"
-            severity="success"
-            autofocus
-        />
-      </template>
-    </pv-dialog>
   </div>
 </template>
 
@@ -687,7 +677,10 @@ onMounted(() => {
   color: #495057;
 }
 
-
+.checklist-text.completed {
+  text-decoration: line-through;
+  color: #6c757d;
+}
 
 /* Delivery Options */
 .delivery-options {
@@ -789,18 +782,8 @@ onMounted(() => {
 .task-actions {
   display: flex;
   gap: 0.75rem;
-}
-
-/* Progress Dialog */
-.progress-dialog-content {
-  text-align: center;
-  padding: 1rem;
-}
-
-.progress-dialog-content p {
-  margin: 1rem 0 0 0;
-  color: #495057;
-  font-size: 1.1rem;
+  width: 100%;
+  justify-content: flex-end;
 }
 
 /* Responsive */
