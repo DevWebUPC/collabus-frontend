@@ -1,4 +1,4 @@
-<!-- TaskList.component.vue (ACTUALIZADO) -->
+<!-- TaskList.component.vue (MODIFICADO) -->
 <template>
   <div class="task-list">
     <!-- Encabezados de la tabla -->
@@ -49,13 +49,12 @@
 
         <div class="task-col acciones">
           <div class="action-buttons">
-            <!-- Botón "Ver Tarea" - HABILITADO cuando hay submission -->
+            <!-- Botón "Ver Entrega" - HABILITADO cuando hay submission -->
             <pv-button
-                v-if="getActualStatus(task) !== 'retrasado'"
-                :label="taskHasSubmission(task) ? 'Ver Entrega' : 'Ver Tarea'"
-                :class="['view-task-btn', { 'has-submission': taskHasSubmission(task) }]"
-                :disabled="!taskHasSubmission(task)"
-                @click="handleViewTask(task)"
+                :label="getSubmissionButtonLabel(task)"
+                :class="['view-task-btn', { 'has-submission': hasSubmissionForTask(task) }]"
+                :disabled="!hasSubmissionForTask(task)"
+                @click="handleViewSubmission(task)"
             />
 
             <!-- Solo mostrar botones para tareas retrasadas -->
@@ -102,9 +101,9 @@ export default {
       type: Array,
       default: () => []
     },
-    taskHasSubmission: {
-      type: Function,
-      default: () => false
+    submissions: {
+      type: Array,
+      default: () => []
     }
   },
   emits: ['delete', 'updateDate', 'create', 'view', 'view-submission'],
@@ -118,14 +117,6 @@ export default {
         month: '2-digit',
         year: 'numeric'
       })
-    },
-
-    isOverdue(task) {
-      if (!task.dueDate || task.status === 'completed') return false
-
-      const dueDate = new Date(task.dueDate)
-      const today = new Date()
-      return dueDate < today
     },
 
     getStatusClass(status) {
@@ -152,16 +143,10 @@ export default {
     getActualStatus(task) {
       if (task.status === 'completed') return 'completed';
 
-      // ✅ USAR EL MÉTODO DE LA ENTIDAD EN LUGAR DE CÁLCULO MANUAL
-      if (task.isOverdue && task.isOverdue()) {
-        return 'retrasado';
-      }
-
-      // ✅ VERIFICAR DIRECTAMENTE SI LA FECHA ESTÁ VENCIDA
       if (task.dueDate) {
         const dueDate = new Date(task.dueDate);
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // Solo comparar fechas, no horas
+        today.setHours(0, 0, 0, 0);
 
         if (dueDate < today) {
           return 'retrasado';
@@ -172,15 +157,29 @@ export default {
     },
 
     /**
-     * Manejar el clic en "Ver Tarea" - redirige a submission si existe
+     * Verificar si existe una submission para esta tarea
      */
-    handleViewTask(task) {
-      if (this.taskHasSubmission(task)) {
-        // Si hay submission, emitir evento para ver la entrega
+    hasSubmissionForTask(task) {
+      if (!this.submissions || !this.submissions.length) return false;
+
+      return this.submissions.some(submission =>
+          submission.taskId === task.id.toString()
+      );
+    },
+
+    /**
+     * Obtener el texto del botón basado en si hay submission
+     */
+    getSubmissionButtonLabel(task) {
+      return this.hasSubmissionForTask(task) ? 'Ver Entrega' : 'Sin Entrega';
+    },
+
+    /**
+     * Manejar el clic en "Ver Entrega"
+     */
+    handleViewSubmission(task) {
+      if (this.hasSubmissionForTask(task)) {
         this.$emit('view-submission', task);
-      } else {
-        // Si no hay submission, emitir evento para ver la tarea normal
-        this.$emit('view', task);
       }
     }
   }
@@ -188,7 +187,7 @@ export default {
 </script>
 
 <style scoped>
-/* Los estilos permanecen iguales */
+/* Los estilos permanecen iguales, solo actualizamos los colores del botón */
 .task-list {
   width: 100%;
 }
@@ -311,7 +310,7 @@ export default {
   width: 100%;
 }
 
-/* Botón "Ver Tarea" - ESTILOS ACTUALIZADOS */
+/* Botón "Ver Entrega" - ESTILOS ACTUALIZADOS */
 .view-task-btn {
   border-radius: 6px;
   padding: 0.5rem 1rem;

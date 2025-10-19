@@ -1,4 +1,4 @@
-<!-- ProjectTasksView.vue (corregido) -->
+<!-- ProjectTasksView.vue (MODIFICADO) -->
 <template>
   <div class="tasks-container">
     <!-- Header con botón Crear -->
@@ -76,10 +76,12 @@
     <!-- Componente TaskList con tareas filtradas -->
     <TaskList
         :tasks="filteredTasks"
+        :submissions="submissions"
         @view="viewTask"
         @delete="handleShowDeleteModal"
         @updateDate="handleShowUpdateDateModal"
         @create="showCreateForm = true"
+        @view-submission="handleViewSubmission"
     />
 
     <!-- Modal de creación de tareas -->
@@ -119,8 +121,10 @@
 
 <script>
 import { ref, onMounted, computed, nextTick } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useProjectDetailStore } from '../../../projects/application/project-detail.store.js'
 import { useTaskStore } from '../../application/task-store.js'
+import { useTaskSubmissionStore } from '../../application/task-submission-store.js'
 import TaskCreateForm from './TaskCreateForm.vue'
 import TaskList from '../components/TaskList.component.vue'
 import ModalDecision from '../components/ModalDecision.component.vue'
@@ -140,6 +144,9 @@ export default {
     const showUpdateDateModal = ref(false)
     const projectDetailStore = useProjectDetailStore()
     const taskStore = useTaskStore()
+    const taskSubmissionStore = useTaskSubmissionStore()
+    const route = useRoute()
+    const router = useRouter()
 
     // Estado de los filtros
     const showCollaboratorDropdown = ref(false)
@@ -148,18 +155,23 @@ export default {
     const selectedStatus = ref(null)
     const selectedTask = ref(null)
 
+    // Obtener todas las submissions del proyecto
+    const submissions = computed(() => {
+      return taskSubmissionStore.submissions || []
+    })
+
     const projectTasks = computed(() => {
       if (!projectDetailStore.project?.id) return []
 
       // ✅ OBTENER SIEMPRE DIRECTAMENTE DEL STORE
-      // Esto asegura que siempre tengamos los datos más recientes
       const tasks = taskStore.getProjectTasks(projectDetailStore.project.id)
 
-      // ✅ DEBUG: Verificar qué tareas estamos obteniendo
       console.log('📋 Tareas en computed:', tasks.length, tasks)
+      console.log('📦 Submissions disponibles:', submissions.value)
 
       return tasks
     })
+
     // Mensaje para eliminar tarea
     const deleteMessage = computed(() => {
       if (!selectedTask.value) return ''
@@ -267,7 +279,7 @@ export default {
       return statusMap[status] || status
     }
 
-    // Métodos para manejar modales - NOMBRES CORREGIDOS
+    // Métodos para manejar modales
     const handleShowDeleteModal = (task) => {
       selectedTask.value = task
       showDeleteModal.value = true
@@ -289,7 +301,6 @@ export default {
           await taskStore.deleteTask(projectDetailStore.project.id, selectedTask.value.id)
 
           // ✅ FORZAR ACTUALIZACIÓN DEL COMPUTED
-          // Esto asegura que la vista se actualice inmediatamente
           await nextTick()
 
           // ✅ RECARGAR LAS TAREAS PARA SINCRONIZAR
@@ -337,6 +348,12 @@ export default {
       }
     }
 
+    // Manejar la visualización de submission
+    const handleViewSubmission = (task) => {
+      console.log('👀 Ver submission de tarea:', task)
+      router.push(`/projects/${projectDetailStore.project.id}/tasks/${task.id}/submission`)
+    }
+
     // Cerrar dropdowns al hacer clic fuera
     const closeDropdowns = (event) => {
       if (!event.target.closest('.filter-item')) {
@@ -348,6 +365,19 @@ export default {
     onMounted(async () => {
       if (projectDetailStore.project?.id) {
         await taskStore.loadProjectTasks(projectDetailStore.project.id)
+
+        // ✅ CARGAR TODAS LAS SUBMISSIONS DEL PROYECTO
+        try {
+          console.log('🔄 Cargando submissions para el proyecto...')
+          // Cargar submissions para todas las tareas del proyecto
+          const tasks = taskStore.getProjectTasks(projectDetailStore.project.id)
+          for (const task of tasks) {
+            await taskSubmissionStore.loadSubmissionsByTask(task.id)
+          }
+          console.log('✅ Submissions cargadas:', taskSubmissionStore.submissions)
+        } catch (error) {
+          console.error('❌ Error cargando submissions:', error)
+        }
       }
 
       // Agregar event listener para cerrar dropdowns
@@ -372,6 +402,7 @@ export default {
       showUpdateDateModal,
       projectTasks,
       filteredTasks,
+      submissions,
       viewTask,
       handleTaskCreated,
       showCollaboratorDropdown,
@@ -389,17 +420,19 @@ export default {
       selectStatus,
       clearFilters,
       getStatusText,
-      handleShowDeleteModal, // NOMBRE CORREGIDO
-      handleShowUpdateDateModal, // NOMBRE CORREGIDO
+      handleShowDeleteModal,
+      handleShowUpdateDateModal,
       cancelDelete,
       confirmDelete,
-      handleDateUpdate
+      handleDateUpdate,
+      handleViewSubmission
     }
   }
 }
 </script>
 
 <style scoped>
+/* Los estilos permanecen iguales */
 .tasks-container {
   padding: 1.5rem;
   background: white;

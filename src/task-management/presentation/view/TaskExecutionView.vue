@@ -267,10 +267,8 @@ const submitTask = async () => {
     alert('Tarea enviada y marcada como completada correctamente');
 
     // ✅ REDIRIGIR a la vista de tareas para ver el cambio
-    router.push({
-      name: 'project-tasks',
-      params: { projectId: projectId }
-    });
+    router.go(-1);
+
 
   } catch (error) {
     console.error('❌ Error al enviar la tarea:', error);
