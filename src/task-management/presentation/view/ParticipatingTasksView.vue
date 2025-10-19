@@ -3,10 +3,12 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useProjectDetailStore } from '../../../projects/application/project-detail.store.js';
 import { useUserStore } from '../../../iam/application/user-store.js';
+import { useTaskSubmissionStore } from '../../application/task-submission-store.js';
 
 const router = useRouter();
 const projectDetailStore = useProjectDetailStore();
 const userStore = useUserStore();
+const taskSubmissionStore = useTaskSubmissionStore();
 
 // Estado reactivo
 const loading = ref(false);
@@ -44,28 +46,33 @@ const getNormalizedUserId = () => {
   return userId ? String(userId) : null;
 };
 
-// Computed: Tareas filtradas
+// Computed: Verificar si una tarea tiene submission (completada)
+const hasTaskSubmission = (taskId) => {
+  return taskSubmissionStore.hasSubmissionForTask(taskId);
+};
+
+// Computed: Tareas filtradas - ACTUALIZADO para usar submissions
 const filteredTasks = computed(() => {
   const tasks = myTasks.value;
 
   switch (activeFilter.value) {
     case 'pending':
-      return tasks.filter(task => !task.completed && !isOverdue(task.dueDate));
+      return tasks.filter(task => !hasTaskSubmission(task.id) && !isOverdue(task.dueDate));
     case 'overdue':
-      return tasks.filter(task => !task.completed && isOverdue(task.dueDate));
+      return tasks.filter(task => !hasTaskSubmission(task.id) && isOverdue(task.dueDate));
     case 'completed':
-      return tasks.filter(task => task.completed);
+      return tasks.filter(task => hasTaskSubmission(task.id));
     default:
       return tasks;
   }
 });
 
-// Computed: Estadísticas
+// Computed: Estadísticas - ACTUALIZADO para usar submissions
 const taskStats = computed(() => {
   const tasks = myTasks.value;
-  const pending = tasks.filter(task => !task.completed && !isOverdue(task.dueDate)).length;
-  const overdue = tasks.filter(task => !task.completed && isOverdue(task.dueDate)).length;
-  const completed = tasks.filter(task => task.completed).length;
+  const completed = tasks.filter(task => hasTaskSubmission(task.id)).length;
+  const pending = tasks.filter(task => !hasTaskSubmission(task.id) && !isOverdue(task.dueDate)).length;
+  const overdue = tasks.filter(task => !hasTaskSubmission(task.id) && isOverdue(task.dueDate)).length;
 
   return {
     total: tasks.length,
@@ -106,7 +113,7 @@ const getDaysRemaining = (dueDate) => {
   return diffDays;
 };
 
-// Navegar a vista de tarea - ACTUALIZADO
+// Navegar a vista de tarea
 const viewTask = (task) => {
   console.log('Ver tarea:', task);
   router.push({
@@ -118,8 +125,7 @@ const viewTask = (task) => {
   });
 };
 
-// Iniciar tarea (placeholder)
-// En el método startTask
+// Iniciar tarea - SOLO para tareas sin submission
 const startTask = (task) => {
   console.log('Iniciar tarea:', task);
   router.push({
@@ -130,14 +136,29 @@ const startTask = (task) => {
     }
   });
 };
+
 // Cambiar filtro
 const setFilter = (filter) => {
   activeFilter.value = filter;
 };
 
-// Cargar tareas cuando el componente se monte
-onMounted(() => {
+// Cargar tareas y submissions cuando el componente se monte
+onMounted(async () => {
   console.log('Tareas del usuario en pestaña Tasks:', myTasks.value);
+
+  // Cargar todas las submissions para las tareas del usuario
+  if (myTasks.value.length > 0) {
+    loading.value = true;
+    try {
+      for (const task of myTasks.value) {
+        await taskSubmissionStore.loadSubmissionsByTask(task.id);
+      }
+    } catch (error) {
+      console.error('Error loading submissions:', error);
+    } finally {
+      loading.value = false;
+    }
+  }
 });
 </script>
 
@@ -226,14 +247,14 @@ onMounted(() => {
           :key="task.id"
           class="task-card"
           :class="{
-          'overdue': isOverdue(task.dueDate) && !task.completed,
-          'completed': task.completed
+          'overdue': isOverdue(task.dueDate) && !hasTaskSubmission(task.id),
+          'completed': hasTaskSubmission(task.id)
         }"
       >
         <!-- Header de la tarjeta -->
         <div class="task-header">
           <div class="task-status">
-            <span v-if="task.completed" class="status-badge completed">
+            <span v-if="hasTaskSubmission(task.id)" class="status-badge completed">
               <i class="pi pi-check-circle"></i>
               Completada
             </span>
@@ -261,7 +282,7 @@ onMounted(() => {
               <i class="pi pi-calendar"></i>
               <span class="meta-text">
                 {{ formatDate(task.dueDate) }}
-                <span v-if="!task.completed && getDaysRemaining(task.dueDate) !== null"
+                <span v-if="!hasTaskSubmission(task.id) && getDaysRemaining(task.dueDate) !== null"
                       class="days-remaining"
                       :class="{ 'overdue': isOverdue(task.dueDate) }">
                   ({{ isOverdue(task.dueDate) ? Math.abs(getDaysRemaining(task.dueDate)) + ' días de retraso' : getDaysRemaining(task.dueDate) + ' días restantes' }})
@@ -275,10 +296,18 @@ onMounted(() => {
                 Creada: {{ formatDate(task.createdAt) }}
               </span>
             </div>
+
+            <!-- Mostrar información de submission si existe -->
+            <div v-if="hasTaskSubmission(task.id)" class="meta-item">
+              <i class="pi pi-check"></i>
+              <span class="meta-text" style="color: var(--color-green-600);">
+                Entregada correctamente
+              </span>
+            </div>
           </div>
         </div>
 
-        <!-- Acciones -->
+        <!-- Acciones - ACTUALIZADO: Solo mostrar "Hacer Tarea" si no hay submission -->
         <div class="task-actions">
           <pv-button
               label="Ver Tarea"
@@ -289,7 +318,7 @@ onMounted(() => {
               class="view-btn"
           />
           <pv-button
-              v-if="!task.completed && !isOverdue(task.dueDate)"
+              v-if="!hasTaskSubmission(task.id)"
               label="Hacer Tarea"
               icon="pi pi-play"
               severity="primary"
@@ -297,7 +326,7 @@ onMounted(() => {
               class="start-btn"
           />
           <pv-button
-              v-else-if="task.completed"
+              v-else
               label="Completada"
               icon="pi pi-check"
               severity="success"
@@ -324,6 +353,7 @@ onMounted(() => {
   </div>
 </template>
 
+<!-- Los estilos permanecen iguales -->
 <style scoped>
 /* Los estilos permanecen iguales */
 .participating-tasks-view {
