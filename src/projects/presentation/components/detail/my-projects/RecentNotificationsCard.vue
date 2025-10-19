@@ -1,49 +1,8 @@
 <script setup>
 import { ref, computed } from 'vue';
 
-// Notificaciones estáticas de ejemplo
-const staticNotifications = ref([
-  {
-    id: '1',
-    type: 'new_application',
-    title: 'Nueva postulación recibida 🎯',
-    message: 'María Gonzalez se ha postulado al rol de Frontend Developer',
-    date: new Date(Date.now() - 10 * 60 * 1000).toISOString(), // 10 minutos atrás
-    read: false
-  },
-  {
-    id: '2',
-    type: 'new_application',
-    title: 'Nueva postulación recibida 🎯',
-    message: 'Carlos Rodriguez quiere unirse como Backend Engineer',
-    date: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 horas atrás
-    read: false
-  },
-  {
-    id: '3',
-    type: 'application_accepted',
-    title: 'Postulación aceptada ✅',
-    message: 'Has aceptado a Ana Martinez como UX/UI Designer',
-    date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), // 1 día atrás
-    read: true
-  },
-  {
-    id: '4',
-    type: 'project_update',
-    title: 'Proyecto actualizado 📝',
-    message: 'Se han agregado nuevas tareas al proyecto',
-    date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 días atrás
-    read: true
-  },
-  {
-    id: '5',
-    type: 'milestone',
-    title: 'Hito completado 🎉',
-    message: 'Se ha completado el hito "Diseño de interfaz"',
-    date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 días atrás
-    read: true
-  }
-]);
+// Notificaciones vacías
+const staticNotifications = ref([]);
 
 // Computed: Notificaciones recientes (últimas 5)
 const recentNotifications = computed(() => {
