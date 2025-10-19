@@ -25,6 +25,9 @@
               <span class="task-due" :class="{ overdue: isOverdue(task.dueDate) }">
                 {{ formatDueDate(task.dueDate) }}
               </span>
+              <span class="task-status" :class="task.status">
+                Estado: {{ getStatusText(task.status) }}
+              </span>
             </div>
           </div>
         </div>
@@ -56,7 +59,7 @@ const store = useProjectDetailStore();
 // Emit para navegación
 const emit = defineEmits(['view-all-tasks']);
 
-// Computed property para obtener tareas urgentes
+// Computed property para obtener tareas urgentes - ✅ CORREGIDO: Excluir tareas completadas
 const urgentTasks = computed(() => {
   if (!store.project || !store.project.tasks || !Array.isArray(store.project.tasks)) {
     return [];
@@ -68,6 +71,11 @@ const urgentTasks = computed(() => {
 
   return store.project.tasks
       .filter(task => {
+        // ✅ EXCLUIR TAREAS COMPLETADAS
+        if (task.status === 'completed') {
+          return false;
+        }
+
         if (!task.dueDate) return false;
 
         const dueDate = new Date(task.dueDate);
@@ -102,6 +110,17 @@ const formatDueDate = (dueDate) => {
   }
 };
 
+// Obtener texto del estado
+const getStatusText = (status) => {
+  const statusMap = {
+    'pending': 'Pendiente',
+    'in_progress': 'En Progreso',
+    'completed': 'Completada',
+    'retrasado': 'Retrasada'
+  };
+  return statusMap[status] || status;
+};
+
 // Manejar clic en "Ver Todas las Tareas"
 const handleViewAllTasks = () => {
   console.log('🔄 Navegando a la pestaña de Tasks');
@@ -115,7 +134,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Tus estilos existentes se mantienen igual */
+/* Estilos existentes se mantienen */
 .tasks-list {
   display: flex;
   flex-direction: column;
@@ -176,6 +195,34 @@ onMounted(() => {
 .task-due.overdue {
   color: #dc2626;
   font-weight: bold;
+}
+
+.task-status {
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+.task-status.completed {
+  background: var(--color-success);
+  color: white;
+}
+
+.task-status.in_progress {
+  background: var(--color-warning);
+  color: white;
+}
+
+.task-status.pending {
+  background: var(--color-gray-400);
+  color: white;
+}
+
+.task-status.retrasado {
+  background: var(--color-error);
+  color: white;
 }
 
 .no-tasks {
