@@ -6,102 +6,122 @@ import { BaseEndpoint } from '../../shared/infrastructure/base-endpoint.js';
  * Handles HTTP requests for project-related operations
  */
 export class ProjectsApi extends BaseEndpoint {
-  constructor() {
-    const baseApi = new BaseApi();
-    super(baseApi, '/projects');
-  }
+    constructor() {
+        const baseApi = new BaseApi();
+        super(baseApi, '/projects');
+    }
 
-  /**
-   * Get projects where user is participating
-   * @param {string} userId - User ID
-   * @returns {Promise} API response
-   */
-  getParticipatingProjects(userId) {
-    return this.http.get(`${this.endpointPath}/participating/${userId}`);
-  }
+    /**
+     * Get projects where user is participating
+     * @param {string} userId - User ID
+     * @returns {Promise} API response
+     */
+    getParticipatingProjects(userId) {
+        return this.http.get(`${this.endpointPath}/participating/${userId}`);
+    }
 
-  /**
-   * Get projects owned by user
-   * @param {string} userId - User ID
-   * @returns {Promise} API response
-   */
-  getOwnedProjects(userId) {
-    return this.http.get(`${this.endpointPath}/owned/${userId}`);
-  }
+    // En projects-api.js - AGREGAR si no existe
+    /**
+     * Get a specific project by ID
+     * @param {string} projectId - Project ID
+     * @returns {Promise} API response
+     */
+    getById(projectId) {
+        return this.http.get(`${this.endpointPath}/${projectId}`);
+    }
 
-  /**
-   * Get project statistics
-   * @param {string} projectId - Project ID
-   * @returns {Promise} API response
-   */
-  getProjectStats(projectId) {
-    return this.http.get(`${this.endpointPath}/${projectId}/stats`);
-  }
+    /**
+     * Get projects owned by user
+     * @param {string} userId - User ID
+     * @returns {Promise} API response
+     */
+    getOwnedProjects(userId) {
+        return this.http.get(`${this.endpointPath}/owned/${userId}`);
+    }
 
-  /**
-   * Add collaborator to project
-   * @param {string} projectId - Project ID
-   * @param {Object} collaborator - Collaborator data
-   * @returns {Promise} API response
-   */
-  addCollaborator(projectId, collaborator) {
-    return this.http.post(`${this.endpointPath}/${projectId}/collaborators`, collaborator);
-  }
+    /**
+     * Get project statistics
+     * @param {string} projectId - Project ID
+     * @returns {Promise} API response
+     */
+    getProjectStats(projectId) {
+        return this.http.get(`${this.endpointPath}/${projectId}/stats`);
+    }
 
-  /**
-   * Remove collaborator from project
-   * @param {string} projectId - Project ID
-   * @param {string} collaboratorId - Collaborator ID
-   * @returns {Promise} API response
-   */
-  removeCollaborator(projectId, collaboratorId) {
-    return this.http.delete(`${this.endpointPath}/${projectId}/collaborators/${collaboratorId}`);
-  }
+    /**
+     * Add collaborator to project
+     * @param {string} projectId - Project ID
+     * @param {Object} collaborator - Collaborator data
+     * @returns {Promise} API response
+     */
+    addCollaborator(projectId, collaborator) {
+        return this.http.post(`${this.endpointPath}/${projectId}/collaborators`, collaborator);
+    }
 
-  /**
-   * Get project notifications
-   * @param {string} projectId - Project ID
-   * @returns {Promise} API response
-   */
-  getProjectNotifications(projectId) {
-    return this.http.get(`${this.endpointPath}/${projectId}/notifications`);
-  }
+    /**
+     * Remove collaborator from project
+     * @param {string} projectId - Project ID
+     * @param {string} collaboratorId - Collaborator ID
+     * @returns {Promise} API response
+     */
+    removeCollaborator(projectId, collaboratorId) {
+        return this.http.delete(`${this.endpointPath}/${projectId}/collaborators/${collaboratorId}`);
+    }
 
-  /**
-   * Update project status
-   * @param {string} projectId - Project ID
-   * @param {string} status - New status
-   * @returns {Promise} API response
-   */
-  updateStatus(projectId, status) {
-    return this.http.patch(`${this.endpointPath}/${projectId}/status`, { status });
-  }
+    /**
+     * Get project notifications
+     * @param {string} projectId - Project ID
+     * @returns {Promise} API response
+     */
+    getProjectNotifications(projectId) {
+        return this.http.get(`${this.endpointPath}/${projectId}/notifications`);
+    }
 
-  /**
-   * Search projects by criteria
-   * @param {Object} criteria - Search criteria
-   * @returns {Promise} API response
-   */
-  searchProjects(criteria) {
-    return this.http.get(`${this.endpointPath}/search`, { params: criteria });
-  }
+    /**
+     * Update project status
+     * @param {string} projectId - Project ID
+     * @param {string} status - New status
+     * @returns {Promise} API response
+     */
+    updateStatus(projectId, status) {
+        return this.http.patch(`${this.endpointPath}/${projectId}/status`, { status });
+    }
 
-  /**
-   * Add project to user's owned projects
-   * @param {string} userId - User ID
-   * @param {string} projectId - Project ID
-   * @returns {Promise} API response
-   */
-  addToOwnedProjects(userId, projectId) {
-    return this.http.post(`${this.endpointPath}/owned/${userId}`, { projectId });
-  }
+    /**
+     * Search projects by criteria
+     * @param {Object} criteria - Search criteria
+     * @returns {Promise} API response
+     */
+    searchProjects(criteria) {
+        return this.http.get(`${this.endpointPath}/search`, { params: criteria });
+    }
 
-  /**
-   * Get projects created by user (temporary method using userId filter)
-   * @param {string} userId - User ID
-   * @returns {Promise} API response
-   */
-  getProjectsByUserId(userId) {
-    return this.http.get(`${this.endpointPath}?userId=${userId}`);
-  }
+    /**
+     * Add project to user's owned projects
+     * @param {string} userId - User ID
+     * @param {string} projectId - Project ID
+     * @returns {Promise} API response
+     */
+    addToOwnedProjects(userId, projectId) {
+        return this.http.post(`${this.endpointPath}/owned/${userId}`, { projectId });
+    }
+
+    /**
+     * Get projects created by user (temporary method using userId filter)
+     * @param {string} userId - User ID
+     * @returns {Promise} API response
+     */
+    getProjectsByUserId(userId) {
+        return this.http.get(`${this.endpointPath}?userId=${userId}`);
+    }
+
+    /**
+     * Update project data
+     * @param {string} projectId - Project ID
+     * @param {Object} updateData - Data to update
+     * @returns {Promise} API response
+     */
+    update(projectId, updateData) {
+        return this.http.patch(`${this.endpointPath}/${projectId}`, updateData);
+    }
 }

@@ -1,15 +1,22 @@
 <script setup>
-import { computed } from 'vue';
+import { computed} from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useHomeStore } from '../../application/home.store.js';
+import {useUserStore} from "../../../iam/application/user-store.js";
 
+const userStore = useUserStore();
 const { t } = useI18n();
 const router = useRouter();
 const homeStore = useHomeStore();
 
 // Computed properties
-const projects = computed(() => homeStore.paginatedProjects);
+const projects = computed(() => {
+  const currentUserId = userStore.currentUser?.id?.toString();
+  return homeStore.paginatedProjects.filter(project =>
+      project.userId !== currentUserId
+  );
+});
 const isLoading = computed(() => homeStore.isLoadingProjects);
 const totalProjects = computed(() => homeStore.filteredProjects.length);
 const currentPage = computed(() => homeStore.currentPage);
@@ -25,10 +32,9 @@ const handleViewProject = (project) => {
   router.push(`/projects/show/${project.id}`);
 };
 
-// Handle apply to project
+// Handle apply to project - ACTUALIZADO
 const handleApplyToProject = (project) => {
-  console.log('Apply to project:', project);
-  // Navigate to application or show modal
+  router.push(`/projects/${project.id}/apply`);
 };
 
 // Get project status color
@@ -42,8 +48,6 @@ const getStatusColor = (status) => {
   };
   return statusMap[status?.toLowerCase()] || 'info';
 };
-
-
 </script>
 
 <template>
@@ -78,9 +82,9 @@ const getStatusColor = (status) => {
     <!-- Projects List -->
     <div v-else-if="projects.length" class="projects-container">
       <div
-        v-for="project in projects"
-        :key="project.id"
-        class="project-card"
+          v-for="project in projects"
+          :key="project.id"
+          class="project-card"
       >
         <div class="project-header">
           <div class="project-title-section">
@@ -98,15 +102,15 @@ const getStatusColor = (status) => {
             <h4 class="roles-title">{{ t('home.projects.availableRoles') }}:</h4>
             <div class="roles-tags">
               <pv-chip
-                v-for="role in project.roles.slice(0, 3)"
-                :key="role.id"
-                :label="role.name"
-                class="role-chip"
+                  v-for="role in project.roles.slice(0, 3)"
+                  :key="role.id"
+                  :label="role.name"
+                  class="role-chip"
               />
               <pv-chip
-                v-if="project.roles.length > 3"
-                :label="`+${project.roles.length - 3}`"
-                class="role-chip more-roles"
+                  v-if="project.roles.length > 3"
+                  :label="`+${project.roles.length - 3}`"
+                  class="role-chip more-roles"
               />
             </div>
           </div>
@@ -116,15 +120,15 @@ const getStatusColor = (status) => {
             <h4 class="roles-title">{{ t('home.projects.areas') }}:</h4>
             <div class="areas-tags">
               <span
-                v-for="area in project.areas.slice(0, 2)"
-                :key="area"
-                class="area-tag"
+                  v-for="area in project.areas.slice(0, 2)"
+                  :key="area"
+                  class="area-tag"
               >
                 {{ area }}
               </span>
               <span
-                v-if="project.areas.length > 2"
-                class="area-tag more-areas"
+                  v-if="project.areas.length > 2"
+                  class="area-tag more-areas"
               >
                 +{{ project.areas.length - 2 }}
               </span>
@@ -139,14 +143,14 @@ const getStatusColor = (status) => {
               {{ t('home.projects.duration') }}: {{ project.durationQuantity }} {{ project.durationType }}
             </span>
           </div>
-          
+
           <!-- Tags/Keywords -->
           <div v-if="project.tags?.length" class="tags-section">
             <div class="project-tags">
               <span
-                v-for="tag in project.tags.slice(0, 4)"
-                :key="tag"
-                class="project-tag"
+                  v-for="tag in project.tags.slice(0, 4)"
+                  :key="tag"
+                  class="project-tag"
               >
                 #{{ tag }}
               </span>
@@ -157,16 +161,16 @@ const getStatusColor = (status) => {
 
         <div class="project-actions">
           <pv-button
-            :label="t('home.projects.viewMore')"
-            icon="pi pi-eye"
-            class="view-button"
-            @click="handleViewProject(project)"
+              :label="t('home.projects.viewMore')"
+              icon="pi pi-eye"
+              class="view-button"
+              @click="handleViewProject(project)"
           />
           <pv-button
-            :label="t('home.projects.apply')"
-            icon="pi pi-send"
-            class="apply-button"
-            @click="handleApplyToProject(project)"
+              :label="t('home.projects.apply')"
+              icon="pi pi-send"
+              class="apply-button"
+              @click="handleApplyToProject(project)"
           />
         </div>
       </div>
@@ -178,21 +182,21 @@ const getStatusColor = (status) => {
       <h3 class="empty-title">{{ t('home.projects.noProjects') }}</h3>
       <p class="empty-message">{{ t('home.projects.noProjectsMessage') }}</p>
       <pv-button
-        :label="t('home.projects.clearFilters')"
-        icon="pi pi-filter-slash"
-        outlined
-        @click="homeStore.clearFilters()"
+          :label="t('home.projects.clearFilters')"
+          icon="pi pi-filter-slash"
+          outlined
+          @click="homeStore.clearFilters()"
       />
     </div>
 
     <!-- Pagination -->
     <div v-if="projects.length && homeStore.totalPages > 1" class="pagination-section">
       <pv-paginator
-        :first="(currentPage - 1) * itemsPerPage"
-        :rows="itemsPerPage"
-        :total-records="totalProjects"
-        @page="handlePageChange"
-        template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+          :first="(currentPage - 1) * itemsPerPage"
+          :rows="itemsPerPage"
+          :total-records="totalProjects"
+          @page="handlePageChange"
+          template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
       />
     </div>
   </div>

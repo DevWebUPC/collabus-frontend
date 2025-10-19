@@ -21,7 +21,19 @@ const currentProjects = computed(() => {
 // Methods
 const switchTab = async (tab) => {
   activeTab.value = tab;
-  
+
+  // ✅ SOLUCIÓN: Forzar recarga de datos
+  try {
+    console.log('🔄 Switching tab to:', tab);
+    if (tab === 'participating') {
+      await projectsStore.fetchParticipatingProjects();
+    } else {
+      await projectsStore.fetchOwnedProjects();
+    }
+    console.log('✅ Tab data loaded');
+  } catch (error) {
+    console.error('Error loading projects:', error);
+  }
 };
 
 const navigateToProject = (projectId) => {

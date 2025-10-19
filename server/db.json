@@ -744,220 +744,352 @@
   ],
   "projects": [
     {
-      "id": "1",
-      "title": "E-Commerce Platform",
-      "description": "A modern e-commerce platform with advanced features for online retail businesses. Includes payment integration, inventory management, and analytics dashboard.",
-      "summary": "Plataforma de comercio electrónico moderna con funcionalidades avanzadas para empresas de venta online.",
-      "category": "Desarrollo Web, E-commerce",
+      "title": "prueba",
+      "description": "prueba preuab",
       "areas": [
-        "Desarrollo Web",
-        "E-commerce",
-        "Marketing Digital"
+        "Desarrollo Web"
       ],
       "tags": [
-        "React",
-        "Node.js",
-        "PostgreSQL",
-        "Stripe",
-        "AWS"
+        "prueba"
       ],
-      "academicLevel": "Profesional senior",
+      "academicLevel": "Estudiante de pregrado",
+      "benefits": "prueba \nprueba",
       "skills": [
-        "JavaScript",
-        "React",
-        "Node.js",
-        "Database Design",
-        "Payment Integration"
+        "prueba"
       ],
-      "durationQuantity": 5,
+      "durationQuantity": 1,
       "durationType": "meses",
-      "benefits": "Los participantes aprenderán desarrollo full-stack moderno, integración de pagos, arquitectura escalable y buenas prácticas de desarrollo. Ideal para construir un portafolio sólido y ganar experiencia práctica en proyectos reales de e-commerce.",
       "roles": [
         {
-          "id": "role_1",
-          "name": "Frontend Developer",
+          "id": 1760636758828,
+          "name": "prueba1",
           "cards": [
             {
-              "id": "card_1_1",
-              "title": "Responsabilidades Técnicas",
+              "id": 1760636758829,
+              "title": "prueba",
               "items": [
-                "Desarrollar interfaces de usuario responsivas con React",
-                "Implementar state management con Redux",
-                "Integrar APIs REST con el backend",
-                "Optimizar rendimiento y experiencia de usuario"
-              ]
-            },
-            {
-              "id": "card_1_2",
-              "title": "Habilidades Requeridas",
-              "items": [
-                "Experiencia sólida en React y JavaScript ES6+",
-                "Conocimiento de CSS3 y preprocesadores",
-                "Familiaridad con herramientas de build (Webpack, Vite)",
-                "Experiencia en testing con Jest/React Testing Library"
+                "prueba"
               ]
             }
           ]
         },
         {
-          "id": "role_2",
-          "name": "Backend Developer",
+          "id": 1760636802707,
+          "name": "prueba",
           "cards": [
             {
-              "id": "card_2_1",
-              "title": "Responsabilidades del Servidor",
+              "id": 1760636802708,
+              "title": "prueba",
               "items": [
-                "Desarrollar APIs REST con Node.js y Express",
-                "Diseñar e implementar base de datos PostgreSQL",
-                "Integrar sistemas de pago (Stripe, PayPal)",
-                "Implementar autenticación y autorización JWT"
-              ]
-            },
-            {
-              "id": "card_2_2",
-              "title": "Requisitos Técnicos",
-              "items": [
-                "Experiencia en Node.js y frameworks backend",
-                "Conocimiento sólido de bases de datos relacionales",
-                "Experiencia con APIs de terceros",
-                "Conocimiento de seguridad web y mejores prácticas"
+                "prueba"
               ]
             }
           ]
         }
       ],
       "status": "active",
-      "progress": 65,
-      "startDate": "2025-10-15T00:00:00.000Z",
-      "endDate": "2026-06-15T00:00:00.000Z",
-      "budget": 15000,
-      "userId": "2",
+      "progress": 0,
+      "userId": "1",
+      "authorName": "Vitaly Baca",
       "collaborators": [
-        "1",
-        "3",
-        "5",
-        "6",
-        "7",
-        "8"
+        {
+          "id": "1760755114175",
+          "applicantId": 2,
+          "name": "Sebastian Pariachi",
+          "role": "prueba1",
+          "roleId": 1760636758828,
+          "progress": 0,
+          "joinedAt": "2025-10-18T02:38:34.175Z"
+        },
+        {
+          "id": "1760755122629",
+          "applicantId": 6,
+          "name": "Luis Fernandez Garcia",
+          "role": "prueba",
+          "roleId": 1760636802707,
+          "progress": 0,
+          "joinedAt": "2025-10-18T02:38:42.629Z"
+        }
       ],
       "tasks": [
-        "1",
-        "2",
-        "3"
-      ],
-      "milestones": [
-        "1",
-        "2"
-      ],
-      "createdAt": "2025-10-10T00:00:00.000Z",
-      "updatedAt": "2025-10-20T00:00:00.000Z",
-      "authorName": "Alice Johnson"
-    },
-    {
-      "id": "2",
-      "authorName": "Bob Wilson",
-      "title": "Mobile Banking App",
-      "description": "Secure mobile banking application with biometric authentication, transaction history, and real-time notifications.",
-      "summary": "Aplicación móvil de banca segura con autenticación biométrica y notificaciones en tiempo real.",
-      "category": "mobile-dev",
-      "areas": [
-        "Desarrollo Móvil",
-        "Fintech",
-        "Seguridad"
-      ],
-      "tags": [
-        "React Native",
-        "iOS",
-        "Android",
-        "Biometric",
-        "Security"
-      ],
-      "academicLevel": "Profesional avanzado",
-      "skills": [
-        "React Native",
-        "Mobile Development",
-        "Security",
-        "API Integration",
-        "Biometric Authentication"
-      ],
-      "durationQuantity": 6,
-      "durationType": "meses",
-      "benefits": "Los participantes desarrollarán habilidades especializadas en seguridad móvil, autenticación biométrica, y arquitecturas fintech. Experiencia práctica en el desarrollo de aplicaciones bancarias con estándares de seguridad de nivel enterprise.",
-      "roles": [
         {
-          "id": "role_mobile_1",
-          "name": "Mobile Developer",
-          "cards": [
+          "title": "prueba",
+          "description": "hola es un prueba",
+          "dueDate": "2025-10-31T05:00:00.000Z",
+          "assignedTo": 2,
+          "assignedToName": "Sebastian Pariachi",
+          "role": "prueba1",
+          "checklist": [
             {
-              "id": "card_mobile_1_1",
-              "title": "Desarrollo Nativo",
-              "items": [
-                "Desarrollar interfaces nativas con React Native",
-                "Implementar autenticación biométrica",
-                "Integrar APIs bancarias seguras",
-                "Optimizar rendimiento en dispositivos móviles"
-              ]
+              "id": 1760840424430,
+              "text": "prueba 1",
+              "completed": true
             },
             {
-              "id": "card_mobile_1_2",
-              "title": "Seguridad Móvil",
-              "items": [
-                "Implementar encriptación end-to-end",
-                "Gestionar certificados y tokens seguros",
-                "Desarrollar sistemas anti-fraude",
-                "Cumplir estándares PCI DSS"
-              ]
+              "id": 1760840427998,
+              "text": "prueba 2",
+              "completed": true
             }
-          ]
+          ],
+          "tools": [
+            {
+              "id": 1760840432486,
+              "name": "pruaba 1.2",
+              "checked": false
+            },
+            {
+              "id": 1760840437238,
+              "name": "prueba 2.1",
+              "checked": false
+            }
+          ],
+          "comment": "hola",
+          "attachments": [
+            {
+              "id": 1760840451302.7175,
+              "name": "https://github.com/",
+              "type": "link",
+              "icon": "pi pi-link"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1760840455404",
+          "createdAt": "2025-10-19T02:20:55.404Z",
+          "updatedAt": "2025-10-19T02:28:28.174Z",
+          "status": "completed",
+          "progress": 100,
+          "completedAt": "2025-10-19T02:28:28.157Z"
+        },
+        {
+          "title": "prueba2",
+          "description": "prueba",
+          "dueDate": "2025-10-19T05:00:00.000Z",
+          "assignedTo": 2,
+          "assignedToName": "Sebastian Pariachi",
+          "role": "prueba1",
+          "checklist": [
+            {
+              "id": 1760841951279,
+              "text": "prueba1",
+              "completed": true
+            },
+            {
+              "id": 1760841954143,
+              "text": "prueba2",
+              "completed": true
+            }
+          ],
+          "tools": [
+            {
+              "id": 1760841959567,
+              "name": "prueba",
+              "checked": false
+            },
+            {
+              "id": 1760841962927,
+              "name": "prueba",
+              "checked": false
+            }
+          ],
+          "comment": "hola esta es una prueba",
+          "attachments": [
+            {
+              "id": 1760841974831.8413,
+              "name": "https://github.com/",
+              "type": "link",
+              "icon": "pi pi-link"
+            },
+            {
+              "id": 1760841989103.3643,
+              "name": "vista-de-proyectos-participados-enviar-tarea-(Colaboradors).png",
+              "type": "file",
+              "icon": "pi pi-file"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1760841990887",
+          "createdAt": "2025-10-19T02:46:30.887Z",
+          "updatedAt": "2025-10-19T02:47:38.055Z",
+          "progress": 100,
+          "status": "completed",
+          "completedAt": "2025-10-19T02:47:38.039Z"
+        },
+        {
+          "title": "prueba 13",
+          "description": "prueba otra",
+          "dueDate": "2025-10-29T05:00:00.000Z",
+          "assignedTo": 2,
+          "assignedToName": "Sebastian Pariachi",
+          "role": "prueba1",
+          "checklist": [
+            {
+              "id": 1760842113959,
+              "text": "prueba",
+              "completed": true
+            },
+            {
+              "id": 1760842118271,
+              "text": "prueba",
+              "completed": true
+            }
+          ],
+          "tools": [
+            {
+              "id": 1760842121215,
+              "name": "prueba",
+              "checked": false
+            },
+            {
+              "id": 1760842124863,
+              "name": "123",
+              "checked": false
+            }
+          ],
+          "comment": "hola este es un prueba",
+          "attachments": [
+            {
+              "id": 1760842136575.461,
+              "name": "https://github.com/",
+              "type": "link",
+              "icon": "pi pi-link"
+            },
+            {
+              "id": 1760842141551.2043,
+              "name": "Crear Proyecto 3.png",
+              "type": "file",
+              "icon": "pi pi-file"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1760842143123",
+          "createdAt": "2025-10-19T02:49:03.123Z",
+          "updatedAt": "2025-10-19T03:03:11.905Z",
+          "status": "completed",
+          "progress": 100,
+          "completedAt": "2025-10-19T03:03:11.889Z"
+        },
+        {
+          "title": "hola",
+          "description": "hola mundo",
+          "dueDate": "2025-10-19T05:00:00.000Z",
+          "assignedTo": 2,
+          "assignedToName": "Sebastian Pariachi",
+          "role": "prueba1",
+          "checklist": [
+            {
+              "id": 1760843483823,
+              "text": "hola mundo",
+              "completed": true
+            }
+          ],
+          "tools": [
+            {
+              "id": 1760843488407,
+              "name": "hola mundo",
+              "checked": false
+            }
+          ],
+          "comment": "hola mundo",
+          "attachments": [
+            {
+              "id": 1760843504952.2937,
+              "name": "https://github.com/",
+              "type": "link",
+              "icon": "pi pi-link"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1760843506853",
+          "createdAt": "2025-10-19T03:11:46.853Z",
+          "updatedAt": "2025-10-19T03:19:32.111Z",
+          "status": "completed",
+          "progress": 100,
+          "completedAt": "2025-10-19T03:19:32.102Z"
+        },
+        {
+          "title": "hola",
+          "description": "hola",
+          "dueDate": "2025-10-19T05:00:00.000Z",
+          "assignedTo": 6,
+          "assignedToName": "Luis Fernandez Garcia",
+          "role": "prueba",
+          "checklist": [
+            {
+              "id": 1760845713105,
+              "text": "hola",
+              "completed": true
+            }
+          ],
+          "tools": [
+            {
+              "id": 1760845716665,
+              "name": "123",
+              "checked": false
+            }
+          ],
+          "comment": "hola",
+          "attachments": [
+            {
+              "id": 1760845726769.8533,
+              "name": "https://www.youtube.com/watch?v=HgzGwKwLmgM",
+              "type": "link",
+              "icon": "pi pi-link"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1760845728697",
+          "createdAt": "2025-10-19T03:48:48.697Z",
+          "updatedAt": "2025-10-19T03:49:28.763Z",
+          "status": "completed",
+          "progress": 100,
+          "completedAt": "2025-10-19T03:49:28.746Z"
         }
       ],
-      "status": "active",
-      "progress": 40,
-      "startDate": "2026-02-01T00:00:00.000Z",
-      "endDate": "2026-08-01T00:00:00.000Z",
-      "budget": 25000,
-      "userId": "1",
-      "collaborators": [
-        "2",
-        "4"
-      ],
-      "tasks": [
-        "4",
-        "5",
-        "7"
-      ],
-      "milestones": [
-        "3"
-      ],
-      "createdAt": "2025-10-25T00:00:00.000Z",
-      "updatedAt": "2026-02-05T00:00:00.000Z"
+      "milestones": [],
+      "createdAt": "2025-10-16T17:46:54.022Z",
+      "updatedAt": "2025-10-16T17:46:54.022Z",
+      "id": 1,
+      "notifications": []
     },
     {
-      "title": "prueba de nuevo proyecto",
-      "summary": "prueba de nuevo proyecto\nesto debe aparecer en el home",
+      "title": "prueba 123",
+      "description": "asdasd asda",
       "areas": [
         "Desarrollo Web"
       ],
       "tags": [
-        "tag"
+        "12"
       ],
-      "academicLevel": "Estudiante de pregrado",
-      "benefits": "prueba de nuevo proyecto",
+      "academicLevel": "Estudiante de posgrado",
+      "benefits": "sadasd asd",
       "skills": [
-        "asdasd"
+        "asd"
       ],
       "durationQuantity": 1,
       "durationType": "meses",
       "roles": [
         {
-          "id": 1760061988268,
-          "name": "rol1",
+          "id": 1760639474190,
+          "name": "sad",
           "cards": [
             {
-              "id": 1760061988269,
-              "title": "titulo",
+              "id": 1760639474191,
+              "title": "asdasd",
               "items": [
-                "card"
+                "asd"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 1760639496812,
+          "name": "asdas",
+          "cards": [
+            {
+              "id": 1760639496813,
+              "title": "asdasd",
+              "items": [
+                "sasadasd"
               ]
             }
           ]
@@ -965,384 +1097,71 @@
       ],
       "status": "active",
       "progress": 0,
-      "userId": "1",
+      "userId": "4",
+      "authorName": "CarlosR",
       "collaborators": [],
       "tasks": [],
       "milestones": [],
-      "createdAt": "2025-10-10T02:07:16.523Z",
-      "updatedAt": "2025-10-10T02:07:16.523Z",
-      "id": "uyP0-d3"
-    },
-    {
-      "title": "prueba2",
-      "summary": "test description",
-      "areas": [
-        "Desarrollo Web"
-      ],
-      "tags": [
-        "tag"
-      ],
-      "academicLevel": "Estudiante de pregrado",
-      "benefits": "test description",
-      "skills": [
-        "ada"
-      ],
-      "durationQuantity": 1,
-      "durationType": "meses",
-      "roles": [
-        {
-          "id": 1760062036558,
-          "name": "test description",
-          "cards": [
-            {
-              "id": 1760062036559,
-              "title": "test description",
-              "items": [
-                "test description"
-              ]
-            }
-          ]
-        }
-      ],
-      "status": "active",
-      "progress": 0,
-      "userId": "1",
-      "collaborators": [],
-      "tasks": [],
-      "milestones": [],
-      "createdAt": "2025-10-10T02:09:20.633Z",
-      "updatedAt": "2025-10-10T02:09:20.633Z",
-      "id": "b8joDRR"
-    },
-    {
-      "title": "summary",
-      "description": "summarysummarysummary",
-      "areas": [
-        "Desarrollo Web"
-      ],
-      "tags": [
-        "summary"
-      ],
-      "academicLevel": "Estudiante de pregrado",
-      "benefits": "summarysummarysummary",
-      "skills": [
-        "summary"
-      ],
-      "durationQuantity": 1,
-      "durationType": "meses",
-      "roles": [
-        {
-          "id": 1760062212314,
-          "name": "summary",
-          "cards": [
-            {
-              "id": 1760062212315,
-              "title": "summary",
-              "items": [
-                "summary"
-              ]
-            }
-          ]
-        }
-      ],
-      "status": "active",
-      "progress": 0,
-      "userId": "1",
-      "authorName": "Usuario",
-      "collaborators": [],
-      "tasks": [],
-      "milestones": [],
-      "createdAt": "2025-10-10T02:10:25.682Z",
-      "updatedAt": "2025-10-10T02:10:25.682Z",
-      "id": "DMj8Bl6"
+      "createdAt": "2025-10-16T18:31:43.191Z",
+      "updatedAt": "2025-10-16T18:31:43.191Z",
+      "id": 2,
+      "notifications": []
     }
   ],
-  "tasks": [
+  "applications": [
     {
-      "id": "1",
-      "title": "Design Homepage Layout",
-      "description": "Create responsive homepage design with modern UI components and user-friendly navigation.",
-      "priority": "high",
-      "status": "completed",
-      "assignedTo": "3",
-      "projectId": "1",
-      "dueDate": "2026-02-15T00:00:00.000Z",
-      "estimatedHours": 16,
-      "actualHours": 14,
-      "tags": [
-        "design",
-        "frontend"
-      ],
-      "createdAt": "2025-10-15T00:00:00.000Z",
-      "updatedAt": "2026-02-10T00:00:00.000Z",
-      "completedAt": "2026-02-10T00:00:00.000Z"
+      "projectId": 1,
+      "applicantId": 2,
+      "applicantName": "Sebastian Pariachi",
+      "applicantEmail": "u20231c426@gmail.com",
+      "applicantPortfolio": "",
+      "applicantPhone": "",
+      "roleId": 1760636758828,
+      "message": "d",
+      "acceptedTerms": true,
+      "cvFile": null,
+      "cvFileName": "",
+      "id": 1,
+      "status": "accepted",
+      "reviewNotes": "Aplicante aceptado en el proyecto",
+      "reviewerId": 1,
+      "reviewedAt": "2025-10-18T02:38:34.078Z"
     },
     {
-      "id": "2",
-      "title": "Implement User Authentication",
-      "description": "Set up secure user authentication system with JWT tokens and password encryption.",
-      "priority": "high",
-      "status": "in-progress",
-      "assignedTo": "1",
-      "projectId": "1",
-      "dueDate": "2026-03-01T00:00:00.000Z",
-      "estimatedHours": 24,
-      "actualHours": 18,
-      "tags": [
-        "backend",
-        "security"
-      ],
-      "createdAt": "2025-10-20T00:00:00.000Z",
-      "updatedAt": "2026-02-15T00:00:00.000Z",
-      "completedAt": null
+      "projectId": 1,
+      "applicantId": 4,
+      "applicantName": "Carlos Rodriguez Perez",
+      "applicantEmail": "carlos.rodriguez@email.com",
+      "applicantPortfolio": "https://aulavirtual.upc.edu.pe/",
+      "applicantPhone": "+51936266002",
+      "roleId": 1760636802707,
+      "message": "sas",
+      "acceptedTerms": true,
+      "cvFile": null,
+      "cvFileName": "",
+      "id": 2,
+      "status": "rejected",
+      "reviewNotes": "Aplicante rechazado",
+      "reviewerId": 1,
+      "reviewedAt": "2025-10-18T02:38:35.375Z"
     },
     {
-      "id": "3",
-      "title": "Payment Gateway Integration",
-      "description": "Integrate Stripe payment processing for secure online transactions.",
-      "priority": "medium",
-      "status": "pending",
-      "assignedTo": "1",
-      "projectId": "1",
-      "dueDate": "2026-04-01T00:00:00.000Z",
-      "estimatedHours": 20,
-      "actualHours": 0,
-      "tags": [
-        "backend",
-        "payments"
-      ],
-      "createdAt": "2026-02-01T00:00:00.000Z",
-      "updatedAt": "2026-02-01T00:00:00.000Z",
-      "completedAt": null
-    },
-    {
-      "id": "4",
-      "title": "Mobile App UI Design",
-      "description": "Design intuitive user interface for mobile banking application following iOS and Android guidelines.",
-      "priority": "high",
-      "status": "in-progress",
-      "assignedTo": "4",
-      "projectId": "2",
-      "dueDate": "2026-03-15T00:00:00.000Z",
-      "estimatedHours": 32,
-      "actualHours": 20,
-      "tags": [
-        "mobile",
-        "design"
-      ],
-      "createdAt": "2026-02-05T00:00:00.000Z",
-      "updatedAt": "2026-02-20T00:00:00.000Z",
-      "completedAt": null
-    },
-    {
-      "id": "5",
-      "title": "Biometric Authentication",
-      "description": "Implement fingerprint and face recognition for secure app access.",
-      "priority": "high",
-      "status": "pending",
-      "assignedTo": "4",
-      "projectId": "2",
-      "dueDate": "2026-05-01T00:00:00.000Z",
-      "estimatedHours": 28,
-      "actualHours": 0,
-      "tags": [
-        "mobile",
-        "security"
-      ],
-      "createdAt": "2026-02-10T00:00:00.000Z",
-      "updatedAt": "2026-02-10T00:00:00.000Z",
-      "completedAt": null
-    },
-    {
-      "id": "6",
-      "title": "Data Collection Setup",
-      "description": "Set up data pipelines and establish connections to various data sources.",
-      "priority": "medium",
-      "status": "pending",
-      "assignedTo": "1",
-      "projectId": "3",
-      "dueDate": "2026-04-15T00:00:00.000Z",
-      "estimatedHours": 16,
-      "actualHours": 2,
-      "tags": [
-        "data",
-        "backend"
-      ],
-      "createdAt": "2026-02-25T00:00:00.000Z",
-      "updatedAt": "2026-03-01T00:00:00.000Z",
-      "completedAt": null
-    },
-    {
-      "id": "7",
-      "title": "API Integration",
-      "description": "Set up API integrations and establish connections to various external services.",
-      "priority": "medium",
-      "status": "pending",
-      "assignedTo": "2",
-      "projectId": "2",
-      "dueDate": "2026-04-15T00:00:00.000Z",
-      "estimatedHours": 16,
-      "actualHours": 2,
-      "tags": [
-        "api",
-        "backend"
-      ],
-      "createdAt": "2026-02-25T00:00:00.000Z",
-      "updatedAt": "2026-03-01T00:00:00.000Z",
-      "completedAt": null
-    }
-  ],
-  "milestones": [
-    {
-      "id": "1",
-      "title": "MVP Release",
-      "description": "Launch minimum viable product with core e-commerce features.",
-      "dueDate": "2025-09-11T00:00:00.000Z",
-      "status": "in-progress",
-      "projectId": "1",
-      "progress": 70,
-      "deliverables": [
-        {
-          "id": "1",
-          "name": "User Registration",
-          "completed": true
-        },
-        {
-          "id": "2",
-          "name": "Product Catalog",
-          "completed": true
-        },
-        {
-          "id": "3",
-          "name": "Shopping Cart",
-          "completed": false
-        }
-      ],
-      "createdAt": "2025-10-15T00:00:00.000Z",
-      "updatedAt": "2026-02-20T00:00:00.000Z",
-      "completedAt": null
-    },
-    {
-      "id": "2",
-      "title": "Payment System Launch",
-      "description": "Complete payment processing integration and testing.",
-      "dueDate": "2026-05-30T00:00:00.000Z",
-      "status": "pending",
-      "projectId": "1",
-      "progress": 25,
-      "deliverables": [
-        {
-          "id": "4",
-          "name": "Payment Gateway",
-          "completed": false
-        },
-        {
-          "id": "5",
-          "name": "Order Management",
-          "completed": false
-        }
-      ],
-      "createdAt": "2026-02-01T00:00:00.000Z",
-      "updatedAt": "2026-02-01T00:00:00.000Z",
-      "completedAt": null
-    },
-    {
-      "id": "3",
-      "title": "Beta Version Release",
-      "description": "Release beta version of mobile banking app for testing.",
-      "dueDate": "2026-06-01T00:00:00.000Z",
-      "status": "completed",
-      "projectId": "2",
-      "progress": 30,
-      "deliverables": [
-        {
-          "id": "6",
-          "name": "Core Banking Features",
-          "completed": false
-        },
-        {
-          "id": "7",
-          "name": "Security Implementation",
-          "completed": false
-        }
-      ],
-      "createdAt": "2026-02-05T00:00:00.000Z",
-      "updatedAt": "2026-02-15T00:00:00.000Z",
-      "completedAt": null
-    },
-    {
-      "id": "4",
-      "title": "Beta Version Release 2",
-      "description": "Release beta version of mobile banking app for testing.",
-      "dueDate": "2026-06-02T00:00:00.000Z",
-      "status": "pending",
-      "projectId": "2",
-      "progress": 50,
-      "deliverables": [
-        {
-          "id": "6",
-          "name": "Core Banking Features",
-          "completed": false
-        },
-        {
-          "id": "7",
-          "name": "Security Implementation",
-          "completed": false
-        }
-      ],
-      "createdAt": "2026-02-04T00:00:00.000Z",
-      "updatedAt": "2026-02-20T00:00:00.000Z",
-      "completedAt": null
-    }
-  ],
-  "notifications": [
-    {
-      "id": "notif_2_1",
-      "message": "Bob Wilson completó la integración de Face ID.",
-      "type": "task_completed",
-      "userId": "1",
-      "projectId": "2",
-      "createdAt": "2025-10-08T16:45:00.000Z"
-    },
-    {
-      "id": "notif_2_2",
-      "message": "Nueva actualización de requisitos de seguridad.",
-      "type": "requirement_update",
-      "userId": "1",
-      "projectId": "2",
-      "createdAt": "2025-10-07T11:30:00.000Z"
-    },
-    {
-      "id": "notif_2_3",
-      "message": "Revisión de código programada para mañana.",
-      "type": "review_scheduled",
-      "userId": "1",
-      "projectId": "2",
-      "createdAt": "2025-10-06T14:00:00.000Z"
-    },
-    {
-      "id": "notif_1_1",
-      "message": "Nueva tarea asignada: Implement User Authentication",
-      "type": "task_assigned",
-      "userId": "2",
-      "projectId": "1",
-      "createdAt": "2025-10-09T09:15:00.000Z"
-    },
-    {
-      "id": "notif_1_2",
-      "message": "John Doe completó el diseño de la homepage.",
-      "type": "task_completed",
-      "userId": "2",
-      "projectId": "1",
-      "createdAt": "2025-10-08T14:30:00.000Z"
-    },
-    {
-      "id": "notif_1_3",
-      "message": "Se acerca el deadline del MVP Release.",
-      "type": "milestone_reminder",
-      "userId": "2",
-      "projectId": "1",
-      "createdAt": "2025-10-07T10:00:00.000Z"
+      "projectId": 1,
+      "applicantId": 6,
+      "applicantName": "Luis Fernandez Garcia",
+      "applicantEmail": "luis.fernandez@email.com",
+      "applicantPortfolio": "https://chatgpt.com/",
+      "applicantPhone": "+51936266002",
+      "roleId": 1760636802707,
+      "message": "asdadasd",
+      "acceptedTerms": true,
+      "cvFile": null,
+      "cvFileName": "",
+      "id": 3,
+      "status": "accepted",
+      "reviewNotes": "Aplicante aceptado en el proyecto",
+      "reviewerId": 1,
+      "reviewedAt": "2025-10-18T02:38:42.602Z"
     }
   ],
   "categories": [
@@ -1404,180 +1223,6 @@
       "icon": "pi pi-megaphone",
       "isActive": true,
       "createdAt": "2025-10-01T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    }
-  ],
-  "collaborators": [
-    {
-      "id": "1",
-      "name": "John Doe",
-      "email": "john.doe@example.com",
-      "role": "Frontend Developer",
-      "avatar": null,
-      "skills": [
-        "React",
-        "JavaScript",
-        "CSS",
-        "HTML",
-        "Git"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-15T00:00:00.000Z",
-      "bio": "Frontend developer with 5+ years experience in React and modern web technologies.",
-      "tasksAssigned": 10,
-      "tasksCompleted": 7,
-      "projectId": "1",
-      "createdAt": "2025-09-15T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "2",
-      "name": "Jane Smith",
-      "email": "jane.smith@example.com",
-      "role": "Backend Developer",
-      "avatar": null,
-      "skills": [
-        "Node.js",
-        "Express",
-        "MongoDB",
-        "PostgreSQL",
-        "Docker"
-      ],
-      "status": "active",
-      "joinedAt": "2025-08-20T00:00:00.000Z",
-      "bio": "Full-stack developer specializing in backend architecture and database design.",
-      "tasksAssigned": 8,
-      "tasksCompleted": 4,
-      "projectId": "2",
-      "createdAt": "2025-08-20T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "3",
-      "name": "Alice Johnson",
-      "email": "alice.johnson@example.com",
-      "role": "UX Designer",
-      "avatar": null,
-      "skills": [
-        "UI/UX Design",
-        "Figma",
-        "Adobe XD",
-        "User Research",
-        "Prototyping"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-01T00:00:00.000Z",
-      "bio": "UI/UX designer focused on creating intuitive and accessible user experiences.",
-      "tasksAssigned": 6,
-      "tasksCompleted": 4,
-      "projectId": "1",
-      "createdAt": "2025-09-01T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "4",
-      "name": "Bob Wilson",
-      "email": "bob.wilson@example.com",
-      "role": "Mobile Developer",
-      "avatar": null,
-      "skills": [
-        "React Native",
-        "iOS",
-        "Android",
-        "Swift",
-        "Kotlin"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-10T00:00:00.000Z",
-      "bio": "Mobile developer with expertise in cross-platform and native app development.",
-      "tasksAssigned": 12,
-      "tasksCompleted": 11,
-      "projectId": "2",
-      "createdAt": "2025-09-10T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "5",
-      "name": "Ariana Lizeth",
-      "email": "ariana.lizeth@example.com",
-      "role": "UX Designer",
-      "avatar": null,
-      "skills": [
-        "UI/UX Design",
-        "Figma",
-        "Adobe XD",
-        "User Research"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-05T00:00:00.000Z",
-      "bio": "UX Designer focused on user experience and interface design.",
-      "tasksAssigned": 10,
-      "tasksCompleted": 7,
-      "projectId": "1",
-      "createdAt": "2025-09-05T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "6",
-      "name": "Dyaron Huapaya",
-      "email": "dyaron.huapaya@example.com",
-      "role": "Backend",
-      "avatar": null,
-      "skills": [
-        "Node.js",
-        "Python",
-        "Django",
-        "PostgreSQL"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-12T00:00:00.000Z",
-      "bio": "Backend developer specializing in APIs and database design.",
-      "tasksAssigned": 10,
-      "tasksCompleted": 5,
-      "projectId": "1",
-      "createdAt": "2025-09-12T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "7",
-      "name": "Gilbert Alonso",
-      "email": "gilbert.alonso@example.com",
-      "role": "Frontend",
-      "avatar": null,
-      "skills": [
-        "Vue.js",
-        "React",
-        "JavaScript",
-        "TypeScript"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-18T00:00:00.000Z",
-      "bio": "Frontend developer with expertise in modern JavaScript frameworks.",
-      "tasksAssigned": 10,
-      "tasksCompleted": 6,
-      "projectId": "1",
-      "createdAt": "2025-09-18T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "8",
-      "name": "Sebastián Pariachi",
-      "email": "sebastian.pariachi@example.com",
-      "role": "QA Tester",
-      "avatar": null,
-      "skills": [
-        "Testing",
-        "Selenium",
-        "Jest",
-        "Cypress"
-      ],
-      "status": "active",
-      "joinedAt": "2025-09-22T00:00:00.000Z",
-      "bio": "QA Tester ensuring high quality software delivery.",
-      "tasksAssigned": 10,
-      "tasksCompleted": 9,
-      "projectId": "1",
-      "createdAt": "2025-09-22T00:00:00.000Z",
       "updatedAt": "2025-10-01T00:00:00.000Z"
     }
   ],
@@ -1737,78 +1382,102 @@
       "createdAt": "2025-10-01T00:00:00.000Z"
     }
   ],
-  "projectCollaborations": [
+  "task-submissions": [
     {
-      "id": "pc_1_1",
-      "projectId": "1",
-      "collaboratorId": "1",
-      "role": "Frontend Developer",
-      "joinedAt": "2025-10-15T00:00:00.000Z",
-      "status": "active",
-      "contribution": 85,
-      "tasksAssigned": 3,
-      "tasksCompleted": 1,
-      "permissions": [
-        "view",
-        "edit",
-        "comment"
+      "taskId": "1760840455404",
+      "collaboratorId": 2,
+      "submittedAt": "2025-10-19T02:28:28.119Z",
+      "links": [
+        "https://github.com/"
       ],
-      "createdAt": "2025-10-15T00:00:00.000Z",
-      "updatedAt": "2025-10-20T00:00:00.000Z"
+      "attachments": [
+        {
+          "name": "Crear Proyecto 3.png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/38a753e2-bae9-4526-b33c-38117691bffb"
+        }
+      ],
+      "notes": "hola",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 1
     },
     {
-      "id": "pc_1_3",
-      "projectId": "1",
-      "collaboratorId": "3",
-      "role": "UI/UX Designer",
-      "joinedAt": "2025-10-16T00:00:00.000Z",
-      "status": "active",
-      "contribution": 90,
-      "tasksAssigned": 2,
-      "tasksCompleted": 1,
-      "permissions": [
-        "view",
-        "edit",
-        "comment"
+      "taskId": "1760841990887",
+      "collaboratorId": 2,
+      "submittedAt": "2025-10-19T02:47:37.999Z",
+      "links": [
+        "https://github.com/"
       ],
-      "createdAt": "2025-10-16T00:00:00.000Z",
-      "updatedAt": "2025-10-20T00:00:00.000Z"
+      "attachments": [
+        {
+          "name": "Frame-crear-tareas.png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/c007e54c-4120-446c-b70e-dfca93e64b10"
+        }
+      ],
+      "notes": "hola este es una prueba",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 2
     },
     {
-      "id": "pc_2_2",
-      "projectId": "2",
-      "collaboratorId": "2",
-      "role": "Backend Developer",
-      "joinedAt": "2026-02-01T00:00:00.000Z",
-      "status": "active",
-      "contribution": 75,
-      "tasksAssigned": 2,
-      "tasksCompleted": 0,
-      "permissions": [
-        "view",
-        "edit",
-        "comment"
+      "taskId": "1760842143123",
+      "collaboratorId": 2,
+      "submittedAt": "2025-10-19T03:03:11.856Z",
+      "links": [],
+      "attachments": [
+        {
+          "name": "ver presentacion del postulante.png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/bf2d8173-a292-436e-be25-79c58daeb97f"
+        }
       ],
-      "createdAt": "2026-02-01T00:00:00.000Z",
-      "updatedAt": "2026-02-05T00:00:00.000Z"
+      "notes": "hola",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 3
     },
     {
-      "id": "pc_2_4",
-      "projectId": "2",
-      "collaboratorId": "4",
-      "role": "Mobile Developer",
-      "joinedAt": "2026-02-02T00:00:00.000Z",
-      "status": "active",
-      "contribution": 80,
-      "tasksAssigned": 3,
-      "tasksCompleted": 1,
-      "permissions": [
-        "view",
-        "edit",
-        "comment"
+      "taskId": "1760843506853",
+      "collaboratorId": 2,
+      "submittedAt": "2025-10-19T03:19:32.088Z",
+      "links": [
+        "https://github.com/"
       ],
-      "createdAt": "2026-02-02T00:00:00.000Z",
-      "updatedAt": "2026-02-10T00:00:00.000Z"
+      "attachments": [
+        {
+          "name": "Vista-de-postular-a-un-proyecto.png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/daf4e8d3-d0e2-44f5-bf51-fc3b52c5c6c9"
+        }
+      ],
+      "notes": "hola mundo",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 4
+    },
+    {
+      "taskId": "1760845728697",
+      "collaboratorId": 6,
+      "submittedAt": "2025-10-19T03:49:28.737Z",
+      "links": [],
+      "attachments": [
+        {
+          "name": "ver presentacion del postulante.png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/9cb7227c-9d12-4246-9a8d-94ecfaa03318"
+        }
+      ],
+      "notes": "hola avanze la tarea",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 5
     }
   ]
 }

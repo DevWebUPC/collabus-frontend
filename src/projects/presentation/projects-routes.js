@@ -3,6 +3,8 @@ const ProjectList = () => import('./views/project-list.vue');
 const ProjectDetail = () => import('./views/project-detail.vue');
 const ProjectCreate = () => import('./views/project-create.vue');
 const ShowProject = () => import('./views/show-project.component.vue');
+const ProjectApplication = () => import('./components/ProjectApplication.vue');
+const ProjectApplicant = () => import('./views/ProjectApplicant.vue'); // Nueva ruta
 
 export const projectRoutes = [
   {
@@ -41,5 +43,26 @@ export const projectRoutes = [
       requiresAuth: true 
     },
     props: true
-  }
+  },
+    {
+        path: '/projects/:id/apply',
+        name: 'project-apply',
+        component: ProjectApplication,
+        meta: {
+            title: 'Apply to Project',
+            requiresAuth: true
+        },
+        props: true
+    },
+    {
+        path: '/applications/:applicationId',
+        name: 'project-applicant',
+        component: ProjectApplicant,
+        meta: {
+            title: 'Applicant Details',
+            requiresAuth: true
+        },
+        props: true
+    }
 ];
+

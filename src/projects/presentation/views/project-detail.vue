@@ -3,18 +3,27 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useProjectDetailStore } from '../../application/project-detail.store.js';
+import { watch } from 'vue';
+// My Projects
+import ProjectProgressCard from '../components/detail/my-projects/ProjectProgressCard.vue';
+import CollaboratorsCard from '../components/detail/my-projects/CollaboratorsCard.vue';
+import RecentNotificationsCard from '../components/detail/my-projects/RecentNotificationsCard.vue';
+import UpcomingMilestonesCard from '../components/detail/my-projects/UpcomingMilestonesCard.vue';
+import UrgentTasksCard from '../components/detail/my-projects/UrgentTasksCard.vue';
+import ApplicantsCard from '../components/detail/my-projects/ApplicantsCard.vue';
+// Participating
+import MyTaskCard from "../components/detail/participating/MyTaskCard.vue";
+import ProjectProgressCardParticipating from "../components/detail/participating/ProjectProgressCardParticipating.vue";
+import RecentActivityCard from "../components/detail/participating/RecentActivityCard.vue";
+import UpcomingMilestonesCardParticipating from "../components/detail/participating/UpcomingMilestonesCardParticipating.vue";
+// Task Management
+import ProjectTasksView from '../../../task-management/presentation/view/ProjectTasksView.vue';
+import ParticipatingTasksView from "../../../task-management/presentation/view/ParticipatingTasksView.vue";
 
-// Import modular components
-import ProjectProgressCard from '../components/detail/ProjectProgressCard.vue';
-import ProjectStatsCard from '../components/detail/ProjectStatsCard.vue';
-import ProjectOverallProgressCard from '../components/detail/ProjectOverallProgressCard.vue';
-import ProjectTasksCard from '../components/detail/ProjectTasksCard.vue';
-import ProjectMilestonesCard from '../components/detail/ProjectMilestonesCard.vue';
-import ProjectNotificationsCard from '../components/detail/ProjectNotificationsCard.vue';
-import ProjectUrgentTasksCard from '../components/detail/ProjectUrgentTasksCard.vue';
-import ProjectCollaboratorsCard from '../components/detail/ProjectCollaboratorsCard.vue';
 import EmptyTabContent from '../components/detail/EmptyTabContent.vue';
+import { useUserStore } from '../../../iam/application/user-store.js';
 
+const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
 const store = useProjectDetailStore();
@@ -23,15 +32,39 @@ const { t } = useI18n();
 // State
 const activeTab = ref('overview');
 
-
 // Methods
 const navigateBack = () => {
   router.push({ name: 'projects' });
 };
 
+// Manejar navegación a tasks desde UrgentTasksCard
+const handleViewAllTasks = () => {
+  console.log('🎯 Navegando a pestaña Tasks desde UrgentTasksCard');
+  activeTab.value = 'tasks';
+};
+
+// Manejar navegación a tasks desde MyTaskCard
+const handleViewAllTasksFromMyTaskCard = () => {
+  console.log('🎯 Navegando a pestaña Tasks desde MyTaskCard');
+  activeTab.value = 'tasks';
+};
+
+// Setup event listeners
+const setupEventListeners = () => {
+  window.addEventListener('view-all-tasks', handleViewAllTasksFromMyTaskCard);
+};
+
+const cleanupEventListeners = () => {
+  window.removeEventListener('view-all-tasks', handleViewAllTasksFromMyTaskCard);
+};
+
 onMounted(async () => {
-  console.log('Project ID:', route.params.id);
-  
+  console.log('🎯 Project Detail mounted - ID:', route.params.id);
+  console.log('👤 Current user ID:', userStore.currentUser?.id);
+
+  // Setup event listeners
+  setupEventListeners();
+
   const projectId = route.params.id;
   if (!projectId) {
     router.push({ name: 'projects' });
@@ -39,11 +72,17 @@ onMounted(async () => {
   }
 
   try {
-    // Load all project detail data
+    // ✅ SOLUCIÓN: Resetear y forzar recarga completa
+    console.log('🔄 Forcing project reload...');
+    store.reset();
     await store.loadProjectDetail(projectId);
-    console.log('Project loaded:', store.project);
+
+    console.log('✅ Project loaded:', store.project);
+    console.log('🏷️ isOwned:', store.isOwned);
+    console.log('🤝 isParticipating:', store.isParticipating);
+
   } catch (err) {
-    console.error('Error loading project:', err);
+    console.error('❌ Error loading project:', err);
     router.push({ name: 'projects' });
   }
 });
@@ -52,7 +91,38 @@ onMounted(async () => {
 onUnmounted(() => {
   console.log('Clearing project detail store on unmount');
   store.reset();
+  cleanupEventListeners();
 });
+
+watch(
+    () => route.params.id,
+    async (newId, oldId) => {
+      if (newId && newId !== oldId) {
+        console.log('🔄 Route changed - New project ID:', newId);
+        try {
+          store.reset();
+          await store.loadProjectDetail(newId);
+        } catch (err) {
+          console.error('Error loading new project:', err);
+        }
+      }
+    }
+);
+
+// ✅ SOLUCIÓN: Watcher para cambios en el usuario
+watch(
+    () => userStore.currentUser,
+    async (newUser) => {
+      if (newUser && store.project) {
+        console.log('🔄 User changed, reloading project...');
+        try {
+          await store.loadProjectDetail(store.project.id);
+        } catch (err) {
+          console.error('Error reloading project after user change:', err);
+        }
+      }
+    }
+);
 </script>
 
 <template>
@@ -60,11 +130,11 @@ onUnmounted(() => {
     <!-- Header -->
     <div class="page-header">
       <div class="header-actions">
-        <pv-button 
-          icon="pi pi-arrow-left"
-          text
-          @click="navigateBack"
-          class="back-btn"
+        <pv-button
+            icon="pi pi-arrow-left"
+            text
+            @click="navigateBack"
+            class="back-btn"
         />
         <h1 class="page-title">{{ store.project?.title || 'Cargando...' }}</h1>
       </div>
@@ -85,42 +155,42 @@ onUnmounted(() => {
     <div v-if="store.project && !store.loading" class="project-content">
       <!-- Tab Navigation -->
       <div class="tab-navigation">
-        <pv-button 
-          :class="['tab-button', { active: activeTab === 'overview' }]"
-          @click="activeTab = 'overview'"
+        <pv-button
+            :class="['tab-button', { active: activeTab === 'overview' }]"
+            @click="activeTab = 'overview'"
         >
           {{ $t('projects.detail.tabs.overview') }}
         </pv-button>
-        <pv-button 
-          :class="['tab-button', { active: activeTab === 'tasks' }]"
-          @click="activeTab = 'tasks'"
+        <pv-button
+            :class="['tab-button', { active: activeTab === 'tasks' }]"
+            @click="activeTab = 'tasks'"
         >
           {{ $t('projects.detail.tabs.tasks') }}
         </pv-button>
-        <pv-button 
-          :class="['tab-button', { active: activeTab === 'milestones' }]"
-          @click="activeTab = 'milestones'"
+        <pv-button
+            :class="['tab-button', { active: activeTab === 'milestones' }]"
+            @click="activeTab = 'milestones'"
         >
           {{ $t('projects.detail.tabs.milestones') }}
         </pv-button>
-        <pv-button 
-          v-if="store.isOwned"
-          :class="['tab-button', { active: activeTab === 'contributions' }]"
-          @click="activeTab = 'contributions'"
+        <pv-button
+            v-if="store.isOwned"
+            :class="['tab-button', { active: activeTab === 'contributions' }]"
+            @click="activeTab = 'contributions'"
         >
           {{ $t('projects.detail.tabs.contributions') }}
         </pv-button>
-        <pv-button 
-          v-if="store.isOwned"
-          :class="['tab-button', { active: activeTab === 'applicants' }]"
-          @click="activeTab = 'applicants'"
+        <pv-button
+            v-if="store.isOwned"
+            :class="['tab-button', { active: activeTab === 'applicants' }]"
+            @click="activeTab = 'applicants'"
         >
           {{ $t('projects.detail.tabs.applicants') }}
         </pv-button>
-        <pv-button 
-          v-if="store.isParticipating"
-          :class="['tab-button', { active: activeTab === 'feedback' }]"
-          @click="activeTab = 'feedback'"
+        <pv-button
+            v-if="store.isParticipating"
+            :class="['tab-button', { active: activeTab === 'feedback' }]"
+            @click="activeTab = 'feedback'"
         >
           {{ $t('projects.detail.tabs.feedback') }}
         </pv-button>
@@ -130,111 +200,89 @@ onUnmounted(() => {
       <div class="tab-content">
         <!-- Overview Tab -->
         <div v-if="activeTab === 'overview'" class="overview-content">
-          <!-- Top Row: Progress and Stats -->
-          <div  v-if="!store.isOwned" class="dashboard-grid">
-            <ProjectProgressCard 
-              :project="store.project" 
-              :stats="store.projectStats"
-            />
-            <ProjectStatsCard 
-              :project="store.project" 
-              :stats="store.projectStats"
-            />
-          </div>
-
-          <!-- Content based on ownership -->
           <template v-if="store.isOwned">
-            <!-- For Owned Projects: Special 3-column layout -->
-            <div class="owned-project-layout">
-              <!-- First row: 3 columns -->
-              <div class="dashboard-three-columns">
-                <!-- Left column: Overall Progress -->
-                <div class="left-column">
-                  <ProjectOverallProgressCard 
-                    :project="store.project" 
-                    :stats="store.projectStats"
-                  />
-
-                  <ProjectCollaboratorsCard 
-                    v-if="store.hasCollaboratorsData"
-                    :collaborators="store.collaborators"
-                  />
+            <!-- Layout corregido según la imagen -->
+            <div class="dashboard-layout">
+              <!-- Fila 1: 3 columnas -->
+              <div class="dashboard-row">
+                <!-- Columna izquierda: Progreso y Colaboradores -->
+                <div class="left-section">
+                  <ProjectProgressCard />
+                  <CollaboratorsCard />
                 </div>
-                
-                <!-- Center column: Notifications -->
-                <ProjectNotificationsCard 
-                  v-if="store.hasNotificationsData"
-                  :notifications="store.projectNotifications"
-                />
-                
-                <!-- Right column: Milestones and Urgent Tasks -->
-                <div class="right-column">
-                  <ProjectMilestonesCard 
-                    v-if="store.hasMilestonesData"
-                    :milestones="store.upcomingMilestones"
-                  />
-                  <ProjectUrgentTasksCard 
-                    v-if="store.urgentTasks.length > 0"
-                    :urgentTasks="store.urgentTasks"
-                  />
+
+                <!-- Columna central: Notificaciones -->
+                <div class="center-section">
+                  <RecentNotificationsCard />
+                </div>
+
+                <!-- Columna derecha: Hitos y Tareas -->
+                <div class="right-section">
+                  <UpcomingMilestonesCard />
+                  <UrgentTasksCard @view-all-tasks="handleViewAllTasks" />
                 </div>
               </div>
-
             </div>
           </template>
 
           <template v-else>
             <!-- For Participating Projects: My Tasks and Milestones -->
-            <div v-if="store.hasTasksData || store.hasMilestonesData" class="dashboard-row">
-              <ProjectTasksCard 
-                v-if="store.hasTasksData"
-                :tasks="store.myTasks"
-                :title="$t('projects.detail.sections.my-tasks')"
-              />
-              <ProjectMilestonesCard 
-                v-if="store.hasMilestonesData"
-                :milestones="store.upcomingMilestones"
-              />
+            <div class="participating-content">
+              <div class="dashboard-layout">
+                <div class="dashboard-row">
+                  <!-- Columna izquierda: Progreso y Mis Tareas -->
+                  <div class="left-section">
+                    <ProjectProgressCardParticipating />
+                    <MyTaskCard />
+                  </div>
+
+                  <!-- Columna derecha: Próximos Hitos y Actividad Reciente -->
+                  <div class="right-section">
+                    <RecentActivityCard />
+                    <UpcomingMilestonesCardParticipating />
+                  </div>
+                </div>
+              </div>
             </div>
           </template>
         </div>
 
         <!-- Other tabs content -->
-        <EmptyTabContent 
-          v-else-if="activeTab === 'tasks'" 
-          tab-name="tasks" 
-          icon="pi-check-square"
+        <ProjectTasksView
+            v-else-if="activeTab === 'tasks' && store.isOwned"
         />
 
-        <EmptyTabContent 
-          v-else-if="activeTab === 'milestones'" 
-          tab-name="milestones" 
-          icon="pi-flag"
+        <ParticipatingTasksView
+            v-else-if="activeTab === 'tasks' && !store.isOwned"
         />
 
-        <EmptyTabContent 
-          v-else-if="activeTab === 'contributions'" 
-          tab-name="contributions" 
-          icon="pi-dollar"
+        <EmptyTabContent
+            v-else-if="activeTab === 'milestones'"
+            tab-name="milestones"
+            icon="pi-flag"
         />
 
-        <EmptyTabContent 
-          v-else-if="activeTab === 'applicants'" 
-          tab-name="applicants" 
-          icon="pi-users"
+        <EmptyTabContent
+            v-else-if="activeTab === 'contributions'"
+            tab-name="contributions"
+            icon="pi-dollar"
         />
 
-        <EmptyTabContent 
-          v-else-if="activeTab === 'feedback'" 
-          tab-name="feedback" 
-          icon="pi-comments"
+        <ApplicantsCard v-else-if="activeTab === 'applicants'" />
+
+        <EmptyTabContent
+            v-else-if="activeTab === 'feedback'"
+            tab-name="feedback"
+            icon="pi-comments"
         />
       </div>
     </div>
   </div>
 </template>
 
+<!-- Los estilos se mantienen igual -->
 <style scoped>
+/* Tus estilos existentes se mantienen igual */
 .project-detail-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -245,6 +293,58 @@ onUnmounted(() => {
 
 .page-header {
   margin-bottom: 2rem;
+}
+
+.overview-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-height: 400px;
+}
+
+/* Layout centrado para proyectos participados */
+.participating-content {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.participating-content .dashboard-layout {
+  width: 100%;
+  max-width: 1000px; /* Ancho máximo para centrar el contenido */
+  margin: 0 auto; /* Centrar horizontalmente */
+}
+
+.participating-content .dashboard-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+  gap: 2rem;
+  align-items: start;
+}
+
+.participating-content .left-section,
+.participating-content .right-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Asegurar que las cards tengan altura consistente */
+.participating-content :deep(.p-card) {
+  height: fit-content;
+  min-height: 200px; /* Altura mínima para consistencia */
+}
+
+/* Responsive para participating */
+@media (max-width: 768px) {
+  .participating-content .dashboard-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .participating-content .dashboard-layout {
+    max-width: 100%;
+  }
 }
 
 .header-actions {
@@ -344,54 +444,35 @@ onUnmounted(() => {
   min-height: 400px;
 }
 
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+/* Nuevo layout corregido */
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .dashboard-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-}
-
-/* Owned project layout styles */
-.owned-project-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin-top: 2rem;
-}
-
-.dashboard-three-columns {
-  display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
+  align-items: start;
 }
 
-.left-column {
+.left-section {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.right-column {
+.center-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.right-section {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-}
-
-.collaborators-row {
-  margin-top: 1.5rem;
-}
-
-.collaborators-left-column {
-  grid-column: 1;
-}
-
-.empty-right-space {
-  grid-column: 2;
 }
 
 /* Cards - basic styles for layout only */
@@ -412,17 +493,14 @@ onUnmounted(() => {
   margin-bottom: 1rem;
 }
 
-/* Specific styling for owned project layout */
-.owned-project-layout :deep(.p-card) {
+/* Ajustes específicos para el layout */
+.left-section :deep(.p-card),
+.right-section :deep(.p-card) {
   height: fit-content;
 }
 
-.left-column :deep(.p-card) {
-  margin-bottom: 0;
-}
-
-.collaborators-row :deep(.p-card) {
-  margin-top: 0;
+.center-section :deep(.p-card) {
+  height: 100%;
 }
 
 /* Custom Button Styles to match design */
@@ -447,61 +525,39 @@ onUnmounted(() => {
   box-shadow: 0 0 0 2px var(--color-primary-200);
 }
 
-/* Layout and responsive styles */
-
 /* Responsive */
 @media (max-width: 768px) {
   .project-detail-container {
     padding: 0.5rem;
   }
-  
-  .dashboard-grid,
-  .dashboard-row,
-  .dashboard-three-columns {
+
+  .dashboard-row {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
-  .left-column,
-  .right-column {
+
+  .left-section,
+  .right-section {
     gap: 1rem;
   }
-  
-  .collaborators-row {
-    margin-top: 1rem;
-  }
-  
-  .owned-project-layout {
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-  
+
   .tab-navigation {
     overflow-x: auto;
   }
-  
+
   .tab-button {
     min-width: 120px;
   }
-  
-  /* Responsive adjustments are handled by individual components */
 }
 
 @media (max-width: 1024px) {
-  .dashboard-three-columns {
+  .dashboard-row {
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
   }
-  
-  .right-column {
+
+  .center-section {
     grid-column: span 2;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-  
-  .left-column {
-    grid-column: 1;
   }
 }
 
