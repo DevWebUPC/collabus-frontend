@@ -1,7 +1,7 @@
 <template>
   <pv-card class="my-tasks-card">
     <template #title>
-      Mis Tareas
+      Mis Tareas Pendientes
     </template>
     <template #content>
       <div class="tasks-list">
@@ -12,36 +12,24 @@
         </div>
 
         <!-- Empty State -->
-        <div v-else-if="myTasks.length === 0" class="empty-state">
+        <div v-else-if="pendingTasks.length === 0" class="empty-state">
           <i class="pi pi-inbox empty-icon"></i>
-          <h3>No tienes tareas asignadas</h3>
-          <p>Cuando te asignen tareas en este proyecto, aparecerán aquí.</p>
+          <h3>No tienes tareas pendientes</h3>
+          <p>Cuando te asignen nuevas tareas por hacer, aparecerán aquí.</p>
         </div>
 
         <!-- Tasks List -->
         <div v-else class="tasks-container">
           <div class="tasks-scroll-container">
             <div
-                v-for="task in myTasks"
+                v-for="task in pendingTasks"
                 :key="task.id"
                 class="task-item"
-                :class="{
-                'overdue': isOverdue(task.dueDate) && !task.completed,
-                'completed': task.completed
-              }"
             >
               <div class="task-info">
                 <div class="task-header">
                   <h4 class="task-title">{{ task.title }}</h4>
-                  <span v-if="task.completed" class="status-badge completed">
-                    <i class="pi pi-check-circle"></i>
-                    Completada
-                  </span>
-                  <span v-else-if="isOverdue(task.dueDate)" class="status-badge overdue">
-                    <i class="pi pi-exclamation-triangle"></i>
-                    Vencida
-                  </span>
-                  <span v-else class="status-badge pending">
+                  <span class="status-badge pending">
                     <i class="pi pi-clock"></i>
                     Pendiente
                   </span>
@@ -54,10 +42,9 @@
                     <i class="pi pi-calendar"></i>
                     <span class="meta-text">
                       {{ formatDate(task.dueDate) }}
-                      <span v-if="!task.completed && getDaysRemaining(task.dueDate) !== null"
-                            class="days-remaining"
-                            :class="{ 'overdue': isOverdue(task.dueDate) }">
-                        ({{ isOverdue(task.dueDate) ? Math.abs(getDaysRemaining(task.dueDate)) + ' días de retraso' : getDaysRemaining(task.dueDate) + ' días restantes' }})
+                      <span v-if="getDaysRemaining(task.dueDate) !== null"
+                            class="days-remaining">
+                        ({{ getDaysRemaining(task.dueDate) + ' días restantes' }})
                       </span>
                     </span>
                   </div>
@@ -74,7 +61,7 @@
           <!-- Botón general Ver Tareas -->
           <div class="view-all-tasks-btn-container">
             <pv-button
-                label="Ver Tareas"
+                label="Ver Todas las Tareas"
                 icon="pi pi-arrow-right"
                 @click="viewAllTasks"
                 class="view-all-tasks-btn"
@@ -91,14 +78,16 @@
 import { ref, computed, onMounted } from 'vue';
 import { useProjectDetailStore } from '../../../../application/project-detail.store.js';
 import { useUserStore } from '../../../../../iam/application/user-store.js';
+import { useTaskSubmissionStore } from '../../../../../task-management/application/task-submission-store.js';
 
 const projectDetailStore = useProjectDetailStore();
 const userStore = useUserStore();
+const taskSubmissionStore = useTaskSubmissionStore();
 
 const loading = ref(false);
 
-// Computed: Obtener tareas del usuario actual
-const myTasks = computed(() => {
+// Computed: Obtener tareas pendientes del usuario actual (sin submission y no vencidas)
+const pendingTasks = computed(() => {
   if (!projectDetailStore.project?.tasks) {
     return [];
   }
@@ -108,8 +97,17 @@ const myTasks = computed(() => {
     return [];
   }
 
-  return projectDetailStore.project.tasks.filter(task =>
+  // Filtrar tareas asignadas al usuario y que NO tengan submission
+  const userTasks = projectDetailStore.project.tasks.filter(task =>
       task.assignedTo && String(task.assignedTo) === userId
+  );
+
+  // Solo devolver las tareas que:
+  // 1. No tienen submission (pendientes)
+  // 2. No están vencidas
+  return userTasks.filter(task =>
+      !taskSubmissionStore.hasSubmissionForTask(task.id) &&
+      !isOverdue(task.dueDate)
   );
 });
 
@@ -118,18 +116,11 @@ const getNormalizedUserId = () => {
   return userId ? String(userId) : null;
 };
 
-// Computed: Estadísticas rápidas para mostrar en el card
+// Computed: Estadísticas rápidas para mostrar en el card (solo pendientes)
 const taskStats = computed(() => {
-  const tasks = myTasks.value;
-  const pending = tasks.filter(task => !task.completed && !isOverdue(task.dueDate)).length;
-  const overdue = tasks.filter(task => !task.completed && isOverdue(task.dueDate)).length;
-  const completed = tasks.filter(task => task.completed).length;
-
+  const tasks = pendingTasks.value;
   return {
-    total: tasks.length,
-    pending,
-    overdue,
-    completed
+    total: tasks.length
   };
 });
 
@@ -172,8 +163,22 @@ const viewAllTasks = () => {
 };
 
 // Cargar tareas cuando el componente se monte
-onMounted(() => {
-  console.log('Mis tareas en el card:', myTasks.value);
+onMounted(async () => {
+  console.log('Tareas pendientes en el card:', pendingTasks.value);
+
+  // Cargar submissions para poder determinar qué tareas están pendientes
+  if (pendingTasks.value.length > 0) {
+    loading.value = true;
+    try {
+      for (const task of pendingTasks.value) {
+        await taskSubmissionStore.loadSubmissionsByTask(task.id);
+      }
+    } catch (error) {
+      console.error('Error loading submissions:', error);
+    } finally {
+      loading.value = false;
+    }
+  }
 });
 </script>
 
@@ -282,17 +287,6 @@ onMounted(() => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.task-item.overdue {
-  border-left-color: var(--color-red-500);
-  background: #fef2f2;
-}
-
-.task-item.completed {
-  border-left-color: var(--color-green-500);
-  background: #f0fdf4;
-  opacity: 0.9;
-}
-
 .task-info {
   display: flex;
   flex-direction: column;
@@ -333,16 +327,6 @@ onMounted(() => {
   color: #d97706;
 }
 
-.status-badge.overdue {
-  background: #fecaca;
-  color: #dc2626;
-}
-
-.status-badge.completed {
-  background: #d1fae5;
-  color: #059669;
-}
-
 .task-description {
   font-size: 0.8rem;
   color: var(--color-gray-600);
@@ -377,10 +361,6 @@ onMounted(() => {
 .days-remaining {
   font-weight: 500;
   font-size: 0.7rem;
-}
-
-.days-remaining.overdue {
-  color: var(--color-red-600);
 }
 
 /* Contenedor y botón Ver Tareas */
