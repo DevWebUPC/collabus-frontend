@@ -1043,6 +1043,98 @@
           "status": "completed",
           "progress": 100,
           "completedAt": "2025-10-19T03:49:28.746Z"
+        },
+        {
+          "title": "prueba",
+          "description": "hola",
+          "dueDate": "2025-10-22T05:00:00.000Z",
+          "assignedTo": 6,
+          "assignedToName": "Luis Fernandez Garcia",
+          "role": "prueba",
+          "checklist": [
+            {
+              "id": 1760895546931,
+              "text": "paso1",
+              "completed": true
+            },
+            {
+              "id": 1760895549563,
+              "text": "paso2",
+              "completed": true
+            }
+          ],
+          "tools": [
+            {
+              "id": 1760895552475,
+              "name": "paso1",
+              "checked": false
+            }
+          ],
+          "comment": "hola",
+          "attachments": [
+            {
+              "id": 1760895563619.1301,
+              "name": "https://www.figma.com/files/team/1412940702019006362/recents-and-sharing?fuid=1249751912393142551",
+              "type": "link",
+              "icon": "pi pi-link"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1760895564970",
+          "createdAt": "2025-10-19T17:39:24.970Z",
+          "updatedAt": "2025-10-19T18:44:24.300Z",
+          "progress": 100,
+          "status": "completed",
+          "completedAt": "2025-10-19T18:44:24.283Z"
+        },
+        {
+          "title": "prueba-123",
+          "description": "prueba 2.1",
+          "dueDate": "2025-10-31T05:00:00.000Z",
+          "assignedTo": 2,
+          "assignedToName": "Sebastian Pariachi",
+          "role": "prueba1",
+          "checklist": [
+            {
+              "id": 1760898258453,
+              "text": "1",
+              "completed": true
+            },
+            {
+              "id": 1760898259799,
+              "text": "2",
+              "completed": true
+            }
+          ],
+          "tools": [
+            {
+              "id": 1760898261172,
+              "name": "figma",
+              "checked": false
+            }
+          ],
+          "comment": "hola",
+          "attachments": [
+            {
+              "id": 1760898273317.6826,
+              "name": "vista-de-proyectos-participados-enviar-tarea-(Colaboradors).png",
+              "type": "file",
+              "icon": "pi pi-file"
+            },
+            {
+              "id": 1760898286221.208,
+              "name": "https://www.figma.com/files/team/1412940702019006362/recents-and-sharing?fuid=1249751912393142551",
+              "type": "link",
+              "icon": "pi pi-link"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1760898289795",
+          "createdAt": "2025-10-19T18:24:49.795Z",
+          "updatedAt": "2025-10-19T18:42:04.145Z",
+          "progress": 100,
+          "status": "completed",
+          "completedAt": "2025-10-19T18:42:04.127Z"
         }
       ],
       "milestones": [],
@@ -1478,6 +1570,44 @@
       "createdAt": null,
       "updatedAt": null,
       "id": 5
+    },
+    {
+      "taskId": "1760898289795",
+      "collaboratorId": 2,
+      "submittedAt": "2025-10-19T18:42:04.101Z",
+      "links": [
+        " https://www.figma.com/files/team/1412940702019006362/recents-and-sharing?fuid=1249751912393142551"
+      ],
+      "attachments": [
+        {
+          "name": "crear-hito.png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/0bb6be1f-c4e0-416c-b8ac-1d001444057d"
+        }
+      ],
+      "notes": "hola prueba",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 6
+    },
+    {
+      "taskId": "1760895564970",
+      "collaboratorId": 6,
+      "submittedAt": "2025-10-19T18:44:24.262Z",
+      "links": [],
+      "attachments": [
+        {
+          "name": "vista-de-proyectos-participados-enviar-tarea-(Colaboradors).png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/89adbf12-a05f-47f8-a9d3-4ca2e28f8543"
+        }
+      ],
+      "notes": "",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 7
     }
   ]
 }
