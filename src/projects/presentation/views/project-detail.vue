@@ -23,6 +23,10 @@ import ParticipatingTasksView from "../../../task-management/presentation/view/P
 import EmptyTabContent from '../components/detail/EmptyTabContent.vue';
 import { useUserStore } from '../../../iam/application/user-store.js';
 
+// Milestones Management
+import ProjectMilestonesView from "../../../milestones-management/presentation/views/ProjectMilestonesView.vue";
+import ParticipatingMilestonesView from "../../../milestones-management/presentation/views/ParticipatingMilestonesView.vue";
+
 const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
@@ -256,11 +260,14 @@ watch(
             v-else-if="activeTab === 'tasks' && !store.isOwned"
         />
 
-        <EmptyTabContent
-            v-else-if="activeTab === 'milestones'"
-            tab-name="milestones"
-            icon="pi-flag"
+        <ProjectMilestonesView
+          v-else-if="activeTab === 'milestones' && store.isOwned"
         />
+
+        <ParticipatingMilestonesView
+          v-else-if="activeTab === 'milestones' && !store.isOwned"
+        />
+
 
         <EmptyTabContent
             v-else-if="activeTab === 'contributions'"
