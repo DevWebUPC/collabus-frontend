@@ -1,3 +1,4 @@
+// task-submission-store.js (MODIFICADO)
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { TaskSubmissionApi } from '../infrastructure/task-submission-api.js';
@@ -28,7 +29,16 @@ export const useTaskSubmissionStore = defineStore('taskSubmission', () => {
             setLoading(true);
             clearError();
             const response = await taskSubmissionApi.getByTaskId(taskId);
-            submissions.value = TaskSubmissionAssembler.fromApiArrayToEntityArray(response.data);
+            const newSubmissions = TaskSubmissionAssembler.fromApiArrayToEntityArray(response.data);
+
+            // ✅ EVITAR DUPLICADOS al agregar nuevas submissions
+            newSubmissions.forEach(newSub => {
+                const existingIndex = submissions.value.findIndex(sub => sub.id === newSub.id);
+                if (existingIndex === -1) {
+                    submissions.value.push(newSub);
+                }
+            });
+
             return submissions.value;
         } catch (err) {
             setError('Error loading submissions');
@@ -36,6 +46,18 @@ export const useTaskSubmissionStore = defineStore('taskSubmission', () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    // ✅ NUEVO MÉTODO: Obtener submission por taskId
+    const getSubmissionByTaskId = (taskId) => {
+        return submissions.value.find(submission =>
+            submission.taskId === taskId.toString()
+        );
+    };
+
+    // ✅ NUEVO MÉTODO: Verificar si existe submission para una tarea
+    const hasSubmissionForTask = (taskId) => {
+        return !!getSubmissionByTaskId(taskId);
     };
 
     const loadSubmission = async (submissionId) => {
@@ -137,6 +159,8 @@ export const useTaskSubmissionStore = defineStore('taskSubmission', () => {
         updateSubmission,
         deleteSubmission,
         getSubmissionByTaskAndCollaborator,
-        hasSubmittedTask
+        hasSubmittedTask,
+        getSubmissionByTaskId, // ✅ EXPORTAR NUEVO MÉTODO
+        hasSubmissionForTask   // ✅ EXPORTAR NUEVO MÉTODO
     };
 });
