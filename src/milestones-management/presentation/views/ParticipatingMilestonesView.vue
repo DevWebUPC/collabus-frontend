@@ -162,15 +162,14 @@ const viewMilestone = (milestone) => {
 // Navegar a vista de tareas del hito
 const viewMilestoneTasks = (milestone) => {
   console.log('Ver tareas del hito:', milestone);
-  // Aquí podrías navegar a una vista específica de tareas del hito
-  // o mostrar un modal/dialog con las tareas
+
   router.push({
-    name: 'participating-tasks',
+    name: 'milestone-tasks', // 👈 Usar el nuevo nombre de ruta
     params: {
       projectId: projectDetailStore.project.id
     },
     query: {
-      milestone: milestone.id
+      milestone: milestone.id // 👈 Pasar el ID del hito como query parameter
     }
   });
 };
