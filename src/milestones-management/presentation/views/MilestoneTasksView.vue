@@ -129,6 +129,23 @@ const getStatusText = (status) => {
   }
 };
 
+const startTask = (task) => {
+  console.log('🚀 Iniciando tarea:', {
+    taskId: task.id,
+    taskTitle: task.title,
+    typeOfTaskId: typeof task.id
+  });
+
+  router.push({
+    name: 'milestone-task-submit',
+    params: { projectId: projectId.value },
+    query: {
+      milestone: milestoneId.value,
+      task: task.id // Asegúrate de que esto no sea undefined
+    }
+  });
+};
+
 
 </script>
 
@@ -332,16 +349,6 @@ const getStatusText = (status) => {
                   </span>
                 </div>
               </div>
-            </div>
-
-            <!-- Botón para continuar la tarea -->
-            <div class="task-actions">
-              <pv-button
-                  label="Continuar Tarea"
-                  icon="pi pi-sync"
-                  class="p-button-primary"
-                  @click="startTask(task)"
-              />
             </div>
           </div>
         </div>
