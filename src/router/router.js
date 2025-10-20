@@ -9,6 +9,7 @@ import RankingDeColaboradores from "../profile-management/presentation/views/ran
 import { projectRoutes } from "../projects/presentation/projects-routes.js";
 import { profileRoutes } from "../profile-management/presentation/profile-routes.js";
 import {taskRoutes} from "../task-management/presentation/task-routes.js";
+import {milestoneRoutes} from "../milestones-management/presentation/milestone-routes.js";
 import Notifications from "../shared/presentation/views/notifications-view.vue";
 
 // Import dinámico para page not found
@@ -35,6 +36,9 @@ const routes = [
 
     // Task routes
     ...taskRoutes,
+
+    // milestones
+    milestoneRoutes
 ];
 
 const router = createRouter({
