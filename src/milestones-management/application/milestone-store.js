@@ -269,10 +269,17 @@ export const useMilestonesStore = defineStore('milestone', {
                 this.setLoading(true);
                 this.clearError();
 
+                console.log('🎯 Store - Datos recibidos para crear milestone:', milestoneData);
+                console.log('🔍 Store - Verificando milestoneTasks:', milestoneData.milestoneTasks);
+
                 const milestonesApi = new MilestonesApi();
                 const response = await milestonesApi.createMilestone(milestoneData);
 
+                console.log('📡 Store - Respuesta del API:', response.data);
+
                 const newMilestone = MilestoneAssembler.fromApiToEntity(response.data);
+
+                console.log('✅ Store - Milestone creado con tasks:', newMilestone.milestoneTasks);
 
                 // Agregar a la lista global
                 this.milestones.push(newMilestone);
@@ -284,9 +291,9 @@ export const useMilestonesStore = defineStore('milestone', {
                 console.log(`✅ Created milestone: ${newMilestone.title}`);
                 return newMilestone;
             } catch (error) {
+                console.error('❌ Store - Error creating milestone:', error);
                 const errorMsg = `Error creating milestone: ${error.message}`;
                 this.setError(errorMsg);
-                console.error('❌', errorMsg);
                 throw error;
             } finally {
                 this.setLoading(false);
