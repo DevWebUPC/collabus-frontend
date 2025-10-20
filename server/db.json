@@ -1305,9 +1305,11 @@
                 }
               ],
               "comment": "",
-              "status": "pending",
-              "progress": 0,
-              "dueDate": "2025-10-28T05:00:00.000Z"
+              "status": "completed",
+              "progress": 100,
+              "dueDate": "2025-10-28T05:00:00.000Z",
+              "completedAt": "2025-10-20T20:13:25.927Z",
+              "updatedAt": "2025-10-20T20:13:25.937Z"
             },
             {
               "id": "task_1760986992854_tsg1up354",
@@ -1355,9 +1357,11 @@
                 }
               ],
               "comment": "",
-              "status": "pending",
-              "progress": 0,
-              "dueDate": "2025-10-28T05:00:00.000Z"
+              "status": "completed",
+              "progress": 100,
+              "dueDate": "2025-10-28T05:00:00.000Z",
+              "completedAt": "2025-10-20T20:18:14.792Z",
+              "updatedAt": "2025-10-20T20:18:14.839Z"
             }
           ],
           "status": "active",
@@ -1365,7 +1369,7 @@
           "createdBy": "1",
           "id": "milestone_1760986992883_8jlpekx47",
           "createdAt": "2025-10-20T19:03:12.883Z",
-          "updatedAt": "2025-10-20T19:03:12.883Z"
+          "updatedAt": "2025-10-20T20:18:14.868Z"
         }
       ],
       "createdAt": "2025-10-16T17:46:54.022Z",
@@ -1880,24 +1884,46 @@
     {
       "milestoneTaskId": "task_1760986992853_x8da5h17q",
       "collaboratorId": "2",
-      "submittedAt": "2025-10-20T19:14:35.629Z",
+      "submittedAt": "2025-10-20T20:13:25.903Z",
       "links": [],
       "attachments": [
         {
-          "id": "file_1760987675629_xrtxrnhbd",
+          "id": "file_1760991205902_z42kidz9n",
           "name": "ver hito.png",
           "type": "file",
-          "url": "blob:http://localhost:5173/e4172dd6-8ce8-40b2-b931-1cc71d0131b1",
-          "uploadedAt": "2025-10-20T19:14:35.629Z"
+          "url": "blob:http://localhost:5173/e3b6c344-9735-4419-b509-e96b1ed54300",
+          "uploadedAt": "2025-10-20T20:13:25.903Z"
         }
       ],
-      "notes": "asdasdas",
+      "notes": "asdasd",
       "status": "submitted",
       "milestoneId": "milestone_1760986992883_8jlpekx47",
       "projectId": "1",
-      "createdAt": "2025-10-20T19:14:35.629Z",
-      "updatedAt": "2025-10-20T19:14:35.629Z",
+      "createdAt": "2025-10-20T20:13:25.903Z",
+      "updatedAt": "2025-10-20T20:13:25.903Z",
       "id": 1
+    },
+    {
+      "milestoneTaskId": "task_1760986992854_tsg1up354",
+      "collaboratorId": "5",
+      "submittedAt": "2025-10-20T20:18:14.759Z",
+      "links": [],
+      "attachments": [
+        {
+          "id": "file_1760991494758_aadxbagm7",
+          "name": "ver hito.png",
+          "type": "file",
+          "url": "blob:http://localhost:5173/570c5e34-d4e7-4bdb-b7b8-d6473f782d12",
+          "uploadedAt": "2025-10-20T20:18:14.759Z"
+        }
+      ],
+      "notes": "asdasdasd dssasad",
+      "status": "submitted",
+      "milestoneId": "milestone_1760986992883_8jlpekx47",
+      "projectId": "1",
+      "createdAt": "2025-10-20T20:18:14.759Z",
+      "updatedAt": "2025-10-20T20:18:14.759Z",
+      "id": 2
     }
   ]
 }
