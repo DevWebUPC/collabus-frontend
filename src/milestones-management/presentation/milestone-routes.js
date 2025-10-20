@@ -3,7 +3,8 @@ const MilestoneCreateForm = () => import('../presentation/views/MilestoneCreateF
 const ProjectMilestonesView = () => import('../presentation/views/ProjectMilestonesView.vue')
 const MilestoneDetailView = () => import('../presentation/views/MilestoneDetailView.vue')
 const MilestoneTasksView = () => import('../presentation/views/MilestoneTasksView.vue')
-// 👇 Asegúrate de que esto sea un export named
+const MilestoneTaskSubmitView = () => import('../presentation/views/MilestoneTaskSubmitView.vue')
+
 export const milestoneRoutes = [
     {
         path: '/projects/:projectId/milestones/create',
@@ -38,6 +39,15 @@ export const milestoneRoutes = [
         component: MilestoneTasksView,
         meta: {
             title: 'Mis Tareas del Hito',
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/projects/:projectId/milestone-task-submit',
+        name: 'milestone-task-submit',
+        component: MilestoneTaskSubmitView,
+        meta: {
+            title: 'Enviar Tarea del Hito',
             requiresAuth: true
         }
     }
