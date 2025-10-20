@@ -17,12 +17,26 @@ export class MilestonesApi extends BaseEndpoint {
      * @returns {Promise} API response
      */
     getProjectMilestones(projectId) {
+        console.log('🔍 Fetching milestones for project:', projectId);
+
+        // CORRECCIÓN: Obtener el proyecto completo y extraer los milestones
         return this.http.get(`${this.endpointPath}/${projectId}`)
             .then(response => {
-                // Extraer milestones del proyecto
+                console.log('📦 Project response:', response.data);
+
+                // Extraer milestones del proyecto - manejar diferentes estructuras
+                const milestones = response.data.milestones ||
+                    response.data.project?.milestones ||
+                    [];
+
+                console.log('✅ Milestones found:', milestones.length);
                 return {
-                    data: response.data.milestones || []
+                    data: milestones
                 };
+            })
+            .catch(error => {
+                console.error('❌ Error fetching project:', error);
+                throw error;
             });
     }
 
