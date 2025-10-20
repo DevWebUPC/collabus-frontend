@@ -2,7 +2,7 @@
 const MilestoneCreateForm = () => import('../presentation/views/MilestoneCreateForm.vue')
 const ProjectMilestonesView = () => import('../presentation/views/ProjectMilestonesView.vue')
 const MilestoneDetailView = () => import('../presentation/views/MilestoneDetailView.vue')
-
+const MilestoneTasksView = () => import('../presentation/views/MilestoneTasksView.vue')
 // 👇 Asegúrate de que esto sea un export named
 export const milestoneRoutes = [
     {
@@ -29,6 +29,15 @@ export const milestoneRoutes = [
         component: MilestoneDetailView,
         meta: {
             title: 'Detalle del Hito',
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/projects/:projectId/milestone-tasks',
+        name: 'milestone-tasks',
+        component: MilestoneTasksView,
+        meta: {
+            title: 'Mis Tareas del Hito',
             requiresAuth: true
         }
     }
