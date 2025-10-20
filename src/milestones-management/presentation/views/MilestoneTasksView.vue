@@ -32,13 +32,25 @@ const assignedTasks = computed(() => {
 
   return milestone.value.milestoneTasks.filter(task => {
     const taskUserId = task.assignedTo ? String(task.assignedTo) : null;
-    return taskUserId === normalizedUserId.value;
+    const isAssignedToMe = taskUserId === normalizedUserId.value;
+
+    return isAssignedToMe;
   });
 });
 
+const reloadMilestoneData = async () => {
+  try {
+    await milestonesStore.loadMilestone(projectId.value, milestoneId.value);
+    milestone.value = milestonesStore.currentMilestone;
+    console.log('✅ Datos del milestone recargados');
+  } catch (error) {
+    console.error('❌ Error recargando datos:', error);
+  }
+};
+
 // Computed: Estadísticas de las tareas
 const taskStats = computed(() => {
-  const tasks = assignedTasks.value;
+  const tasks = assignedTasks.value; // Usar todas las tareas asignadas
   const total = tasks.length;
   const completed = tasks.filter(task => task.status === 'completed').length;
   const pending = tasks.filter(task => task.status === 'pending').length;
@@ -56,10 +68,14 @@ const taskStats = computed(() => {
 
 // Computed: Tareas agrupadas por estado
 const tasksByStatus = computed(() => {
+  const pendingTasks = assignedTasks.value.filter(task => task.status === 'pending');
+  const inProgressTasks = assignedTasks.value.filter(task => task.status === 'in_progress');
+  const completedTasks = assignedTasks.value.filter(task => task.status === 'completed'); // ← INCLUIR COMPLETADAS
+
   return {
-    pending: assignedTasks.value.filter(task => task.status === 'pending'),
-    inProgress: assignedTasks.value.filter(task => task.status === 'in_progress'),
-    completed: assignedTasks.value.filter(task => task.status === 'completed')
+    pending: pendingTasks,
+    inProgress: inProgressTasks,
+    completed: completedTasks // ← AHORA SÍ MOSTRAMOS COMPLETADAS
   };
 });
 
@@ -289,7 +305,7 @@ const startTask = (task) => {
             </div>
 
             <!-- Botón para hacer la tarea -->
-            <div class="task-actions">
+            <div class="task-actions" v-if="task.status !== 'completed'">
               <pv-button
                   label="Hacer Tarea"
                   icon="pi pi-play"
