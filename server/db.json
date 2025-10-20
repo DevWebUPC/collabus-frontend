@@ -1242,113 +1242,130 @@
       ],
       "milestones": [
         {
-          "title": "hola",
-          "description": "1",
+          "title": "prueba",
+          "description": "prueba",
           "tools": [
             "2",
-            "1"
+            "3"
           ],
-          "generalComment": "exs",
-          "dueDate": "2025-10-22T05:00:00.000Z",
+          "generalComment": "hola",
+          "dueDate": "2025-10-28T05:00:00.000Z",
           "attachments": [
             {
-              "id": "milestone_file_0_1760978361878_ox8es5ig8",
-              "name": "ver hito.png",
+              "id": "milestone_file_0_1760986992855_e4hdl3m9q",
+              "name": "Group 456.png",
               "type": "file",
-              "url": "blob:http://localhost:5173/f2766313-80a1-477b-bfea-0d238a17429e"
+              "url": "blob:http://localhost:5173/1c7d9b11-1d44-4635-bbc1-f59307178c93"
             },
             {
-              "id": "milestone_link_0_1760978361878_kdttyqs0y",
+              "id": "milestone_link_0_1760986992855_iqjiwgow1",
               "name": "Enlace 1",
               "type": "link",
-              "url": "31",
+              "url": "https://github.com/",
               "icon": "pi pi-link"
             }
           ],
           "milestoneTasks": [
             {
-              "id": "task_1760978361877_8n6ijwarc",
-              "title": "1",
-              "description": "1",
+              "id": "task_1760986992853_x8da5h17q",
+              "title": "tarea 1",
+              "description": "hola",
               "assignedTo": 2,
               "assignedToName": "Sebastian Pariachi",
               "checklist": [
                 {
-                  "id": "checklist_0_1760978361877_880v4ig35",
+                  "id": "checklist_0_1760986992854_xagc9if6t",
                   "text": "1",
                   "completed": false
                 },
                 {
-                  "id": "checklist_0_1760978361877_haqgysza3",
+                  "id": "checklist_0_1760986992854_54h3hb4i7",
                   "text": "2",
+                  "completed": false
+                },
+                {
+                  "id": "checklist_0_1760986992854_ahwupgusp",
+                  "text": "3",
                   "completed": false
                 }
               ],
               "attachments": [
                 {
-                  "id": "file_0_0_1760978361877_uldnfq0n4",
+                  "id": "file_0_0_1760986992854_h7ey16gmb",
                   "name": "ver hito.png",
                   "type": "file",
-                  "url": "blob:http://localhost:5173/24751f5b-3ff3-4158-a1cb-fdb78c4c007b"
+                  "url": "blob:http://localhost:5173/3624a25d-8180-4612-abb8-bcb3c83bb563"
                 },
                 {
-                  "id": "link_0_0_1760978361877_9lw9l4he0",
+                  "id": "link_0_0_1760986992854_jgxs4kwty",
                   "name": "Enlace 1",
                   "type": "link",
-                  "url": "https://www.figma.com/design/5w3Mgz6F3KzoDXQeX93wxn/Mockup-Aplicacion-web?node-id=656-4735&t=09vF924KDxSB0wAx-0",
+                  "url": "https://github.com/",
                   "icon": "pi pi-link"
                 }
               ],
               "comment": "",
               "status": "pending",
               "progress": 0,
-              "dueDate": "2025-10-22T05:00:00.000Z"
+              "dueDate": "2025-10-28T05:00:00.000Z"
             },
             {
-              "id": "task_1760978361877_082kiq9h7",
-              "title": "3",
-              "description": "2",
-              "assignedTo": 6,
-              "assignedToName": "Luis Fernandez Garcia",
+              "id": "task_1760986992854_tsg1up354",
+              "title": "tarea 2",
+              "description": "hola",
+              "assignedTo": 5,
+              "assignedToName": "Ana Martinez Sanchez",
               "checklist": [
                 {
-                  "id": "checklist_1_1760978361877_027uhvja6",
+                  "id": "checklist_1_1760986992854_nm2rdobwa",
+                  "text": "1",
+                  "completed": false
+                },
+                {
+                  "id": "checklist_1_1760986992854_rijzv6xq1",
                   "text": "2",
                   "completed": false
                 },
                 {
-                  "id": "checklist_1_1760978361877_0v9uipa2o",
-                  "text": "1",
+                  "id": "checklist_1_1760986992854_tqjqldsw5",
+                  "text": "3",
                   "completed": false
                 }
               ],
               "attachments": [
                 {
-                  "id": "file_1_0_1760978361877_99o36tsv1",
-                  "name": "Group 456.png",
+                  "id": "file_1_0_1760986992854_sw0jsjssc",
+                  "name": "ver hito.png",
                   "type": "file",
-                  "url": "blob:http://localhost:5173/94a544ba-85c3-42b8-b6ca-e7390e4a00bd"
+                  "url": "blob:http://localhost:5173/68578c69-cc22-4675-bbbf-36b4c1e7a25d"
                 },
                 {
-                  "id": "link_1_0_1760978361878_ns5eg197r",
+                  "id": "link_1_0_1760986992854_m1ka2qut7",
                   "name": "Enlace 1",
                   "type": "link",
-                  "url": "https://www.figma.com/design/5w3Mgz6F3KzoDXQeX93wxn/Mockup-Aplicacion-web?node-id=656-4735&t=09vF924KDxSB0wAx-0",
+                  "url": "https://github.com/",
+                  "icon": "pi pi-link"
+                },
+                {
+                  "id": "link_1_1_1760986992854_e46soc4il",
+                  "name": "Enlace 2",
+                  "type": "link",
+                  "url": "https://github.com/",
                   "icon": "pi pi-link"
                 }
               ],
               "comment": "",
               "status": "pending",
               "progress": 0,
-              "dueDate": "2025-10-22T05:00:00.000Z"
+              "dueDate": "2025-10-28T05:00:00.000Z"
             }
           ],
           "status": "active",
           "progress": 0,
           "createdBy": "1",
-          "id": "milestone_1760978361907_j5x97ousl",
-          "createdAt": "2025-10-20T16:39:21.907Z",
-          "updatedAt": "2025-10-20T16:39:21.907Z"
+          "id": "milestone_1760986992883_8jlpekx47",
+          "createdAt": "2025-10-20T19:03:12.883Z",
+          "updatedAt": "2025-10-20T19:03:12.883Z"
         }
       ],
       "createdAt": "2025-10-16T17:46:54.022Z",
@@ -1857,6 +1874,30 @@
       "createdAt": null,
       "updatedAt": null,
       "id": 8
+    }
+  ],
+  "milestone-task-submissions": [
+    {
+      "milestoneTaskId": "task_1760986992853_x8da5h17q",
+      "collaboratorId": "2",
+      "submittedAt": "2025-10-20T19:14:35.629Z",
+      "links": [],
+      "attachments": [
+        {
+          "id": "file_1760987675629_xrtxrnhbd",
+          "name": "ver hito.png",
+          "type": "file",
+          "url": "blob:http://localhost:5173/e4172dd6-8ce8-40b2-b931-1cc71d0131b1",
+          "uploadedAt": "2025-10-20T19:14:35.629Z"
+        }
+      ],
+      "notes": "asdasdas",
+      "status": "submitted",
+      "milestoneId": "milestone_1760986992883_8jlpekx47",
+      "projectId": "1",
+      "createdAt": "2025-10-20T19:14:35.629Z",
+      "updatedAt": "2025-10-20T19:14:35.629Z",
+      "id": 1
     }
   ]
 }
