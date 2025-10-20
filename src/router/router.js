@@ -38,7 +38,7 @@ const routes = [
     ...taskRoutes,
 
     // milestones
-    milestoneRoutes
+    ...milestoneRoutes
 ];
 
 const router = createRouter({
