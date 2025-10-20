@@ -1242,178 +1242,113 @@
       ],
       "milestones": [
         {
-          "title": "prueba",
-          "description": "este es un hito de prueba",
+          "title": "hola",
+          "description": "1",
           "tools": [
-            "prueba"
-          ],
-          "generalComment": "prueba",
-          "dueDate": "2025-10-31T05:00:00.000Z",
-          "attachments": [
-            {
-              "name": "crear-hito.png",
-              "type": "file",
-              "url": "blob:http://localhost:5173/6e806dac-a29b-4d48-bf22-353ef3f1e647"
-            }
-          ],
-          "milestoneTasks": [
-            {
-              "title": "prueba",
-              "description": "prueba",
-              "assignedTo": 6,
-              "assignedToName": "Luis Fernandez Garcia",
-              "checklist": [
-                {
-                  "text": "prueba",
-                  "completed": false
-                },
-                {
-                  "text": "prueba",
-                  "completed": false
-                }
-              ],
-              "attachments": [
-                {
-                  "name": "vista-de-proyectos-participados-enviar-tarea-(Colaboradors).png",
-                  "type": "file",
-                  "url": "blob:http://localhost:5173/97a6e63b-37d8-4600-89cc-074b532037e7"
-                },
-                {
-                  "name": "Enlace 1",
-                  "type": "link",
-                  "url": "https://github.com/",
-                  "icon": "pi pi-link"
-                }
-              ],
-              "comment": "",
-              "status": "pending",
-              "progress": 0,
-              "dueDate": "2025-10-31T05:00:00.000Z"
-            },
-            {
-              "title": "prueba 2",
-              "description": "prueba",
-              "assignedTo": 2,
-              "assignedToName": "Sebastian Pariachi",
-              "checklist": [
-                {
-                  "text": "prueba",
-                  "completed": false
-                },
-                {
-                  "text": "prueba",
-                  "completed": false
-                }
-              ],
-              "attachments": [
-                {
-                  "name": "vista-de-proyectos-participados-enviar-tarea-(Colaboradors).png",
-                  "type": "file",
-                  "url": "blob:http://localhost:5173/af200310-9476-4b2c-b446-f4191dbe8c03"
-                }
-              ],
-              "comment": "",
-              "status": "pending",
-              "progress": 0,
-              "dueDate": "2025-10-31T05:00:00.000Z"
-            }
-          ],
-          "status": "active",
-          "progress": 0,
-          "createdBy": "1",
-          "id": "milestone_1760929412853_46p6471kg",
-          "createdAt": "2025-10-20T03:03:32.853Z",
-          "updatedAt": "2025-10-20T03:03:32.853Z"
-        },
-        {
-          "title": "prueba",
-          "description": "prueba",
-          "tools": [
-            "1",
             "2",
-            "3"
+            "1"
           ],
-          "generalComment": "hola este es un prueba",
-          "dueDate": "2025-10-31T05:00:00.000Z",
+          "generalComment": "exs",
+          "dueDate": "2025-10-22T05:00:00.000Z",
           "attachments": [
             {
-              "name": "Group 297.png",
+              "id": "milestone_file_0_1760978361878_ox8es5ig8",
+              "name": "ver hito.png",
               "type": "file",
-              "url": "blob:http://localhost:5173/5624c193-f761-44b1-a0c5-ac0518b30ed3"
+              "url": "blob:http://localhost:5173/f2766313-80a1-477b-bfea-0d238a17429e"
             },
             {
+              "id": "milestone_link_0_1760978361878_kdttyqs0y",
               "name": "Enlace 1",
               "type": "link",
-              "url": "https://github.com/",
+              "url": "31",
               "icon": "pi pi-link"
             }
           ],
           "milestoneTasks": [
             {
-              "title": "321",
-              "description": "pruyeba",
-              "assignedTo": 5,
-              "assignedToName": "Ana Martinez Sanchez",
+              "id": "task_1760978361877_8n6ijwarc",
+              "title": "1",
+              "description": "1",
+              "assignedTo": 2,
+              "assignedToName": "Sebastian Pariachi",
               "checklist": [
                 {
-                  "text": "123",
+                  "id": "checklist_0_1760978361877_880v4ig35",
+                  "text": "1",
                   "completed": false
                 },
                 {
-                  "text": "321",
-                  "completed": false
-                },
-                {
-                  "text": "231",
+                  "id": "checklist_0_1760978361877_haqgysza3",
+                  "text": "2",
                   "completed": false
                 }
               ],
               "attachments": [
                 {
-                  "name": "Group 456.png",
+                  "id": "file_0_0_1760978361877_uldnfq0n4",
+                  "name": "ver hito.png",
                   "type": "file",
-                  "url": "blob:http://localhost:5173/2e2224f4-4007-45be-88d4-60ac9b314a59"
+                  "url": "blob:http://localhost:5173/24751f5b-3ff3-4158-a1cb-fdb78c4c007b"
                 },
                 {
+                  "id": "link_0_0_1760978361877_9lw9l4he0",
                   "name": "Enlace 1",
                   "type": "link",
-                  "url": "https://github.com/",
+                  "url": "https://www.figma.com/design/5w3Mgz6F3KzoDXQeX93wxn/Mockup-Aplicacion-web?node-id=656-4735&t=09vF924KDxSB0wAx-0",
                   "icon": "pi pi-link"
                 }
               ],
               "comment": "",
               "status": "pending",
               "progress": 0,
-              "dueDate": "2025-10-31T05:00:00.000Z"
+              "dueDate": "2025-10-22T05:00:00.000Z"
             },
             {
-              "title": "123",
-              "description": "123",
-              "assignedTo": 2,
-              "assignedToName": "Sebastian Pariachi",
+              "id": "task_1760978361877_082kiq9h7",
+              "title": "3",
+              "description": "2",
+              "assignedTo": 6,
+              "assignedToName": "Luis Fernandez Garcia",
               "checklist": [
                 {
-                  "text": "123",
+                  "id": "checklist_1_1760978361877_027uhvja6",
+                  "text": "2",
                   "completed": false
                 },
                 {
-                  "text": "213",
+                  "id": "checklist_1_1760978361877_0v9uipa2o",
+                  "text": "1",
                   "completed": false
                 }
               ],
-              "attachments": [],
+              "attachments": [
+                {
+                  "id": "file_1_0_1760978361877_99o36tsv1",
+                  "name": "Group 456.png",
+                  "type": "file",
+                  "url": "blob:http://localhost:5173/94a544ba-85c3-42b8-b6ca-e7390e4a00bd"
+                },
+                {
+                  "id": "link_1_0_1760978361878_ns5eg197r",
+                  "name": "Enlace 1",
+                  "type": "link",
+                  "url": "https://www.figma.com/design/5w3Mgz6F3KzoDXQeX93wxn/Mockup-Aplicacion-web?node-id=656-4735&t=09vF924KDxSB0wAx-0",
+                  "icon": "pi pi-link"
+                }
+              ],
               "comment": "",
               "status": "pending",
               "progress": 0,
-              "dueDate": "2025-10-31T05:00:00.000Z"
+              "dueDate": "2025-10-22T05:00:00.000Z"
             }
           ],
           "status": "active",
           "progress": 0,
           "createdBy": "1",
-          "id": "milestone_1760939359737_ewzb6ue3t",
-          "createdAt": "2025-10-20T05:49:19.737Z",
-          "updatedAt": "2025-10-20T05:49:19.737Z"
+          "id": "milestone_1760978361907_j5x97ousl",
+          "createdAt": "2025-10-20T16:39:21.907Z",
+          "updatedAt": "2025-10-20T16:39:21.907Z"
         }
       ],
       "createdAt": "2025-10-16T17:46:54.022Z",
