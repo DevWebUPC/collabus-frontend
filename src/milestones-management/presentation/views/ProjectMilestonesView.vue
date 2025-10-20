@@ -8,6 +8,20 @@ const showStatusDropdown = ref(false);
 const showCollaboratorDropdown = ref(false);
 const showCreateForm = ref(false)
 
+// ✅ AGREGAR: Función para manejar cuando se crea un hito
+const onMilestoneCreated = (nuevoHito) => {
+  console.log('🎉 Hito creado exitosamente:', nuevoHito);
+
+  // Cerrar el modal
+  showCreateForm.value = false;
+
+  // Opcional: Mostrar mensaje de éxito (si tienes un sistema de notificaciones)
+  // showSuccessNotification('Hito creado exitosamente');
+
+  // Opcional: Recargar la lista de hitos si es necesario
+  // loadMilestones();
+};
+
 const getStatusText = (status) => {
   const statusMap = {
     'pending': 'Pendiente',
@@ -23,7 +37,6 @@ const statusOptions = [
   { value: 'completed', label: 'Completado' },
   { value: 'retrasado', label: 'Retrasado' }
 ];
-
 
 // Métodos para manejar los dropdowns
 const toggleStatusDropdown = () => {
@@ -70,7 +83,6 @@ onUnmounted(() => {
   document.removeEventListener('click', closeDropdowns);
 });
 </script>
-
 <template>
   <div class="milestones-container">
     <!--Header de boton de crear-->
@@ -145,6 +157,7 @@ onUnmounted(() => {
   >
     <MilestoneCreateForm
         @cancel="showCreateForm = false"
+        @submit="onMilestoneCreated"
 
     />
   </pv-dialog>
