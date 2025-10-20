@@ -143,6 +143,14 @@ const getDaysRemaining = (dueDate) => {
 // Navegar a vista de hito
 const viewMilestone = (milestone) => {
   console.log('Ver hito:', milestone);
+  console.log('Navegando a:', {
+    name: 'milestone-detail',
+    params: {
+      projectId: projectDetailStore.project.id,
+      milestoneId: milestone.id
+    }
+  });
+
   router.push({
     name: 'milestone-detail',
     params: {
@@ -151,7 +159,6 @@ const viewMilestone = (milestone) => {
     }
   });
 };
-
 // Navegar a vista de tareas del hito
 const viewMilestoneTasks = (milestone) => {
   console.log('Ver tareas del hito:', milestone);
@@ -188,6 +195,7 @@ onMounted(async () => {
     }
   }
 });
+
 </script>
 
 <template>
