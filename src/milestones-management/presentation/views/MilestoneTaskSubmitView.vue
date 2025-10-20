@@ -3,20 +3,24 @@ import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useMilestonesStore } from '../../application/milestone-store.js';
 import { useUserStore } from '../../../iam/application/user-store.js';
+import { useMilestoneTaskSubmissionStore } from '../../application/milestone-task-submission-store.js';
 
 const route = useRoute();
 const router = useRouter();
 const milestonesStore = useMilestonesStore();
 const userStore = useUserStore();
+const submissionStore = useMilestoneTaskSubmissionStore();
 
 // Estado reactivo
 const loading = ref(false);
+const submitting = ref(false);
 const milestone = ref(null);
 const task = ref(null);
 const submissionData = ref({
   files: [],
   links: [],
-  notes: ''
+  notes: '',
+  newLink: ''
 });
 
 // Obtener IDs de los parámetros
@@ -106,8 +110,52 @@ const removeLink = (index) => {
   submissionData.value.links.splice(index, 1);
 };
 
+// Enviar la tarea
+const submitTask = async () => {
+  try {
+    submitting.value = true;
 
+    console.log('🚀 Iniciando envío de tarea...', {
+      projectId: projectId.value,
+      milestoneId: milestoneId.value,
+      taskId: task.value?.id,
+      collaboratorId: normalizedUserId.value,
+      submissionData: submissionData.value
+    });
 
+    // Validaciones
+    if (submissionData.value.files.length === 0 && submissionData.value.links.length === 0) {
+      alert('❌ Debes agregar al menos un archivo o enlace para enviar la tarea');
+      return;
+    }
+
+    // ✅ DEBUG: Verificar que todos los IDs estén presentes
+    console.log('🔍 IDs para la submission:', {
+      taskId: task.value.id,
+      collaboratorId: normalizedUserId.value,
+      milestoneId: milestoneId.value,
+      projectId: projectId.value
+    });
+
+    // Crear la submission
+    const submission = await submissionStore.createSubmissionFromForm(
+        submissionData.value,
+        task.value.id,
+        normalizedUserId.value,
+        milestoneId.value,
+        projectId.value
+    );
+
+    console.log('✅ Submission creada exitosamente:', submission);
+
+    // Resto del código...
+  } catch (error) {
+    console.error('❌ Error completo en submitTask:', error);
+    alert(`❌ Error al enviar la tarea: ${error.message}`);
+  } finally {
+    submitting.value = false;
+  }
+};
 
 // Volver a la vista anterior
 const goBack = () => {
@@ -326,6 +374,9 @@ onMounted(async () => {
               label="Enviar"
               icon="pi pi-send"
               class="p-button-primary"
+              @click="submitTask"
+              :loading="submitting"
+              :disabled="submitting"
           />
         </div>
       </div>
