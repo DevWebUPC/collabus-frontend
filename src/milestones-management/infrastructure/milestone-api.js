@@ -288,29 +288,53 @@ export class MilestonesApi extends BaseEndpoint {
      * @returns {Promise} API response
      */
     async updateMilestoneTask(projectId, milestoneId, taskId, updateData) {
-        // Obtener el milestone actual
-        const milestoneResponse = await this.getMilestone(projectId, milestoneId);
-        const milestone = milestoneResponse.data;
+        try {
+            console.log(`🔄 API - Updating milestone task:`, {
+                projectId,
+                milestoneId,
+                taskId,
+                updateData
+            });
 
-        if (!milestone.milestoneTasks || !Array.isArray(milestone.milestoneTasks)) {
-            throw new Error('No tasks found in milestone');
+            // Obtener el milestone actual
+            const milestoneResponse = await this.getMilestone(projectId, milestoneId);
+            const milestone = milestoneResponse.data;
+
+            if (!milestone.milestoneTasks || !Array.isArray(milestone.milestoneTasks)) {
+                throw new Error('No tasks found in milestone');
+            }
+
+            // Normalizar IDs para comparación
+            const normalizedTaskId = String(taskId);
+
+            // Encontrar y actualizar la tarea
+            const taskIndex = milestone.milestoneTasks.findIndex(t => {
+                const normalizedExistingId = String(t.id);
+                return normalizedExistingId === normalizedTaskId;
+            });
+
+            if (taskIndex === -1) {
+                console.error('❌ Task not found. Available tasks:', milestone.milestoneTasks.map(t => ({ id: t.id, type: typeof t.id })));
+                throw new Error('Task not found in milestone');
+            }
+
+            // Actualizar la tarea
+            milestone.milestoneTasks[taskIndex] = {
+                ...milestone.milestoneTasks[taskIndex],
+                ...updateData,
+                updatedAt: new Date().toISOString()
+            };
+
+            console.log('✅ Task updated successfully:', milestone.milestoneTasks[taskIndex]);
+
+            // Actualizar el milestone completo
+            return this.updateMilestone(projectId, milestoneId, {
+                milestoneTasks: milestone.milestoneTasks
+            });
+        } catch (error) {
+            console.error('❌ Error in updateMilestoneTask:', error);
+            throw error;
         }
-
-        // Encontrar y actualizar la tarea
-        const taskIndex = milestone.milestoneTasks.findIndex(t => t.id === taskId);
-        if (taskIndex === -1) {
-            throw new Error('Task not found in milestone');
-        }
-
-        milestone.milestoneTasks[taskIndex] = {
-            ...milestone.milestoneTasks[taskIndex],
-            ...updateData
-        };
-
-        // Actualizar el milestone
-        return this.updateMilestone(projectId, milestoneId, {
-            milestoneTasks: milestone.milestoneTasks
-        });
     }
 
     /**
