@@ -1,15 +1,42 @@
 <script setup>
-import { ref } from 'vue';
-import {FileUpload as PvFileUpload} from "primevue";
+import { ref, onMounted, computed } from 'vue';
+import { FileUpload as PvFileUpload } from "primevue";
+import { useRoute } from 'vue-router';
+import { useMilestonesStore } from '../../application/milestone-store.js';
+import { useProjectDetailStore } from '../../../projects/application/project-detail.store.js';
 
+// Stores
+const milestonesStore = useMilestonesStore();
+const projectDetailStore = useProjectDetailStore();
+const route = useRoute();
+
+// Props
+const projectId = ref(null);
+
+
+onMounted(() => {
+  console.log('🔍 Route params al montar:', route.params);
+
+  // CORREGIR: Obtener projectId directamente
+  projectId.value = route.params.projectId;
+  console.log('🔍 Project ID obtenido:', projectId.value, 'Type:', typeof projectId.value);
+
+  if (!projectId.value) {
+    console.error('❌ Project ID no encontrado en route.params:', route.params);
+  }
+});
+
+const emit = defineEmits(['cancel', 'submit']);
+
+// Datos del formulario
 const nombreHito = ref('');
 const descripcionHito = ref('');
 const herramientas = ref([]);
 const comentarioGeneral = ref('');
 const fechaVencimiento = ref('');
 const archivosAdjuntos = ref([]);
-const enlacesAdjuntos = ref([]); // Nuevo array para enlaces
-const nuevoEnlace = ref(''); // Para el input de nuevo enlace
+const enlacesAdjuntos = ref([]);
+const nuevoEnlace = ref('');
 
 const tareas = ref([
   {
@@ -17,22 +44,60 @@ const tareas = ref([
     descripcion: '',
     checklist: [''],
     archivos: [],
-    enlaces: [], // Nuevo array para enlaces en tareas
-    colaborador: null, // Nuevo campo para colaborador
-    nuevoEnlace: '' // Para el input de nuevo enlace en tareas
+    enlaces: [],
+    colaborador: null,
+    nuevoEnlace: ''
   }
 ]);
 
-// Simulamos una lista de colaboradores (deberías obtenerla de tu API o store)
-const colaboradores = ref([
-  { name: 'Juan Pérez', id: 1 },
-  { name: 'María García', id: 2 },
-  { name: 'Carlos López', id: 3 },
-  { name: 'Ana Martínez', id: 4 },
-]);
-
+// Colaboradores reales del proyecto
+const colaboradoresDisponibles = ref([]);
 const nuevaHerramienta = ref('');
 
+// Cargar colaboradores cuando el componente se monta
+onMounted(async () => {
+  console.log('🔍 Route params al montar:', route.params);
+
+  // Obtener projectId de diferentes formas posibles
+  projectId.value = route.params.projectId ||
+      route.params.id ||
+      route.query.projectId;
+
+  console.log('🔍 Project ID obtenido:', projectId.value);
+
+  if (!projectId.value) {
+    console.error('❌ Project ID no encontrado. Route:', route);
+    // Opcional: redirigir a página de error o proyectos
+    // router.push('/projects');
+    return;
+  }
+
+  await loadCollaborators();
+});
+
+const loadCollaborators = async () => {
+  try {
+    // Asegurarse de que el proyecto esté cargado
+    if (!projectDetailStore.project) {
+      await projectDetailStore.loadProjectDetail(projectId.value); // ✅ CORREGIDO
+    }
+
+    if (projectDetailStore.project?.collaborators) {
+      colaboradoresDisponibles.value = projectDetailStore.project.collaborators.map(collab => ({
+        id: collab.applicantId,
+        name: collab.name,
+        role: collab.role
+      }));
+      console.log('👥 Colaboradores cargados para hito:', colaboradoresDisponibles.value);
+    } else {
+      console.log('⚠️ No hay colaboradores en el proyecto');
+    }
+  } catch (error) {
+    console.error('Error cargando colaboradores:', error);
+  }
+};
+
+// Funciones existentes para manejar el formulario
 const agregarHerramienta = () => {
   if (nuevaHerramienta.value.trim()) {
     herramientas.value.push(nuevaHerramienta.value.trim());
@@ -121,25 +186,87 @@ const eliminarArchivo = (index, tipo, tareaIndex = null) => {
   }
 };
 
-const emit = defineEmits(['cancel', 'submit']);
+// FUNCIÓN MODIFICADA: Crear hito con store
+const guardarHito = async () => {
+  try {
+    console.log('🚀 Iniciando creación de hito...');
 
-const guardarHito = () => {
-  const hitoData = {
-    nombre: nombreHito.value,
-    descripcion: descripcionHito.value,
-    herramientas: herramientas.value,
-    comentarioGeneral: comentarioGeneral.value,
-    fechaVencimiento: fechaVencimiento.value,
-    archivosAdjuntos: archivosAdjuntos.value,
-    enlacesAdjuntos: enlacesAdjuntos.value, // Incluir enlaces
-    tareas: tareas.value
-  };
+    // ✅ USAR projectId.value en lugar de projectId.value (computed)
+    if (!projectId.value) {
+      console.error('❌ Project ID no disponible. Route params:', route.params);
+      alert('Error: No se pudo identificar el proyecto. Por favor, regresa y vuelve a intentarlo.');
+      return;
+    }
 
-  console.log('Datos del hito:', hitoData);
-  emit('submit', hitoData);
+    // Validaciones básicas
+    if (!nombreHito.value.trim()) {
+      console.error('❌ El nombre del hito es requerido');
+      alert('El nombre del hito es requerido');
+      return;
+    }
+
+    console.log('🎯 Project ID válido:', projectId.value);
+
+    // Preparar datos del formulario
+    const formData = {
+      nombre: nombreHito.value,
+      descripcion: descripcionHito.value,
+      herramientas: herramientas.value,
+      comentarioGeneral: comentarioGeneral.value,
+      fechaVencimiento: fechaVencimiento.value,
+      archivosAdjuntos: archivosAdjuntos.value,
+      enlacesAdjuntos: enlacesAdjuntos.value,
+      tareas: tareas.value
+    };
+
+    console.log('📝 Datos del formulario:', formData);
+    console.log('👤 Creado por:', projectDetailStore.getCurrentUserId());
+    console.log('👥 Colaboradores disponibles:', colaboradoresDisponibles.value);
+
+    // Usar el store para crear el hito
+    const nuevoHito = await milestonesStore.createMilestoneFromForm(
+        formData,
+        projectId.value, // ← USAR projectId.value directamente
+        projectDetailStore.getCurrentUserId(),
+        colaboradoresDisponibles.value
+    );
+
+    console.log('✅ Hito creado exitosamente:', nuevoHito);
+
+    // Emitir evento de éxito
+    emit('submit', nuevoHito);
+
+    // Limpiar formulario
+    resetForm();
+
+  } catch (error) {
+    console.error('❌ Error creando hito:', error);
+    alert(`Error al crear el hito: ${error.message}`);
+  }
+};
+
+const resetForm = () => {
+  nombreHito.value = '';
+  descripcionHito.value = '';
+  herramientas.value = [];
+  comentarioGeneral.value = '';
+  fechaVencimiento.value = '';
+  archivosAdjuntos.value = [];
+  enlacesAdjuntos.value = [];
+  nuevoEnlace.value = '';
+  tareas.value = [{
+    nombre: '',
+    descripcion: '',
+    checklist: [''],
+    archivos: [],
+    enlaces: [],
+    colaborador: null,
+    nuevoEnlace: ''
+  }];
 };
 
 const cancelar = () => {
+  resetForm();
   emit('cancel');
 };
 </script>
@@ -328,12 +455,12 @@ const cancelar = () => {
           />
         </div>
 
-        <!-- Nuevo campo: Seleccionar colaborador -->
+        <!-- Campo para seleccionar colaborador REAL -->
         <div class="form-section">
           <h5>Colaborador Asignado</h5>
           <pv-dropdown
               v-model="tarea.colaborador"
-              :options="colaboradores"
+              :options="colaboradoresDisponibles"
               optionLabel="name"
               placeholder="Seleccionar colaborador"
               class="w-full"
@@ -465,6 +592,8 @@ const cancelar = () => {
       <pv-button
           label="Crear Nuevo Hito"
           @click="guardarHito"
+          :loading="milestonesStore.loading"
+          :disabled="!nombreHito.trim()"
       />
     </div>
   </div>
