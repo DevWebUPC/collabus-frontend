@@ -196,10 +196,17 @@ export const useMilestonesStore = defineStore('milestone', {
                 this.setLoading(true);
                 this.clearError();
 
+                console.log('🚀 Loading milestones for project:', projectId);
+                console.log('📝 Store state before load:', this.milestones.length);
+
                 const milestonesApi = new MilestonesApi();
                 const response = await milestonesApi.getProjectMilestones(projectId);
 
+                console.log('📦 API Response:', response);
+
                 const milestones = MilestoneAssembler.fromApiArrayToEntityArray(response.data);
+
+                console.log('✅ Transformed milestones:', milestones);
 
                 // Reemplazar milestones del proyecto específico
                 this.milestones = [
@@ -221,6 +228,7 @@ export const useMilestonesStore = defineStore('milestone', {
                 const errorMsg = `Error loading project milestones: ${error.message}`;
                 this.setError(errorMsg);
                 console.error('❌', errorMsg);
+                console.error('🔍 Error details:', error.response?.data || error);
                 throw error;
             } finally {
                 this.setLoading(false);
