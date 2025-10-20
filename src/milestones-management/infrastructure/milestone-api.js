@@ -92,6 +92,9 @@ export class MilestonesApi extends BaseEndpoint {
     async createMilestone(milestoneData) {
         const { projectId, ...milestone } = milestoneData;
 
+        console.log('📡 API - Datos recibidos para crear milestone:', milestone);
+        console.log('🔍 API - Verificando milestoneTasks con IDs:', milestone.milestoneTasks);
+
         // Obtener el proyecto actual
         const projectResponse = await this.http.get(`${this.endpointPath}/${projectId}`);
         const project = projectResponse.data;
@@ -101,12 +104,16 @@ export class MilestonesApi extends BaseEndpoint {
             project.milestones = [];
         }
 
+        // ✅ CORRECCIÓN: Usar el milestone completo que ya viene con los IDs del assembler
         const newMilestone = {
-            ...milestone,
-            id: `milestone_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, // Generar ID único
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
+            ...milestone, // Esto ya incluye los milestoneTasks con IDs
+            id: milestone.id || `milestone_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            createdAt: milestone.createdAt || new Date().toISOString(),
+            updatedAt: milestone.updatedAt || new Date().toISOString()
         };
+
+        console.log('✅ API - Nuevo milestone a guardar (CON IDs):', newMilestone);
+        console.log('🔍 API - MilestoneTasks con IDs:', newMilestone.milestoneTasks);
 
         project.milestones.push(newMilestone);
 
@@ -115,9 +122,9 @@ export class MilestonesApi extends BaseEndpoint {
             milestones: project.milestones
         });
 
+        console.log('📝 API - Milestone guardado en proyecto CON IDs');
         return { data: newMilestone };
     }
-
     /**
      * Update a milestone
      * @param {string} projectId - Project ID
