@@ -1,5 +1,6 @@
 // milestones-management/presentation/milestone-routes.js
 const MilestoneCreateForm = () => import('../presentation/views/MilestoneCreateForm.vue')
+const ProjectMilestonesView = () => import('../presentation/views/ProjectMilestonesView.vue')
 export const milestoneRoutes = [
     {
         path: '/projects/:projectId/milestones/create',
@@ -10,4 +11,13 @@ export const milestoneRoutes = [
             requiresAuth: true
         }
     },
+    {
+        path: '/projects/:projectId/milestones',
+        name: 'project-milestones',
+        component: ProjectMilestonesView,
+        meta: {
+            title: 'Milestones del Proyecto',
+            requiresAuth: true
+        }
+    }
 ];
