@@ -13,6 +13,31 @@ export class MilestoneAssembler {
     static fromApiToEntity(apiData) {
         if (!apiData) return null;
 
+        // Generar IDs para milestoneTasks si no existen
+        const milestoneTasks = (apiData.milestoneTasks || []).map((task, index) => ({
+            id: task.id || `task_${Date.now()}_${index}_${Math.random().toString(36).substr(2, 9)}`, // ✅ Mejor generación de ID
+            title: task.title || '',
+            description: task.description || '',
+            assignedTo: task.assignedTo || null,
+            assignedToName: task.assignedToName || '',
+            checklist: (task.checklist || []).map((item, checklistIndex) => ({
+                id: item.id || `checklist_${Date.now()}_${index}_${checklistIndex}_${Math.random().toString(36).substr(2, 9)}`,
+                text: item.text || '',
+                completed: item.completed || false
+            })),
+            attachments: (task.attachments || []).map((att, attIndex) => ({
+                id: att.id || `attachment_${Date.now()}_${index}_${attIndex}_${Math.random().toString(36).substr(2, 9)}`,
+                name: att.name || '',
+                type: att.type || 'file',
+                url: att.url || '',
+                icon: att.icon || (att.type === 'link' ? 'pi pi-link' : 'pi pi-file')
+            })),
+            comment: task.comment || '',
+            status: task.status || 'pending',
+            progress: task.progress || 0,
+            dueDate: task.dueDate
+        }));
+
         return new Milestone({
             id: apiData.id,
             title: apiData.title || '',
@@ -21,7 +46,7 @@ export class MilestoneAssembler {
             generalComment: apiData.generalComment || '',
             dueDate: apiData.dueDate,
             attachments: apiData.attachments || [],
-            milestoneTasks: apiData.milestoneTasks || [],
+            milestoneTasks: milestoneTasks, // Usar las tareas con IDs
             status: apiData.status || 'active',
             progress: apiData.progress || 0,
             projectId: apiData.projectId,
@@ -68,30 +93,45 @@ export class MilestoneAssembler {
      * @returns {Object} API submission data
      */
     static fromFormToApi(formData, projectId, createdBy, collaborators = []) {
-        console.log('🔧 Assembler - Project ID:', projectId); // Debug
+        console.log('🔧 Assembler - Iniciando transformación del formulario');
+        console.log('📋 FormData recibido:', formData);
+        console.log('👥 Collaborators:', collaborators);
 
-        // Transformar las tareas del formulario a milestoneTasks
-        const milestoneTasks = formData.tareas.map(tarea => {
+        // Función auxiliar para generar IDs más consistentes
+        const generateId = (prefix) => {
+            return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        };
+
+        // Transformar las tareas del formulario a milestoneTasks CON IDs
+        const milestoneTasks = formData.tareas.map((tarea, index) => {
+            console.log(`📝 Procesando tarea ${index}:`, tarea);
+
             const collaborator = collaborators.find(c => c.id === tarea.colaborador?.id);
-            return {
-                title: tarea.nombre,
-                description: tarea.descripcion,
-                assignedTo: tarea.colaborador?.id,
+            const taskId = generateId('task');
+
+            const taskData = {
+                id: taskId, // ✅ ID PRINCIPAL DE LA TAREA
+                title: tarea.nombre || '',
+                description: tarea.descripcion || '',
+                assignedTo: tarea.colaborador?.id || null,
                 assignedToName: collaborator?.name || tarea.colaborador?.name || '',
-                checklist: tarea.checklist.map(item => ({
-                    text: item,
+                checklist: (tarea.checklist || []).map((item, checklistIndex) => ({
+                    id: generateId(`checklist_${index}`),
+                    text: item || '',
                     completed: false
                 })),
                 attachments: [
-                    ...tarea.archivos.map(archivo => ({
-                        name: archivo.name,
+                    ...(tarea.archivos || []).map((archivo, fileIndex) => ({
+                        id: generateId(`file_${index}_${fileIndex}`),
+                        name: archivo.name || '',
                         type: 'file',
                         url: URL.createObjectURL(archivo)
                     })),
-                    ...tarea.enlaces.map(enlace => ({
-                        name: enlace.nombre,
+                    ...(tarea.enlaces || []).map((enlace, linkIndex) => ({
+                        id: generateId(`link_${index}_${linkIndex}`),
+                        name: enlace.nombre || `Enlace ${linkIndex + 1}`,
                         type: 'link',
-                        url: enlace.url,
+                        url: enlace.url || '',
                         icon: 'pi pi-link'
                     }))
                 ],
@@ -100,35 +140,42 @@ export class MilestoneAssembler {
                 progress: 0,
                 dueDate: formData.fechaVencimiento
             };
+
+            console.log(`✅ Tarea ${index} procesada:`, taskData);
+            return taskData;
         });
 
+        console.log('📦 MilestoneTasks generadas:', milestoneTasks);
+
         const apiData = {
-            title: formData.nombre,
-            description: formData.descripcion,
-            tools: formData.herramientas,
-            generalComment: formData.comentarioGeneral,
+            title: formData.nombre || '',
+            description: formData.descripcion || '',
+            tools: formData.herramientas || [],
+            generalComment: formData.comentarioGeneral || '',
             dueDate: formData.fechaVencimiento ? new Date(formData.fechaVencimiento).toISOString() : null,
             attachments: [
-                ...formData.archivosAdjuntos.map(archivo => ({
-                    name: archivo.name,
+                ...(formData.archivosAdjuntos || []).map((archivo, index) => ({
+                    id: generateId(`milestone_file_${index}`),
+                    name: archivo.name || '',
                     type: 'file',
                     url: URL.createObjectURL(archivo)
                 })),
-                ...formData.enlacesAdjuntos.map(enlace => ({
-                    name: enlace.nombre,
+                ...(formData.enlacesAdjuntos || []).map((enlace, index) => ({
+                    id: generateId(`milestone_link_${index}`),
+                    name: enlace.nombre || `Enlace ${index + 1}`,
                     type: 'link',
-                    url: enlace.url,
+                    url: enlace.url || '',
                     icon: 'pi pi-link'
                 }))
             ],
             milestoneTasks: milestoneTasks,
             status: 'active',
             progress: 0,
-            projectId: projectId, // ✅ Asegurar que projectId se incluya
+            projectId: projectId,
             createdBy: createdBy
         };
 
-        console.log('📤 API Data to send:', apiData); // Debug
+        console.log('📤 API Data final para enviar:', apiData);
         return apiData;
     }
 
