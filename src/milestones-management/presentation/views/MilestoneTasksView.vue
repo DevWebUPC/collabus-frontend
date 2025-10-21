@@ -102,7 +102,13 @@ const loadMilestoneData = async () => {
 
 
 const goBack = () => {
-  router.go(-1)
+  // Navegar directamente al project-detail en la pestaña de milestones
+  router.push({
+    name: 'project-detail',
+    params: {
+      id: projectId.value
+    },
+  });
 };
 
 // Inicializar componente
