@@ -26,6 +26,16 @@
         <i class="pi pi-check-circle" style="font-size: 2rem; color: var(--color-success); margin-bottom: 0.5rem;"></i>
         <p>No hay hitos próximos</p>
       </div>
+
+      <!-- NUEVO: Botón Ver Todos los Hitos -->
+      <div class="view-all">
+        <pv-button
+            label="Ver Todos los Hitos"
+            text
+            icon="pi pi-list"
+            @click="handleViewAllMilestones"
+        />
+      </div>
     </template>
   </pv-card>
 </template>
@@ -37,6 +47,9 @@ import { useProjectDetailStore } from '../../../../application/project-detail.st
 
 const route = useRoute();
 const store = useProjectDetailStore();
+
+// Emit para navegación - NUEVO
+const emit = defineEmits(['view-all-milestones']);
 
 // ✅ CORREGIDO: Función para calcular el progreso real del hito basado en sus tareas
 const calculateMilestoneProgress = (milestone) => {
@@ -130,6 +143,12 @@ const formatDueDate = (dueDate) => {
   }
 };
 
+// NUEVO: Manejar clic en "Ver Todos los Hitos"
+const handleViewAllMilestones = () => {
+  console.log('🔄 Navegando a la pestaña de Milestones');
+  emit('view-all-milestones');
+};
+
 // Debug
 onMounted(() => {
   console.log('📋 Upcoming Milestones Loaded:', upcomingMilestones.value);
@@ -151,11 +170,12 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Los estilos se mantienen igual */
+/* Estilos existentes se mantienen y se agrega el nuevo */
 .milestones-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .milestone-item {
@@ -212,6 +232,7 @@ onMounted(() => {
   text-align: center;
   padding: 2rem 1rem;
   color: var(--color-gray-500);
+  margin-bottom: 1rem;
 }
 
 .card-title {
@@ -235,5 +256,14 @@ onMounted(() => {
 .badge.normal {
   background: var(--color-success);
   color: white;
+}
+
+/* NUEVO: Estilos para el botón Ver Todos */
+.view-all {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  border-top: 1px solid var(--color-gray-200);
+  padding-top: 1rem;
 }
 </style>
