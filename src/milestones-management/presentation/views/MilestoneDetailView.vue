@@ -1,19 +1,68 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useMilestonesStore } from '../../application/milestone-store.js';
 import { useProjectDetailStore } from '../../../projects/application/project-detail.store.js';
+import { useMilestoneTaskSubmissionStore } from '../../application/milestone-task-submission-store.js';
 
 const route = useRoute();
 const router = useRouter();
 const milestonesStore = useMilestonesStore();
 const projectDetailStore = useProjectDetailStore();
+const submissionStore = useMilestoneTaskSubmissionStore();
 
 const loading = ref(false);
 
 // Computed properties
 const milestone = computed(() => milestonesStore.currentMilestone);
 const project = computed(() => projectDetailStore.project);
+
+watch(
+    () => submissionStore.submissions,
+    () => {
+      updateMilestoneStatusBasedOnSubmissions();
+    },
+    { deep: true }
+);
+
+const updateMilestoneStatusBasedOnSubmissions = () => {
+  if (!milestone.value) return;
+
+  const allTasksHaveSubmissions = checkIfAllTasksHaveSubmissions(milestone.value);
+
+  if (allTasksHaveSubmissions && milestone.value.status !== 'completed') {
+    console.log('🎯 Actualizando hito a completado basado en submissions');
+
+    // Actualizar en el store
+    const updatedMilestone = {
+      ...milestone.value,
+      status: 'completed',
+      progress: 100,
+      completedAt: new Date().toISOString()
+    };
+
+    // Actualizar en el store local (no hace llamada API para evitar loops)
+    milestonesStore.currentMilestone = updatedMilestone;
+
+    // También actualizar en la lista de milestones del store
+    const index = milestonesStore.milestones.findIndex(m => m.id === milestone.value.id);
+    if (index !== -1) {
+      milestonesStore.milestones[index] = updatedMilestone;
+    }
+  }
+};
+
+const checkIfAllTasksHaveSubmissions = (milestone) => {
+  if (!milestone.milestoneTasks || milestone.milestoneTasks.length === 0) {
+    return false;
+  }
+
+  return milestone.milestoneTasks.every(task => {
+    const hasSubmission = submissionStore.hasSubmissionForMilestoneTask(task.id);
+    console.log(`   - Tarea "${task.title}": ${hasSubmission ? 'TIENE' : 'NO TIENE'} submission`);
+    return hasSubmission;
+  });
+};
 
 const isOverdue = computed(() => {
   if (!milestone.value?.dueDate || milestone.value.status === 'completed') return false;
@@ -34,6 +83,12 @@ const daysRemaining = computed(() => {
 // Determinar el estado del hito
 const milestoneStatus = computed(() => {
   if (milestone.value?.status === 'completed') return 'completed';
+
+  // Verificar si debería estar completado basado en submissions
+  const allTasksHaveSubmissions = milestone.value ?
+      checkIfAllTasksHaveSubmissions(milestone.value) : false;
+
+  if (allTasksHaveSubmissions) return 'completed';
   if (isOverdue.value) return 'overdue';
   return 'pending';
 });
@@ -133,6 +188,12 @@ onMounted(async () => {
 
     // Cargar milestone específico
     await milestonesStore.loadMilestone(projectId, milestoneId);
+
+    // Cargar submissions para este proyecto
+    await submissionStore.loadSubmissionsByProject(projectId);
+
+    // Verificar y actualizar estado basado en submissions
+    updateMilestoneStatusBasedOnSubmissions();
 
     console.log('✅ Milestone cargado:', milestone.value);
   } catch (error) {
