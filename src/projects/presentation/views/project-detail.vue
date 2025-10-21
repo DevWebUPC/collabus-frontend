@@ -52,13 +52,21 @@ const handleViewAllTasksFromMyTaskCard = () => {
   activeTab.value = 'tasks';
 };
 
+// Manejar navegación a milestones desde UpcomingMilestonesCardParticipating
+const handleViewAllMilestones = () => {
+  console.log('🎯 Navegando a pestaña Milestones desde UpcomingMilestonesCardParticipating');
+  activeTab.value = 'milestones';
+};
+
 // Setup event listeners
 const setupEventListeners = () => {
   window.addEventListener('view-all-tasks', handleViewAllTasksFromMyTaskCard);
+  window.addEventListener('view-all-milestones', handleViewAllMilestones); // 👈 NUEVO
 };
 
 const cleanupEventListeners = () => {
   window.removeEventListener('view-all-tasks', handleViewAllTasksFromMyTaskCard);
+  window.removeEventListener('view-all-milestones', handleViewAllMilestones); // 👈 NUEVO
 };
 
 onMounted(async () => {
@@ -208,7 +216,7 @@ watch(
 
                 <!-- Columna derecha: Hitos y Tareas -->
                 <div class="right-section">
-                  <UpcomingMilestonesCard />
+                  <UpcomingMilestonesCard @view-all-milestones="activeTab = 'milestones'" />
                   <UrgentTasksCard @view-all-tasks="handleViewAllTasks" />
                 </div>
               </div>
