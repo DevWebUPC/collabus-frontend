@@ -190,13 +190,6 @@ watch(
         >
           {{ $t('projects.detail.tabs.applicants') }}
         </pv-button>
-        <pv-button
-            v-if="store.isParticipating"
-            :class="['tab-button', { active: activeTab === 'feedback' }]"
-            @click="activeTab = 'feedback'"
-        >
-          {{ $t('projects.detail.tabs.feedback') }}
-        </pv-button>
       </div>
 
       <!-- Tab Content -->
@@ -269,11 +262,6 @@ watch(
 
         <ApplicantsCard v-else-if="activeTab === 'applicants'" />
 
-        <EmptyTabContent
-            v-else-if="activeTab === 'feedback'"
-            tab-name="feedback"
-            icon="pi-comments"
-        />
       </div>
     </div>
   </div>
