@@ -230,11 +230,18 @@ const closeDropdowns = (event) => {
   }
 };
 
-const onMilestoneCreated = (nuevoHito) => {
+const onMilestoneCreated = async (nuevoHito) => {
   console.log('🎉 Hito creado exitosamente:', nuevoHito);
   showCreateForm.value = false;
-};
 
+  // ✅ NUEVO: Recargar los hitos del proyecto después de crear uno nuevo
+  try {
+    await milestonesStore.loadProjectMilestones(projectId.value);
+    console.log('✅ Hitos recargados después de crear nuevo hito');
+  } catch (error) {
+    console.error('❌ Error recargando hitos:', error);
+  }
+};
 // ✅ MODIFICAR: Cargar submissions al montar el componente
 onMounted(async () => {
   console.log('📍 Route params in ProjectMilestonesView:', route.params);
