@@ -2,6 +2,8 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useMilestonesStore } from '../../application/milestone-store.js';
+import MilestoneRescheduleModal from './MilestoneRescheduleModal.vue';
+import MilestoneDeleteModal from './MilestoneDeleteModal.vue';
 
 // Stores y route
 const milestonesStore = useMilestonesStore();
@@ -19,6 +21,15 @@ const props = defineProps({
   }
 });
 
+// Datos reactivos
+const milestones = ref([]);
+const loading = ref(false);
+const error = ref(null);
+const expandedMilestones = ref(new Set());
+const showRescheduleModal = ref(false);
+const showDeleteModal = ref(false);
+const selectedMilestone = ref(null);
+
 const viewTaskDetails = (milestoneId, taskId) => {
   console.log('🔍 Navegando a detalles de tarea:', { milestoneId, taskId });
 
@@ -35,12 +46,6 @@ const viewTaskDetails = (milestoneId, taskId) => {
 const isTaskCompleted = (task) => {
   return task.status === 'completed' || task.progress === 100;
 };
-
-// Datos reactivos
-const milestones = ref([]);
-const loading = ref(false);
-const error = ref(null);
-const expandedMilestones = ref(new Set()); // Para manejar qué hitos están expandidos
 
 // Cargar hitos del proyecto
 const loadMilestones = async (projectIdToLoad = props.projectId) => {
@@ -211,6 +216,40 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
   if (!milestone.milestoneTasks) return [];
   return milestone.milestoneTasks.filter(task => task.assignedTo === collaboratorId);
 };
+
+// Métodos para los modales de hitos atrasados
+const openRescheduleModal = (milestone) => {
+  selectedMilestone.value = milestone;
+  showRescheduleModal.value = true;
+};
+
+const openDeleteModal = (milestone) => {
+  selectedMilestone.value = milestone;
+  showDeleteModal.value = true;
+};
+
+const handleMilestoneRescheduled = (result) => {
+  console.log('✅ Hito reprogramado:', result);
+  // En lugar de recargar, actualiza el milestone específico
+  const index = milestones.value.findIndex(m => m.id === result.milestoneId);
+  if (index !== -1) {
+    // Actualiza la fecha en el array local
+    milestones.value[index].dueDate = result.newDueDate;
+    // Forzar reactividad
+    milestones.value = [...milestones.value];
+  }
+};
+
+
+const handleMilestoneDeleted = (result) => {
+  console.log('🗑️ Hito eliminado:', result);
+  // En lugar de recargar, elimina el milestone del array local
+  milestones.value = milestones.value.filter(m => m.id !== result.milestoneId);
+};
+
+const handleModalCancel = () => {
+  console.log('❌ Operación cancelada');
+};
 </script>
 
 <template>
@@ -255,6 +294,9 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
         </div>
 
         <!-- Descripción -->
+        <p v-if="milestone.description" class="milestone-description">
+          {{ milestone.description }}
+        </p>
 
         <!-- Información de fechas y progreso -->
         <div class="milestone-details">
@@ -277,7 +319,56 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
           </div>
         </div>
 
+        <!-- Sección de acciones para hitos atrasados -->
+        <div
+            v-if="determineMilestoneStatus(milestone) === 'overdue'"
+            class="milestone-actions"
+        >
+          <div class="overdue-warning">
+            <i class="pi pi-exclamation-triangle"></i>
+            <span>Este hito está atrasado</span>
+          </div>
+          <div class="action-buttons">
+            <pv-button
+                label="Reprogramar"
+                severity="warning"
+                size="small"
+                @click="openRescheduleModal(milestone)"
+                class="action-btn"
+            >
+              <i class="pi pi-calendar-plus"></i>
+            </pv-button>
+            <pv-button
+                label="Eliminar"
+                severity="danger"
+                size="small"
+                @click="openDeleteModal(milestone)"
+                class="action-btn"
+            >
+              <i class="pi pi-trash"></i>
+            </pv-button>
+          </div>
+        </div>
 
+        <!-- Información de tareas -->
+        <div class="tasks-info">
+          <span class="pi pi-list-check task-icon"></span>
+          <span>{{ milestone.milestoneTasks ? milestone.milestoneTasks.length : 0 }} tareas asignadas</span>
+        </div>
+
+        <!-- Herramientas -->
+        <div v-if="milestone.tools && milestone.tools.length > 0" class="tools-section">
+          <div class="tools-label">Herramientas:</div>
+          <div class="tools-list">
+            <span
+                v-for="tool in milestone.tools"
+                :key="tool"
+                class="tool-tag"
+            >
+              {{ tool }}
+            </span>
+          </div>
+        </div>
 
         <!-- Sección expandible de tareas por colaborador -->
         <div
@@ -300,9 +391,15 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
               <div class="collaborator-header">
                 <div class="collaborator-info">
                   <div class="collaborator-name">{{ collaborator.name }}</div>
+                  <div class="collaborator-stats">
+                    <span class="completed-tasks">{{ collaborator.completedTasks }}/{{ collaborator.totalTasks }}</span> tareas completadas
+                  </div>
                 </div>
 
                 <div class="collaborator-progress">
+                  <span class="progress-percentage">
+                    {{ collaborator.totalTasks > 0 ? Math.round((collaborator.completedTasks / collaborator.totalTasks) * 100) : 0 }}%
+                  </span>
                   <div class="progress-bar small">
                     <div
                         class="progress-fill"
@@ -324,20 +421,33 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
                     class="task-item"
                 >
                   <div class="task-main">
-                    <div class="task-title">{{ task.title }}</div>
-                    <span :class="['task-status', task.status]">
-                      {{ task.status === 'completed' ? 'Completada' : 'Pendiente' }}
-                    </span>
-                    <pv-button
-                        v-if="isTaskCompleted(task)"
-                        class="view-task-btn"
-                        severity="secondary"
-                        size="small"
-                        @click="viewTaskDetails(milestone.id, task.id)"
-                    >
-                      <i class="pi pi-eye"></i>
-                      Ver Tarea
-                    </pv-button>
+                    <div class="task-info">
+                      <div class="task-title">{{ task.title }}</div>
+                      <div v-if="task.description" class="task-description">
+                        {{ task.description }}
+                      </div>
+                      <div class="task-details">
+                        <span class="task-progress">Progreso: {{ task.progress }}%</span>
+                        <span v-if="task.dueDate" class="task-due-date">
+                          Vence: {{ formatDate(task.dueDate) }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="task-actions">
+                      <span :class="['task-status', task.status]">
+                        {{ task.status === 'completed' ? 'Completada' : 'Pendiente' }}
+                      </span>
+                      <pv-button
+                          v-if="isTaskCompleted(task)"
+                          class="view-task-btn"
+                          severity="secondary"
+                          size="small"
+                          @click="viewTaskDetails(milestone.id, task.id)"
+                      >
+                        <i class="pi pi-eye"></i>
+                        Ver Tarea
+                      </pv-button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -357,110 +467,31 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
       <h3>No hay hitos creados</h3>
       <p>Crea tu primer hito para organizar las tareas del proyecto</p>
     </div>
+
+    <!-- Modales para hitos atrasados -->
+    <MilestoneRescheduleModal
+        v-model:visible="showRescheduleModal"
+        :milestone="selectedMilestone"
+        :projectId="projectId"
+        @rescheduled="handleMilestoneRescheduled"
+        @cancel="handleModalCancel"
+    />
+
+    <MilestoneDeleteModal
+        v-model:visible="showDeleteModal"
+        :milestone="selectedMilestone"
+        :projectId="projectId"
+        @deleted="handleMilestoneDeleted"
+        @cancel="handleModalCancel"
+    />
   </div>
 </template>
 
 <style scoped>
-.task-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.milestones-list {
+  width: 100%;
 }
 
-.view-task-btn {
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-  white-space: nowrap;
-}
-
-.view-task-btn .pi {
-  font-size: 0.75rem;
-  margin-right: 0.25rem;
-}
-
-/* Mejoras para la lista de tareas */
-.task-item {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  padding: 1rem;
-  transition: border-color 0.2s ease;
-}
-
-.task-item:hover {
-  border-color: #3b82f6;
-}
-
-.task-main {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 0.5rem;
-}
-
-.task-title {
-  font-weight: 500;
-  color: #374151;
-  flex: 1;
-}
-
-.task-status {
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.task-status.completed {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.task-status.pending {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.task-description {
-  color: #6b7280;
-  font-size: 0.875rem;
-  line-height: 1.4;
-  margin-bottom: 0.5rem;
-}
-
-.task-details {
-  display: flex;
-  gap: 1rem;
-  font-size: 0.75rem;
-  color: #6b7280;
-}
-
-.task-progress {
-  font-weight: 500;
-}
-
-.task-due-date {
-  color: #dc2626;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .task-main {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .task-actions {
-    align-self: stretch;
-    justify-content: space-between;
-  }
-
-  .task-details {
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-}
 .error-state {
   text-align: center;
   padding: 2rem;
@@ -557,7 +588,6 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
   white-space: nowrap;
 }
 
-
 .status-badge {
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
@@ -651,6 +681,46 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
   background: #3b82f6;
   border-radius: 3px;
   transition: width 0.3s ease;
+}
+
+/* Estilos para la sección de acciones de hitos atrasados */
+.milestone-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: #fef2f2;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+  margin-bottom: 1rem;
+}
+
+.overdue-warning {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #dc2626;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.overdue-warning i {
+  font-size: 1rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  font-size: 0.75rem;
+  padding: 0.4rem 0.75rem;
+}
+
+.action-btn .pi {
+  font-size: 0.75rem;
+  margin-right: 0.25rem;
 }
 
 .tasks-info {
@@ -811,28 +881,14 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
   margin-bottom: 0.5rem;
 }
 
-.task-title {
-  font-weight: 500;
-  color: #374151;
+.task-info {
   flex: 1;
 }
 
-.task-status {
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
+.task-title {
   font-weight: 500;
-  white-space: nowrap;
-}
-
-.task-status.completed {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.task-status.pending {
-  background: #fef3c7;
-  color: #92400e;
+  color: #374151;
+  margin-bottom: 0.25rem;
 }
 
 .task-description {
@@ -855,6 +911,41 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
 
 .task-due-date {
   color: #dc2626;
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.task-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.task-status.completed {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.task-status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.view-task-btn {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  white-space: nowrap;
+}
+
+.view-task-btn .pi {
+  font-size: 0.75rem;
+  margin-right: 0.25rem;
 }
 
 .no-tasks {
@@ -888,6 +979,20 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
     align-self: stretch;
   }
 
+  .milestone-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+
+  .action-buttons {
+    justify-content: space-between;
+  }
+
+  .action-btn {
+    flex: 1;
+  }
+
   .collaborator-header {
     flex-direction: column;
     align-items: flex-start;
@@ -908,6 +1013,11 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
   .task-main {
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  .task-actions {
+    align-self: stretch;
+    justify-content: space-between;
   }
 
   .task-details {
