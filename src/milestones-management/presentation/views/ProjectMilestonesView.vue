@@ -5,18 +5,20 @@ import MilestoneCreateForm from "./MilestoneCreateForm.vue";
 import MilestoneList from "../components/MilestoneList.component.vue";
 import { useProjectDetailStore } from "../../../projects/application/project-detail.store.js";
 import { useMilestonesStore } from "../../application/milestone-store.js";
+import { useMilestoneTaskSubmissionStore } from "../../application/milestone-task-submission-store.js"; // ✅ AGREGAR
 
-// ✅ AGREGAR: Obtener la ruta y stores
+// ✅ AGREGAR: Store de submissions
+const submissionStore = useMilestoneTaskSubmissionStore();
+
+// Resto del código existente...
 const route = useRoute();
 const projectDetailStore = useProjectDetailStore();
 const milestonesStore = useMilestonesStore();
 
-// ✅ CORREGIR: Obtener projectId de la ruta
 const projectId = computed(() => {
   const id = route.params.projectId || route.params.id;
   console.log('🆔 Project ID from route:', id, 'Type:', typeof id);
 
-  // Convertir a string para consistencia
   if (id) {
     return String(id);
   }
@@ -27,35 +29,88 @@ const projectId = computed(() => {
 
 // Estado de filtros
 const selectedStatus = ref(null);
-const selectedCollaborators = ref([]); // ✅ CAMBIO: Ahora es un array para múltiples colaboradores
+const selectedCollaborators = ref([]);
 const showStatusDropdown = ref(false);
 const showCollaboratorDropdown = ref(false);
 const showCreateForm = ref(false);
 
-// ✅ AGREGAR: Función para manejar cuando se crea un hito
-const onMilestoneCreated = (nuevoHito) => {
-  console.log('🎉 Hito creado exitosamente:', nuevoHito);
-  showCreateForm.value = false;
+// ✅ NUEVO: Función para verificar si todas las tareas tienen submissions
+const checkIfAllTasksHaveSubmissions = (milestone) => {
+  if (!milestone.milestoneTasks || milestone.milestoneTasks.length === 0) {
+    return false;
+  }
+
+  return milestone.milestoneTasks.every(task => {
+    const hasSubmission = submissionStore.hasSubmissionForMilestoneTask(task.id);
+    console.log(`   - Tarea "${task.title}": ${hasSubmission ? 'TIENE' : 'NO TIENE'} submission`);
+    return hasSubmission;
+  });
 };
 
-// Obtener hitos del store con filtros aplicados
+// ✅ MODIFICAR: Determinar estado del hito considerando submissions
+const determineMilestoneStatus = (milestone) => {
+  // Si ya está completado en el store, mantenerlo
+  if (milestone.status === 'completed' || milestone.progress === 100) {
+    return 'completed';
+  }
+
+  // ✅ NUEVO: Verificar si debería estar completado basado en submissions
+  const allTasksHaveSubmissions = checkIfAllTasksHaveSubmissions(milestone);
+  if (allTasksHaveSubmissions) {
+    console.log(`🎯 Hito "${milestone.title}" debería estar completado por submissions`);
+    return 'completed';
+  }
+
+  // Si está retrasado (fecha vencida y no completado)
+  if (milestone.dueDate) {
+    const now = new Date();
+    const dueDate = new Date(milestone.dueDate);
+    if (dueDate < now) {
+      return 'overdue';
+    }
+  }
+
+  // Por defecto, pendiente
+  return 'pending';
+};
+
+// ✅ MODIFICAR: Obtener hitos del store con estado actualizado
 const filteredMilestones = computed(() => {
   if (!projectId.value) return [];
 
   let milestones = milestonesStore.getProjectMilestones(projectId.value);
 
+  // ✅ ACTUALIZAR: Crear una copia con el estado actualizado basado en submissions
+  const updatedMilestones = milestones.map(milestone => {
+    const actualStatus = determineMilestoneStatus(milestone);
+
+    // Si el estado calculado es diferente al almacenado, crear una copia actualizada
+    if ((actualStatus === 'completed' && milestone.status !== 'completed') ||
+        (actualStatus !== 'completed' && milestone.status === 'completed')) {
+
+      return {
+        ...milestone,
+        status: actualStatus === 'completed' ? 'completed' : 'active',
+        progress: actualStatus === 'completed' ? 100 : milestone.progress
+      };
+    }
+
+    return milestone;
+  });
+
   // Aplicar filtro por estado
   if (selectedStatus.value) {
-    milestones = milestones.filter(milestone => {
+    milestones = updatedMilestones.filter(milestone => {
       const status = determineMilestoneStatus(milestone);
       return status === selectedStatus.value;
     });
+  } else {
+    milestones = updatedMilestones;
   }
 
-  // ✅ NUEVO: Aplicar filtro por múltiples colaboradores
+  // Aplicar filtro por múltiples colaboradores
   if (selectedCollaborators.value.length > 0) {
     milestones = milestones.filter(milestone => {
-      // Verificar si el hito tiene TODOS los colaboradores seleccionados
       return selectedCollaborators.value.every(selectedCollab => {
         return hasCollaboratorInMilestone(milestone, selectedCollab.id);
       });
@@ -65,18 +120,16 @@ const filteredMilestones = computed(() => {
   return milestones;
 });
 
-// ✅ NUEVO: Verificar si un colaborador participa en un hito
-const hasCollaboratorInMilestone = (milestone, collaboratorId) => {
-  if (!milestone.milestoneTasks || !Array.isArray(milestone.milestoneTasks)) {
-    return false;
-  }
-
-  return milestone.milestoneTasks.some(task =>
-      task.assignedTo === collaboratorId
-  );
+// Resto del código existente (getStatusText, uniqueCollaborators, etc.)...
+const getStatusText = (status) => {
+  const statusMap = {
+    'pending': 'Pendiente',
+    'completed': 'Completado',
+    'overdue': 'Retrasado'
+  };
+  return statusMap[status] || status;
 };
 
-// ✅ NUEVO: Obtener colaboradores únicos de todos los hitos
 const uniqueCollaborators = computed(() => {
   if (!projectId.value) return [];
 
@@ -100,36 +153,16 @@ const uniqueCollaborators = computed(() => {
   return Array.from(collaborators.values());
 });
 
-// ✅ NUEVO: Determinar estado del hito (similar a MilestoneList.component.vue)
-const determineMilestoneStatus = (milestone) => {
-  // Si está completado, retornar completado
-  if (milestone.status === 'completed' || milestone.progress === 100) {
-    return 'completed';
+const hasCollaboratorInMilestone = (milestone, collaboratorId) => {
+  if (!milestone.milestoneTasks || !Array.isArray(milestone.milestoneTasks)) {
+    return false;
   }
 
-  // Si está retrasado (fecha vencida y no completado)
-  if (milestone.dueDate) {
-    const now = new Date();
-    const dueDate = new Date(milestone.dueDate);
-    if (dueDate < now) {
-      return 'overdue';
-    }
-  }
-
-  // Por defecto, pendiente
-  return 'pending';
+  return milestone.milestoneTasks.some(task =>
+      task.assignedTo === collaboratorId
+  );
 };
 
-const getStatusText = (status) => {
-  const statusMap = {
-    'pending': 'Pendiente',
-    'completed': 'Completado',
-    'overdue': 'Retrasado'
-  };
-  return statusMap[status] || status;
-};
-
-// Resto del código existente...
 const statusOptions = [
   { value: 'pending', label: 'Pendiente' },
   { value: 'completed', label: 'Completado' },
@@ -146,29 +179,24 @@ const toggleCollaboratorDropdown = () => {
   showStatusDropdown.value = false;
 };
 
-// ✅ MODIFICADO: Manejar selección múltiple de colaboradores
 const toggleCollaboratorSelection = (collaborator) => {
   const existingIndex = selectedCollaborators.value.findIndex(
       collab => collab.id === collaborator.id
   );
 
   if (existingIndex > -1) {
-    // Remover si ya está seleccionado
     selectedCollaborators.value.splice(existingIndex, 1);
   } else {
-    // Agregar si no está seleccionado
     selectedCollaborators.value.push(collaborator);
   }
 };
 
-// ✅ NUEVO: Verificar si un colaborador está seleccionado
 const isCollaboratorSelected = (collaborator) => {
   return selectedCollaborators.value.some(
       collab => collab.id === collaborator.id
   );
 };
 
-// ✅ NUEVO: Obtener texto para el filtro de colaboradores
 const getCollaboratorsFilterText = () => {
   if (selectedCollaborators.value.length === 0) {
     return 'Por Colaborador';
@@ -202,7 +230,12 @@ const closeDropdowns = (event) => {
   }
 };
 
-// ✅ NUEVO: Cargar hitos al montar el componente
+const onMilestoneCreated = (nuevoHito) => {
+  console.log('🎉 Hito creado exitosamente:', nuevoHito);
+  showCreateForm.value = false;
+};
+
+// ✅ MODIFICAR: Cargar submissions al montar el componente
 onMounted(async () => {
   console.log('📍 Route params in ProjectMilestonesView:', route.params);
   console.log('📍 Full route object:', route);
@@ -212,9 +245,13 @@ onMounted(async () => {
   if (projectId.value) {
     try {
       await milestonesStore.loadProjectMilestones(projectId.value);
-      console.log('✅ Hitos cargados para el proyecto:', projectId.value);
+
+      // ✅ NUEVO: Cargar submissions para verificar estado de tareas
+      await submissionStore.loadSubmissionsByProject(projectId.value);
+
+      console.log('✅ Hitos y submissions cargados para el proyecto:', projectId.value);
     } catch (error) {
-      console.error('❌ Error cargando hitos:', error);
+      console.error('❌ Error cargando hitos o submissions:', error);
     }
   }
 });
