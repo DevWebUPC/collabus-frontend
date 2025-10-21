@@ -270,7 +270,6 @@ export const useMilestonesStore = defineStore('milestone', {
                 this.clearError();
 
                 console.log('🎯 Store - Datos recibidos para crear milestone:', milestoneData);
-                console.log('🔍 Store - Verificando milestoneTasks:', milestoneData.milestoneTasks);
 
                 const milestonesApi = new MilestonesApi();
                 const response = await milestonesApi.createMilestone(milestoneData);
@@ -281,12 +280,18 @@ export const useMilestonesStore = defineStore('milestone', {
 
                 console.log('✅ Store - Milestone creado con tasks:', newMilestone.milestoneTasks);
 
-                // Agregar a la lista global
+                // ✅ MEJORADO: Agregar a la lista global
                 this.milestones.push(newMilestone);
 
-                // Invalidar caches relevantes
+                // ✅ MEJORADO: Invalidar caches relevantes de forma más agresiva
                 this.projectMilestones.delete(newMilestone.projectId);
                 this.milestoneStats.delete(newMilestone.projectId);
+
+                // ✅ NUEVO: Forzar actualización inmediata en el cache del proyecto
+                if (this.projectMilestones.has(newMilestone.projectId)) {
+                    const currentProjectMilestones = this.projectMilestones.get(newMilestone.projectId);
+                    this.projectMilestones.set(newMilestone.projectId, [...currentProjectMilestones, newMilestone]);
+                }
 
                 console.log(`✅ Created milestone: ${newMilestone.title}`);
                 return newMilestone;
