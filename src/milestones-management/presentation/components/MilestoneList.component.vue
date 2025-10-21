@@ -74,7 +74,7 @@ watch(() => props.milestones, (newMilestones) => {
     console.log('🔄 Filtered milestones changed:', newMilestones);
     milestones.value = newMilestones;
   }
-});
+}, { immediate: true });
 
 watch(() => props.projectId, async (newProjectId) => {
   if (newProjectId) {
