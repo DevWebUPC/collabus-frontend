@@ -4,11 +4,13 @@ import { useRouter } from 'vue-router';
 import { useProjectDetailStore } from '../../../projects/application/project-detail.store.js';
 import { useUserStore } from '../../../iam/application/user-store.js';
 import { useMilestonesStore } from '../../application/milestone-store.js';
+import { useMilestoneTaskSubmissionStore } from '../../application/milestone-task-submission-store.js';
 
 const router = useRouter();
 const projectDetailStore = useProjectDetailStore();
 const userStore = useUserStore();
 const milestonesStore = useMilestonesStore();
+const submissionStore = useMilestoneTaskSubmissionStore();
 
 // Estado reactivo
 const loading = ref(false);
@@ -28,31 +30,59 @@ const myMilestones = computed(() => {
   }
 
   console.log('🔍 Filtering milestones for user:', userId);
-  console.log('📋 All milestones:', projectDetailStore.project.milestones);
 
   // Filtrar hitos que tienen al menos una tarea asignada al usuario
   const userMilestones = projectDetailStore.project.milestones.filter(milestone => {
     const hasUserTasks = milestone.milestoneTasks?.some(task => {
       const taskUserId = task.assignedTo ? String(task.assignedTo) : null;
-      const matches = taskUserId === userId;
-      if (matches) {
-        console.log(`   - Milestone "${milestone.title}": Tarea "${task.title}" asignada al usuario`);
-      }
-      return matches;
+      return taskUserId === userId;
     });
 
     console.log(`   - Milestone "${milestone.title}": ${hasUserTasks ? 'TIENE' : 'NO TIENE'} tareas del usuario`);
     return hasUserTasks;
   });
 
-  console.log('✅ User milestones found:', userMilestones.length, userMilestones);
-  return userMilestones;
+  // Verificar estado de completado basado en submissions
+  const updatedMilestones = userMilestones.map(milestone => {
+    const allTasksCompleted = checkIfAllTasksHaveSubmissions(milestone);
+
+    if (allTasksCompleted && milestone.status !== 'completed') {
+      console.log(`🎯 Milestone "${milestone.title}" debería estar completado`);
+      return {
+        ...milestone,
+        status: 'completed',
+        progress: 100
+      };
+    }
+
+    return milestone;
+  });
+
+  console.log('✅ User milestones found:', updatedMilestones.length);
+  return updatedMilestones;
 });
+
+const checkIfAllTasksHaveSubmissions = (milestone) => {
+  if (!milestone.milestoneTasks || milestone.milestoneTasks.length === 0) {
+    return false;
+  }
+
+  // Verificar cada tarea del hito
+  const allTasksHaveSubmissions = milestone.milestoneTasks.every(task => {
+    const hasSubmission = submissionStore.hasSubmissionForMilestoneTask(task.id);
+    console.log(`   - Tarea "${task.title}": ${hasSubmission ? 'TIENE' : 'NO TIENE'} submission`);
+    return hasSubmission;
+  });
+
+  console.log(`   - Milestone "${milestone.title}": ${allTasksHaveSubmissions ? 'TODAS' : 'NO TODAS'} las tareas tienen submissions`);
+  return allTasksHaveSubmissions;
+};
 
 const getNormalizedUserId = () => {
   const userId = userStore.currentUser?.id || localStorage.getItem("userId");
   return userId ? String(userId) : null;
 };
+
 
 // Computed: Obtener mis tareas dentro de los hitos
 const getMyTasksInMilestone = (milestone) => {
@@ -187,6 +217,8 @@ onMounted(async () => {
     loading.value = true;
     try {
       await milestonesStore.loadProjectMilestones(projectDetailStore.project.id);
+      // Cargar submissions para verificar estado de tareas
+      await submissionStore.loadSubmissionsByProject(projectDetailStore.project.id);
     } catch (error) {
       console.error('Error loading milestones:', error);
     } finally {
