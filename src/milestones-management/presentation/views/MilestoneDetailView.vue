@@ -155,9 +155,16 @@ const goBack = () => {
 };
 
 const viewTask = (task) => {
-  console.log('Ver tarea:', task);
-  // Aquí podrías navegar a una vista detallada de la tarea
-  // o mostrar un modal/dialog con los detalles
+  console.log('Navegando a tarea:', task);
+  const { projectId, milestoneId } = route.params;
+  router.push({
+    name: 'milestone-task-detail',
+    params: {
+      projectId,
+      milestoneId,
+      taskId: task.id
+    }
+  });
 };
 
 const downloadAttachment = (attachment) => {
