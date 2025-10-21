@@ -16,14 +16,14 @@
           </div>
         </div>
 
-        <!-- Barra normal para hitos -->
+        <!-- Barra morada para hitos -->
         <div class="progress-item">
-          <span class="progress-label">Hitos completados</span>
-          <div class="progress-bar-container">
-            <div class="progress-bar">
-              <div class="progress-fill" :style="{ width: milestonesProgress + '%' }"></div>
-            </div>
-            <span class="progress-value">{{ completedMilestonesCount }}/{{ totalMilestonesCount }} ({{ milestonesProgress }}%)</span>
+          <div class="progress-info">
+            <span class="progress-label">Hitos completados</span>
+            <span class="progress-value">{{ milestonesProgress }}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill task-progress" :style="{ width: milestonesProgress + '%' }"></div>
           </div>
         </div>
       </div>
@@ -32,12 +32,16 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useProjectDetailStore } from '../../../../application/project-detail.store.js';
+import { useMilestonesStore } from '../../../../../milestones-management/application/milestone-store.js';
+import { useMilestoneTaskSubmissionStore } from '../../../../../milestones-management/application/milestone-task-submission-store.js';
 
 const route = useRoute();
 const store = useProjectDetailStore();
+const milestonesStore = useMilestonesStore();
+const submissionStore = useMilestoneTaskSubmissionStore();
 
 // Computed properties para calcular el progreso
 const totalTasksCount = computed(() => {
@@ -62,16 +66,61 @@ const totalMilestonesCount = computed(() => {
   return store.project.milestones.length;
 });
 
+// ✅ CORREGIDO: Función para verificar si todas las tareas de un hito tienen submissions
+const checkIfAllTasksHaveSubmissions = (milestone) => {
+  if (!milestone.milestoneTasks || milestone.milestoneTasks.length === 0) {
+    return false;
+  }
+
+  return milestone.milestoneTasks.every(task => {
+    const hasSubmission = submissionStore.hasSubmissionForMilestoneTask(task.id);
+    return hasSubmission;
+  });
+};
+
+// ✅ CORREGIDO: Determinar si un hito está completado considerando submissions
+const isMilestoneCompleted = (milestone) => {
+  // Si ya está marcado como completado en el store
+  if (milestone.status === 'completed' || milestone.progress === 100) {
+    return true;
+  }
+
+  // ✅ NUEVO: Verificar si todas las tareas tienen submissions
+  const allTasksHaveSubmissions = checkIfAllTasksHaveSubmissions(milestone);
+  if (allTasksHaveSubmissions) {
+    console.log(`🎯 Hito "${milestone.title}" está completado por submissions`);
+    return true;
+  }
+
+  return false;
+};
+
+// ✅ CORREGIDO: Contar hitos completados considerando submissions
 const completedMilestonesCount = computed(() => {
   if (!store.project?.milestones || !Array.isArray(store.project.milestones)) return 0;
+
   return store.project.milestones.filter(milestone =>
-      milestone.status === 'completed' || milestone.completed === true
+      isMilestoneCompleted(milestone)
   ).length;
 });
 
+// ✅ CORREGIDO: Calcular progreso de hitos
 const milestonesProgress = computed(() => {
   if (totalMilestonesCount.value === 0) return 0;
   return Math.round((completedMilestonesCount.value / totalMilestonesCount.value) * 100);
+});
+
+// Cargar submissions al montar el componente
+onMounted(async () => {
+  const projectId = route.params.projectId || route.params.id;
+  if (projectId) {
+    try {
+      await submissionStore.loadSubmissionsByProject(String(projectId));
+      console.log('✅ Submissions cargados para calcular progreso de hitos');
+    } catch (error) {
+      console.error('❌ Error cargando submissions:', error);
+    }
+  }
 });
 
 // Debug para verificar cálculos
@@ -115,7 +164,7 @@ console.log('📊 Project Progress:', {
   color: var(--color-gray-700);
 }
 
-/* Barra morada para tareas */
+/* Barra de fondo para ambas */
 .progress-bar {
   width: 100%;
   height: 12px;
@@ -125,6 +174,7 @@ console.log('📊 Project Progress:', {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
+/* Barra morada para tareas Y hitos */
 .progress-fill.task-progress {
   height: 100%;
   background: linear-gradient(90deg, #8b5cf6, #7c3aed);
@@ -134,31 +184,25 @@ console.log('📊 Project Progress:', {
   box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);
 }
 
-/* Barra normal para hitos */
-.progress-bar-container {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
+/* Eliminar la barra normal que ya no se usa */
 .progress-fill:not(.task-progress) {
-  height: 100%;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
-  border-radius: 5px;
-  transition: width 0.5s ease-in-out;
-  position: relative;
+  display: none; /* O eliminar esta regla completamente */
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .progress-bar-container {
+  .progress-bars {
+    gap: 1rem;
+  }
+
+  .progress-info {
     flex-direction: column;
-    align-items: stretch;
-    gap: 0.5rem;
+    align-items: flex-start;
+    gap: 0.25rem;
   }
 
   .progress-value {
-    text-align: center;
+    text-align: left;
   }
 }
 </style>
