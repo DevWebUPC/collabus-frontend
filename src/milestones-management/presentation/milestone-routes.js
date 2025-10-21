@@ -4,6 +4,7 @@ const ProjectMilestonesView = () => import('../presentation/views/ProjectMilesto
 const MilestoneDetailView = () => import('../presentation/views/MilestoneDetailView.vue')
 const MilestoneTasksView = () => import('../presentation/views/MilestoneTasksView.vue')
 const MilestoneTaskSubmitView = () => import('../presentation/views/MilestoneTaskSubmitView.vue')
+const MilestoneTaskDetailView = () => import('../presentation/views/MilestoneTaskDetailView.vue')
 
 export const milestoneRoutes = [
     {
@@ -50,5 +51,14 @@ export const milestoneRoutes = [
             title: 'Enviar Tarea del Hito',
             requiresAuth: true
         }
-    }
+    },
+    {
+        path: '/projects/:projectId/milestones/:milestoneId/tasks/:taskId', // NUEVA RUTA
+        name: 'milestone-task-detail',
+        component: MilestoneTaskDetailView,
+        meta: {
+            title: 'Detalle de Tarea del Hito',
+            requiresAuth: true
+        }
+    },
 ];
