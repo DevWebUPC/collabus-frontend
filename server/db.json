@@ -1237,67 +1237,228 @@
           "createdBy": "1",
           "id": "1760939253789",
           "createdAt": "2025-10-20T05:47:33.789Z",
-          "updatedAt": "2025-10-20T05:47:33.789Z"
+          "updatedAt": "2025-10-21T04:49:21.363Z",
+          "status": "completed",
+          "progress": 100,
+          "completedAt": "2025-10-21T04:49:21.343Z"
+        },
+        {
+          "title": "nueva tarea",
+          "description": "avanzar ladning page",
+          "dueDate": "2025-10-23T05:00:00.000Z",
+          "assignedTo": 5,
+          "assignedToName": "Ana Martinez Sanchez",
+          "role": "prueba",
+          "checklist": [
+            {
+              "id": 1761025472527,
+              "text": "1",
+              "completed": true
+            },
+            {
+              "id": 1761025473615,
+              "text": "2",
+              "completed": true
+            },
+            {
+              "id": 1761025474791,
+              "text": "3",
+              "completed": true
+            }
+          ],
+          "tools": [
+            {
+              "id": 1761025476511,
+              "name": "figma",
+              "checked": false
+            }
+          ],
+          "comment": "hola",
+          "attachments": [
+            {
+              "id": 1761025491631.7556,
+              "name": "VLSM.xlsx",
+              "type": "file",
+              "icon": "pi pi-file"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1761025495323",
+          "createdAt": "2025-10-21T05:44:55.323Z",
+          "updatedAt": "2025-10-21T06:20:53.660Z",
+          "progress": 100,
+          "status": "completed",
+          "completedAt": "2025-10-21T06:20:53.651Z"
+        },
+        {
+          "title": "12",
+          "description": "asd",
+          "dueDate": "2025-10-23T05:00:00.000Z",
+          "assignedTo": 2,
+          "assignedToName": "Sebastian Pariachi",
+          "role": "prueba1",
+          "checklist": [
+            {
+              "id": 1761027708536,
+              "text": "das",
+              "completed": false
+            },
+            {
+              "id": 1761027711616,
+              "text": "asd",
+              "completed": false
+            }
+          ],
+          "tools": [
+            {
+              "id": 1761027713080,
+              "name": "asd",
+              "checked": false
+            },
+            {
+              "id": 1761027715904,
+              "name": "sad",
+              "checked": false
+            }
+          ],
+          "comment": "asdasd",
+          "attachments": [
+            {
+              "id": 1761027723305.7834,
+              "name": "ver hito.png",
+              "type": "file",
+              "icon": "pi pi-file"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1761027724534",
+          "createdAt": "2025-10-21T06:22:04.534Z",
+          "updatedAt": "2025-10-21T14:24:31.305Z",
+          "status": "completed",
+          "progress": 100,
+          "completedAt": "2025-10-21T14:24:31.281Z"
+        },
+        {
+          "title": "fds",
+          "description": "asd",
+          "dueDate": "2025-10-24T05:00:00.000Z",
+          "assignedTo": 2,
+          "assignedToName": "Sebastian Pariachi",
+          "role": "prueba1",
+          "checklist": [
+            {
+              "id": 1761028564865,
+              "text": "sad",
+              "completed": false
+            }
+          ],
+          "tools": [
+            {
+              "id": 1761028566569,
+              "name": "sad",
+              "checked": false
+            }
+          ],
+          "comment": "sad",
+          "attachments": [
+            {
+              "id": 1761028574537.987,
+              "name": "VLSM.xlsx",
+              "type": "file",
+              "icon": "pi pi-file"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1761028575743",
+          "createdAt": "2025-10-21T06:36:15.743Z",
+          "updatedAt": "2025-10-21T06:36:15.743Z"
+        },
+        {
+          "title": "tarea de prueba",
+          "description": "hola esta es una tarea de pueba",
+          "dueDate": "2025-10-23T05:00:00.000Z",
+          "assignedTo": 2,
+          "assignedToName": "Sebastian Pariachi",
+          "role": "prueba1",
+          "checklist": [
+            {
+              "id": 1761056518837,
+              "text": "1",
+              "completed": false
+            },
+            {
+              "id": 1761056520125,
+              "text": "2",
+              "completed": false
+            },
+            {
+              "id": 1761056521381,
+              "text": "3",
+              "completed": false
+            }
+          ],
+          "tools": [
+            {
+              "id": 1761056523085,
+              "name": "prueba",
+              "checked": false
+            }
+          ],
+          "comment": "este a es un tarea de prueba",
+          "attachments": [
+            {
+              "id": 1761056541949.9473,
+              "name": "Group 456.png",
+              "type": "file",
+              "icon": "pi pi-file"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1761056543300",
+          "createdAt": "2025-10-21T14:22:23.300Z",
+          "updatedAt": "2025-10-21T14:22:23.300Z"
         }
       ],
       "milestones": [
         {
-          "title": "prueba",
-          "description": "prueba",
+          "title": "hito de prueba",
+          "description": "hito",
           "tools": [
-            "2",
-            "3"
+            "figma",
+            "github"
           ],
-          "generalComment": "hola",
-          "dueDate": "2025-10-28T05:00:00.000Z",
+          "generalComment": "este es un hito de prueba",
+          "dueDate": "2025-10-23T05:00:00.000Z",
           "attachments": [
             {
-              "id": "milestone_file_0_1760986992855_e4hdl3m9q",
-              "name": "Group 456.png",
+              "id": "milestone_file_0_1761055230302_co3uqkpel",
+              "name": "vista-de-perfil-otro usuario.png",
               "type": "file",
-              "url": "blob:http://localhost:5173/1c7d9b11-1d44-4635-bbc1-f59307178c93"
-            },
-            {
-              "id": "milestone_link_0_1760986992855_iqjiwgow1",
-              "name": "Enlace 1",
-              "type": "link",
-              "url": "https://github.com/",
-              "icon": "pi pi-link"
+              "url": "blob:http://localhost:5173/255c46bd-82b0-495d-b8e9-25d485728dcc"
             }
           ],
           "milestoneTasks": [
             {
-              "id": "task_1760986992853_x8da5h17q",
-              "title": "tarea 1",
-              "description": "hola",
-              "assignedTo": 2,
-              "assignedToName": "Sebastian Pariachi",
+              "id": "task_1761055230301_354whr742",
+              "title": "tarea de hito de prueba",
+              "description": "hito de tarea de prueba",
+              "assignedTo": 6,
+              "assignedToName": "Luis Fernandez Garcia",
               "checklist": [
                 {
-                  "id": "checklist_0_1760986992854_xagc9if6t",
-                  "text": "1",
+                  "id": "checklist_0_1761055230302_lb3boetpt",
+                  "text": "prueab 1",
                   "completed": false
                 },
                 {
-                  "id": "checklist_0_1760986992854_54h3hb4i7",
-                  "text": "2",
-                  "completed": false
-                },
-                {
-                  "id": "checklist_0_1760986992854_ahwupgusp",
-                  "text": "3",
+                  "id": "checklist_0_1761055230302_tm8dlvkgn",
+                  "text": "prueba 2",
                   "completed": false
                 }
               ],
               "attachments": [
                 {
-                  "id": "file_0_0_1760986992854_h7ey16gmb",
-                  "name": "ver hito.png",
-                  "type": "file",
-                  "url": "blob:http://localhost:5173/3624a25d-8180-4612-abb8-bcb3c83bb563"
-                },
-                {
-                  "id": "link_0_0_1760986992854_jgxs4kwty",
+                  "id": "link_0_0_1761055230302_vawn5ieow",
                   "name": "Enlace 1",
                   "type": "link",
                   "url": "https://github.com/",
@@ -1307,69 +1468,50 @@
               "comment": "",
               "status": "completed",
               "progress": 100,
-              "dueDate": "2025-10-28T05:00:00.000Z",
-              "completedAt": "2025-10-20T20:13:25.927Z",
-              "updatedAt": "2025-10-20T20:13:25.937Z"
+              "dueDate": "2025-10-23T05:00:00.000Z",
+              "completedAt": "2025-10-21T14:19:25.440Z",
+              "updatedAt": "2025-10-21T14:19:25.474Z"
             },
             {
-              "id": "task_1760986992854_tsg1up354",
-              "title": "tarea 2",
-              "description": "hola",
+              "id": "task_1761055230302_l0fzu3gwy",
+              "title": "prueba del hito 2",
+              "description": "hito de pueba",
               "assignedTo": 5,
               "assignedToName": "Ana Martinez Sanchez",
               "checklist": [
                 {
-                  "id": "checklist_1_1760986992854_nm2rdobwa",
-                  "text": "1",
+                  "id": "checklist_1_1761055230302_fg9fc05sk",
+                  "text": "prueba 1",
                   "completed": false
                 },
                 {
-                  "id": "checklist_1_1760986992854_rijzv6xq1",
-                  "text": "2",
-                  "completed": false
-                },
-                {
-                  "id": "checklist_1_1760986992854_tqjqldsw5",
-                  "text": "3",
+                  "id": "checklist_1_1761055230302_1b2msoyu8",
+                  "text": "prueba 2",
                   "completed": false
                 }
               ],
               "attachments": [
                 {
-                  "id": "file_1_0_1760986992854_sw0jsjssc",
-                  "name": "ver hito.png",
+                  "id": "file_1_0_1761055230302_h3z60hj3k",
+                  "name": "Crear Proyecto 3.png",
                   "type": "file",
-                  "url": "blob:http://localhost:5173/68578c69-cc22-4675-bbbf-36b4c1e7a25d"
-                },
-                {
-                  "id": "link_1_0_1760986992854_m1ka2qut7",
-                  "name": "Enlace 1",
-                  "type": "link",
-                  "url": "https://github.com/",
-                  "icon": "pi pi-link"
-                },
-                {
-                  "id": "link_1_1_1760986992854_e46soc4il",
-                  "name": "Enlace 2",
-                  "type": "link",
-                  "url": "https://github.com/",
-                  "icon": "pi pi-link"
+                  "url": "blob:http://localhost:5173/029506b0-d299-4149-84d2-28aeecf216ff"
                 }
               ],
               "comment": "",
               "status": "completed",
               "progress": 100,
-              "dueDate": "2025-10-28T05:00:00.000Z",
-              "completedAt": "2025-10-20T20:18:14.792Z",
-              "updatedAt": "2025-10-20T20:18:14.839Z"
+              "dueDate": "2025-10-23T05:00:00.000Z",
+              "completedAt": "2025-10-21T14:17:53.516Z",
+              "updatedAt": "2025-10-21T14:17:53.533Z"
             }
           ],
           "status": "active",
           "progress": 0,
           "createdBy": "1",
-          "id": "milestone_1760986992883_8jlpekx47",
-          "createdAt": "2025-10-20T19:03:12.883Z",
-          "updatedAt": "2025-10-20T20:18:14.868Z"
+          "id": "milestone_1761055230329_iual7mezf",
+          "createdAt": "2025-10-21T14:00:30.329Z",
+          "updatedAt": "2025-10-21T14:19:25.491Z"
         }
       ],
       "createdAt": "2025-10-16T17:46:54.022Z",
@@ -1878,51 +2020,105 @@
       "createdAt": null,
       "updatedAt": null,
       "id": 8
+    },
+    {
+      "taskId": "1760939253789",
+      "collaboratorId": 5,
+      "submittedAt": "2025-10-21T04:49:21.302Z",
+      "links": [],
+      "attachments": [
+        {
+          "name": "Group 456.png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/5cbe5c10-3095-41d4-9b53-0e7e12d4bb53"
+        }
+      ],
+      "notes": "asdasd",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 9
+    },
+    {
+      "taskId": "1761025495323",
+      "collaboratorId": 5,
+      "submittedAt": "2025-10-21T06:20:53.641Z",
+      "links": [],
+      "attachments": [
+        {
+          "name": "TRABAJO PARCIAL.pptx",
+          "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+          "url": "blob:http://localhost:5173/ce098f9c-0b9d-473d-ba12-4b003ebcbd37"
+        }
+      ],
+      "notes": "sdasd",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 10
+    },
+    {
+      "taskId": "1761027724534",
+      "collaboratorId": 2,
+      "submittedAt": "2025-10-21T14:24:31.253Z",
+      "links": [],
+      "attachments": [
+        {
+          "name": "Group 456.png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/cc758740-6bd8-4497-a6c9-45192f4cf9b8"
+        }
+      ],
+      "notes": "hola este es un envio de prueba",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 11
     }
   ],
   "milestone-task-submissions": [
     {
-      "milestoneTaskId": "task_1760986992853_x8da5h17q",
-      "collaboratorId": "2",
-      "submittedAt": "2025-10-20T20:13:25.903Z",
+      "milestoneTaskId": "task_1761055230302_l0fzu3gwy",
+      "collaboratorId": "5",
+      "submittedAt": "2025-10-21T14:17:53.486Z",
       "links": [],
       "attachments": [
         {
-          "id": "file_1760991205902_z42kidz9n",
-          "name": "ver hito.png",
+          "id": "file_1761056273486_ti2frdbc3",
+          "name": "vista-de-perfil-otro usuario.png",
           "type": "file",
-          "url": "blob:http://localhost:5173/e3b6c344-9735-4419-b509-e96b1ed54300",
-          "uploadedAt": "2025-10-20T20:13:25.903Z"
+          "url": "blob:http://localhost:5173/e996b541-c869-4030-99f5-96c5115aaef7",
+          "uploadedAt": "2025-10-21T14:17:53.486Z"
         }
       ],
-      "notes": "asdasd",
+      "notes": "hola este es un envio de prueba",
       "status": "submitted",
-      "milestoneId": "milestone_1760986992883_8jlpekx47",
+      "milestoneId": "milestone_1761055230329_iual7mezf",
       "projectId": "1",
-      "createdAt": "2025-10-20T20:13:25.903Z",
-      "updatedAt": "2025-10-20T20:13:25.903Z",
+      "createdAt": "2025-10-21T14:17:53.486Z",
+      "updatedAt": "2025-10-21T14:17:53.486Z",
       "id": 1
     },
     {
-      "milestoneTaskId": "task_1760986992854_tsg1up354",
-      "collaboratorId": "5",
-      "submittedAt": "2025-10-20T20:18:14.759Z",
+      "milestoneTaskId": "task_1761055230301_354whr742",
+      "collaboratorId": "6",
+      "submittedAt": "2025-10-21T14:19:25.430Z",
       "links": [],
       "attachments": [
         {
-          "id": "file_1760991494758_aadxbagm7",
-          "name": "ver hito.png",
+          "id": "file_1761056365429_pte0pryog",
+          "name": "Vista-de-postular-a-un-proyecto.png",
           "type": "file",
-          "url": "blob:http://localhost:5173/570c5e34-d4e7-4bdb-b7b8-d6473f782d12",
-          "uploadedAt": "2025-10-20T20:18:14.759Z"
+          "url": "blob:http://localhost:5173/a8e9bedf-fc73-4e58-ac41-c2349726ec07",
+          "uploadedAt": "2025-10-21T14:19:25.430Z"
         }
       ],
-      "notes": "asdasdasd dssasad",
+      "notes": "hola este es un envio de prueba",
       "status": "submitted",
-      "milestoneId": "milestone_1760986992883_8jlpekx47",
+      "milestoneId": "milestone_1761055230329_iual7mezf",
       "projectId": "1",
-      "createdAt": "2025-10-20T20:18:14.759Z",
-      "updatedAt": "2025-10-20T20:18:14.759Z",
+      "createdAt": "2025-10-21T14:19:25.430Z",
+      "updatedAt": "2025-10-21T14:19:25.430Z",
       "id": 2
     }
   ]
