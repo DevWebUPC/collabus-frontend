@@ -1,11 +1,12 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useMilestonesStore } from '../../application/milestone-store.js';
 
 // Stores y route
 const milestonesStore = useMilestonesStore();
 const route = useRoute();
+const router = useRouter();
 
 const props = defineProps({
   projectId: {
@@ -17,6 +18,23 @@ const props = defineProps({
     default: null
   }
 });
+
+const viewTaskDetails = (milestoneId, taskId) => {
+  console.log('🔍 Navegando a detalles de tarea:', { milestoneId, taskId });
+
+  router.push({
+    name: 'milestone-task-detail',
+    params: {
+      projectId: props.projectId,
+      milestoneId: milestoneId,
+      taskId: taskId
+    }
+  });
+};
+
+const isTaskCompleted = (task) => {
+  return task.status === 'completed' || task.progress === 100;
+};
 
 // Datos reactivos
 const milestones = ref([]);
@@ -310,6 +328,16 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
                     <span :class="['task-status', task.status]">
                       {{ task.status === 'completed' ? 'Completada' : 'Pendiente' }}
                     </span>
+                    <pv-button
+                        v-if="isTaskCompleted(task)"
+                        class="view-task-btn"
+                        severity="secondary"
+                        size="small"
+                        @click="viewTaskDetails(milestone.id, task.id)"
+                    >
+                      <i class="pi pi-eye"></i>
+                      Ver Tarea
+                    </pv-button>
                   </div>
                 </div>
               </div>
@@ -333,6 +361,106 @@ const getTasksByCollaborator = (milestone, collaboratorId) => {
 </template>
 
 <style scoped>
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.view-task-btn {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  white-space: nowrap;
+}
+
+.view-task-btn .pi {
+  font-size: 0.75rem;
+  margin-right: 0.25rem;
+}
+
+/* Mejoras para la lista de tareas */
+.task-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.task-item:hover {
+  border-color: #3b82f6;
+}
+
+.task-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.task-title {
+  font-weight: 500;
+  color: #374151;
+  flex: 1;
+}
+
+.task-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.task-status.completed {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.task-status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.task-description {
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.task-details {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.task-progress {
+  font-weight: 500;
+}
+
+.task-due-date {
+  color: #dc2626;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .task-main {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .task-actions {
+    align-self: stretch;
+    justify-content: space-between;
+  }
+
+  .task-details {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
 .error-state {
   text-align: center;
   padding: 2rem;
