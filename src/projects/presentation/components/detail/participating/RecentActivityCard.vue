@@ -38,8 +38,17 @@
               <i class="pi pi-flag"></i>
             </div>
             <div class="stat-content">
-              <span class="stat-label">Hitos Alcanzados</span>
+              <span class="stat-label">Hitos Completados</span>
               <span class="stat-value">{{ completedMilestones }}/{{ totalMilestones }}</span>
+              <div v-if="totalMilestones > 0" class="progress-bar">
+                <div
+                    class="progress-fill milestone-progress"
+                    :style="{ width: milestoneCompletionPercentage + '%' }"
+                ></div>
+              </div>
+              <span v-if="totalMilestones > 0" class="stat-percentage">
+                {{ milestoneCompletionPercentage }}% completado
+              </span>
             </div>
           </div>
 
@@ -56,6 +65,9 @@
               <span v-if="nextDeadline" class="stat-deadline">
                 {{ nextDeadline.title }}
               </span>
+              <span v-if="nextDeadlineType" class="stat-deadline-type">
+                {{ nextDeadlineType }}
+              </span>
             </div>
           </div>
         </div>
@@ -69,10 +81,12 @@ import { ref, computed, onMounted } from 'vue';
 import { useProjectDetailStore } from '../../../../application/project-detail.store.js';
 import { useUserStore } from '../../../../../iam/application/user-store.js';
 import { useTaskSubmissionStore } from '../../../../../task-management/application/task-submission-store.js';
+import { useMilestoneTaskSubmissionStore } from '../../../../../milestones-management/application/milestone-task-submission-store.js';
 
 const projectDetailStore = useProjectDetailStore();
 const userStore = useUserStore();
 const taskSubmissionStore = useTaskSubmissionStore();
+const milestoneSubmissionStore = useMilestoneTaskSubmissionStore();
 
 const loading = ref(false);
 
@@ -104,40 +118,130 @@ const totalTasks = computed(() => {
   return userTasks.value.length;
 });
 
-// Computed: Porcentaje de completado
+// Computed: Porcentaje de completado de tareas
 const completionPercentage = computed(() => {
   if (totalTasks.value === 0) return 0;
   return Math.round((completedTasks.value / totalTasks.value) * 100);
 });
 
-// Computed: Hitos (usando milestones del proyecto)
+// Computed: Hitos en los que participa el usuario
+const userMilestones = computed(() => {
+  if (!projectDetailStore.project?.milestones) return [];
+
+  const userId = getNormalizedUserId();
+  if (!userId) return [];
+
+  // Filtrar hitos que tienen al menos una tarea asignada al usuario
+  const userMilestones = projectDetailStore.project.milestones.filter(milestone => {
+    const hasUserTasks = milestone.milestoneTasks?.some(task => {
+      const taskUserId = task.assignedTo ? String(task.assignedTo) : null;
+      return taskUserId === userId;
+    });
+    return hasUserTasks;
+  });
+
+  // Verificar estado de completado basado en submissions (MISMA LÓGICA QUE ParticipatingMilestonesView.vue)
+  const updatedMilestones = userMilestones.map(milestone => {
+    const allTasksCompleted = checkIfAllTasksHaveSubmissions(milestone);
+
+    if (allTasksCompleted && milestone.status !== 'completed') {
+      return {
+        ...milestone,
+        status: 'completed',
+        progress: 100
+      };
+    }
+
+    return milestone;
+  });
+
+  return updatedMilestones;
+});
+
+// MISMA FUNCIÓN QUE EN ParticipatingMilestonesView.vue
+const checkIfAllTasksHaveSubmissions = (milestone) => {
+  if (!milestone.milestoneTasks || milestone.milestoneTasks.length === 0) {
+    return false;
+  }
+
+  // Verificar cada tarea del hito
+  const allTasksHaveSubmissions = milestone.milestoneTasks.every(task => {
+    const hasSubmission = milestoneSubmissionStore.hasSubmissionForMilestoneTask(task.id);
+    return hasSubmission;
+  });
+
+  return allTasksHaveSubmissions;
+};
+
+// Computed: Hitos completados por el usuario (INCLUYENDO LOS QUE SE MARCADOS COMO COMPLETADOS POR LA LÓGICA ANTERIOR)
 const completedMilestones = computed(() => {
-  if (!projectDetailStore.project?.milestones) return 0;
-  return projectDetailStore.project.milestones.filter(milestone =>
-      milestone.completed
+  return userMilestones.value.filter(milestone =>
+      milestone.status === 'completed'
   ).length;
 });
 
+// Computed: Total de hitos en los que participa
 const totalMilestones = computed(() => {
-  if (!projectDetailStore.project?.milestones) return 0;
-  return projectDetailStore.project.milestones.length;
+  return userMilestones.value.length;
 });
 
-// Computed: Próxima fecha de entrega (tarea pendiente más cercana)
+// Computed: Porcentaje de completado de hitos
+const milestoneCompletionPercentage = computed(() => {
+  if (totalMilestones.value === 0) return 0;
+  return Math.round((completedMilestones.value / totalMilestones.value) * 100);
+});
+
+// Computed: Próxima fecha de entrega (tarea o hito pendiente más cercano)
 const nextDeadline = computed(() => {
+  const userId = getNormalizedUserId();
+  if (!userId) return null;
+
+  const pendingItems = [];
+
+  // Agregar tareas pendientes del usuario
   const pendingTasks = userTasks.value.filter(task =>
       !taskSubmissionStore.hasSubmissionForTask(task.id) &&
       task.dueDate
   );
 
-  if (pendingTasks.length === 0) return null;
+  pendingTasks.forEach(task => {
+    pendingItems.push({
+      type: 'task',
+      title: task.title,
+      dueDate: task.dueDate,
+      originalItem: task
+    });
+  });
+
+  // Agregar hitos pendientes del usuario
+  const pendingMilestones = userMilestones.value.filter(milestone =>
+      milestone.status !== 'completed' &&
+      milestone.dueDate
+  );
+
+  pendingMilestones.forEach(milestone => {
+    pendingItems.push({
+      type: 'milestone',
+      title: milestone.title,
+      dueDate: milestone.dueDate,
+      originalItem: milestone
+    });
+  });
+
+  if (pendingItems.length === 0) return null;
 
   // Ordenar por fecha más cercana
-  const sortedTasks = [...pendingTasks].sort((a, b) =>
+  const sortedItems = [...pendingItems].sort((a, b) =>
       new Date(a.dueDate) - new Date(b.dueDate)
   );
 
-  return sortedTasks[0];
+  return sortedItems[0];
+});
+
+// Computed: Tipo del próximo deadline (tarea o hito)
+const nextDeadlineType = computed(() => {
+  if (!nextDeadline.value) return '';
+  return nextDeadline.value.type === 'task' ? 'Tarea' : 'Hito';
 });
 
 const getNormalizedUserId = () => {
@@ -166,6 +270,11 @@ onMounted(async () => {
       for (const task of userTasks.value) {
         await taskSubmissionStore.loadSubmissionsByTask(task.id);
       }
+    }
+
+    // Cargar submissions de milestone tasks para verificar estado de hitos
+    if (projectDetailStore.project?.id) {
+      await milestoneSubmissionStore.loadSubmissionsByProject(projectDetailStore.project.id);
     }
   } catch (error) {
     console.error('Error loading activity data:', error);
@@ -276,6 +385,15 @@ onMounted(async () => {
   font-style: italic;
 }
 
+.stat-deadline-type {
+  font-size: 0.75rem;
+  color: var(--color-gray-500);
+  background: var(--color-gray-200);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
 /* Progress Bar */
 .progress-bar {
   width: 100%;
@@ -291,6 +409,10 @@ onMounted(async () => {
   background: linear-gradient(90deg, #10b981, #059669);
   border-radius: 3px;
   transition: width 0.3s ease;
+}
+
+.progress-fill.milestone-progress {
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
 }
 
 /* Responsive */
