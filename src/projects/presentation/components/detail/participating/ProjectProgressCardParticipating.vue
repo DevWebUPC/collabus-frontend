@@ -27,15 +27,22 @@
 import { ref, computed, onMounted } from 'vue';
 import { useProjectDetailStore } from '../../../../application/project-detail.store.js';
 import { useTaskSubmissionStore } from '../../../../../task-management/application/task-submission-store.js';
+import { useMilestoneTaskSubmissionStore } from '../../../../../milestones-management/application/milestone-task-submission-store.js';
 
 const projectDetailStore = useProjectDetailStore();
 const taskSubmissionStore = useTaskSubmissionStore();
+const milestoneSubmissionStore = useMilestoneTaskSubmissionStore();
 
 const loading = ref(false);
 
 // Computed: Obtener todas las tareas del proyecto
 const projectTasks = computed(() => {
   return projectDetailStore.project?.tasks || [];
+});
+
+// Computed: Obtener todos los hitos del proyecto
+const projectMilestones = computed(() => {
+  return projectDetailStore.project?.milestones || [];
 });
 
 // Computed: Total de tareas
@@ -50,19 +57,50 @@ const completedTasks = computed(() => {
   ).length;
 });
 
+// Computed: Total de hitos
+const totalMilestones = computed(() => {
+  return projectMilestones.value.length;
+});
+
+// Computed: Hitos completados (todos los milestoneTasks tienen submissions)
+const completedMilestones = computed(() => {
+  return projectMilestones.value.filter(milestone => {
+    // Verificar si todos los milestoneTasks tienen submissions
+    return checkIfAllTasksHaveSubmissions(milestone);
+  }).length;
+});
+
+// Función para verificar si todas las tareas de un hito tienen submissions
+const checkIfAllTasksHaveSubmissions = (milestone) => {
+  if (!milestone.milestoneTasks || milestone.milestoneTasks.length === 0) {
+    return false;
+  }
+
+  // Verificar cada tarea del hito
+  const allTasksHaveSubmissions = milestone.milestoneTasks.every(task => {
+    const hasSubmission = milestoneSubmissionStore.hasSubmissionForMilestoneTask(task.id);
+    return hasSubmission;
+  });
+
+  return allTasksHaveSubmissions;
+};
+
 // Computed: Tareas pendientes
 const pendingTasks = computed(() => {
   return totalTasks.value - completedTasks.value;
 });
 
-// Computed: Progreso general del proyecto basado en tareas completadas
+// Computed: Progreso general del proyecto basado en tareas y hitos completados
 const progress = computed(() => {
-  if (totalTasks.value === 0) return 0;
-  const percentage = (completedTasks.value / totalTasks.value) * 100;
+  const totalItems = totalTasks.value + totalMilestones.value;
+  if (totalItems === 0) return 0;
+
+  const completedItems = completedTasks.value + completedMilestones.value;
+  const percentage = (completedItems / totalItems) * 100;
   return Math.round(percentage * 10) / 10; // Redondear a 1 decimal
 });
 
-// Cargar submissions para todas las tareas del proyecto
+// Cargar submissions para todas las tareas y hitos del proyecto
 onMounted(async () => {
   loading.value = true;
   try {
@@ -71,6 +109,11 @@ onMounted(async () => {
       for (const task of projectTasks.value) {
         await taskSubmissionStore.loadSubmissionsByTask(task.id);
       }
+    }
+
+    // Cargar submissions para todos los milestone tasks del proyecto
+    if (projectDetailStore.project?.id) {
+      await milestoneSubmissionStore.loadSubmissionsByProject(projectDetailStore.project.id);
     }
   } catch (error) {
     console.error('Error loading project progress data:', error);

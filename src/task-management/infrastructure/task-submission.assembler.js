@@ -1,4 +1,4 @@
-import { TaskSubmission } from '../domain/model/TaskSubmission.js';
+import { TaskSubmission } from '../domain/model/task-submission.entity.js';
 
 export class TaskSubmissionAssembler {
     static fromApiToEntity(apiData) {

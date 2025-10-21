@@ -13,7 +13,6 @@ const menuItems = [
   { label: "nav.home", to: "/home", key: "home" },
   { label: "nav.projects", to: "/projects", key: "projects" },
   { label: "nav.collaborators", to: "/collaborators", key: "collaborators" },
-  { label: "nav.notifications", to: "/notifications", key: "notifications" },
 ];
 
 const drawer = ref(false);

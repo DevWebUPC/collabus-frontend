@@ -9,7 +9,7 @@ import RankingDeColaboradores from "../profile-management/presentation/views/ran
 import { projectRoutes } from "../projects/presentation/projects-routes.js";
 import { profileRoutes } from "../profile-management/presentation/profile-routes.js";
 import {taskRoutes} from "../task-management/presentation/task-routes.js";
-import Notifications from "../shared/presentation/views/notifications-view.vue";
+import {milestoneRoutes} from "../milestones-management/presentation/milestone-routes.js";
 
 // Import dinámico para page not found
 const pageNotFound = () =>
@@ -23,7 +23,6 @@ const routes = [
     { path: "/create-account", name: "create-account", component: Onboarding, meta: { title: "Create Account" } },
     { path: "/home", name: "home", component: Home, meta: { title: "Home" } },
     { path: "/collaborators", name: "collaborators", component: Collaborator, meta: { title: "Collaborators" } },
-    { path: "/notifications", name: "notifications", component: Notifications, meta: { title: "Notifications" } },
     { path: "/recovery-password", name: "recovery-password", component: RecoveryPassword, meta: { title: "Recovery Password" } },
     { path: "/:pathMatch(.*)*", name: "not-found", component: pageNotFound, meta: { title: "Page Not Found" } },
 
@@ -35,6 +34,9 @@ const routes = [
 
     // Task routes
     ...taskRoutes,
+
+    // milestones
+    ...milestoneRoutes
 ];
 
 const router = createRouter({

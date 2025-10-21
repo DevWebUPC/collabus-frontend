@@ -7,7 +7,6 @@ import { watch } from 'vue';
 // My Projects
 import ProjectProgressCard from '../components/detail/my-projects/ProjectProgressCard.vue';
 import CollaboratorsCard from '../components/detail/my-projects/CollaboratorsCard.vue';
-import RecentNotificationsCard from '../components/detail/my-projects/RecentNotificationsCard.vue';
 import UpcomingMilestonesCard from '../components/detail/my-projects/UpcomingMilestonesCard.vue';
 import UrgentTasksCard from '../components/detail/my-projects/UrgentTasksCard.vue';
 import ApplicantsCard from '../components/detail/my-projects/ApplicantsCard.vue';
@@ -22,6 +21,10 @@ import ParticipatingTasksView from "../../../task-management/presentation/view/P
 
 import EmptyTabContent from '../components/detail/EmptyTabContent.vue';
 import { useUserStore } from '../../../iam/application/user-store.js';
+
+// Milestones Management
+import ProjectMilestonesView from "../../../milestones-management/presentation/views/ProjectMilestonesView.vue";
+import ParticipatingMilestonesView from "../../../milestones-management/presentation/views/ParticipatingMilestonesView.vue";
 
 const userStore = useUserStore();
 const route = useRoute();
@@ -49,13 +52,21 @@ const handleViewAllTasksFromMyTaskCard = () => {
   activeTab.value = 'tasks';
 };
 
+// Manejar navegación a milestones desde UpcomingMilestonesCardParticipating
+const handleViewAllMilestones = () => {
+  console.log('🎯 Navegando a pestaña Milestones desde UpcomingMilestonesCardParticipating');
+  activeTab.value = 'milestones';
+};
+
 // Setup event listeners
 const setupEventListeners = () => {
   window.addEventListener('view-all-tasks', handleViewAllTasksFromMyTaskCard);
+  window.addEventListener('view-all-milestones', handleViewAllMilestones); // 👈 NUEVO
 };
 
 const cleanupEventListeners = () => {
   window.removeEventListener('view-all-tasks', handleViewAllTasksFromMyTaskCard);
+  window.removeEventListener('view-all-milestones', handleViewAllMilestones); // 👈 NUEVO
 };
 
 onMounted(async () => {
@@ -187,13 +198,6 @@ watch(
         >
           {{ $t('projects.detail.tabs.applicants') }}
         </pv-button>
-        <pv-button
-            v-if="store.isParticipating"
-            :class="['tab-button', { active: activeTab === 'feedback' }]"
-            @click="activeTab = 'feedback'"
-        >
-          {{ $t('projects.detail.tabs.feedback') }}
-        </pv-button>
       </div>
 
       <!-- Tab Content -->
@@ -201,24 +205,18 @@ watch(
         <!-- Overview Tab -->
         <div v-if="activeTab === 'overview'" class="overview-content">
           <template v-if="store.isOwned">
-            <!-- Layout corregido según la imagen -->
+            <!-- Layout corregido: SOLO 2 COLUMNAS para My Projects -->
             <div class="dashboard-layout">
-              <!-- Fila 1: 3 columnas -->
-              <div class="dashboard-row">
+              <div class="dashboard-row two-columns">
                 <!-- Columna izquierda: Progreso y Colaboradores -->
                 <div class="left-section">
                   <ProjectProgressCard />
                   <CollaboratorsCard />
                 </div>
 
-                <!-- Columna central: Notificaciones -->
-                <div class="center-section">
-                  <RecentNotificationsCard />
-                </div>
-
                 <!-- Columna derecha: Hitos y Tareas -->
                 <div class="right-section">
-                  <UpcomingMilestonesCard />
+                  <UpcomingMilestonesCard @view-all-milestones="activeTab = 'milestones'" />
                   <UrgentTasksCard @view-all-tasks="handleViewAllTasks" />
                 </div>
               </div>
@@ -229,7 +227,7 @@ watch(
             <!-- For Participating Projects: My Tasks and Milestones -->
             <div class="participating-content">
               <div class="dashboard-layout">
-                <div class="dashboard-row">
+                <div class="dashboard-row two-columns">
                   <!-- Columna izquierda: Progreso y Mis Tareas -->
                   <div class="left-section">
                     <ProjectProgressCardParticipating />
@@ -256,10 +254,12 @@ watch(
             v-else-if="activeTab === 'tasks' && !store.isOwned"
         />
 
-        <EmptyTabContent
-            v-else-if="activeTab === 'milestones'"
-            tab-name="milestones"
-            icon="pi-flag"
+        <ProjectMilestonesView
+            v-else-if="activeTab === 'milestones' && store.isOwned"
+        />
+
+        <ParticipatingMilestonesView
+            v-else-if="activeTab === 'milestones' && !store.isOwned"
         />
 
         <EmptyTabContent
@@ -270,19 +270,12 @@ watch(
 
         <ApplicantsCard v-else-if="activeTab === 'applicants'" />
 
-        <EmptyTabContent
-            v-else-if="activeTab === 'feedback'"
-            tab-name="feedback"
-            icon="pi-comments"
-        />
       </div>
     </div>
   </div>
 </template>
 
-<!-- Los estilos se mantienen igual -->
 <style scoped>
-/* Tus estilos existentes se mantienen igual */
 .project-detail-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -311,33 +304,34 @@ watch(
 
 .participating-content .dashboard-layout {
   width: 100%;
-  max-width: 1000px; /* Ancho máximo para centrar el contenido */
-  margin: 0 auto; /* Centrar horizontalmente */
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-.participating-content .dashboard-row {
+/* Layout de 2 columnas para ambos tipos de proyectos */
+.dashboard-row.two-columns {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
   align-items: start;
 }
 
-.participating-content .left-section,
-.participating-content .right-section {
+.left-section,
+.right-section {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
 /* Asegurar que las cards tengan altura consistente */
-.participating-content :deep(.p-card) {
+:deep(.p-card) {
   height: fit-content;
-  min-height: 200px; /* Altura mínima para consistencia */
+  min-height: 200px;
 }
 
-/* Responsive para participating */
+/* Responsive para ambos layouts */
 @media (max-width: 768px) {
-  .participating-content .dashboard-row {
+  .dashboard-row.two-columns {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
@@ -437,44 +431,6 @@ watch(
   background: transparent;
 }
 
-.overview-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  min-height: 400px;
-}
-
-/* Nuevo layout corregido */
-.dashboard-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.dashboard-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 2rem;
-  align-items: start;
-}
-
-.left-section {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.center-section {
-  display: flex;
-  flex-direction: column;
-}
-
-.right-section {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
 /* Cards - basic styles for layout only */
 :deep(.p-card) {
   border-radius: 12px;
@@ -497,10 +453,6 @@ watch(
 .left-section :deep(.p-card),
 .right-section :deep(.p-card) {
   height: fit-content;
-}
-
-.center-section :deep(.p-card) {
-  height: 100%;
 }
 
 /* Custom Button Styles to match design */
@@ -531,7 +483,7 @@ watch(
     padding: 0.5rem;
   }
 
-  .dashboard-row {
+  .dashboard-row.two-columns {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
@@ -550,14 +502,10 @@ watch(
   }
 }
 
-@media (max-width: 1024px) {
-  .dashboard-row {
+/* Para pantallas más grandes, mantener 2 columnas */
+@media (min-width: 769px) {
+  .dashboard-row.two-columns {
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-
-  .center-section {
-    grid-column: span 2;
   }
 }
 
@@ -572,11 +520,5 @@ watch(
 .tasks-milestones-section .p-card {
   flex: 1;
   min-height: 280px;
-}
-
-.notifications-section {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
 }
 </style>

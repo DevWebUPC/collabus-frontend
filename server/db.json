@@ -809,6 +809,15 @@
           "roleId": 1760636802707,
           "progress": 0,
           "joinedAt": "2025-10-18T02:38:42.629Z"
+        },
+        {
+          "id": "1760939195449",
+          "applicantId": 5,
+          "name": "Ana Martinez Sanchez",
+          "role": "prueba",
+          "roleId": 1760636802707,
+          "progress": 0,
+          "joinedAt": "2025-10-20T05:46:35.449Z"
         }
       ],
       "tasks": [
@@ -1043,9 +1052,468 @@
           "status": "completed",
           "progress": 100,
           "completedAt": "2025-10-19T03:49:28.746Z"
+        },
+        {
+          "title": "prueba",
+          "description": "hola",
+          "dueDate": "2025-10-22T05:00:00.000Z",
+          "assignedTo": 6,
+          "assignedToName": "Luis Fernandez Garcia",
+          "role": "prueba",
+          "checklist": [
+            {
+              "id": 1760895546931,
+              "text": "paso1",
+              "completed": true
+            },
+            {
+              "id": 1760895549563,
+              "text": "paso2",
+              "completed": true
+            }
+          ],
+          "tools": [
+            {
+              "id": 1760895552475,
+              "name": "paso1",
+              "checked": false
+            }
+          ],
+          "comment": "hola",
+          "attachments": [
+            {
+              "id": 1760895563619.1301,
+              "name": "https://www.figma.com/files/team/1412940702019006362/recents-and-sharing?fuid=1249751912393142551",
+              "type": "link",
+              "icon": "pi pi-link"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1760895564970",
+          "createdAt": "2025-10-19T17:39:24.970Z",
+          "updatedAt": "2025-10-19T18:44:24.300Z",
+          "progress": 100,
+          "status": "completed",
+          "completedAt": "2025-10-19T18:44:24.283Z"
+        },
+        {
+          "title": "prueba-123",
+          "description": "prueba 2.1",
+          "dueDate": "2025-10-31T05:00:00.000Z",
+          "assignedTo": 2,
+          "assignedToName": "Sebastian Pariachi",
+          "role": "prueba1",
+          "checklist": [
+            {
+              "id": 1760898258453,
+              "text": "1",
+              "completed": true
+            },
+            {
+              "id": 1760898259799,
+              "text": "2",
+              "completed": true
+            }
+          ],
+          "tools": [
+            {
+              "id": 1760898261172,
+              "name": "figma",
+              "checked": false
+            }
+          ],
+          "comment": "hola",
+          "attachments": [
+            {
+              "id": 1760898273317.6826,
+              "name": "vista-de-proyectos-participados-enviar-tarea-(Colaboradors).png",
+              "type": "file",
+              "icon": "pi pi-file"
+            },
+            {
+              "id": 1760898286221.208,
+              "name": "https://www.figma.com/files/team/1412940702019006362/recents-and-sharing?fuid=1249751912393142551",
+              "type": "link",
+              "icon": "pi pi-link"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1760898289795",
+          "createdAt": "2025-10-19T18:24:49.795Z",
+          "updatedAt": "2025-10-19T18:42:04.145Z",
+          "progress": 100,
+          "status": "completed",
+          "completedAt": "2025-10-19T18:42:04.127Z"
+        },
+        {
+          "title": "prueba",
+          "description": "hola",
+          "dueDate": "2025-10-31T05:00:00.000Z",
+          "assignedTo": 6,
+          "assignedToName": "Luis Fernandez Garcia",
+          "role": "prueba",
+          "checklist": [
+            {
+              "id": 1760915363124,
+              "text": "1",
+              "completed": true
+            },
+            {
+              "id": 1760915364564,
+              "text": "2",
+              "completed": true
+            }
+          ],
+          "tools": [
+            {
+              "id": 1760915366100,
+              "name": "3",
+              "checked": false
+            },
+            {
+              "id": 1760915367644,
+              "name": "2",
+              "checked": false
+            },
+            {
+              "id": 1760915368644,
+              "name": "1",
+              "checked": false
+            }
+          ],
+          "comment": "hola este es una prueba",
+          "attachments": [
+            {
+              "id": 1760915389436.1526,
+              "name": "https://github.com/DevWebUPC/collabus-frontend",
+              "type": "link",
+              "icon": "pi pi-link"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1760915392140",
+          "createdAt": "2025-10-19T23:09:52.140Z",
+          "updatedAt": "2025-10-19T23:10:22.488Z",
+          "progress": 100,
+          "status": "completed",
+          "completedAt": "2025-10-19T23:10:22.472Z"
+        },
+        {
+          "title": "hola",
+          "description": "hola",
+          "dueDate": "2025-10-22T05:00:00.000Z",
+          "assignedTo": 5,
+          "assignedToName": "Ana Martinez Sanchez",
+          "role": "prueba",
+          "checklist": [
+            {
+              "id": 1760939238201,
+              "text": "123",
+              "completed": false
+            }
+          ],
+          "tools": [
+            {
+              "id": 1760939239681,
+              "name": "https://github.com/",
+              "checked": false
+            }
+          ],
+          "comment": "asdasd",
+          "attachments": [
+            {
+              "id": 1760939247537.7563,
+              "name": "https://github.com/",
+              "type": "link",
+              "icon": "pi pi-link"
+            },
+            {
+              "id": 1760939252337.773,
+              "name": "Group 456.png",
+              "type": "file",
+              "icon": "pi pi-file"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1760939253789",
+          "createdAt": "2025-10-20T05:47:33.789Z",
+          "updatedAt": "2025-10-21T04:49:21.363Z",
+          "status": "completed",
+          "progress": 100,
+          "completedAt": "2025-10-21T04:49:21.343Z"
+        },
+        {
+          "title": "nueva tarea",
+          "description": "avanzar ladning page",
+          "dueDate": "2025-10-23T05:00:00.000Z",
+          "assignedTo": 5,
+          "assignedToName": "Ana Martinez Sanchez",
+          "role": "prueba",
+          "checklist": [
+            {
+              "id": 1761025472527,
+              "text": "1",
+              "completed": true
+            },
+            {
+              "id": 1761025473615,
+              "text": "2",
+              "completed": true
+            },
+            {
+              "id": 1761025474791,
+              "text": "3",
+              "completed": true
+            }
+          ],
+          "tools": [
+            {
+              "id": 1761025476511,
+              "name": "figma",
+              "checked": false
+            }
+          ],
+          "comment": "hola",
+          "attachments": [
+            {
+              "id": 1761025491631.7556,
+              "name": "VLSM.xlsx",
+              "type": "file",
+              "icon": "pi pi-file"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1761025495323",
+          "createdAt": "2025-10-21T05:44:55.323Z",
+          "updatedAt": "2025-10-21T06:20:53.660Z",
+          "progress": 100,
+          "status": "completed",
+          "completedAt": "2025-10-21T06:20:53.651Z"
+        },
+        {
+          "title": "12",
+          "description": "asd",
+          "dueDate": "2025-10-23T05:00:00.000Z",
+          "assignedTo": 2,
+          "assignedToName": "Sebastian Pariachi",
+          "role": "prueba1",
+          "checklist": [
+            {
+              "id": 1761027708536,
+              "text": "das",
+              "completed": false
+            },
+            {
+              "id": 1761027711616,
+              "text": "asd",
+              "completed": false
+            }
+          ],
+          "tools": [
+            {
+              "id": 1761027713080,
+              "name": "asd",
+              "checked": false
+            },
+            {
+              "id": 1761027715904,
+              "name": "sad",
+              "checked": false
+            }
+          ],
+          "comment": "asdasd",
+          "attachments": [
+            {
+              "id": 1761027723305.7834,
+              "name": "ver hito.png",
+              "type": "file",
+              "icon": "pi pi-file"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1761027724534",
+          "createdAt": "2025-10-21T06:22:04.534Z",
+          "updatedAt": "2025-10-21T14:24:31.305Z",
+          "status": "completed",
+          "progress": 100,
+          "completedAt": "2025-10-21T14:24:31.281Z"
+        },
+        {
+          "title": "fds",
+          "description": "asd",
+          "dueDate": "2025-10-24T05:00:00.000Z",
+          "assignedTo": 2,
+          "assignedToName": "Sebastian Pariachi",
+          "role": "prueba1",
+          "checklist": [
+            {
+              "id": 1761028564865,
+              "text": "sad",
+              "completed": false
+            }
+          ],
+          "tools": [
+            {
+              "id": 1761028566569,
+              "name": "sad",
+              "checked": false
+            }
+          ],
+          "comment": "sad",
+          "attachments": [
+            {
+              "id": 1761028574537.987,
+              "name": "VLSM.xlsx",
+              "type": "file",
+              "icon": "pi pi-file"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1761028575743",
+          "createdAt": "2025-10-21T06:36:15.743Z",
+          "updatedAt": "2025-10-21T06:36:15.743Z"
+        },
+        {
+          "title": "tarea de prueba",
+          "description": "hola esta es una tarea de pueba",
+          "dueDate": "2025-10-23T05:00:00.000Z",
+          "assignedTo": 2,
+          "assignedToName": "Sebastian Pariachi",
+          "role": "prueba1",
+          "checklist": [
+            {
+              "id": 1761056518837,
+              "text": "1",
+              "completed": false
+            },
+            {
+              "id": 1761056520125,
+              "text": "2",
+              "completed": false
+            },
+            {
+              "id": 1761056521381,
+              "text": "3",
+              "completed": false
+            }
+          ],
+          "tools": [
+            {
+              "id": 1761056523085,
+              "name": "prueba",
+              "checked": false
+            }
+          ],
+          "comment": "este a es un tarea de prueba",
+          "attachments": [
+            {
+              "id": 1761056541949.9473,
+              "name": "Group 456.png",
+              "type": "file",
+              "icon": "pi pi-file"
+            }
+          ],
+          "createdBy": "1",
+          "id": "1761056543300",
+          "createdAt": "2025-10-21T14:22:23.300Z",
+          "updatedAt": "2025-10-21T14:22:23.300Z"
         }
       ],
-      "milestones": [],
+      "milestones": [
+        {
+          "title": "hito de prueba",
+          "description": "hito",
+          "tools": [
+            "figma",
+            "github"
+          ],
+          "generalComment": "este es un hito de prueba",
+          "dueDate": "2025-10-23T05:00:00.000Z",
+          "attachments": [
+            {
+              "id": "milestone_file_0_1761055230302_co3uqkpel",
+              "name": "vista-de-perfil-otro usuario.png",
+              "type": "file",
+              "url": "blob:http://localhost:5173/255c46bd-82b0-495d-b8e9-25d485728dcc"
+            }
+          ],
+          "milestoneTasks": [
+            {
+              "id": "task_1761055230301_354whr742",
+              "title": "tarea de hito de prueba",
+              "description": "hito de tarea de prueba",
+              "assignedTo": 6,
+              "assignedToName": "Luis Fernandez Garcia",
+              "checklist": [
+                {
+                  "id": "checklist_0_1761055230302_lb3boetpt",
+                  "text": "prueab 1",
+                  "completed": false
+                },
+                {
+                  "id": "checklist_0_1761055230302_tm8dlvkgn",
+                  "text": "prueba 2",
+                  "completed": false
+                }
+              ],
+              "attachments": [
+                {
+                  "id": "link_0_0_1761055230302_vawn5ieow",
+                  "name": "Enlace 1",
+                  "type": "link",
+                  "url": "https://github.com/",
+                  "icon": "pi pi-link"
+                }
+              ],
+              "comment": "",
+              "status": "completed",
+              "progress": 100,
+              "dueDate": "2025-10-23T05:00:00.000Z",
+              "completedAt": "2025-10-21T14:19:25.440Z",
+              "updatedAt": "2025-10-21T14:19:25.474Z"
+            },
+            {
+              "id": "task_1761055230302_l0fzu3gwy",
+              "title": "prueba del hito 2",
+              "description": "hito de pueba",
+              "assignedTo": 5,
+              "assignedToName": "Ana Martinez Sanchez",
+              "checklist": [
+                {
+                  "id": "checklist_1_1761055230302_fg9fc05sk",
+                  "text": "prueba 1",
+                  "completed": false
+                },
+                {
+                  "id": "checklist_1_1761055230302_1b2msoyu8",
+                  "text": "prueba 2",
+                  "completed": false
+                }
+              ],
+              "attachments": [
+                {
+                  "id": "file_1_0_1761055230302_h3z60hj3k",
+                  "name": "Crear Proyecto 3.png",
+                  "type": "file",
+                  "url": "blob:http://localhost:5173/029506b0-d299-4149-84d2-28aeecf216ff"
+                }
+              ],
+              "comment": "",
+              "status": "completed",
+              "progress": 100,
+              "dueDate": "2025-10-23T05:00:00.000Z",
+              "completedAt": "2025-10-21T14:17:53.516Z",
+              "updatedAt": "2025-10-21T14:17:53.533Z"
+            }
+          ],
+          "status": "active",
+          "progress": 0,
+          "createdBy": "1",
+          "id": "milestone_1761055230329_iual7mezf",
+          "createdAt": "2025-10-21T14:00:30.329Z",
+          "updatedAt": "2025-10-21T14:19:25.491Z"
+        }
+      ],
       "createdAt": "2025-10-16T17:46:54.022Z",
       "updatedAt": "2025-10-16T17:46:54.022Z",
       "id": 1,
@@ -1162,6 +1630,24 @@
       "reviewNotes": "Aplicante aceptado en el proyecto",
       "reviewerId": 1,
       "reviewedAt": "2025-10-18T02:38:42.602Z"
+    },
+    {
+      "projectId": 1,
+      "applicantId": 5,
+      "applicantName": "Ana Martinez Sanchez",
+      "applicantEmail": "ana.martinez@email.com",
+      "applicantPortfolio": "https://github.com/",
+      "applicantPhone": "936266002",
+      "roleId": 1760636802707,
+      "message": "hola",
+      "acceptedTerms": true,
+      "cvFile": null,
+      "cvFileName": "",
+      "id": 4,
+      "status": "accepted",
+      "reviewNotes": "Aplicante aceptado en el proyecto",
+      "reviewerId": 1,
+      "reviewedAt": "2025-10-20T05:46:35.425Z"
     }
   ],
   "categories": [
@@ -1478,6 +1964,162 @@
       "createdAt": null,
       "updatedAt": null,
       "id": 5
+    },
+    {
+      "taskId": "1760898289795",
+      "collaboratorId": 2,
+      "submittedAt": "2025-10-19T18:42:04.101Z",
+      "links": [
+        " https://www.figma.com/files/team/1412940702019006362/recents-and-sharing?fuid=1249751912393142551"
+      ],
+      "attachments": [
+        {
+          "name": "crear-hito.png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/0bb6be1f-c4e0-416c-b8ac-1d001444057d"
+        }
+      ],
+      "notes": "hola prueba",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 6
+    },
+    {
+      "taskId": "1760895564970",
+      "collaboratorId": 6,
+      "submittedAt": "2025-10-19T18:44:24.262Z",
+      "links": [],
+      "attachments": [
+        {
+          "name": "vista-de-proyectos-participados-enviar-tarea-(Colaboradors).png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/89adbf12-a05f-47f8-a9d3-4ca2e28f8543"
+        }
+      ],
+      "notes": "",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 7
+    },
+    {
+      "taskId": "1760915392140",
+      "collaboratorId": 6,
+      "submittedAt": "2025-10-19T23:10:22.453Z",
+      "links": [],
+      "attachments": [
+        {
+          "name": "vista-de-proyectos-participados-enviar-tarea-(Colaboradors).png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/f0f8329e-3f2a-4baf-a6d0-96d1271ea37f"
+        }
+      ],
+      "notes": "hola",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 8
+    },
+    {
+      "taskId": "1760939253789",
+      "collaboratorId": 5,
+      "submittedAt": "2025-10-21T04:49:21.302Z",
+      "links": [],
+      "attachments": [
+        {
+          "name": "Group 456.png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/5cbe5c10-3095-41d4-9b53-0e7e12d4bb53"
+        }
+      ],
+      "notes": "asdasd",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 9
+    },
+    {
+      "taskId": "1761025495323",
+      "collaboratorId": 5,
+      "submittedAt": "2025-10-21T06:20:53.641Z",
+      "links": [],
+      "attachments": [
+        {
+          "name": "TRABAJO PARCIAL.pptx",
+          "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+          "url": "blob:http://localhost:5173/ce098f9c-0b9d-473d-ba12-4b003ebcbd37"
+        }
+      ],
+      "notes": "sdasd",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 10
+    },
+    {
+      "taskId": "1761027724534",
+      "collaboratorId": 2,
+      "submittedAt": "2025-10-21T14:24:31.253Z",
+      "links": [],
+      "attachments": [
+        {
+          "name": "Group 456.png",
+          "type": "image/png",
+          "url": "blob:http://localhost:5173/cc758740-6bd8-4497-a6c9-45192f4cf9b8"
+        }
+      ],
+      "notes": "hola este es un envio de prueba",
+      "reviewedAt": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "id": 11
+    }
+  ],
+  "milestone-task-submissions": [
+    {
+      "milestoneTaskId": "task_1761055230302_l0fzu3gwy",
+      "collaboratorId": "5",
+      "submittedAt": "2025-10-21T14:17:53.486Z",
+      "links": [],
+      "attachments": [
+        {
+          "id": "file_1761056273486_ti2frdbc3",
+          "name": "vista-de-perfil-otro usuario.png",
+          "type": "file",
+          "url": "blob:http://localhost:5173/e996b541-c869-4030-99f5-96c5115aaef7",
+          "uploadedAt": "2025-10-21T14:17:53.486Z"
+        }
+      ],
+      "notes": "hola este es un envio de prueba",
+      "status": "submitted",
+      "milestoneId": "milestone_1761055230329_iual7mezf",
+      "projectId": "1",
+      "createdAt": "2025-10-21T14:17:53.486Z",
+      "updatedAt": "2025-10-21T14:17:53.486Z",
+      "id": 1
+    },
+    {
+      "milestoneTaskId": "task_1761055230301_354whr742",
+      "collaboratorId": "6",
+      "submittedAt": "2025-10-21T14:19:25.430Z",
+      "links": [],
+      "attachments": [
+        {
+          "id": "file_1761056365429_pte0pryog",
+          "name": "Vista-de-postular-a-un-proyecto.png",
+          "type": "file",
+          "url": "blob:http://localhost:5173/a8e9bedf-fc73-4e58-ac41-c2349726ec07",
+          "uploadedAt": "2025-10-21T14:19:25.430Z"
+        }
+      ],
+      "notes": "hola este es un envio de prueba",
+      "status": "submitted",
+      "milestoneId": "milestone_1761055230329_iual7mezf",
+      "projectId": "1",
+      "createdAt": "2025-10-21T14:19:25.430Z",
+      "updatedAt": "2025-10-21T14:19:25.430Z",
+      "id": 2
     }
   ]
 }
