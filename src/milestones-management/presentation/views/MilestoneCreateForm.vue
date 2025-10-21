@@ -191,7 +191,6 @@ const guardarHito = async () => {
   try {
     console.log('🚀 Iniciando creación de hito...');
 
-    // ✅ USAR projectId.value en lugar de projectId.value (computed)
     if (!projectId.value) {
       console.error('❌ Project ID no disponible. Route params:', route.params);
       alert('Error: No se pudo identificar el proyecto. Por favor, regresa y vuelve a intentarlo.');
@@ -220,20 +219,18 @@ const guardarHito = async () => {
     };
 
     console.log('📝 Datos del formulario:', formData);
-    console.log('👤 Creado por:', projectDetailStore.getCurrentUserId());
-    console.log('👥 Colaboradores disponibles:', colaboradoresDisponibles.value);
 
-    // Usar el store para crear el hito
+    // ✅ MODIFICADO: Usar el store para crear el hito y esperar a que termine
     const nuevoHito = await milestonesStore.createMilestoneFromForm(
         formData,
-        projectId.value, // ← USAR projectId.value directamente
+        projectId.value,
         projectDetailStore.getCurrentUserId(),
         colaboradoresDisponibles.value
     );
 
     console.log('✅ Hito creado exitosamente:', nuevoHito);
 
-    // Emitir evento de éxito
+    // ✅ IMPORTANTE: Emitir el evento SOLO después de que el hito se haya creado
     emit('submit', nuevoHito);
 
     // Limpiar formulario
