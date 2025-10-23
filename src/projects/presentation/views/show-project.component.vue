@@ -2,9 +2,14 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useProjectsStore } from '../../application/projects.store.js';
+import { useAuthStore } from '../../../iam/application/auth-store.js';
+import { useProfileStore } from '../../../profile-management/application/profile-store.js';
 
 const route = useRoute();
 const projectsStore = useProjectsStore();
+const authStore = useAuthStore();
+const profileStore = useProfileStore();
+const profilesStore = useProjectsStore();
 const project = ref(null);
 const loading = ref(true);
 
@@ -48,15 +53,47 @@ const toggleLike = () => {
   // Aquí podrías agregar lógica para guardar el like en tu backend
 };
 
-const toggleSave = () => {
+const toggleSave = async () => {
   isSaved.value = !isSaved.value;
-  // Aquí podrías agregar lógica para guardar como favorito en tu backend
+  const userId = authStore.currentUser?.id;
+  let profileId = null;
+  if (userId) {
+    if (!profileStore.allProfiles.length) {
+      await profileStore.fetchAllProfiles();
+    }
+    const profile = profileStore.allProfiles.find(p => String(p.userId) === String(userId));
+    profileId = profile?.id;
+  }
+  const projectId = project.value?.id;
+  if (!profileId || !projectId) return;
+  if (isSaved.value) {
+    // Guardar como favorito
+    await projectsStore.addFavorite(profileId, projectId);
+  } else {
+    // Quitar de favoritos
+    await projectsStore.removeFavorite(profileId, projectId);
+  }
 };
 
 onMounted(async () => {
   try {
+    // Obtener el userId del usuario autenticado
+    const userId = authStore.currentUser?.id;
+    let profileId = null;
+    if (userId) {
+      if (!profileStore.allProfiles.length) {
+        await profileStore.fetchAllProfiles();
+      }
+      const profile = profileStore.allProfiles.find(p => String(p.userId) === String(userId));
+      profileId = profile?.id;
+    }
     const projectId = route.params.id;
     project.value = await projectsStore.fetchProjectById(projectId);
+    // Verificar si el proyecto ya está en favoritos
+    if (profileId && project.value?.id) {
+      await projectsStore.fetchFavorites(profileId);
+      isSaved.value = projectsStore.favorites.some(fav => fav.projectId === project.value.id);
+    }
   } catch (error) {
     console.error('Error loading project:', error);
   } finally {

@@ -1574,6 +1574,48 @@
       "updatedAt": "2025-10-16T18:31:43.191Z",
       "id": 2,
       "notifications": []
+    },
+    {
+      "title": "123123",
+      "description": "312312321312312321",
+      "areas": [
+        "Desarrollo Web"
+      ],
+      "tags": [
+        "123123"
+      ],
+      "academicLevel": "Estudiante de pregrado",
+      "benefits": "1322121123213213213",
+      "skills": [
+        "123123123"
+      ],
+      "durationQuantity": 1,
+      "durationType": "meses",
+      "roles": [
+        {
+          "id": 1761252784479,
+          "name": "qweqwewqe",
+          "cards": [
+            {
+              "id": 1761252784480,
+              "title": "qwewqeqw",
+              "items": [
+                "eqweqwewqe"
+              ]
+            }
+          ]
+        }
+      ],
+      "status": "active",
+      "progress": 0,
+      "userId": "1",
+      "authorName": "Vitaly Baca",
+      "collaborators": [],
+      "tasks": [],
+      "milestones": [],
+      "createdAt": "2025-10-23T20:53:19.917Z",
+      "updatedAt": "2025-10-23T20:53:19.917Z",
+      "id": 3
     }
   ],
   "applications": [
@@ -2120,6 +2162,13 @@
       "createdAt": "2025-10-21T14:19:25.430Z",
       "updatedAt": "2025-10-21T14:19:25.430Z",
       "id": 2
+    }
+  ],
+  "favorites": [
+    {
+      "profileId": 1,
+      "projectId": 2,
+      "id": 1
     }
   ]
 }

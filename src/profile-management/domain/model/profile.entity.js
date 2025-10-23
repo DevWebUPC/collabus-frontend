@@ -4,22 +4,23 @@
  */
 export class Profile {
     constructor({
-                    id = null,
-                    userId = null,
-                    username = '',
-                    avatar = null,
-                    role = '',
-                    bio = '',
-                    abilities = [],
-                    experiences = [],
-                    cv = null,
-                    status = 'active',
-                    points = 0, // 👈 Nuevo campo - inicializado en 0
-                    projects = [], // 👈 Nuevo campo - array vacío
-                    pointsGivenBy = [],
-                    createdAt = null,
-                    updatedAt = null
-                } = {}) {
+        id = null,
+        userId = null,
+        username = '',
+        avatar = null,
+        role = '',
+        bio = '',
+        abilities = [],
+        experiences = [],
+        cv = null,
+        status = 'active',
+        points = 0, // 👈 Nuevo campo - inicializado en 0
+        projects = [], // 👈 Nuevo campo - array vacío
+        pointsGivenBy = [],
+        favoriteProjects = [], // 👈 IDs de proyectos favoritos
+        createdAt = null,
+        updatedAt = null
+    } = {}) {
         this.id = id;
         this.userId = userId;
         this.username = username;
@@ -35,8 +36,28 @@ export class Profile {
         this.pointsGivenBy = pointsGivenBy;
         this.createdAt = createdAt ? new Date(createdAt) : new Date();
         this.updatedAt = updatedAt ? new Date(updatedAt) : new Date();
+        this.favoriteProjects = favoriteProjects;
+
+    }
+    // Favoritos
+    addFavoriteProject(projectId) {
+        if (!this.favoriteProjects.includes(projectId)) {
+            this.favoriteProjects.push(projectId);
+            this.updatedAt = new Date();
+        }
     }
 
+    removeFavoriteProject(projectId) {
+        const idx = this.favoriteProjects.indexOf(projectId);
+        if (idx !== -1) {
+            this.favoriteProjects.splice(idx, 1);
+            this.updatedAt = new Date();
+        }
+    }
+
+    isFavoriteProject(projectId) {
+        return this.favoriteProjects.includes(projectId);
+    }
     // Business logic methods
     isComplete() {
         return this.username && this.role && this.bio;
