@@ -1,5 +1,5 @@
 <script setup>
-import { computed} from 'vue';
+import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useHomeStore } from '../../application/home.store.js';
@@ -48,6 +48,12 @@ const getStatusColor = (status) => {
   };
   return statusMap[status?.toLowerCase()] || 'info';
 };
+
+onMounted(() => {
+  if (!userStore.currentUser) {
+    userStore.initializeUser();
+  }
+});
 </script>
 
 <template>

@@ -36,6 +36,10 @@ export default {
     }
   },
   async mounted() {
+    const userStore = useUserStore();
+    if (!userStore.currentUser) {
+      userStore.initializeUser();
+    }
     if (!this.isFiltered && this.collaborators.length === 0) {
       await this.loadCollaborators();
     }
