@@ -6,14 +6,12 @@ import { useProfileStore } from '../../application/profile-store.js';
 import { useUserStore } from '../../../iam/application/user-store.js';
 import { useRouter, useRoute } from 'vue-router';
 import CommentCardList from './comment-card-list.component.vue';
-import CommentModal from '../../../shared/presentation/components/modal-comment.component.vue';
 import { useProjectsStore } from '../../../projects/application/projects.store.js';
-import { useProfileStore } from '../../application/profile-store.js';
 
 const selectedOption = ref(2);
 const selectedProjectView = ref('my-projects'); // 'my-projects' o 'favorites'
 
-const projectsStore = useProjectsStore();const projectsStore = useProjectsStore();
+const projectsStore = useProjectsStore();
 const profileStore = useProfileStore();
 const userStore = useUserStore();
 const router = useRouter();
