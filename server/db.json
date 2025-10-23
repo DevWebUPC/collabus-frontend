@@ -2170,5 +2170,21 @@
       "projectId": 2,
       "id": 1
     }
+  ],
+  "comments": [
+    {
+      "profileId": "2",
+      "userId": 1,
+      "rating": 5,
+      "comment": "123",
+      "id": 1
+    },
+    {
+      "profileId": "2",
+      "userId": 1,
+      "rating": 3,
+      "comment": "12333",
+      "id": 2
+    }
   ]
 }

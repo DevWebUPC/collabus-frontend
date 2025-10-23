@@ -313,6 +313,9 @@
       "area": "Áreas",
       "duration": "Duracion",
       "see-more": "Ver más"
+    },
+    "comments": {
+      "empty": "Aún no hay comentarios para este perfil."
     }
   },
   "application": {

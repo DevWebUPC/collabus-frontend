@@ -140,7 +140,7 @@
       "tabs": {
         "overview": "Overview",
         "tasks": "Tasks",
-        "milestones": "Milestones", 
+        "milestones": "Milestones",
         "feedback": "Feedback",
         "contributions": "Contributions",
         "applicants": "Applicants"
@@ -155,7 +155,7 @@
       "stats": {
         "tasks-completed": "Tasks Completed",
         "milestones-achieved": "Milestones Achieved",
-        "next-delivery": "Next Delivery", 
+        "next-delivery": "Next Delivery",
         "days": "days"
       },
       "sections": {
@@ -187,7 +187,7 @@
         "no-stats": "No statistics available",
         "no-stats-desc": "Project statistics will be shown when data is available.",
         "coming-soon": "Coming soon...",
-        "tasks-content": "Tasks content coming soon...", 
+        "tasks-content": "Tasks content coming soon...",
         "milestones-content": "Milestones content coming soon...",
         "contributions-content": "Contributions content coming soon...",
         "applicants-content": "Applicants content coming soon...",
@@ -316,6 +316,9 @@
       "area": "Areas",
       "duration": "Duration",
       "see-more": "See more"
+    },
+    "comments": {
+      "empty": "No comments yet for this profile."
     }
   },
   "application": {

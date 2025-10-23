@@ -1,4 +1,75 @@
 <!-- CommentModal.vue -->
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useProfileStore } from '../../../profile-management/application/profile-store.js';
+import { useUserStore } from '../../../iam/application/user-store.js';
+import { useRoute } from 'vue-router';
+
+const props = defineProps({
+  visible: {
+    type: Boolean,
+    default: false
+  }
+});
+
+const emit = defineEmits(['close', 'submit']);
+
+const currentRating = ref(0);
+const commentText = ref('');
+
+const profileStore = useProfileStore();
+const userStore = useUserStore();
+const route = useRoute();
+const profileId = computed(() => route.params.id);
+
+onMounted(() => {
+  if (!userStore.currentUser) {
+    userStore.initializeUser?.();
+  }
+});
+
+const ratingText = computed(() => {
+  const ratings = {
+    0: 'Selecciona una calificación',
+    1: 'Muy Malo',
+    2: 'Malo',
+    3: 'Regular',
+    4: 'Bueno',
+    5: 'Excelente'
+  };
+  return ratings[currentRating.value];
+});
+
+const setRating = (rating) => {
+  currentRating.value = rating;
+};
+
+const closeModal = () => {
+  resetForm();
+  emit('close');
+};
+
+const submitComment = async () => {
+  if (!profileId.value || !userStore.currentUser?.id) {
+    closeModal();
+    return;
+  }
+
+  await profileStore.addComment({
+    profileId: profileId.value,
+    userId: userStore.currentUser.id,
+    rating: currentRating.value,
+    comment: commentText.value
+  });
+  closeModal();
+};
+
+const resetForm = () => {
+  currentRating.value = 0;
+  commentText.value = '';
+};
+</script>
+
 <template>
   <div v-if="visible" class="modal-overlay" @click.self="closeModal">
     <div class="modal-container">
@@ -65,60 +136,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, computed } from 'vue';
-
-const props = defineProps({
-  visible: {
-    type: Boolean,
-    default: false
-  }
-});
-
-const emit = defineEmits(['close', 'submit']);
-
-const currentRating = ref(0);
-const commentText = ref('');
-
-const ratingText = computed(() => {
-  const ratings = {
-    0: 'Selecciona una calificación',
-    1: 'Muy Malo',
-    2: 'Malo',
-    3: 'Regular',
-    4: 'Bueno',
-    5: 'Excelente'
-  };
-  return ratings[currentRating.value];
-});
-
-const setRating = (rating) => {
-  currentRating.value = rating;
-};
-
-const closeModal = () => {
-  resetForm();
-  emit('close');
-};
-
-const submitComment = () => {
-  // En el futuro aquí se enviará el comentario
-  console.log('Comentario enviado:', {
-    rating: currentRating.value,
-    comment: commentText.value
-  });
-
-  // Por ahora solo cerramos el modal
-  closeModal();
-};
-
-const resetForm = () => {
-  currentRating.value = 0;
-  commentText.value = '';
-};
-</script>
-
 <style scoped>
 .modal-overlay {
   position: fixed;
