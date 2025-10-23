@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { ProfileApi } from '../infrastructure/profile-api.js';
 import { ProfileAssembler } from '../infrastructure/profile.assembler.js';
+import { CommentApi } from '../infrastructure/comment-api.js';
+import { CommentAssembler } from '../infrastructure/comment.assembler.js';
 
 export const useProfileStore = defineStore('profile', () => {
     // State
@@ -10,8 +12,12 @@ export const useProfileStore = defineStore('profile', () => {
     const loading = ref(false);
     const error = ref(null);
 
+    // Comments state
+    const comments = ref([]); // All comments for the current profile
+
     // API instance
     const profileApi = new ProfileApi();
+    const commentApi = new CommentApi();
 
     // Actions
     const setLoading = (value) => {
@@ -24,6 +30,36 @@ export const useProfileStore = defineStore('profile', () => {
 
     const clearError = () => {
         error.value = null;
+    };
+
+    // Comments actions
+    const fetchComments = async (profileId) => {
+        try {
+            setLoading(true);
+            clearError();
+            const response = await commentApi.getCommentsByProfile(profileId);
+            comments.value = CommentAssembler.fromApiArrayToEntityArray(response.data);
+        } catch (err) {
+            setError('Failed to fetch comments');
+            console.error('Error fetching comments:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const addComment = async (commentData) => {
+        try {
+            setLoading(true);
+            clearError();
+            await commentApi.addComment(commentData);
+            // Refetch comments after adding
+            await fetchComments(commentData.profileId);
+        } catch (err) {
+            setError('Failed to add comment');
+            console.error('Error adding comment:', err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const fetchAllProfiles = async () => {
@@ -292,6 +328,7 @@ export const useProfileStore = defineStore('profile', () => {
         loading,
         allProfiles,
         error,
+        comments,
 
         // Computed
         hasProfile,
@@ -310,5 +347,8 @@ export const useProfileStore = defineStore('profile', () => {
         fetchAllProfiles,
         updateProfileById,
         searchProfiles,
+        // Comments
+        fetchComments,
+        addComment,
     };
 });
