@@ -37,7 +37,7 @@ const activeTab = ref('overview');
 
 // Methods
 const navigateBack = () => {
-  router.push({ name: 'projects' });
+  router.back();
 };
 
 // Manejar navegación a tasks desde UrgentTasksCard

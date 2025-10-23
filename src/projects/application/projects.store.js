@@ -3,6 +3,8 @@ import { ref, computed } from 'vue';
 import { ProjectsApi } from '../infrastructure/projects-api.js';
 import { ProjectAssembler } from '../infrastructure/project.assembler.js';
 import { CategoryAssembler } from '../infrastructure/category.assembler.js';
+import { FavoritesApi } from '../infrastructure/favorites-api.js';
+import { FavoriteAssembler } from '../infrastructure/favorite.assembler.js';
 
 export const useProjectsStore = defineStore('projects', () => {
     // State
@@ -11,12 +13,73 @@ export const useProjectsStore = defineStore('projects', () => {
     const loading = ref(false);
     const error = ref(null);
 
+
     // API instances
     const projectsApi = new ProjectsApi();
+    const favoritesApi = new FavoritesApi();
+
 
     // Use ref instead of computed for participatingProjects and ownedProjects
     const participatingProjects = ref([]);
     const ownedProjects = ref([]);
+
+    // FAVORITES
+    const favorites = ref([]); // Array of Favorite entities
+    const favoriteProjects = computed(() => {
+        // Devuelve los proyectos favoritos del usuario actual
+        const favProjectIds = favorites.value.map(fav => fav.projectId);
+        return projects.value.filter(p => favProjectIds.includes(p.id));
+    });
+    // FAVORITES actions
+    const fetchFavorites = async (profileId) => {
+        try {
+            setLoading(true);
+            clearError();
+            const response = await favoritesApi.getFavoritesByProfile(profileId);
+            favorites.value = FavoriteAssembler.fromApiArrayToEntityArray(response.data);
+        } catch (err) {
+            setError('Failed to fetch favorites');
+            console.error('Error fetching favorites:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const addFavorite = async (profileId, projectId) => {
+        try {
+            setLoading(true);
+            clearError();
+            await favoritesApi.addFavorite(profileId, projectId);
+            // Refetch favorites after adding
+            await fetchFavorites(profileId);
+        } catch (err) {
+            setError('Failed to add favorite');
+            console.error('Error adding favorite:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const removeFavorite = async (profileId, projectId) => {
+        try {
+            setLoading(true);
+            clearError();
+            // Buscar el favoriteId correspondiente
+            const favorite = favorites.value.find(fav => String(fav.profileId) === String(profileId) && String(fav.projectId) === String(projectId));
+            if (!favorite) {
+                setError('Favorite not found');
+                return;
+            }
+            await favoritesApi.removeFavorite(favorite.id);
+            // Refetch favorites after removing
+            await fetchFavorites(profileId);
+        } catch (err) {
+            setError('Failed to remove favorite');
+            console.error('Error removing favorite:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Actions
     const setLoading = (value) => {
@@ -338,6 +401,9 @@ export const useProjectsStore = defineStore('projects', () => {
         participatingProjects,
         ownedProjects,
 
+        favorites,
+        favoriteProjects,
+
         // Actions
         fetchProjects,
         fetchParticipatingProjects,
@@ -354,5 +420,10 @@ export const useProjectsStore = defineStore('projects', () => {
         setError,
         clearError,
         reset,
+
+    // Favorites
+    fetchFavorites,
+    addFavorite,
+    removeFavorite,
     };
 });
