@@ -9,12 +9,19 @@ import { BaseEndpoint } from '../../shared/infrastructure/base-endpoint.js';
 export class UsersApi extends BaseEndpoint {
     constructor() {
         const baseApi = new BaseApi();
-        super(baseApi, '/users');
+        super(baseApi, '/users'); // Mantenemos '/users' como endpoint base
 
         // Agregar interceptors para debugging
         this.http.interceptors.request.use(request => {
             console.log('🚀 API Request:', request.method?.toUpperCase(), request.url);
             console.log('📦 Request Data:', request.data);
+
+            // Agregar token a las requests si existe
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                request.headers.Authorization = `Bearer ${token}`;
+            }
+
             return request;
         });
 
@@ -25,6 +32,20 @@ export class UsersApi extends BaseEndpoint {
             console.log('❌ API Error:', error.response?.status, error.message);
             console.log('📋 Error Details:', error.response?.data);
             return Promise.reject(error);
+        });
+    }
+
+    /**
+     * Authenticate user with backend C# - NUEVO MÉTODO
+     * @param {string} email - User email
+     * @param {string} password - User password
+     * @returns {Promise} API response
+     */
+    authenticate(email, password) {
+        // Usamos el endpoint de autenticación del backend C#
+        return this.http.post('/authentication/sign-in', {
+            email: email,
+            password: password
         });
     }
 

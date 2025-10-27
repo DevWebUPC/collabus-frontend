@@ -1,4 +1,3 @@
-<!-- profile-management/presentation/views/profile-view.vue -->
 <script setup lang="js">
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
@@ -89,30 +88,46 @@ const loadUserProfile = async () => {
 
     const currentUser = userStore.currentUser;
     console.log('👤 Usuario del store:', currentUser);
+    console.log('🔍 Store completo:', userStore);
 
     const userId = currentUser?.id;
-    console.log('🆔 ID de usuario para buscar perfil:', userId);
+    console.log('🆔 ID de usuario para buscar perfil:', userId, 'Tipo:', typeof userId);
 
     if (!userId) {
-      console.log('❌ No hay usuario autenticado');
+      console.log('❌ No hay usuario autenticado o no tiene ID');
       profileStore.clearProfile();
       return;
     }
 
-    console.log('📥 Buscando perfil para userId:', userId);
+    console.log('📥 Buscando perfil específico para userId:', userId);
 
-    // Siempre recargar el perfil desde la API, sin importar si ya está cargado
-    await profileStore.getProfileByUserId(userId);
+    // ✅ Forzar recarga desde API
+    const profile = await profileStore.getProfileByUserId(userId);
+
+    if (!profile) {
+      console.log('ℹ️ Usuario no tiene perfil creado, mostrando estado de perfil incompleto');
+      // No redirigir automáticamente, mostrar el estado en la UI
+      return;
+    }
 
     console.log('✅ Perfil cargado exitosamente:', profileStore.currentProfile);
+    console.log('🔍 Verificando datos:', {
+      profileId: profileStore.currentProfile?.id,
+      profileUserId: profileStore.currentProfile?.userId,
+      currentUserId: userId
+    });
 
   } catch (error) {
     console.error('❌ Error cargando perfil:', error);
+
+    // Mostrar error específico
+    if (error.response?.status === 404) {
+      console.log('ℹ️ Perfil no encontrado para este usuario');
+    }
   } finally {
     isLoadingProfile.value = false;
   }
 };
-
 // 👇 Función para hacer logout
 const handleLogout = async () => {
   try {

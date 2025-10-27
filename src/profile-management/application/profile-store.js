@@ -187,18 +187,23 @@ export const useProfileStore = defineStore('profile', () => {
             setLoading(true);
             clearError();
 
-            console.log('🔄 Cargando perfil desde API para userId:', userId);
+            console.log('🔄 Cargando perfil para userId:', userId);
+            console.log('📋 Tipo de userId:', typeof userId, 'Valor:', userId);
 
+            if (!userId) {
+                throw new Error('No se proporcionó userId');
+            }
+
+            // ✅ USAR EL NUEVO MÉTODO ESPECÍFICO
             const response = await profileApi.getByUserId(userId);
-            const profiles = response.data;
 
-            if (!profiles || profiles.length === 0) {
+            if (!response.data) {
                 console.log('❌ No se encontró perfil para userId:', userId);
                 return null;
             }
 
-            const profile = ProfileAssembler.fromApiToEntity(profiles[0]);
-            console.log('✅ Perfil cargado desde API:', profile);
+            const profile = ProfileAssembler.fromApiToEntity(response.data);
+            console.log('✅ Perfil encontrado:', profile);
 
             // Actualizar el perfil actual y localStorage
             currentProfile.value = profile;
@@ -207,6 +212,12 @@ export const useProfileStore = defineStore('profile', () => {
 
             return profile;
         } catch (err) {
+            // Si es error 404, significa que no existe perfil para este usuario
+            if (err.response?.status === 404 || err.message === 'Profile not found') {
+                console.log('ℹ️ No se encontró perfil para el usuario, puede ser nuevo');
+                return null;
+            }
+
             const errorMessage = err.response?.data?.message || err.message || 'Error al obtener el perfil';
             setError(errorMessage);
             throw err;
@@ -214,7 +225,6 @@ export const useProfileStore = defineStore('profile', () => {
             setLoading(false);
         }
     };
-
 
     // Update profile
     const updateProfile = async (profileData) => {
