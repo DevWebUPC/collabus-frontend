@@ -155,6 +155,8 @@ export const useProfileStore = defineStore('profile', () => {
             setLoading(true);
             clearError();
 
+            console.log('🔄 Creando perfil para userId:', userId);
+
             // Transform data and create profile
             const apiData = ProfileAssembler.fromOnboardingToApi(onboardingData, userId);
             const response = await profileApi.create(apiData);
@@ -163,11 +165,18 @@ export const useProfileStore = defineStore('profile', () => {
             if (response.status >= 200 && response.status < 300) {
                 const newProfile = ProfileAssembler.fromApiToEntity(response.data);
 
+                console.log('✅ Perfil creado exitosamente:', newProfile);
+
                 // Store profile in local storage for persistence
                 localStorage.setItem('currentProfile', JSON.stringify(newProfile));
                 localStorage.setItem('profileId', newProfile.id);
 
+                // Actualizar el estado del store
                 currentProfile.value = newProfile;
+
+                // También agregar a la lista de perfiles
+                allProfiles.value.push(newProfile);
+
                 return newProfile;
             } else {
                 throw new Error('Error al completar el onboarding');
@@ -175,6 +184,7 @@ export const useProfileStore = defineStore('profile', () => {
         } catch (err) {
             const errorMessage = err.response?.data?.message || err.message || 'Error al completar el onboarding';
             setError(errorMessage);
+            console.error('❌ Error en completeOnboarding:', err);
             throw err;
         } finally {
             setLoading(false);
