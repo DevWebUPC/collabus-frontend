@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { ProjectsApi } from '../infrastructure/projects-api.js';
 import { ProjectAssembler } from '../infrastructure/project.assembler.js';
-import { CategoryAssembler } from '../infrastructure/category.assembler.js';
 import { FavoritesApi } from '../infrastructure/favorites-api.js';
 import { FavoriteAssembler } from '../infrastructure/favorite.assembler.js';
 
@@ -358,24 +357,6 @@ export const useProjectsStore = defineStore('projects', () => {
         }
     };
 
-    // Category Actions
-    const fetchCategories = async () => {
-        try {
-            setLoading(true);
-            clearError();
-
-            const response = await categoriesApi.getAll();
-            categories.value = CategoryAssembler.fromApiArrayToEntityArray(
-                response.data
-            );
-        } catch (err) {
-            setError("Failed to fetch categories");
-            console.error("Error fetching categories:", err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     // Reset state
     const reset = () => {
         projects.value = [];
@@ -415,7 +396,6 @@ export const useProjectsStore = defineStore('projects', () => {
         updateProject,
         deleteProject,
         addToOwnedProjects,
-        fetchCategories,
         setLoading,
         setError,
         clearError,
