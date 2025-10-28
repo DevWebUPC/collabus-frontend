@@ -9,21 +9,25 @@ const homeStore = useHomeStore();
 // Filter options
 const jobTypeOptions = ref([
   { label: t('home.filters.allJobs'), value: '' },
-  { label: t('home.filters.developer'), value: 'dev' },
-  { label: t('home.filters.designer'), value: 'design' },
-  { label: t('home.filters.analyst'), value: 'analist' },
-  { label: t('home.filters.projectManager'), value: 'project' },
-  { label: t('home.filters.tester'), value: 'test' }
+  { label: "Desarrollador", value: 'dev' },
+  { label: "Diseñador", value: 'design' },
+  { label: "Analista", value: 'analist' },
+  { label: "Project Manage", value: 'project' },
+  { label: "Tester", value: 'test' }
 ]);
 
 const areaOptions = ref([
   { label: t('home.filters.allAreas'), value: '' },
-  { label: t('home.filters.technology'), value: 'tecno' },
-  { label: t('home.filters.webDevelopment'), value: 'web' },
-  { label: t('home.filters.mobileDevelopment'), value: 'mobile' },
-  { label: t('home.filters.dataScience'), value: 'data' },
-  { label: t('home.filters.design'), value: 'design' },
-  { label: t('home.filters.marketing'), value: 'marketing' }
+  { label: 'Desarrollo Web', value: 'Desarrollo Web' },
+  { label: 'Desarrollo Móvil', value: 'Desarrollo Móvil' },
+  { label: 'Ciencia de Datos', value: 'Ciencia de Datos' },
+  { label: 'Inteligencia Artificial', value: 'Inteligencia Artificial' },
+  { label: 'Diseño UX/UI', value: 'Diseño UX/UI' },
+  { label: 'Marketing Digital', value: 'Marketing Digital' },
+  { label: 'Ciberseguridad', value: 'Ciberseguridad' },
+  { label: 'DevOps', value: 'DevOps' },
+  { label: 'Cloud Computing', value: 'Cloud Computing' },
+  { label: 'Blockchain', value: 'Blockchain' }
 ]);
 
 // Local reactive copies for form controls
@@ -37,7 +41,7 @@ const handleSearch = async () => {
   homeStore.updateSearchFilter(searchValue.value);
   homeStore.updateJobTypeFilter(jobTypeValue.value);
   homeStore.updateAreaFilter(areaValue.value);
-  
+
   // Refresh only the projects list (not collaborators or featured projects)
   await homeStore.loadAllProjects();
 };
@@ -60,17 +64,28 @@ const handleClearFilters = async () => {
   jobTypeValue.value = '';
   areaValue.value = '';
   homeStore.clearFilters();
-  
+
   // Refresh projects list after clearing filters
   await homeStore.loadAllProjects();
 };
 
 // Check if any filters are active
-const hasActiveFilters = computed(() => 
-  searchValue.value || 
-  jobTypeValue.value || 
-  areaValue.value
+const hasActiveFilters = computed(() =>
+    searchValue.value ||
+    jobTypeValue.value ||
+    areaValue.value
 );
+
+// Check if a value is a custom input (not in the predefined options)
+const isCustomJobType = computed(() => {
+  if (!jobTypeValue.value) return false;
+  return !jobTypeOptions.value.some(opt => opt.value === jobTypeValue.value);
+});
+
+const isCustomArea = computed(() => {
+  if (!areaValue.value) return false;
+  return !areaOptions.value.some(opt => opt.value === areaValue.value);
+});
 </script>
 
 <template>
@@ -82,11 +97,11 @@ const hasActiveFilters = computed(() =>
         <!-- Search Input -->
         <div class="search-field">
           <span class="p-input-icon-left">
-            <pv-inputtext 
-              v-model="searchValue"
-              :placeholder="t('home.filters.searchPlaceholder')"
-              class="search-input"
-              @keyup.enter="handleSearch"
+            <pv-inputtext
+                v-model="searchValue"
+                :placeholder="t('home.filters.searchPlaceholder')"
+                class="search-input"
+                @keyup.enter="handleSearch"
             />
           </span>
         </div>
@@ -94,18 +109,22 @@ const hasActiveFilters = computed(() =>
         <!-- Job Type Filter -->
         <div class="filter-field">
           <pv-dropdown
-            v-model="jobTypeValue"
-            :options="jobTypeOptions"
-            option-label="label"
-            option-value="value"
-            :placeholder="t('home.filters.jobTypePlaceholder')"
-            class="filter-dropdown"
-            @change="handleJobTypeChange"
+              v-model="jobTypeValue"
+              :options="jobTypeOptions"
+              option-label="label"
+              option-value="value"
+              :placeholder="t('home.filters.jobTypePlaceholder')"
+              class="filter-dropdown"
+              editable
+              @change="handleJobTypeChange"
           >
             <template #value="slotProps">
               <div class="dropdown-value" v-if="slotProps.value">
                 <i class="pi pi-briefcase"></i>
-                <span>{{ jobTypeOptions.find(opt => opt.value === slotProps.value)?.label || slotProps.value }}</span>
+                <span>
+                  {{ isCustomJobType ? jobTypeValue : (jobTypeOptions.find(opt => opt.value === slotProps.value)?.label || slotProps.value) }}
+                  <span v-if="isCustomJobType" class="custom-tag">(personalizado)</span>
+                </span>
               </div>
               <div class="dropdown-value" v-else>
                 <i class="pi pi-briefcase"></i>
@@ -118,18 +137,22 @@ const hasActiveFilters = computed(() =>
         <!-- Area Filter -->
         <div class="filter-field">
           <pv-dropdown
-            v-model="areaValue"
-            :options="areaOptions"
-            option-label="label"
-            option-value="value"
-            :placeholder="t('home.filters.areaPlaceholder')"
-            class="filter-dropdown"
-            @change="handleAreaChange"
+              v-model="areaValue"
+              :options="areaOptions"
+              option-label="label"
+              option-value="value"
+              :placeholder="t('home.filters.areaPlaceholder')"
+              class="filter-dropdown"
+              editable
+              @change="handleAreaChange"
           >
             <template #value="slotProps">
               <div class="dropdown-value" v-if="slotProps.value">
                 <i class="pi pi-folder"></i>
-                <span>{{ areaOptions.find(opt => opt.value === slotProps.value)?.label || slotProps.value }}</span>
+                <span>
+                  {{ isCustomArea ? areaValue : (areaOptions.find(opt => opt.value === slotProps.value)?.label || slotProps.value) }}
+                  <span v-if="isCustomArea" class="custom-tag">(personalizado)</span>
+                </span>
               </div>
               <div class="dropdown-value" v-else>
                 <i class="pi pi-folder"></i>
@@ -141,21 +164,21 @@ const hasActiveFilters = computed(() =>
 
         <!-- Search Button -->
         <pv-button
-          :label="t('home.filters.search')"
-          icon="pi pi-search"
-          class="search-button"
-          @click="handleSearch"
+            :label="t('home.filters.search')"
+            icon="pi pi-search"
+            class="search-button"
+            @click="handleSearch"
         />
 
         <!-- Clear Filters Button -->
         <pv-button
-          v-if="hasActiveFilters"
-          :label="t('home.filters.clearFilters')"
-          icon="pi pi-times"
-          class="clear-button"
-          severity="secondary"
-          outlined
-          @click="handleClearFilters"
+            v-if="hasActiveFilters"
+            :label="t('home.filters.clearFilters')"
+            icon="pi pi-times"
+            class="clear-button"
+            severity="secondary"
+            outlined
+            @click="handleClearFilters"
         />
       </div>
     </div>
@@ -242,6 +265,12 @@ const hasActiveFilters = computed(() =>
   gap: 0.5rem;
 }
 
+.custom-tag {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  font-style: italic;
+}
+
 /* Buttons */
 .search-button {
   height: 48px;
@@ -251,7 +280,7 @@ const hasActiveFilters = computed(() =>
   font-weight: 600;
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
-	background: var(--color-primary);
+  background: var(--color-primary);
 }
 
 .search-button:hover {
