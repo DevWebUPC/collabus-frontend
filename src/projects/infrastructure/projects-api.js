@@ -76,7 +76,15 @@ export class ProjectsApi extends BaseApi {
      * @returns {Promise<Object>} API response with project
      */
     async getById(id) {
-        return this.http.get(`${this.resourcePath}/${id}`);
+        console.log('🌐 API: Fetching project with ID:', id);
+        try {
+            const response = await this.http.get(`${this.resourcePath}/${id}`);
+            console.log('🌐 API: Response received:', response.data);
+            return response;
+        } catch (error) {
+            console.error('🌐 API: Error fetching project:', error);
+            throw error;
+        }
     }
 
     /**
