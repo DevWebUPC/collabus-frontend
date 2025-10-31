@@ -11,37 +11,62 @@ export class ProjectAssembler {
    * @returns {Project} Project entity
    */
   static fromApiToEntity(apiData) {
-    if (!apiData) return null;
+      if (!apiData) {
+          console.log('❌ API data is null or undefined');
+          return null;
+      }
 
-    return new Project({
-      id: apiData.id,
-      title: apiData.title || '',
-      description: apiData.description || '',
-      category: apiData.category || '',
-      areas: apiData.areas || [],
-      tags: apiData.tags || [],
-      summary: apiData.summary || '',
-      academicLevel: apiData.academicLevel || '',
-      skills: apiData.skills || [],
-      durationQuantity: apiData.durationQuantity || 1,
-      durationType: apiData.durationType || 'meses',
-      benefits: apiData.benefits || '',
-      roles: apiData.roles || [],
-      status: apiData.status || 'draft',
-      progress: apiData.progress || 0,
-      startDate: apiData.startDate,
-      endDate: apiData.endDate,
-      budget: apiData.budget || 0,
-      userId: apiData.userId,
-      authorName: apiData.authorName || apiData.owner || 'Usuario',
-      collaborators: apiData.collaborators || [],
-      tasks: apiData.tasks || [],
-      milestones: apiData.milestones || [],
-      createdAt: apiData.createdAt,
-      updatedAt: apiData.updatedAt
-    });
+      console.log('📥 Raw API data received:', apiData);
+
+      // ✅ CORREGIDO: Mapear academicLevel correctamente
+      const academicLevel = apiData.academicLevelName ||
+          apiData.academicLevel?.name ||
+          apiData.academicLevel ||
+          '';
+
+      console.log('🎓 Mapped academic level:', academicLevel);
+
+      // ✅ CORREGIDO: Mapear roles correctamente
+      const roles = (apiData.roles || []).map(role => {
+          console.log('👥 Processing role:', role);
+          return {
+              id: role.id,
+              name: role.name,
+              title: role.name, // Para compatibilidad con el template
+              cards: (role.cards || []).map(card => ({
+                  id: card.id,
+                  title: card.title,
+                  items: card.items || []
+              }))
+          };
+      });
+
+      console.log('📋 Final roles:', roles);
+
+      const projectEntity = new Project({
+          id: apiData.id,
+          title: apiData.title || '',
+          description: apiData.description || '',
+          summary: apiData.summary || '',
+          academicLevel: academicLevel,
+          skills: apiData.skills || [],
+          durationQuantity: apiData.durationQuantity || 1,
+          durationType: apiData.durationType || 'meses',
+          benefits: apiData.benefits || '',
+          roles: roles,
+          status: apiData.status || 'draft',
+          progress: apiData.progress || 0,
+          userId: apiData.userId,
+          authorName: apiData.authorName || 'Usuario',
+          areas: apiData.areas || [],
+          tags: apiData.tags || [],
+          createdAt: apiData.createdAt,
+          updatedAt: apiData.updatedAt
+      });
+
+      console.log('🏗️ Final project entity:', projectEntity);
+      return projectEntity;
   }
-
   /**
    * Get additional project data for detail view
    * @param {Object} apiData - Raw API data with additional fields
@@ -51,7 +76,7 @@ export class ProjectAssembler {
     if (!apiData) return null;
 
     const baseProject = this.fromApiToEntity(apiData);
-    
+
     return {
       project: baseProject
     };
