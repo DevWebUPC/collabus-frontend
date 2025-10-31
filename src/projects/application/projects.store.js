@@ -212,18 +212,17 @@ export const useProjectsStore = defineStore('projects', () => {
             setLoading(true);
             clearError();
 
+            console.log('🔄 Store: Fetching project by ID:', id);
+
             // Fetch project data
             const response = await projectsApi.getById(id);
+            console.log('📡 Store: API response:', response.data);
 
-            const projectDetailData = ProjectAssembler.getProjectDetailData(
-                response.data
-            );
+            const projectDetailData = ProjectAssembler.getProjectDetailData(response.data);
+            console.log('🔧 Store: Assembled project detail:', projectDetailData);
+
             const projectEntity = projectDetailData.project;
-
-            // Store additional detail data for UI components (non-derived data)
-            projectEntity._detailData = {
-                stats: projectDetailData.stats,
-            };
+            console.log('🏗️ Store: Final project entity:', projectEntity);
 
             // Update projects array
             const existingIndex = projects.value.findIndex((p) => p.id === id);
@@ -235,8 +234,9 @@ export const useProjectsStore = defineStore('projects', () => {
 
             return projectEntity;
         } catch (err) {
+            console.error('❌ Store: Error fetching project:', err);
+            console.error('Store: Error response:', err.response?.data);
             setError("Failed to fetch project");
-            console.error("Error fetching project:", err);
             throw err;
         } finally {
             setLoading(false);
