@@ -1,127 +1,109 @@
 import { BaseApi } from '../../shared/infrastructure/base-api.js';
-import { BaseEndpoint } from '../../shared/infrastructure/base-endpoint.js';
 
-/**
- * Projects API Service
- * Handles HTTP requests for project-related operations
- */
-export class ProjectsApi extends BaseEndpoint {
+export class ProjectsApi extends BaseApi {
     constructor() {
-        const baseApi = new BaseApi();
-        super(baseApi, '/projects');
+        super();
+        this.resourcePath = "/projects";
     }
 
     /**
-     * Get projects where user is participating
-     * @param {string} userId - User ID
-     * @returns {Promise} API response
+     * Create new project
+     * @param {Object} projectData - Project data
+     * @returns {Promise<Object>} API response with created project
      */
-    getParticipatingProjects(userId) {
-        return this.http.get(`${this.endpointPath}/participating/${userId}`);
+    async create(projectData) {
+        try {
+            // Transformar datos del frontend al formato del backend
+            const backendData = this.transformToBackendFormat(projectData);
+
+            const response = await this.http.post(this.resourcePath, backendData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            return response;
+        } catch (error) {
+            console.error('Error creating project:', error);
+            throw error;
+        }
     }
 
-    // En projects-api.js - AGREGAR si no existe
     /**
-     * Get a specific project by ID
-     * @param {string} projectId - Project ID
-     * @returns {Promise} API response
+     * Transform frontend data to backend format
+     * @param {Object} frontendData - Data from Vue store
+     * @returns {Object} Backend compatible data
      */
-    getById(projectId) {
-        return this.http.get(`${this.endpointPath}/${projectId}`);
+    transformToBackendFormat(frontendData) {
+        // Transformar roles al formato del backend
+        const roles = frontendData.roles.map(role => ({
+            name: role.name,
+            cards: role.cards.map(card => ({
+                title: card.title,
+                items: card.items.filter(item => item.trim() !== '') // Filtrar items vacíos
+            }))
+        }));
+
+        return {
+            userId: parseInt(frontendData.userId) || 1, // Temporal - usar ID real del usuario
+            title: frontendData.title,
+            description: frontendData.summary, // Mapear summary a description
+            summary: frontendData.summary,
+            academicLevelName: frontendData.academicLevel,
+            benefits: frontendData.benefits,
+            skills: frontendData.skills,
+            durationQuantity: frontendData.durationQuantity,
+            durationType: frontendData.durationType,
+            areas: frontendData.areas,
+            tags: frontendData.tags,
+            roles: roles,
+            status: "draft",
+            progress: 0
+        };
     }
 
     /**
-     * Get projects owned by user
-     * @param {string} userId - User ID
-     * @returns {Promise} API response
+     * Get all projects
+     * @returns {Promise<Object>} API response with projects
      */
-    getOwnedProjects(userId) {
-        return this.http.get(`${this.endpointPath}/owned/${userId}`);
+    async getAll() {
+        return this.http.get(this.resourcePath);
     }
 
     /**
-     * Get project statistics
-     * @param {string} projectId - Project ID
-     * @returns {Promise} API response
+     * Get project by ID
+     * @param {string} id - Project ID
+     * @returns {Promise<Object>} API response with project
      */
-    getProjectStats(projectId) {
-        return this.http.get(`${this.endpointPath}/${projectId}/stats`);
+    async getById(id) {
+        return this.http.get(`${this.resourcePath}/${id}`);
     }
 
     /**
-     * Add collaborator to project
-     * @param {string} projectId - Project ID
-     * @param {Object} collaborator - Collaborator data
-     * @returns {Promise} API response
-     */
-    addCollaborator(projectId, collaborator) {
-        return this.http.post(`${this.endpointPath}/${projectId}/collaborators`, collaborator);
-    }
-
-    /**
-     * Remove collaborator from project
-     * @param {string} projectId - Project ID
-     * @param {string} collaboratorId - Collaborator ID
-     * @returns {Promise} API response
-     */
-    removeCollaborator(projectId, collaboratorId) {
-        return this.http.delete(`${this.endpointPath}/${projectId}/collaborators/${collaboratorId}`);
-    }
-
-    /**
-     * Get project notifications
-     * @param {string} projectId - Project ID
-     * @returns {Promise} API response
-     */
-    getProjectNotifications(projectId) {
-        return this.http.get(`${this.endpointPath}/${projectId}/notifications`);
-    }
-
-    /**
-     * Update project status
-     * @param {string} projectId - Project ID
-     * @param {string} status - New status
-     * @returns {Promise} API response
-     */
-    updateStatus(projectId, status) {
-        return this.http.patch(`${this.endpointPath}/${projectId}/status`, { status });
-    }
-
-    /**
-     * Search projects by criteria
-     * @param {Object} criteria - Search criteria
-     * @returns {Promise} API response
-     */
-    searchProjects(criteria) {
-        return this.http.get(`${this.endpointPath}/search`, { params: criteria });
-    }
-
-    /**
-     * Add project to user's owned projects
-     * @param {string} userId - User ID
-     * @param {string} projectId - Project ID
-     * @returns {Promise} API response
-     */
-    addToOwnedProjects(userId, projectId) {
-        return this.http.post(`${this.endpointPath}/owned/${userId}`, { projectId });
-    }
-
-    /**
-     * Get projects created by user (temporary method using userId filter)
-     * @param {string} userId - User ID
-     * @returns {Promise} API response
-     */
-    getProjectsByUserId(userId) {
-        return this.http.get(`${this.endpointPath}?userId=${userId}`);
-    }
-
-    /**
-     * Update project data
-     * @param {string} projectId - Project ID
+     * Update project
+     * @param {string} id - Project ID
      * @param {Object} updateData - Data to update
-     * @returns {Promise} API response
+     * @returns {Promise<Object>} API response
      */
-    update(projectId, updateData) {
-        return this.http.patch(`${this.endpointPath}/${projectId}`, updateData);
+    async update(id, updateData) {
+        return this.http.patch(`${this.resourcePath}/${id}`, updateData);
+    }
+
+    /**
+     * Delete project
+     * @param {string} id - Project ID
+     * @returns {Promise<Object>} API response
+     */
+    async delete(id) {
+        return this.http.delete(`${this.resourcePath}/${id}`);
+    }
+
+    /**
+     * Search projects
+     * @param {Object} criteria - Search criteria
+     * @returns {Promise<Object>} API response
+     */
+    async search(criteria) {
+        return this.http.get(`${this.resourcePath}/search`, { params: criteria });
     }
 }
