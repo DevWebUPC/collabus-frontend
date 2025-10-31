@@ -77,27 +77,46 @@ const toggleSave = async () => {
 
 onMounted(async () => {
   try {
+    console.log('🟡 Iniciando carga del proyecto...');
+
+    const projectId = route.params.id;
+    console.log('🔍 Project ID:', projectId);
+
     // Obtener el userId del usuario autenticado
     const userId = authStore.currentUser?.id;
+    console.log('👤 User ID:', userId);
+
     let profileId = null;
     if (userId) {
       if (!profileStore.allProfiles.length) {
+        console.log('🔄 Cargando perfiles...');
         await profileStore.fetchAllProfiles();
       }
       const profile = profileStore.allProfiles.find(p => String(p.userId) === String(userId));
       profileId = profile?.id;
+      console.log('📝 Profile ID:', profileId);
     }
-    const projectId = route.params.id;
+
+    console.log('📡 Fetching project from store...');
     project.value = await projectsStore.fetchProjectById(projectId);
+
+    console.log('✅ Proyecto cargado:', project.value);
+    console.log('🎓 Academic Level:', project.value?.academicLevel);
+    console.log('👥 Roles:', project.value?.roles);
+    console.log('📊 Roles length:', project.value?.roles?.length);
+
     // Verificar si el proyecto ya está en favoritos
     if (profileId && project.value?.id) {
+      console.log('⭐ Verificando favoritos...');
       await projectsStore.fetchFavorites(profileId);
       isSaved.value = projectsStore.favorites.some(fav => fav.projectId === project.value.id);
     }
   } catch (error) {
-    console.error('Error loading project:', error);
+    console.error('❌ Error loading project:', error);
+    console.error('Error details:', error.response?.data || error.message);
   } finally {
     loading.value = false;
+    console.log('🏁 Carga completada');
   }
 });
 </script>
