@@ -1,4 +1,3 @@
-<!-- CollaboratorsCard.vue - VERSIÓN SIMPLIFICADA -->
 <template>
   <pv-card class="collaborators-card">
     <template #title>
@@ -14,15 +13,17 @@
       <div v-else class="collaborators-list">
         <div v-for="collaborator in collaboratorsWithProgress" :key="collaborator.id" class="collaborator-item">
           <div class="collaborator-info">
-            <span class="collaborator-name">{{ collaborator.name }}</span>
-            <span class="collaborator-role">{{ collaborator.role }}</span>
+            <span class="collaborator-name">{{ collaborator.applicantName }}</span>
+            <span class="collaborator-role">{{ getRoleName(collaborator.roleId) }}</span>
           </div>
-          <div class="collaborator-progress">
-            <div class="progress-bar-container">
-              <div class="progress-bar">
-                <div class="progress-fill" :style="{ width: collaborator.calculatedProgress + '%' }"></div>
+          <div class="collaborator-status">
+            <div class="progress-section">
+              <div class="progress-bar-container">
+                <div class="progress-bar">
+                  <div class="progress-fill" :style="{ width: collaborator.calculatedProgress + '%' }"></div>
+                </div>
+                <span class="progress-value">{{ collaborator.calculatedProgress }}%</span>
               </div>
-              <span class="progress-value">{{ collaborator.calculatedProgress }}%</span>
             </div>
           </div>
         </div>
@@ -37,15 +38,35 @@ import { computed } from 'vue';
 
 const projectDetailStore = useProjectDetailStore();
 
-// ✅ SOLUCIÓN: Usar computed para reactividad
+// Computed para colaboradores
 const collaborators = computed(() => {
-  return projectDetailStore.project?.collaborators || [];
+  if (!projectDetailStore.project?.collaborators) return [];
+
+  console.log('👥 All collaborators from project:', projectDetailStore.project.collaborators);
+
+  // Mostrar todos los colaboradores sin filtrar por status
+  return projectDetailStore.project.collaborators;
 });
 
-// ✅ Calcular progreso real basado en tareas
+// Función para obtener el nombre del rol
+const getRoleName = (roleId) => {
+  if (!projectDetailStore.project?.roles || !roleId) return 'Rol no especificado';
+
+  const role = projectDetailStore.project.roles.find(r =>
+      String(r.id) === String(roleId)
+  );
+
+  console.log(`🔍 Buscando rol ID ${roleId}:`, role);
+  return role?.name || 'Rol no encontrado';
+};
+
+// Calcular progreso real basado en tareas
 const collaboratorsWithProgress = computed(() => {
   if (!collaborators.value.length || !projectDetailStore.project?.tasks) {
-    return collaborators.value;
+    return collaborators.value.map(collaborator => ({
+      ...collaborator,
+      calculatedProgress: collaborator.progress || 0
+    }));
   }
 
   return collaborators.value.map(collaborator => {
@@ -59,7 +80,7 @@ const collaboratorsWithProgress = computed(() => {
     if (totalTasks === 0) {
       return {
         ...collaborator,
-        calculatedProgress: 0
+        calculatedProgress: collaborator.progress || 0
       };
     }
 
@@ -95,12 +116,10 @@ console.log('👥 CollaboratorsCard loaded with progress:', collaboratorsWithPro
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--color-gray-200);
-}
-
-.collaborator-item:last-child {
-  border-bottom: none;
+  padding: 1rem;
+  border: 1px solid var(--color-gray-200);
+  border-radius: 8px;
+  background: var(--color-gray-50);
 }
 
 .collaborator-info {
@@ -110,52 +129,69 @@ console.log('👥 CollaboratorsCard loaded with progress:', collaboratorsWithPro
 }
 
 .collaborator-name {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-gray-800);
   margin-bottom: 0.25rem;
 }
 
 .collaborator-role {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: var(--color-gray-600);
 }
 
-.collaborator-progress {
+.collaborator-status {
   display: flex;
   align-items: center;
-  min-width: 100px;
 }
 
-.collaborator-progress .progress-bar-container {
+.progress-section {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-end;
   gap: 0.5rem;
 }
 
-.collaborator-progress .progress-bar {
-  width: 80px;
-  height: 6px;
-  background: var(--color-gray-200);
-  border-radius: 3px;
-  overflow: hidden;
-  flex-shrink: 0;
+.progress-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-/* ✅ BARRA MORADA */
-.collaborator-progress .progress-fill {
+.progress-bar {
+  width: 100px;
+  height: 8px;
+  background: var(--color-gray-200);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
   height: 100%;
   background: linear-gradient(90deg, #8b5cf6, #7c3aed);
-  border-radius: 3px;
+  border-radius: 4px;
   transition: width 0.3s ease;
-  box-shadow: 0 1px 2px rgba(139, 92, 246, 0.3);
+  box-shadow: 0 1px 3px rgba(139, 92, 246, 0.4);
 }
 
-.collaborator-progress .progress-value {
-  font-size: 0.8rem;
+.progress-value {
+  font-size: 0.75rem;
   color: var(--color-gray-700);
-  min-width: 2.5rem;
   font-weight: 600;
+  min-width: 2.5rem;
   text-align: right;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-badge.accepted {
+  background: var(--color-green-50);
+  color: var(--color-green-600);
+  border: 1px solid var(--color-green-200);
 }
 
 .empty-state {
@@ -188,16 +224,20 @@ console.log('👥 CollaboratorsCard loaded with progress:', collaboratorsWithPro
     gap: 0.75rem;
   }
 
-  .collaborator-progress {
-    width: 100%;
+  .collaborator-status {
+    align-self: stretch;
   }
 
-  .collaborator-progress .progress-bar-container {
+  .progress-section {
     width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 
-  .collaborator-progress .progress-bar {
+  .progress-bar {
     flex: 1;
+    max-width: 120px;
   }
 }
 </style>
