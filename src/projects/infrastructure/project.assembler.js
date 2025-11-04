@@ -41,7 +41,23 @@ export class ProjectAssembler {
           };
       });
 
+      // ✅ CORREGIDO: Mapear colaboradores desde la nueva propiedad
+      const collaborators = (apiData.collaborators || []).map(collab => {
+          console.log('👥 Processing collaborator:', collab);
+          return {
+              id: collab.id || `collab_${Date.now()}`,
+              applicantId: collab.applicantId,
+              applicantName: collab.applicantName,
+              applicantEmail: collab.applicantEmail,
+              roleId: collab.roleId,
+              status: collab.status || 'accepted',
+              progress: collab.progress || 0,
+              joinedAt: collab.joinedAt || collab.createdAt || new Date().toISOString()
+          };
+      });
+
       console.log('📋 Final roles:', roles);
+      console.log('👥 Final collaborators:', collaborators);
 
       const projectEntity = new Project({
           id: apiData.id,
@@ -57,6 +73,7 @@ export class ProjectAssembler {
           status: apiData.status || 'draft',
           progress: apiData.progress || 0,
           userId: apiData.userId,
+          collaborators: collaborators, // ✅ Usar los colaboradores mapeados
           authorName: apiData.authorName || 'Usuario',
           areas: apiData.areas || [],
           tags: apiData.tags || [],
