@@ -94,7 +94,21 @@ export class ProjectsApi extends BaseApi {
      * @returns {Promise<Object>} API response
      */
     async update(id, updateData) {
-        return this.http.patch(`${this.resourcePath}/${id}`, updateData);
+        try {
+            console.log('🌐 API: Updating project:', id, 'with data:', updateData);
+
+            // Asegurar que los colaboradores se envíen correctamente
+            if (updateData.collaborators) {
+                console.log('👥 Sending collaborators to backend:', updateData.collaborators);
+            }
+
+            const response = await this.http.patch(`${this.resourcePath}/${id}`, updateData);
+            console.log('🌐 API: Update response:', response.data);
+            return response;
+        } catch (error) {
+            console.error('🌐 API: Error updating project:', error);
+            throw error;
+        }
     }
 
     /**
@@ -113,5 +127,27 @@ export class ProjectsApi extends BaseApi {
      */
     async search(criteria) {
         return this.http.get(`${this.resourcePath}/search`, { params: criteria });
+    }
+
+    /**
+     * Add collaborator to project
+     * @param {string} projectId - Project ID
+     * @param {Object} collaboratorData - Collaborator data
+     * @returns {Promise<Object>} API response
+     */
+    async addCollaborator(projectId, collaboratorData) {
+        console.log('🌐 API: Adding collaborator to project:', projectId, collaboratorData);
+
+        try {
+            const response = await this.http.post(
+                `${this.resourcePath}/${projectId}/collaborators`,
+                collaboratorData
+            );
+            console.log('🌐 API: Collaborator added successfully:', response.data);
+            return response;
+        } catch (error) {
+            console.error('🌐 API: Error adding collaborator:', error);
+            throw error;
+        }
     }
 }
