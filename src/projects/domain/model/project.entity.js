@@ -190,14 +190,18 @@ export class Project {
     addCollaborator(collaboratorData) {
         const { applicantId, applicantName, role, roleId } = collaboratorData;
 
-        // Verificar si el colaborador ya existe
-        const existingCollaborator = this.collaborators.find(c => c.applicantId === applicantId && c.roleId === roleId);
+        // Check if collaborator already exists
+        const existingCollaborator = this.collaborators.find(c =>
+            c.applicantId === applicantId && c.roleId === roleId
+        );
+
         if (existingCollaborator) {
-            return false; // Ya existe
+            console.log('⚠️ Collaborator already exists:', existingCollaborator);
+            return false;
         }
 
         const newCollaborator = {
-            id: Date.now().toString(), // ID temporal
+            id: `collab_${Date.now()}`,
             applicantId: applicantId,
             name: applicantName,
             role: role,
@@ -208,8 +212,11 @@ export class Project {
 
         this.collaborators.push(newCollaborator);
         this.updatedAt = new Date();
+
+        console.log('✅ Collaborator added:', newCollaborator);
         return true;
     }
+
 
     removeCollaborator(collaboratorId) {
         const index = this.collaborators.findIndex(c => c.id === collaboratorId);
@@ -222,7 +229,9 @@ export class Project {
     }
 
     getCollaboratorByApplicantId(applicantId, roleId) {
-        return this.collaborators.find(c => c.applicantId === applicantId && c.roleId === roleId);
+        return this.collaborators.find(c =>
+            c.applicantId === applicantId && c.roleId === roleId
+        );
     }
 
     updateProgress(newProgress) {
