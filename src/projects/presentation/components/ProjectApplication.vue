@@ -228,7 +228,15 @@ const handleSubmit = async () => {
 
   } catch (error) {
     console.error('Error submitting application:', error);
-    errors.value.push(error.message || t('application.errors.submissionFailed'));
+
+    // ✅ MEJORA: Mostrar mensajes de error más amigables
+    if (error.message.includes('Ya te has postulado')) {
+      errors.value = [error.message];
+    } else if (error.message.includes('Request failed with status code 400')) {
+      errors.value = ['Ya te has postulado a este rol en el proyecto'];
+    } else {
+      errors.value = [error.message || t('application.errors.submissionFailed')];
+    }
   } finally {
     isLoading.value = false;
   }
