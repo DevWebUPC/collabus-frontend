@@ -4,20 +4,23 @@ import { useRouter } from 'vue-router';
 import { useProjectDetailStore } from '../../../projects/application/project-detail.store.js';
 import { useUserStore } from '../../../iam/application/user-store.js';
 import { useTaskSubmissionStore } from '../../application/task-submission-store.js';
+import { useTaskStore } from '../../application/task-store.js';
 
 const router = useRouter();
 const projectDetailStore = useProjectDetailStore();
 const userStore = useUserStore();
 const taskSubmissionStore = useTaskSubmissionStore();
+const taskStore = useTaskStore();
 
 // Estado reactivo
 const loading = ref(false);
-const activeFilter = ref('all'); // 'all', 'pending', 'completed', 'overdue'
+const activeFilter = ref('all');
 
-// Computed: Obtener tareas del usuario actual
+// Computed: Obtener tareas del usuario actual - ACTUALIZADO
 const myTasks = computed(() => {
-  if (!projectDetailStore.project?.tasks) {
-    console.log('❌ No project tasks available');
+  const projectId = projectDetailStore.project?.id;
+  if (!projectId) {
+    console.log('❌ No project ID available');
     return [];
   }
 
@@ -27,52 +30,82 @@ const myTasks = computed(() => {
     return [];
   }
 
-  console.log('🔍 Filtering tasks for user:', userId);
-  console.log('📋 All tasks:', projectDetailStore.project.tasks);
+  console.log('🔍 Buscando tareas para usuario:', userId, 'en proyecto:', projectId);
 
-  const userTasks = projectDetailStore.project.tasks.filter(task => {
+  // ✅ OBTENER TAREAS DEL TASK STORE
+  const projectTasks = taskStore.getProjectTasks(projectId) || [];
+  console.log('📋 Tareas del proyecto desde taskStore:', projectTasks);
+
+  const userTasks = projectTasks.filter(task => {
     const taskUserId = task.assignedTo ? String(task.assignedTo) : null;
     const matches = taskUserId === userId;
     console.log(`   - Task "${task.title}": ${taskUserId} vs ${userId} -> ${matches}`);
     return matches;
   });
 
-  console.log('✅ User tasks found:', userTasks.length, userTasks);
+  console.log('✅ Tareas del usuario encontradas:', userTasks.length, userTasks);
   return userTasks;
 });
+
+const isTaskOverdue = (task) => {
+  const isOverdueStatus = task.status === 'retrasado';
+  console.log(`⏰ Tarea ${task.id} (${task.title}): Estado=${task.status}, Retrasada=${isOverdueStatus}`);
+  return isOverdueStatus;
+};
 
 const getNormalizedUserId = () => {
   const userId = userStore.currentUser?.id || localStorage.getItem("userId");
   return userId ? String(userId) : null;
 };
 
-// Computed: Verificar si una tarea tiene submission (completada)
-const hasTaskSubmission = (taskId) => {
-  return taskSubmissionStore.hasSubmissionForTask(taskId);
+// ✅ CORREGIDO: Determinar si una tarea está completada (usar estado de la tarea)
+const isTaskCompleted = (task) => {
+  // ✅ PRIMERO verificar el estado real de la tarea desde la base de datos
+  const isCompleted = task.status === 'completed';
+  console.log(`🔍 Estado de tarea ${task.id} (${task.title}): ${task.status} -> Completada: ${isCompleted}`);
+  return isCompleted;
 };
 
-// Computed: Tareas filtradas - ACTUALIZADO para usar submissions
+// ✅ NUEVO: Verificar si una tarea tiene submission
+const hasTaskSubmission = (taskId) => {
+  const hasSubmission = taskSubmissionStore.hasSubmissionForTask(taskId);
+  console.log(`📝 Submission para tarea ${taskId}: ${hasSubmission}`);
+  return hasSubmission;
+};
+
+// ✅ NUEVO: Obtener el estado visual de la tarea
+const getTaskDisplayStatus = (task) => {
+  if (isTaskCompleted(task)) {
+    return 'completed';
+  } else if (isTaskOverdue(task)) {
+    return 'overdue';
+  } else {
+    return 'pending';
+  }
+};
+
+// Computed: Tareas filtradas - ACTUALIZADO para usar estado real
 const filteredTasks = computed(() => {
   const tasks = myTasks.value;
 
   switch (activeFilter.value) {
     case 'pending':
-      return tasks.filter(task => !hasTaskSubmission(task.id) && !isOverdue(task.dueDate));
+      return tasks.filter(task => getTaskDisplayStatus(task) === 'pending');
     case 'overdue':
-      return tasks.filter(task => !hasTaskSubmission(task.id) && isOverdue(task.dueDate));
+      return tasks.filter(task => getTaskDisplayStatus(task) === 'overdue');
     case 'completed':
-      return tasks.filter(task => hasTaskSubmission(task.id));
+      return tasks.filter(task => getTaskDisplayStatus(task) === 'completed');
     default:
       return tasks;
   }
 });
-
-// Computed: Estadísticas - ACTUALIZADO para usar submissions
+// Computed: Estadísticas - ACTUALIZADO para usar estado real
 const taskStats = computed(() => {
   const tasks = myTasks.value;
-  const completed = tasks.filter(task => hasTaskSubmission(task.id)).length;
-  const pending = tasks.filter(task => !hasTaskSubmission(task.id) && !isOverdue(task.dueDate)).length;
-  const overdue = tasks.filter(task => !hasTaskSubmission(task.id) && isOverdue(task.dueDate)).length;
+
+  const completed = tasks.filter(task => isTaskCompleted(task)).length;
+  const overdue = tasks.filter(task => isTaskOverdue(task)).length;
+  const pending = tasks.filter(task => getTaskDisplayStatus(task) === 'pending').length;
 
   return {
     total: tasks.length,
@@ -82,7 +115,6 @@ const taskStats = computed(() => {
     completionRate: tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0
   };
 });
-
 // Formatear fecha
 const formatDate = (dateString) => {
   if (!dateString) return 'Sin fecha límite';
@@ -93,6 +125,11 @@ const formatDate = (dateString) => {
     month: '2-digit',
     year: 'numeric'
   });
+};
+
+const isOverdueByDate = (dueDate) => {
+  if (!dueDate) return false;
+  return new Date(dueDate) < new Date();
 };
 
 // Verificar si la tarea está vencida
@@ -125,8 +162,13 @@ const viewTask = (task) => {
   });
 };
 
-// Iniciar tarea - SOLO para tareas sin submission
+// Iniciar tarea - SOLO para tareas sin completar
 const startTask = (task) => {
+  if (isTaskCompleted(task) || isTaskOverdue(task)) {
+    console.log('ℹ️ Tarea completada o retrasada, no se puede iniciar:', task.title);
+    return;
+  }
+
   console.log('Iniciar tarea:', task);
   router.push({
     name: 'task-execution',
@@ -137,27 +179,50 @@ const startTask = (task) => {
   });
 };
 
+
 // Cambiar filtro
 const setFilter = (filter) => {
   activeFilter.value = filter;
 };
 
-// Cargar tareas y submissions cuando el componente se monte
+// Cargar tareas y submissions cuando el componente se monte - ACTUALIZADO
 onMounted(async () => {
-  console.log('Tareas del usuario en pestaña Tasks:', myTasks.value);
+  console.log('🔄 Iniciando carga de tareas del usuario...');
 
-  // Cargar todas las submissions para las tareas del usuario
-  if (myTasks.value.length > 0) {
-    loading.value = true;
-    try {
+  const projectId = projectDetailStore.project?.id;
+  if (!projectId) {
+    console.error('❌ No hay projectId disponible');
+    return;
+  }
+
+  loading.value = true;
+  try {
+    // ✅ PRIMERO: Cargar las tareas del proyecto desde la API
+    console.log('📥 Cargando tareas del proyecto...');
+    await taskStore.loadProjectTasks(projectId);
+
+    console.log('✅ Tareas cargadas desde API');
+    console.log('📋 Tareas del usuario después de carga:', myTasks.value);
+
+    // ✅ SEGUNDO: Cargar submissions para las tareas del usuario (solo para referencia)
+    if (myTasks.value.length > 0) {
+      console.log('📥 Cargando submissions para referencia...');
       for (const task of myTasks.value) {
         await taskSubmissionStore.loadSubmissionsByTask(task.id);
       }
-    } catch (error) {
-      console.error('Error loading submissions:', error);
-    } finally {
-      loading.value = false;
+      console.log('✅ Submissions cargadas para referencia');
     }
+
+    // ✅ LOG PARA DEBUG: Mostrar estado de todas las tareas
+    console.log('🎯 ESTADO FINAL DE TAREAS:');
+    myTasks.value.forEach(task => {
+      console.log(`   - "${task.title}": Estado=${task.status}, Completada=${isTaskCompleted(task)}, Display=${getTaskDisplayStatus(task)}`);
+    });
+
+  } catch (error) {
+    console.error('❌ Error cargando datos:', error);
+  } finally {
+    loading.value = false;
   }
 });
 </script>
@@ -246,15 +311,12 @@ onMounted(async () => {
           v-for="task in filteredTasks"
           :key="task.id"
           class="task-card"
-          :class="{
-          'overdue': isOverdue(task.dueDate) && !hasTaskSubmission(task.id),
-          'completed': hasTaskSubmission(task.id)
-        }"
+          :class="getTaskDisplayStatus(task)"
       >
         <!-- Header de la tarjeta -->
         <div class="task-header">
           <div class="task-status">
-            <span v-if="hasTaskSubmission(task.id)" class="status-badge completed">
+            <span v-if="isTaskCompleted(task)" class="status-badge completed">
               <i class="pi pi-check-circle"></i>
               Completada
             </span>
@@ -266,9 +328,6 @@ onMounted(async () => {
               <i class="pi pi-clock"></i>
               Pendiente
             </span>
-          </div>
-          <div class="task-role">
-            {{ task.role || 'Sin rol específico' }}
           </div>
         </div>
 
@@ -282,7 +341,7 @@ onMounted(async () => {
               <i class="pi pi-calendar"></i>
               <span class="meta-text">
                 {{ formatDate(task.dueDate) }}
-                <span v-if="!hasTaskSubmission(task.id) && getDaysRemaining(task.dueDate) !== null"
+                <span v-if="!isTaskCompleted(task) && getDaysRemaining(task.dueDate) !== null"
                       class="days-remaining"
                       :class="{ 'overdue': isOverdue(task.dueDate) }">
                   ({{ isOverdue(task.dueDate) ? Math.abs(getDaysRemaining(task.dueDate)) + ' días de retraso' : getDaysRemaining(task.dueDate) + ' días restantes' }})
@@ -304,10 +363,12 @@ onMounted(async () => {
                 Entregada correctamente
               </span>
             </div>
+
+            <!-- ✅ NUEVO: Mostrar estado real desde BD -->
           </div>
         </div>
 
-        <!-- Acciones - ACTUALIZADO: Solo mostrar "Hacer Tarea" si no hay submission -->
+        <!-- Acciones - ACTUALIZADO: Usar estado real de la tarea -->
         <div class="task-actions">
           <pv-button
               label="Ver Tarea"
@@ -318,20 +379,12 @@ onMounted(async () => {
               class="view-btn"
           />
           <pv-button
-              v-if="!hasTaskSubmission(task.id)"
+              v-if="!isTaskCompleted(task) && !isTaskOverdue(task)"
               label="Hacer Tarea"
               icon="pi pi-play"
               severity="primary"
               @click="startTask(task)"
               class="start-btn"
-          />
-          <pv-button
-              v-else
-              label="Completada"
-              icon="pi pi-check"
-              severity="success"
-              disabled
-              class="reviewed-btn"
           />
         </div>
       </div>
@@ -353,9 +406,7 @@ onMounted(async () => {
   </div>
 </template>
 
-<!-- Los estilos permanecen iguales -->
 <style scoped>
-/* Los estilos permanecen iguales */
 .participating-tasks-view {
   padding: 0;
   background: transparent;
@@ -473,7 +524,6 @@ onMounted(async () => {
 }
 
 .task-card:hover {
-  transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 

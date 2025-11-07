@@ -23,7 +23,6 @@
         <div class="task-col colaborador">
           <div class="collaborator-info">
             <span class="collaborator-name">{{ task.assignedToName }}</span>
-            <span class="collaborator-role">{{ task.role }}</span>
           </div>
         </div>
 
@@ -49,11 +48,11 @@
 
         <div class="task-col acciones">
           <div class="action-buttons">
-            <!-- Botón "Ver Entrega" - HABILITADO cuando hay submission -->
+            <!-- Botón "Ver Entrega" - MOSTRAR cuando hay submission -->
             <pv-button
+                v-if="shouldShowSubmissionButton(task)"
                 :label="getSubmissionButtonLabel(task)"
                 :class="['view-task-btn', { 'has-submission': hasSubmissionForTask(task) }]"
-                :disabled="!hasSubmissionForTask(task)"
                 @click="handleViewSubmission(task)"
             />
 
@@ -110,7 +109,6 @@ export default {
   methods: {
     formatDate(dateString) {
       if (!dateString) return 'Sin fecha'
-
       const date = new Date(dateString)
       return date.toLocaleDateString('es-ES', {
         day: '2-digit',
@@ -123,7 +121,8 @@ export default {
       const statusClasses = {
         'completed': 'status-completed',
         'pending': 'status-pending',
-        'retrasado': 'status-overdue'
+        'retrasado': 'status-overdue',
+        'in_progress': 'status-in-progress' // Añadir este
       }
       return statusClasses[status] || 'status-pending'
     },
@@ -132,7 +131,8 @@ export default {
       const statusTexts = {
         'completed': 'Completado',
         'pending': 'Pendiente',
-        'retrasado': 'Retrasado'
+        'retrasado': 'Retrasado',
+        'in_progress': 'En Progreso' // Añadir este
       }
       return statusTexts[status] || 'Pendiente'
     },
@@ -141,6 +141,7 @@ export default {
      * Determinar el estado real de la tarea considerando la fecha de vencimiento
      */
     getActualStatus(task) {
+      // ✅ CORREGIDO: Si está completado, siempre retornar 'completed'
       if (task.status === 'completed') return 'completed';
 
       if (task.dueDate) {
@@ -162,9 +163,12 @@ export default {
     hasSubmissionForTask(task) {
       if (!this.submissions || !this.submissions.length) return false;
 
-      return this.submissions.some(submission =>
-          submission.taskId === task.id.toString()
-      );
+      // ✅ CORREGIDO: Buscar por taskId (convertir a string para comparación)
+      return this.submissions.some(submission => {
+        const submissionTaskId = submission.taskId ? submission.taskId.toString() : null;
+        const taskId = task.id ? task.id.toString() : null;
+        return submissionTaskId === taskId;
+      });
     },
 
     /**
@@ -175,10 +179,22 @@ export default {
     },
 
     /**
+     * ✅ NUEVO MÉTODO: Determinar si se debe mostrar el botón de entrega
+     */
+    shouldShowSubmissionButton(task) {
+      const status = this.getActualStatus(task);
+
+      // Mostrar botón si:
+      // 1. La tarea está completada Y tiene submission
+      // 2. O si tiene submission (incluso si no está completada)
+      return this.hasSubmissionForTask(task);
+    },
+
+    /**
      * Manejar el clic en "Ver Entrega"
      */
     handleViewSubmission(task) {
-      if (this.hasSubmissionForTask(task)) {
+      if (this.shouldShowSubmissionButton(task)) {
         this.$emit('view-submission', task);
       }
     }

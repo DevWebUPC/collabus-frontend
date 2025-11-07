@@ -199,7 +199,8 @@ const handleFileUpload = (event) => {
       name: file.name,
       type: file.type,
       file: file,
-      url: URL.createObjectURL(file)
+      url: URL.createObjectURL(file),
+      size: file.size // ✅ AGREGAR TAMAÑO REAL DEL ARCHIVO
     });
   });
 };
@@ -230,21 +231,28 @@ const submitTask = async () => {
     return;
   }
 
-  const taskId = route.params.taskId;
-  const projectId = route.params.projectId;
+  const taskId = parseInt(route.params.taskId);
+  const projectId = parseInt(route.params.projectId);
 
+  // ✅ PREPARAR DATOS CON TAMAÑOS VÁLIDOS
   const submissionData = {
     taskId: taskId,
-    collaboratorId: collaboratorId,
-    links: nonEmptyLinks,
-    attachments: attachments.value.map(att => ({
-      name: att.name,
-      type: att.type,
-      url: att.url
+    collaboratorId: parseInt(collaboratorId),
+    collaboratorName: userStore.currentUser?.fullName || 'Colaborador', // ✅ USAR fullName
+    notes: notes.value || '',
+    links: nonEmptyLinks.map(link => ({
+      url: link,
+      description: ''
     })),
-    notes: notes.value,
-    submittedAt: new Date()
+    attachments: attachments.value.map(att => ({
+      name: att.name || 'archivo',
+      type: att.type || 'file',
+      url: att.url || '',
+      size: att.size > 0 ? att.size : 1024 // ✅ SI ES 0, USAR VALOR POR DEFECTO
+    }))
   };
+
+  console.log('📤 Datos a enviar al backend:', JSON.stringify(submissionData, null, 2));
 
   try {
     loading.value = true;
@@ -260,13 +268,8 @@ const submitTask = async () => {
     await taskStore.updateTaskStatus(
         projectId,
         taskId,
-        'completed',
-        100
+        'completed'
     );
-
-    // ✅ RECARGAR el proyecto completo para sincronizar
-    const projectDetailStore = useProjectDetailStore();
-    await projectDetailStore.loadProjectDetail(projectId);
 
     console.log('✅ Tarea marcada como completada correctamente');
 
@@ -277,13 +280,17 @@ const submitTask = async () => {
 
   } catch (error) {
     console.error('❌ Error al enviar la tarea:', error);
-    alert('Error al enviar la tarea: ' + error.message);
+
+    if (error.response) {
+      console.error('📋 Detalles del error:', error.response.data);
+      alert(`Error al enviar la tarea: ${error.response.data.message || error.response.data}`);
+    } else {
+      alert('Error al enviar la tarea: ' + error.message);
+    }
   } finally {
     loading.value = false;
   }
-};
-
-// Cargar tarea real
+};// Cargar tarea real
 const loadTask = async () => {
   try {
     loading.value = true;
@@ -375,20 +382,6 @@ onMounted(() => {
               Fecha de Vencimiento
             </span>
           </div>
-
-          <!-- Progress Bar -->
-          <div class="progress-section" v-if="checklistItems.length > 0">
-            <div class="progress-header">
-              <h3>Progreso</h3>
-              <span class="progress-text">
-                {{ checklistItems.filter(item => item.completed).length }} de {{ checklistItems.length }} completados
-              </span>
-            </div>
-            <pv-progressbar
-                :value="(checklistItems.filter(item => item.completed).length / checklistItems.length) * 100"
-                class="progress-bar"
-            />
-          </div>
         </div>
       </template>
     </pv-card>
@@ -406,17 +399,12 @@ onMounted(() => {
               :key="item.id"
               class="checklist-item"
           >
-            <pv-checkbox
-                :modelValue="item.completed"
-                @update:modelValue="toggleChecklistItem(item.id)"
-                :binary="true"
-                class="checklist-checkbox"
-            />
+
             <span
                 class="checklist-text"
                 :class="{ 'completed': item.completed }"
             >
-              {{ item.text }}
+              - {{ item.text }}
             </span>
           </div>
         </div>

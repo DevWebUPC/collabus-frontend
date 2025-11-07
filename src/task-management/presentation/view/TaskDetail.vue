@@ -111,43 +111,52 @@ const getEntrepreneurName = () => {
 // Métodos de acciones
 const toggleChecklistItem = async (itemId) => {
   try {
-    const updatedChecklist = task.value.checklist.map(item =>
-        item.id === itemId
-            ? { ...item, completed: !item.completed }
-            : item
-    )
+    console.log('🔄 Toggle checklist item:', itemId);
 
-    await taskStore.updateTask(
+    // ✅ LLAMAR AL BACKEND para toggle
+    await taskStore.toggleChecklistItem(
         route.params.projectId,
         task.value.id,
-        { checklist: updatedChecklist }
-    )
+        itemId
+    );
 
-    // Actualizar la tarea localmente
-    task.value.checklist = updatedChecklist
+    // ✅ RECARGAR la tarea completa para obtener datos actualizados
+    const updatedTask = await taskStore.loadTask(
+        route.params.projectId,
+        route.params.taskId
+    );
+    task.value = updatedTask;
+
+    console.log('✅ Checklist item toggled successfully');
+
   } catch (error) {
-    console.error('Error actualizando checklist:', error)
+    console.error('Error actualizando checklist:', error);
   }
 }
 
+
 const toggleTool = async (toolId) => {
   try {
-    const updatedTools = task.value.tools.map(tool =>
-        tool.id === toolId
-            ? { ...tool, checked: !tool.checked }
-            : tool
-    )
+    console.log('🔄 Toggle tool:', toolId);
 
-    await taskStore.updateTask(
+    // ✅ LLAMAR AL BACKEND para toggle
+    await taskStore.toggleTaskTool(
         route.params.projectId,
         task.value.id,
-        { tools: updatedTools }
-    )
+        toolId
+    );
 
-    // Actualizar la tarea localmente
-    task.value.tools = updatedTools
+    // ✅ RECARGAR la tarea completa
+    const updatedTask = await taskStore.loadTask(
+        route.params.projectId,
+        route.params.taskId
+    );
+    task.value = updatedTask;
+
+    console.log('✅ Tool toggled successfully');
+
   } catch (error) {
-    console.error('Error actualizando herramienta:', error)
+    console.error('Error actualizando herramienta:', error);
   }
 }
 
@@ -184,6 +193,10 @@ onMounted(async () => {
 
     console.log('✅ Tarea cargada:', task.value)
     console.log('📋 Proyecto:', projectDetailStore.project)
+    console.log('📋 Checklist recibido:', task.value.checklist);
+    console.log('🛠️ Tools recibidos:', task.value.tools);
+    console.log('📎 Attachments recibidos:', task.value.attachments);
+
   } catch (error) {
     console.error('Error cargando tarea:', error)
   } finally {
@@ -338,7 +351,6 @@ onMounted(async () => {
               </div>
               <div class="user-details">
                 <span class="user-name">{{ task.assignedToName }}</span>
-                <span class="user-role">{{ task.role }}</span>
               </div>
             </div>
           </div>
