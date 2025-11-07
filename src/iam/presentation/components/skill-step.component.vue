@@ -39,13 +39,13 @@ const removeSkill = (index) => {
 const newExperience = ref({
   position: '',
   company: '',
-  duration: ''
+  StartDate: ''
 });
 
 const addExperience = () => {
   if (newExperience.value.position.trim() && newExperience.value.company.trim()) {
     experiences.value.push({ ...newExperience.value });
-    newExperience.value = { position: '', company: '', duration: '' };
+    newExperience.value = { position: '', company: '', StartDate: '' };
     updateModelValue();
   }
 };
@@ -210,7 +210,7 @@ watch(() => props.modelValue, (newValue) => {
               <div class="form-group">
                 <label>Tiempo</label>
                 <pv-input-text
-                    v-model="newExperience.duration"
+                    v-model="newExperience.StartDate"
                     placeholder="Ej: 2 años"
                     class="w-full"
                 />
@@ -235,7 +235,7 @@ watch(() => props.modelValue, (newValue) => {
             >
               <div class="experience-info">
                 <strong>{{ exp.position }}</strong> en {{ exp.company }}
-                <span v-if="exp.duration" class="experience-duration">• {{ exp.duration }}</span>
+                <span v-if="exp.StartDate" class="experience-duration">• {{ exp.StartDate }}</span>
               </div>
               <span class="remove-experience" @click="removeExperience(index)">×</span>
             </div>
