@@ -25,20 +25,51 @@ export const useProjectsStore = defineStore('projects', () => {
     // FAVORITES
     const favorites = ref([]); // Array of Favorite entities
     const favoriteProjects = computed(() => {
-        // Devuelve los proyectos favoritos del usuario actual
-        const favProjectIds = favorites.value.map(fav => fav.projectId);
-        return projects.value.filter(p => favProjectIds.includes(p.id));
+        // 🔥 CORREGIDO: Eliminar duplicados por ID de proyecto
+        const seenProjectIds = new Set();
+        const uniqueProjects = [];
+
+        projects.value.forEach(project => {
+            const isFavorite = favorites.value.some(fav => fav.projectId === project.id);
+            if (isFavorite && !seenProjectIds.has(project.id)) {
+                seenProjectIds.add(project.id);
+                uniqueProjects.push(project);
+            }
+        });
+
+        console.log('🔄 Computed favoriteProjects - Unique:', uniqueProjects.length, 'All projects:', projects.value.length);
+        return uniqueProjects;
     });
     // FAVORITES actions
     const fetchFavorites = async (profileId) => {
         try {
             setLoading(true);
             clearError();
-            const response = await favoritesApi.getFavoritesByProfile(profileId);
-            favorites.value = FavoriteAssembler.fromApiArrayToEntityArray(response.data);
+            console.log('🔄 Fetching favorites for profile:', profileId);
+
+            // 🔥 CORREGIDO: Obtener solo los favoritos (relaciones)
+            const favoritesResponse = await favoritesApi.getFavoritesByProfile(profileId);
+            console.log('⭐ Favorites raw response:', favoritesResponse.data);
+
+            // Actualizar la lista de favoritos
+            favorites.value = FavoriteAssembler.fromApiArrayToEntityArray(favoritesResponse.data);
+            console.log('📋 Favorites entities:', favorites.value);
+
+            // 🔥 CORREGIDO: Obtener proyectos favoritos por separado
+            const projectsResponse = await favoritesApi.getFavoriteProjectsByProfile(profileId);
+            console.log('🏗️ Favorite projects raw response:', projectsResponse.data);
+
+            // Convertir a entidades de proyecto
+            const favoriteProjectsData = ProjectAssembler.fromApiArrayToEntityArray(projectsResponse.data);
+            console.log('✅ Favorite projects entities:', favoriteProjectsData);
+
+            console.log('🎯 Final state - Favorites:', favorites.value.length, 'Favorite Projects:', favoriteProjectsData.length);
+
         } catch (err) {
+            console.error('❌ Error fetching favorites:', err);
+            console.error('Error response:', err.response?.data);
             setError('Failed to fetch favorites');
-            console.error('Error fetching favorites:', err);
+            favorites.value = [];
         } finally {
             setLoading(false);
         }
@@ -48,12 +79,44 @@ export const useProjectsStore = defineStore('projects', () => {
         try {
             setLoading(true);
             clearError();
-            await favoritesApi.addFavorite(profileId, projectId);
-            // Refetch favorites after adding
+            console.log('➕ Adding favorite:', { profileId, projectId });
+
+            // 🔥 MEJORADO: Verificación más robusta de duplicados
+            const existingFavorite = favorites.value.find(fav =>
+                Number(fav.profileId) === Number(profileId) &&
+                Number(fav.projectId) === Number(projectId)
+            );
+
+            if (existingFavorite) {
+                console.log('⚠️ Project is already in favorites, skipping add. Favorite ID:', existingFavorite.id);
+                // 🔥 IMPORTANTE: Aún así actualizar el estado visual
+                await fetchFavorites(profileId);
+                return existingFavorite;
+            }
+
+            console.log('🔄 Calling API to add favorite...');
+            const response = await favoritesApi.addFavorite(profileId, projectId);
+            console.log('✅ Favorite API response:', response.data);
+
+            // Actualizar la lista de favoritos
             await fetchFavorites(profileId);
+            console.log('✅ Favorite added and list refreshed');
+
+            return response.data;
+
         } catch (err) {
-            setError('Failed to add favorite');
-            console.error('Error adding favorite:', err);
+            console.error('❌ Error adding favorite:', err);
+            console.error('Error status:', err.response?.status);
+            console.error('Error data:', err.response?.data);
+
+            // Si es error 400, probablemente es duplicado
+            if (err.response?.status === 400) {
+                console.log('🔄 Duplicate detected, refreshing favorites list...');
+                await fetchFavorites(profileId);
+            } else {
+                setError('Failed to add favorite');
+            }
+            throw err;
         } finally {
             setLoading(false);
         }
@@ -63,18 +126,19 @@ export const useProjectsStore = defineStore('projects', () => {
         try {
             setLoading(true);
             clearError();
-            // Buscar el favoriteId correspondiente
-            const favorite = favorites.value.find(fav => String(fav.profileId) === String(profileId) && String(fav.projectId) === String(projectId));
-            if (!favorite) {
-                setError('Favorite not found');
-                return;
-            }
-            await favoritesApi.removeFavorite(favorite.id);
+            console.log('➖ Removing favorite:', { profileId, projectId });
+
+            await favoritesApi.removeFavorite(profileId, projectId);
+
             // Refetch favorites after removing
             await fetchFavorites(profileId);
+
+            console.log('✅ Favorite removed successfully');
+
         } catch (err) {
+            console.error('❌ Error removing favorite:', err);
             setError('Failed to remove favorite');
-            console.error('Error removing favorite:', err);
+            throw err;
         } finally {
             setLoading(false);
         }
@@ -172,6 +236,37 @@ export const useProjectsStore = defineStore('projects', () => {
         } catch (err) {
             setError("Failed to fetch participating projects");
             console.error("Error fetching participating projects:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const getFavoriteProjectsByProfile = async (profileId) => {
+        try {
+            setLoading(true);
+            clearError();
+
+            console.log('⭐ Buscando proyectos favoritos para profile:', profileId);
+
+            // Cargar favoritos primero
+            await fetchFavorites(profileId);
+
+            console.log('📋 Favoritos encontrados:', favorites.value);
+            console.log('📦 Todos los proyectos:', projects.value);
+
+            // Filtrar proyectos que están en favoritos
+            const favProjectIds = favorites.value.map(fav => fav.projectId);
+            const favProjects = projects.value.filter(project =>
+                favProjectIds.includes(project.id)
+            );
+
+            console.log('✅ Proyectos favoritos filtrados:', favProjects);
+
+            return favProjects;
+        } catch (error) {
+            console.error('❌ Error obteniendo proyectos favoritos:', error);
+            setError('Error al cargar proyectos favoritos');
+            return [];
         } finally {
             setLoading(false);
         }
@@ -392,6 +487,7 @@ export const useProjectsStore = defineStore('projects', () => {
         fetchOwnedProjects,
         fetchProjectsByUserId,
         fetchProjectById,
+        getFavoriteProjectsByProfile,
         createProject,
         updateProject,
         deleteProject,
