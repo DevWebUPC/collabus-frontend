@@ -1,66 +1,55 @@
 <script setup lang="js">
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, computed, watch, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { useProfileStore } from '../../application/profile-store.js';
-import { useAuthStore } from '../../../iam/application/auth-store.js';
 import { useUserStore } from '../../../iam/application/user-store.js';
 import ProfileHeader from '../components/profile-header.component.vue';
 import ProfileStats from '../components/profile-stats.component.vue';
 import ProfileDescription from '../components/profile-description.component.vue';
 import ProfileSkills from '../components/profile-skills.component.vue';
 import ProfileExperiences from '../components/profile-experiences.component.vue';
-import ProfileTabs from '../components/profile-tabs.component.vue'; // 👈 Agregar esta importación
+import ProfileTabs from '../components/profile-tabs.component.vue';
 
 const profileStore = useProfileStore();
-const authStore = useAuthStore();
 const userStore = useUserStore();
 const router = useRouter();
-const isLoadingProfile = ref(false);
 
-// 👇 Watch para detectar cambios en el usuario autenticado
-watch(
-    () => userStore.currentUser,
-    async (newUser, oldUser) => {
-      if (newUser && newUser.id !== oldUser?.id) {
-        console.log('🔄 Usuario cambiado, cargando perfil...');
-        await loadUserProfile();
-      }
-    }
-);
+// 🔥 ESTADO SIMPLIFICADO - solo un estado de carga
+const isLoading = ref(true);
+const showContent = ref(false);
 
-// 👇 Watch para detectar cuando el usuario se desautentica
-watch(
-    () => userStore.isAuthenticated,
-    (isAuthenticated) => {
-      if (!isAuthenticated) {
-        console.log('🚪 Usuario cerró sesión, limpiando perfil');
-        profileStore.clearProfile();
-      }
-    }
-);
+// 🔥 NUEVO: Estado para controlar la inicialización
+const isInitialized = ref(false);
 
-// Datos mock para cuando no hay perfil cargado
-const mockProfileData = ref({
-  name: 'Usuario',
-  roles: ['Developer'],
-  mainRole: 'Full Stack Developer',
-  points: 0,
-  projects: [],
-  comments: [],
-  description: 'Sin descripción',
-  skills: [],
-  experiences: []
-});
-
-// Computed para obtener los datos del store o mock
+// Computed para obtener los datos del store
 const profileData = computed(() => {
   if (profileStore.currentProfile) {
     return transformProfileData(profileStore.currentProfile);
   }
-  return mockProfileData.value;
+  return getMockProfileData();
 });
 
-// Función para transformar los datos del store al formato que esperan los componentes
+// 🔥 NUEVO: Computed simplificado para estados
+const showProfileContent = computed(() =>
+    !isLoading.value && profileStore.currentProfile && !profileStore.error
+);
+
+const showNoProfile = computed(() =>
+    !isLoading.value &&
+    userStore.isAuthenticated &&
+    !profileStore.currentProfile?.id &&  // ✅ Verificar específicamente el ID
+    !profileStore.error
+);
+
+const showError = computed(() =>
+    !isLoading.value && profileStore.error
+);
+
+const showNotAuthenticated = computed(() =>
+    !isLoading.value && !userStore.isAuthenticated
+);
+
+// Función para transformar los datos del store
 const transformProfileData = (storeProfile) => {
   return {
     name: storeProfile.username || 'Usuario',
@@ -81,72 +70,114 @@ const transformProfileData = (storeProfile) => {
   };
 };
 
-// 👇 Función centralizada para cargar el perfil
+// Función para datos mock
+const getMockProfileData = () => ({
+  name: 'Usuario',
+  roles: ['Developer'],
+  mainRole: 'Full Stack Developer',
+  points: 0,
+  projects: [],
+  comments: [],
+  description: 'Sin descripción',
+  skills: [],
+  experiences: []
+});
+
+// 🔥 FUNCIÓN MEJORADA: Cargar perfil sin duplicados
 const loadUserProfile = async () => {
+  if (!userStore.currentUser?.id) {
+    console.log('❌ No hay usuario autenticado');
+    isLoading.value = false;
+    return;
+  }
+
   try {
-    isLoadingProfile.value = true;
+    console.log('📥 Cargando perfil para userId:', userStore.currentUser.id);
 
-    const currentUser = userStore.currentUser;
-    console.log('👤 Usuario del store:', currentUser);
-    console.log('🔍 Store completo:', userStore);
+    // 🔥 BUSCAR primero en los perfiles ya cargados
+    const existingProfile = profileStore.allProfiles.find(profile =>
+        String(profile.userId) === String(userStore.currentUser.id)
+    );
 
-    const userId = currentUser?.id;
-    console.log('🆔 ID de usuario para buscar perfil:', userId, 'Tipo:', typeof userId);
-
-    if (!userId) {
-      console.log('❌ No hay usuario autenticado o no tiene ID');
-      profileStore.clearProfile();
+    if (existingProfile) {
+      console.log('✅ Perfil encontrado en store:', existingProfile);
+      profileStore.currentProfile = existingProfile;
       return;
     }
 
-    console.log('📥 Buscando perfil específico para userId:', userId);
+    // 🔥 SI NO EXISTE, cargar desde API
+    console.log('🔄 Perfil no encontrado en store, cargando desde API...');
+    const profile = await profileStore.getProfileByUserId(userStore.currentUser.id);
 
-    // ✅ Forzar recarga desde API
-    const profile = await profileStore.getProfileByUserId(userId);
-
-    if (!profile) {
-      console.log('ℹ️ Usuario no tiene perfil creado, mostrando estado de perfil incompleto');
-      // No redirigir automáticamente, mostrar el estado en la UI
-      return;
+    if (profile) {
+      console.log('✅ Perfil cargado desde API:', profile);
+      // El store debería actualizar currentProfile automáticamente
+      // Si no lo hace, forzar la actualización:
+      if (!profileStore.currentProfile) {
+        profileStore.currentProfile = profile;
+      }
+    } else {
+      console.log('⚠️ No se encontró perfil para el usuario');
     }
-
-    console.log('✅ Perfil cargado exitosamente:', profileStore.currentProfile);
-    console.log('🔍 Verificando datos:', {
-      profileId: profileStore.currentProfile?.id,
-      profileUserId: profileStore.currentProfile?.userId,
-      currentUserId: userId
-    });
 
   } catch (error) {
     console.error('❌ Error cargando perfil:', error);
-
-    // Mostrar error específico
-    if (error.response?.status === 404) {
-      console.log('ℹ️ Perfil no encontrado para este usuario');
-    }
-  } finally {
-    isLoadingProfile.value = false;
   }
 };
-// 👇 Función para hacer logout
-const handleLogout = async () => {
+// 🔥 NUEVA FUNCIÓN: Inicialización única
+const initializeProfileView = async () => {
+  if (isInitialized.value) {
+    console.log('🔄 Ya inicializado, omitiendo...');
+    return;
+  }
+
   try {
-    // Mostrar confirmación
-    if (!confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+    isLoading.value = true;
+    isInitialized.value = true;
+
+    console.log('🎯 Inicializando profile-view...');
+
+    // 1. Inicializar stores
+    userStore.initializeUser();
+    profileStore.initializeProfile();
+
+    // 2. Verificar autenticación
+    if (!userStore.isAuthenticated) {
+      console.log('⚠️ No autenticado, redirigiendo...');
+      router.push('/login');
       return;
     }
 
+    console.log('✅ Usuario autenticado:', userStore.currentUser?.id);
+
+    // 3. Estrategia de carga optimizada
+    if (profileStore.currentProfile) {
+      console.log('📂 Perfil ya cargado en store');
+      // 🔥 Pequeña pausa para evitar parpadeo
+      await new Promise(resolve => setTimeout(resolve, 50));
+    } else {
+      console.log('🔄 Cargando perfil desde API...');
+      await loadUserProfile();
+    }
+
+  } catch (error) {
+    console.error('❌ Error en inicialización:', error);
+  } finally {
+    setTimeout(() => {
+      isLoading.value = false;
+      console.log('🚀 Carga completada');
+    }, 100);
+  }
+};
+
+// 👇 Función para hacer logout
+const handleLogout = async () => {
+  try {
+    if (!confirm('¿Estás seguro de que quieres cerrar sesión?')) return;
+
     console.log('🚪 Iniciando logout...');
-
-    // Ejecutar logout en el store de usuario
     await userStore.logout();
-
-    // Limpiar el perfil localmente también
     profileStore.clearProfile();
-
-    console.log('✅ Logout completado, redirigiendo...');
-
-    // Redirigir al login
     router.push('/login');
 
   } catch (error) {
@@ -155,34 +186,43 @@ const handleLogout = async () => {
   }
 };
 
-// Cargar el perfil al montar el componente
-onMounted(async () => {
-  try {
-    console.log('🎯 Componente profile-view montado');
+// 🔥 INICIALIZACIÓN ÚNICA al montar
+onMounted(() => {
+  console.log('🏁 Mounted profile-view');
+  initializeProfileView();
+});
 
-    // Inicializar stores
-    userStore.initializeUser();
-    profileStore.initializeProfile();
-
-    // Verificar si hay usuario autenticado
-    if (userStore.isAuthenticated) {
-      console.log('🔍 Usuario autenticado encontrado, cargando perfil...');
-      await loadUserProfile();
-    } else {
-      console.log('⚠️ No hay usuario autenticado');
-      // Redirigir al login si no está autenticado
-      router.push('/login');
-    }
-
-  } catch (error) {
-    console.error('❌ Error inicializando profile-view:', error);
+// 🔥 WATCH MEJORADO: Solo para cambios de autenticación
+watch(() => userStore.isAuthenticated, (isAuthenticated) => {
+  if (isAuthenticated && !profileStore.currentProfile && !isLoading.value) {
+    console.log('🔄 Cambio de autenticación, recargando perfil...');
+    loadUserProfile();
   }
+});
+watch(() => profileStore.currentProfile, (newProfile) => {
+  console.log('🔄 Watch - currentProfile cambiado:', newProfile);
+  console.log('🔍 Estado actual:', {
+    isLoading: isLoading.value,
+    isAuthenticated: userStore.isAuthenticated,
+    currentProfile: profileStore.currentProfile,
+    error: profileStore.error,
+    showProfileContent: showProfileContent.value,
+    showNoProfile: showNoProfile.value
+  });
+}, { immediate: true });
+
+// 🔥 NUEVO: Watch para los computed properties
+watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
+  console.log('📊 Estados computados:', {
+    showProfileContent: showContent,
+    showNoProfile: showNoProfile
+  });
 });
 </script>
 
 <template>
   <div class="profile-view-container">
-    <!-- Header Section -->
+    <!-- Header Section - SIEMPRE visible -->
     <div class="profile-header-section">
       <div class="header-content">
         <div class="header-title">
@@ -201,7 +241,7 @@ onMounted(async () => {
     </div>
 
     <!-- Loading State -->
-    <div v-if="isLoadingProfile || profileStore.loading" class="loading-container">
+    <div v-if="isLoading" class="loading-container">
       <div class="loading-content">
         <pv-progressspinner class="loading-spinner" />
         <p class="loading-text">Cargando tu perfil...</p>
@@ -209,7 +249,7 @@ onMounted(async () => {
     </div>
 
     <!-- Error State -->
-    <div v-else-if="profileStore.error" class="error-container">
+    <div v-else-if="showError" class="error-container">
       <pv-card class="error-card">
         <template #content>
           <div class="error-content">
@@ -228,7 +268,7 @@ onMounted(async () => {
     </div>
 
     <!-- No Profile State -->
-    <div v-else-if="userStore.isAuthenticated && !profileStore.currentProfile" class="no-profile-container">
+    <div v-else-if="showNoProfile" class="no-profile-container">
       <pv-card class="no-profile-card">
         <template #content>
           <div class="no-profile-content">
@@ -247,7 +287,7 @@ onMounted(async () => {
     </div>
 
     <!-- Profile Content -->
-    <div v-else-if="profileStore.currentProfile" class="profile-content">
+    <div v-else-if="showProfileContent" class="profile-content">
       <div class="profile-main-section">
         <div class="profile-layout">
           <!-- Left Column - Profile Header -->
@@ -278,11 +318,15 @@ onMounted(async () => {
         </div>
       </div>
 
-
+      <!-- Profile Tabs -->
+      <ProfileTabs
+          :profile-data="profileData"
+          :is-public="false"
+      />
     </div>
 
     <!-- Not Authenticated State -->
-    <div v-else class="not-authenticated">
+    <div v-else-if="showNotAuthenticated" class="not-authenticated">
       <pv-card class="auth-card">
         <template #content>
           <div class="auth-content">
@@ -299,8 +343,6 @@ onMounted(async () => {
         </template>
       </pv-card>
     </div>
-    <ProfileTabs :profile-data="profileData" :is-public="false" />
-
   </div>
 </template>
 

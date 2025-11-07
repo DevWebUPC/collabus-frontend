@@ -1,7 +1,5 @@
-
-
 <script setup lang="js">
-import { ref, onMounted, computed, defineProps } from 'vue';
+import { ref, onMounted, computed, defineProps, watch } from 'vue';
 import { useProfileStore } from '../../application/profile-store.js';
 import { useUserStore } from '../../../iam/application/user-store.js';
 import { useRouter, useRoute } from 'vue-router';
@@ -9,15 +7,14 @@ import CommentCardList from './comment-card-list.component.vue';
 import { useProjectsStore } from '../../../projects/application/projects.store.js';
 
 const selectedOption = ref(2);
-const selectedProjectView = ref('my-projects'); // 'my-projects' o 'favorites'
+const selectedProjectView = ref('my-projects');
 
 const projectsStore = useProjectsStore();
 const profileStore = useProfileStore();
 const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute();
-  
-// Props para vista pública
+
 const props = defineProps({
   profileData: {
     type: Object,
@@ -29,56 +26,80 @@ const props = defineProps({
   }
 });
 
-const showCommentModal = ref(false);
-
-const profileId = computed(() => route.params.id);
-const comments = computed(() => profileStore.comments);
-
-const handleOpenCommentModal = () => {
-  showCommentModal.value = true;
-};
-
-const handleCloseCommentModal = () => {
-  showCommentModal.value = false;
-};
-
-const handleSubmitComment = async ({ rating, comment }) => {
-  if (!profileId.value || !userStore.currentUser?.id) return;
-  await profileStore.addComment({
-    profileId: profileId.value,
-    userId: userStore.currentUser.id,
-    rating,
-    comment
-  });
-  showCommentModal.value = false;
-};
-
-const currentProfile = computed(() => {
-  // Si hay id en la ruta, buscar ese perfil
-  if (profileId.value) {
-    const found = profileStore.allProfiles?.find(p => String(p.id) === String(profileId.value));
-    if (found) return found;
+// 🔥 CORREGIDO: Obtener el profileId correctamente
+const profileId = computed(() => {
+  // Si es vista pública, usar el ID de la ruta
+  if (props.isPublic && route.params.id) {
+    return parseInt(route.params.id);
   }
-  // Por defecto, usar el perfil actual
-  return profileStore.currentProfile;
+  // Si es perfil propio, usar el ID del perfil actual
+  if (profileStore.currentProfile?.id) {
+    return profileStore.currentProfile.id;
+  }
+  return null;
 });
 
+// 🔥 CORREGIDO: Obtener userId del perfil
+const profileUserId = computed(() => {
+  // Si es vista pública, usar el userId del perfil que estamos viendo
+  if (props.isPublic) {
+    // Obtener el userId del perfil público que estamos viendo
+    const publicProfile = profileStore.allProfiles.find(p =>
+        p.id.toString() === route.params.id.toString()
+    );
+    return publicProfile?.userId;
+  }
+
+  // Si es perfil propio, usar el userId del usuario autenticado
+  return userStore.currentUser?.id;
+});
+
+// 🔥 FALTA: Agregar la propiedad comments
+const comments = computed(() => {
+  if (!profileId.value) return [];
+
+  // 🔥 FILTRAR: Solo mostrar comentarios que pertenecen a este perfil específico
+  return profileStore.comments.filter(comment =>
+      String(comment.profileId) === String(profileId.value)
+  );
+});
 // Proyectos propios del perfil mostrado
 const myProjects = computed(() => {
-  if (!currentProfile.value) return [];
-  return projectsStore.projects.filter(p => String(p.userId) == String(currentProfile.value.userId));
+  if (!profileUserId.value) return [];
+
+  console.log('🔍 Filtering projects for userId:', profileUserId.value);
+
+  const filteredProjects = projectsStore.projects.filter(p =>
+      String(p.userId) === String(profileUserId.value)
+  );
+
+  console.log('📁 Found projects:', filteredProjects.length);
+  filteredProjects.forEach(p => console.log('   -', p.title, 'by userId:', p.userId));
+
+  return filteredProjects;
 });
 
-// Proyectos favoritos del perfil mostrado (únicos)
+const loadComments = async () => {
+  if (profileId.value) {
+    console.log('🔄 Cargando comentarios para profileId:', profileId.value);
+    await profileStore.fetchComments(profileId.value);
+    console.log('✅ Comentarios cargados:', comments.value.length);
+  }
+};
+
+// 🔥 MODIFICADO: Cargar comentarios cuando cambie el profileId
+watch(profileId, (newProfileId) => {
+  if (newProfileId) {
+    console.log('🔄 ProfileId cambiado, cargando comentarios...');
+    loadComments();
+  }
+});
+
+
+// 🔥 CORREGIDO: Proyectos favoritos - usar directamente los favorites del store
 const favoriteProjects = computed(() => {
-  if (!currentProfile.value) return [];
-  // Eliminar duplicados por project.id
-  const seen = new Set();
-  return projectsStore.favoriteProjects.filter(p => {
-    if (seen.has(p.id)) return false;
-    seen.add(p.id);
-    return true;
-  });
+  console.log('🔄 Computed favoriteProjects:', projectsStore.favoriteProjects.length);
+  return projectsStore.favoriteProjects;
 });
 
 const formatDate = (date) => {
@@ -91,26 +112,81 @@ const formatDate = (date) => {
 };
 
 const navigateToProject = (projectId, fromFavorites = false) => {
-  if (fromFavorites) {
-    router.push(`/projects/show/${projectId}`);
-  } else if (props.isPublic) {
+  if (fromFavorites || props.isPublic) {
     router.push(`/projects/show/${projectId}`);
   } else {
     router.push(`/projects/${projectId}`);
   }
 };
 
+// 🔥 CORREGIDO: Función para cargar favoritos
+const loadFavorites = async () => {
+  if (profileId.value) {
+    console.log('⭐ Cargando favoritos para profileId:', profileId.value);
+    await projectsStore.fetchFavorites(profileId.value);
+    console.log('✅ Favoritos cargados:', projectsStore.favoriteProjects.length);
+  } else {
+    console.log('❌ No hay profileId para cargar favoritos');
+  }
+};
+
+// 🔥 NUEVO: Cargar favoritos cuando se cambie a la pestaña de favoritos
+watch([selectedOption, selectedProjectView], ([newOption, newView]) => {
+  if (newOption === 1 && newView === 'favorites' && profileId.value) {
+    console.log('🔄 Cambiando a pestaña de favoritos, cargando...');
+    loadFavorites();
+  }
+});
+
+watch(profileId, (newProfileId, oldProfileId) => {
+  if (newProfileId && newProfileId !== oldProfileId) {
+    console.log('🔄 ProfileId cambiado, cargando comentarios...');
+    loadComments();
+  }
+});
+
+// 🔥 NUEVO: Cargar favoritos cuando el profileId esté disponible
+watch(profileId, (newProfileId) => {
+  if (newProfileId) {
+    console.log('🔄 ProfileId disponible, precargando favoritos...');
+    // Precargar favoritos para que estén listos cuando el usuario haga clic
+    loadFavorites();
+  }
+});
+
+watch(profileId, (newProfileId) => {
+  if (newProfileId) {
+    console.log('🔄 ProfileId cambiado, cargando comentarios...');
+    loadComments();
+  }
+});
+
+watch(selectedOption, (newOption) => {
+  if (newOption === 2 && profileId.value) {
+    console.log('📝 Pestaña de comentarios seleccionada, recargando...');
+    loadComments();
+  }
+});
+
 
 onMounted(async () => {
-  if (profileId.value) {
-    await profileStore.fetchComments(profileId.value);
-  }
-    // Cargar proyectos y favoritos si es necesario
+  console.log('🎯 ProfileTabs montado - profileId:', profileId.value);
+
+  // Cargar proyectos si es necesario
   if (!projectsStore.projects.length) {
+    console.log('🔄 Cargando proyectos...');
     await projectsStore.fetchProjects();
   }
-  if (currentProfile.value && currentProfile.value.id) {
-    await projectsStore.fetchFavorites(currentProfile.value.id);
+
+  // 🔥 MODIFICADO: Cargar comentarios específicos para este perfil
+  if (profileId.value) {
+    await loadComments();
+  }
+
+  // Cargar favoritos
+  if (profileId.value) {
+    console.log('🔄 Cargando favoritos iniciales...');
+    await loadFavorites();
   }
 });
 </script>
@@ -162,8 +238,8 @@ onMounted(async () => {
             <p>No tienes proyectos propios.</p>
           </div>
           <div v-else class="projects-list">
-            <div 
-              v-for="project in myProjects" 
+            <div
+              v-for="project in myProjects"
               :key="project.id"
               class="project-item"
               @click="navigateToProject(project.id)"
@@ -171,7 +247,7 @@ onMounted(async () => {
             >
               <div class="project-info">
                 <strong class="project-title">{{ project.title || project.projectName }}</strong>
-                <div class="project-author">{{ project.userName || $t('projects.user') }}</div>
+                <div class="project-author">{{ project.authorName || $t('projects.user') }}</div>
                 <div class="project-date">{{ formatDate(project.createdAt) }}</div>
               </div>
               <div class="project-arrow">
@@ -186,8 +262,8 @@ onMounted(async () => {
             <p>No tienes proyectos favoritos.</p>
           </div>
           <div v-else class="projects-list">
-            <div 
-              v-for="project in favoriteProjects" 
+            <div
+              v-for="project in favoriteProjects"
               :key="project.id"
               class="project-item"
               @click="navigateToProject(project.id, true)"
@@ -195,7 +271,7 @@ onMounted(async () => {
             >
               <div class="project-info">
                 <strong class="project-title">{{ project.title || project.projectName }}</strong>
-                <div class="project-author">{{ project.userName || $t('projects.user') }}</div>
+                <div class="project-author">{{ project.authorName || $t('projects.user') }}</div>
                 <div class="project-date">{{ formatDate(project.createdAt) }}</div>
               </div>
               <div class="project-arrow">

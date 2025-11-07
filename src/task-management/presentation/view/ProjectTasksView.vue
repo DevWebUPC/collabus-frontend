@@ -322,19 +322,23 @@ export default {
       try {
         console.log('📅 Actualizando fecha de tarea:', updateData);
 
-        await taskStore.updateTask(
+        const updatedBy = localStorage.getItem('userId') || '1';
+
+        // ✅ Asegurar que la fecha sea un objeto Date válido
+        const dueDate = new Date(updateData.newDueDate);
+
+        if (isNaN(dueDate.getTime())) {
+          throw new Error('Fecha inválida');
+        }
+
+        await taskStore.updateTaskDueDate(
             projectDetailStore.project.id,
             updateData.taskId,
-            {
-              dueDate: updateData.newDueDate.toISOString(),
-              updatedAt: new Date().toISOString()
-            }
+            dueDate,  // Pasar el objeto Date
+            updatedBy
         );
 
-        // ✅ FORZAR ACTUALIZACIÓN INMEDIATA DEL COMPUTED
-        await nextTick();
-
-        // ✅ RECARGAR LAS TAREAS PARA SINCRONIZAR
+        // Recargar tareas
         if (projectDetailStore.project?.id) {
           await taskStore.loadProjectTasks(projectDetailStore.project.id);
         }
@@ -342,9 +346,10 @@ export default {
         showUpdateDateModal.value = false;
         selectedTask.value = null;
 
-        console.log('✅ Fecha actualizada y vista sincronizada');
+        console.log('✅ Fecha actualizada correctamente');
       } catch (error) {
         console.error('❌ Error actualizando fecha:', error);
+        // Mostrar mensaje de error al usuario
       }
     }
 
@@ -366,21 +371,31 @@ export default {
       if (projectDetailStore.project?.id) {
         await taskStore.loadProjectTasks(projectDetailStore.project.id)
 
-        // ✅ CARGAR TODAS LAS SUBMISSIONS DEL PROYECTO
+        // ✅ CORREGIDO: Limpiar submissions antes de cargar nuevas
+        taskSubmissionStore.submissions = [];
+
         try {
-          console.log('🔄 Cargando submissions para el proyecto...')
-          // Cargar submissions para todas las tareas del proyecto
+          console.log('🔄 Cargando submissions para todas las tareas del proyecto...')
           const tasks = taskStore.getProjectTasks(projectDetailStore.project.id)
+          console.log(`📋 Cargando submissions para ${tasks.length} tareas`)
+
+          // Cargar submissions para cada tarea
           for (const task of tasks) {
-            await taskSubmissionStore.loadSubmissionsByTask(task.id)
+            try {
+              // ✅ FORZAR recarga limpia para cada tarea
+              await taskSubmissionStore.loadSubmissionsByTask(task.id)
+              console.log(`✅ Submissions cargadas para tarea ${task.id}`)
+            } catch (error) {
+              console.error(`❌ Error cargando submissions para tarea ${task.id}:`, error)
+            }
           }
-          console.log('✅ Submissions cargadas:', taskSubmissionStore.submissions)
+
+          console.log('✅ Todas las submissions cargadas:', taskSubmissionStore.submissions)
         } catch (error) {
-          console.error('❌ Error cargando submissions:', error)
+          console.error('❌ Error general cargando submissions:', error)
         }
       }
 
-      // Agregar event listener para cerrar dropdowns
       document.addEventListener('click', closeDropdowns)
     })
 
