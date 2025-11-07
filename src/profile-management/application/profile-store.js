@@ -37,8 +37,16 @@ export const useProfileStore = defineStore('profile', () => {
         try {
             setLoading(true);
             clearError();
+            console.log('📥 Fetching comments for profileId:', profileId);
             const response = await commentApi.getCommentsByProfile(profileId);
-            comments.value = CommentAssembler.fromApiArrayToEntityArray(response.data);
+
+            // 🔥 VERIFICAR: Asegurar que solo tenemos comentarios de este perfil
+            const filteredComments = response.data.filter(comment =>
+                String(comment.profileId) === String(profileId)
+            );
+
+            comments.value = CommentAssembler.fromApiArrayToEntityArray(filteredComments);
+            console.log('✅ Comments loaded for profile:', filteredComments.length);
         } catch (err) {
             setError('Failed to fetch comments');
             console.error('Error fetching comments:', err);
@@ -191,48 +199,30 @@ export const useProfileStore = defineStore('profile', () => {
         }
     };
 
-    // Get profile by user ID - ACTUALIZADO
-    const getProfileByUserId = async (userId, forceRefresh = false) => {
+    const getProfileByUserId = async (userId) => {
         try {
-            setLoading(true);
-            clearError();
+            // Buscar en los perfiles ya cargados primero
+            const existingProfile = allProfiles.value.find(profile =>
+                String(profile.userId) === String(userId)
+            );
 
-            console.log('🔄 Cargando perfil para userId:', userId);
-            console.log('📋 Tipo de userId:', typeof userId, 'Valor:', userId);
-
-            if (!userId) {
-                throw new Error('No se proporcionó userId');
+            if (existingProfile) {
+                return existingProfile;
             }
 
-            // ✅ USAR EL NUEVO MÉTODO ESPECÍFICO
+            // Si no está cargado, buscar en la API
+            // Necesitarás implementar este endpoint en tu backend
             const response = await profileApi.getByUserId(userId);
-
-            if (!response.data) {
-                console.log('❌ No se encontró perfil para userId:', userId);
-                return null;
+            if (response.data) {
+                const profile = ProfileAssembler.fromApiToEntity(response.data);
+                allProfiles.value.push(profile);
+                return profile;
             }
 
-            const profile = ProfileAssembler.fromApiToEntity(response.data);
-            console.log('✅ Perfil encontrado:', profile);
-
-            // Actualizar el perfil actual y localStorage
-            currentProfile.value = profile;
-            localStorage.setItem('currentProfile', JSON.stringify(profile));
-            localStorage.setItem('profileId', profile.id);
-
-            return profile;
-        } catch (err) {
-            // Si es error 404, significa que no existe perfil para este usuario
-            if (err.response?.status === 404 || err.message === 'Profile not found') {
-                console.log('ℹ️ No se encontró perfil para el usuario, puede ser nuevo');
-                return null;
-            }
-
-            const errorMessage = err.response?.data?.message || err.message || 'Error al obtener el perfil';
-            setError(errorMessage);
-            throw err;
-        } finally {
-            setLoading(false);
+            return null;
+        } catch (error) {
+            console.error('Error getting profile by userId:', error);
+            return null;
         }
     };
 
@@ -275,8 +265,15 @@ export const useProfileStore = defineStore('profile', () => {
             setLoading(true);
             clearError();
 
-            const apiData = ProfileAssembler.fromUpdateToApi(profileData);
-            const response = await profileApi.patch(profileId, apiData);
+            console.log('🔄 Actualizando puntos del perfil:', profileId, profileData);
+
+            // 🔥 ENVIAR SOLO LOS CAMPOS NECESARIOS PARA PUNTOS
+            const pointsData = {
+                points: profileData.points,
+                pointsGivenBy: profileData.pointsGivenBy
+            };
+
+            const response = await profileApi.patch(profileId, pointsData);
 
             if (response.status >= 200 && response.status < 300) {
                 const updatedProfile = ProfileAssembler.fromApiToEntity(response.data);
@@ -293,13 +290,15 @@ export const useProfileStore = defineStore('profile', () => {
                     localStorage.setItem('currentProfile', JSON.stringify(updatedProfile));
                 }
 
+                console.log('✅ Puntos actualizados exitosamente');
                 return updatedProfile;
             } else {
-                throw new Error('Error al actualizar el perfil');
+                throw new Error('Error al actualizar los puntos');
             }
         } catch (err) {
-            const errorMessage = err.response?.data?.message || err.message || 'Error al actualizar el perfil';
+            const errorMessage = err.response?.data?.message || err.message || 'Error al actualizar los puntos';
             setError(errorMessage);
+            console.error('❌ Error actualizando puntos:', err);
             throw err;
         } finally {
             setLoading(false);

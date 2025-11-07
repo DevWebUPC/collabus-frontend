@@ -93,9 +93,8 @@ export class ProfileApi extends BaseEndpoint {
      * @returns {Promise} API response
      */
     patch(id, profileData) {
-        return this.http.patch(`${this.endpointPath}/${id}`, profileData);
+        return this.http.put(`${this.endpointPath}/${id}`, profileData);
     }
-
     /**
      * Delete profile
      * @param {string} id - Profile ID
