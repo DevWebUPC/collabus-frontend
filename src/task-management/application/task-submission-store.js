@@ -50,10 +50,16 @@ export const useTaskSubmissionStore = defineStore('taskSubmission', () => {
 
     // ✅ NUEVO MÉTODO: Obtener submission por taskId
     const getSubmissionByTaskId = (taskId) => {
-        return submissions.value.find(submission =>
-            submission.taskId === taskId.toString()
-        );
+        // Convertir a string para comparación consistente
+        const taskIdStr = taskId.toString();
+
+        return submissions.value.find(submission => {
+            const submissionTaskId = submission.taskId ? submission.taskId.toString() : null;
+            return submissionTaskId === taskIdStr;
+        });
     };
+
+
 
     // ✅ NUEVO MÉTODO: Verificar si existe submission para una tarea
     const hasSubmissionForTask = (taskId) => {

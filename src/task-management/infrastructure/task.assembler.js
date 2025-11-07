@@ -1,54 +1,73 @@
-
 import { Task } from '../domain/model/task.entity.js';
 
 /**
- * Task Assembler
- * Transforms data between API and domain entities
+ * Task Assembler - ADAPTADO para backend .NET
+ * Transforms data between .NET API and domain entities
  */
 export class TaskAssembler {
     /**
-     * Transform API response to Task entity
-     * @param {Object} apiData - Raw API data
+     * Transform .NET API response to Task entity
+     * @param {Object} apiData - Raw API data from .NET backend
      * @returns {Task} Task entity
      */
     static fromApiToEntity(apiData) {
         if (!apiData) return null;
 
+        console.log('🔄 Transforming API data to entity:', apiData);
+
         return new Task({
-            id: apiData.id,
+            id: apiData.id?.toString() || this.generateId(),
             title: apiData.title || '',
             description: apiData.description || '',
-            dueDate: apiData.dueDate,
+            dueDate: apiData.dueDate ? new Date(apiData.dueDate) : null,
             status: apiData.status || 'pending',
             priority: apiData.priority || 'medium',
             projectId: apiData.projectId,
             assignedTo: apiData.assignedTo,
             assignedToName: apiData.assignedToName || '',
             role: apiData.role || '',
-            checklist: apiData.checklist || [],
-            tools: apiData.tools || [],
+            checklist: (apiData.checklist || []).map(item => ({
+                id: item.id?.toString() || this.generateId(),
+                text: item.text || '',
+                completed: item.completed || false,
+                createdAt: item.createdAt ? new Date(item.createdAt) : new Date()
+            })),
+            tools: (apiData.tools || []).map(tool => ({
+                id: tool.id?.toString() || this.generateId(),
+                name: tool.name || '',
+                checked: tool.checked || false
+            })),
+            attachments: (apiData.attachments || []).map(attachment => ({
+                id: attachment.id?.toString() || this.generateId(),
+                name: attachment.name || '',
+                type: attachment.type || 'file',
+                url: attachment.url || '',
+                icon: attachment.icon || 'pi pi-file',
+                uploadedAt: attachment.uploadedAt ? new Date(attachment.uploadedAt) : new Date()
+            })),
             comment: apiData.comment || '',
-            attachments: apiData.attachments || [],
             progress: apiData.progress || 0,
             estimatedHours: apiData.estimatedHours || 0,
             actualHours: apiData.actualHours || 0,
             createdBy: apiData.createdBy,
-            createdAt: apiData.createdAt,
-            updatedAt: apiData.updatedAt,
-            completedAt: apiData.completedAt
+            createdAt: apiData.createdAt ? new Date(apiData.createdAt) : new Date(),
+            updatedAt: apiData.updatedAt ? new Date(apiData.updatedAt) : new Date(),
+            completedAt: apiData.completedAt ? new Date(apiData.completedAt) : null
         });
     }
 
     /**
-     * Transform Task entity to API format
+     * Transform Task entity to .NET API format
      * @param {Task} entity - Task entity
-     * @returns {Object} API formatted data
+     * @returns {Object} .NET API formatted data
      */
     static fromEntityToApi(entity) {
         if (!entity) return null;
 
+        console.log('🔄 Transforming entity to API data:', entity);
+
         return {
-            id: entity.id,
+            id: entity.id ? parseInt(entity.id) : 0,
             title: entity.title,
             description: entity.description,
             dueDate: entity.dueDate?.toISOString(),
@@ -58,10 +77,24 @@ export class TaskAssembler {
             assignedTo: entity.assignedTo,
             assignedToName: entity.assignedToName,
             role: entity.role,
-            checklist: entity.checklist,
-            tools: entity.tools,
+            checklist: (entity.checklist || []).map(item => ({
+                id: item.id ? parseInt(item.id) : 0,
+                text: item.text,
+                completed: item.completed || false
+            })),
+            tools: (entity.tools || []).map(tool => ({
+                id: tool.id ? parseInt(tool.id) : 0,
+                name: tool.name,
+                checked: tool.checked || false
+            })),
             comment: entity.comment,
-            attachments: entity.attachments,
+            attachments: (entity.attachments || []).map(attachment => ({
+                id: attachment.id ? parseInt(attachment.id) : 0,
+                name: attachment.name,
+                type: attachment.type,
+                url: attachment.url,
+                icon: attachment.icon
+            })),
             progress: entity.progress,
             estimatedHours: entity.estimatedHours,
             actualHours: entity.actualHours,
@@ -73,41 +106,76 @@ export class TaskAssembler {
     }
 
     /**
-     * Transform form data from TaskCreateForm to API format
+     * Transform form data from TaskCreateForm to .NET API format
      * @param {Object} formData - Form data from TaskCreateForm.vue
-     * @param {string} projectId - Project ID
-     * @param {string} createdBy - User ID who created the task
-     * @param {string} assignedTo - Collaborator ID
+     * @param {number} projectId - Project ID
+     * @param {number} createdBy - User ID who created the task
+     * @param {number} assignedTo - Collaborator ID
      * @param {string} assignedToName - Collaborator name
      * @param {string} role - Collaborator role
-     * @returns {Object} API submission data
+     * @returns {Object} .NET API submission data
      */
     static fromFormToApi(formData, projectId, createdBy, assignedTo, assignedToName, role) {
+        console.log('🔄 Transforming form data to API:', formData);
+
         return {
             title: formData.title || '',
             description: formData.description || '',
             dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
             status: 'pending',
             priority: formData.priority || 'medium',
-            projectId: projectId,
-            assignedTo: assignedTo,
+            projectId: parseInt(projectId),
+            assignedTo: parseInt(assignedTo),
             assignedToName: assignedToName,
             role: role,
-            checklist: formData.checklist || [],
-            tools: formData.tools || [],
+            checklist: (formData.checklist || []).map(item => ({
+                text: item.text,
+                completed: item.completed || false
+            })),
+            tools: (formData.tools || []).map(tool => ({
+                name: tool.name,
+                checked: tool.checked || false
+            })),
             comment: formData.comment || '',
-            attachments: formData.attachments || [],
-            progress: 0,
+            attachments: (formData.attachments || []).map(attachment => ({
+                name: attachment.name,
+                type: attachment.type || 'file',
+                url: attachment.url || '',
+                icon: attachment.icon || 'pi pi-file'
+            })),
             estimatedHours: formData.estimatedHours || 0,
-            actualHours: 0,
-            createdBy: createdBy
+            createdBy: parseInt(createdBy)
         };
     }
 
+    /**
+     * Transform update form data to .NET API format
+     * @param {Object} formData - Form data for update
+     * @param {number} projectId - Project ID
+     * @param {number} taskId - Task ID
+     * @returns {Object} .NET API update data
+     */
+    static fromUpdateFormToApi(formData, projectId, taskId) {
+        return {
+            taskId: parseInt(taskId),
+            projectId: parseInt(projectId),
+            title: formData.title,
+            description: formData.description,
+            dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
+            status: formData.status,
+            priority: formData.priority,
+            assignedTo: parseInt(formData.assignedTo),
+            assignedToName: formData.assignedToName,
+            role: formData.role,
+            comment: formData.comment,
+            estimatedHours: formData.estimatedHours || 0,
+            actualHours: formData.actualHours || 0
+        };
+    }
 
     /**
      * Transform API response array to Task entities array
-     * @param {Array} apiDataArray - Array of raw API data
+     * @param {Array} apiDataArray - Array of raw API data from .NET
      * @returns {Array<Task>} Array of Task entities
      */
     static fromApiArrayToEntityArray(apiDataArray) {
@@ -118,7 +186,7 @@ export class TaskAssembler {
     /**
      * Transform Task entities array to API format array
      * @param {Array<Task>} entityArray - Array of Task entities
-     * @returns {Array} Array of API formatted data
+     * @returns {Array} Array of .NET API formatted data
      */
     static fromEntityArrayToApiArray(entityArray) {
         if (!Array.isArray(entityArray)) return [];
@@ -126,82 +194,43 @@ export class TaskAssembler {
     }
 
     /**
-     * Transform API response to task summary for lists
-     * @param {Object} apiData - Raw API data
-     * @returns {Object} Task summary
+     * Generate a simple unique ID
+     * @returns {string} Unique ID
      */
-    static toTaskSummary(apiData) {
-        if (!apiData) return null;
-
-        const task = this.fromApiToEntity(apiData);
-
-        return {
-            id: task.id,
-            title: task.title,
-            assignedToName: task.assignedToName,
-            role: task.role,
-            dueDate: task.dueDate,
-            status: task.status,
-            priority: task.priority,
-            progress: task.progress,
-            daysRemaining: task.getDaysRemaining(),
-            isOverdue: task.isOverdue()
-        };
+    static generateId() {
+        return `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     }
 
     /**
-     * Transform status update data to API format
-     * @param {string} taskId - Task ID
+     * Transform status update data to .NET API format
      * @param {string} status - New status
-     * @param {number} progress - Progress percentage
-     * @returns {Object} API status update data
+     * @returns {string} API status data
      */
-    static toStatusUpdateApi(taskId, status, progress = null) {
-        const updateData = {
-            status: status,
-            updatedAt: new Date().toISOString()
-        };
-
-        if (progress !== null) {
-            updateData.progress = progress;
-        }
-
-        if (status === 'completed') {
-            updateData.completedAt = new Date().toISOString();
-        }
-
-        return updateData;
+    static toStatusUpdateApi(status) {
+        return status;
     }
 
     /**
-     * Transform progress update data to API format
-     * @param {string} taskId - Task ID
-     * @param {number} progress - Progress percentage
-     * @returns {Object} API progress update data
+     * Transform due date update data to .NET API format
+     * @param {Date} dueDate - New due date
+     * @param {number} updatedBy - User ID who updated
+     * @returns {Object} API due date update data
      */
-    static toProgressUpdateApi(taskId, progress) {
+    static toDueDateUpdateApi(dueDate, updatedBy) {
         return {
-            progress: progress,
-            updatedAt: new Date().toISOString(),
-            status: progress === 100 ? 'completed' : 'in_progress'
+            newDueDate: dueDate.toISOString(),
+            updatedBy: updatedBy
         };
     }
 
     /**
-     * Transform checklist update data to API format
-     * @param {string} taskId - Task ID
-     * @param {Array} checklist - Updated checklist
-     * @returns {Object} API checklist update data
+     * Transform delete data to .NET API format
+     * @param {number} deletedBy - User ID who deleted
+     * @returns {Object} API delete data
      */
-    static toChecklistUpdateApi(taskId, checklist) {
-        const completedItems = checklist.filter(item => item.completed).length;
-        const progress = checklist.length > 0 ? Math.round((completedItems / checklist.length) * 100) : 0;
-
+    static toDeleteApi(deletedBy) {
         return {
-            checklist: checklist,
-            progress: progress,
-            updatedAt: new Date().toISOString(),
-            status: progress === 100 ? 'completed' : 'in_progress'
+            deletedBy: deletedBy
         };
     }
 }
