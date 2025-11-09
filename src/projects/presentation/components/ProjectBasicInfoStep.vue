@@ -200,8 +200,8 @@ const updateSummary = (value) => { store.basicInfoData.summary = value }
 }
 
 .form-group {
-  background: white;
-  border: 1px solid #E5E7EB;
+  background: var(--color-white, #FFFFFF);
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -332,7 +332,7 @@ const updateSummary = (value) => { store.basicInfoData.summary = value }
 :deep(.p-autocomplete-panel) {
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   max-height: 200px;
   overflow-y: auto;
   z-index: 1000;
@@ -350,12 +350,12 @@ const updateSummary = (value) => { store.basicInfoData.summary = value }
 }
 
 :deep(.p-autocomplete-item:hover) {
-  background: #F8FAFC;
+  background: var(--color-gray-300, #f8fafc);
 }
 
 :deep(.p-autocomplete-item.p-highlight) {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 :deep(.p-autocomplete-item:last-child) {
@@ -381,7 +381,7 @@ const updateSummary = (value) => { store.basicInfoData.summary = value }
 
 :deep(.p-button.p-button-outlined:hover) {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 :deep(.p-button:disabled) {

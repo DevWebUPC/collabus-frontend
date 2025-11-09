@@ -105,7 +105,7 @@ const clearFilters = () => {
 
 <style scoped>
 .search-filters {
-  background: #fff;
+  background: var(--color-white, #ffffff);
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -130,7 +130,7 @@ const clearFilters = () => {
   font-size: 0.875rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 .filter-select,
@@ -139,7 +139,7 @@ const clearFilters = () => {
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 0.875rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   min-height: 40px;
 }
 
@@ -170,7 +170,7 @@ const clearFilters = () => {
 
 .search-btn {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .search-btn:hover {
@@ -180,7 +180,7 @@ const clearFilters = () => {
 
 .clear-btn {
   background: #6b7280;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .clear-btn:hover {

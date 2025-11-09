@@ -137,18 +137,18 @@ export default {
   color: var(--color-gray-800);
   margin: 0;
   padding: 0.5rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   border-radius: 4px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .collaborator-info {
   color: var(--color-gray-600);
   margin: 0;
   padding: 0.5rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   border-radius: 4px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .current-date {

@@ -129,14 +129,14 @@ const formatDate = (date) => {
   max-width: 600px;
   margin: 0 auto;
   padding: 1rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   min-height: 100vh;
 }
 
 /* Tab Navigation */
 .tab-navigation {
   display: flex;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 4px;
   margin-bottom: 2rem;
@@ -158,18 +158,18 @@ const formatDate = (date) => {
 
 .tab-button.active {
   background: var(--color-primary);;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);
 }
 
 .tab-button:hover:not(.active) {
   background: #f3f4f6;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 /* Projects List */
 .projects-list {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -188,7 +188,7 @@ const formatDate = (date) => {
 .loading-spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid #e5e7eb;
+  border: 3px solid var(--color-gray-300, #e5e7eb);
   border-top: 3px solid var(--color-primary);;
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -229,7 +229,7 @@ const formatDate = (date) => {
 }
 
 .project-item:hover {
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   padding-left: 2rem;
 }
 
@@ -294,7 +294,7 @@ const formatDate = (date) => {
 
 .fab-button i {
   font-size: 1.25rem;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 /* Responsive */

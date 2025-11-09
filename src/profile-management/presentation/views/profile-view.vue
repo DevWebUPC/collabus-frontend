@@ -399,7 +399,7 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 }
 
 .profile-title {
-  color: white;
+  color: var(--color-white, #FFFFFF);
   font-size: 2.25rem;
   font-weight: 700;
   margin: 0 0 0.5rem 0;
@@ -598,7 +598,7 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 
 /* Profile Content */
 .profile-content {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -618,8 +618,8 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 
 /* Left Column */
 .left-column {
-  background: #f8fafc;
-  border-right: 1px solid #e5e7eb;
+  background: var(--color-gray-300, #f8fafc);
+  border-right: 1px solid var(--color-gray-300, #e5e7eb);
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -628,7 +628,7 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 /* Right Column */
 .right-column {
   padding: 2rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
 }
 
 .content-grid {
@@ -639,8 +639,8 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 
 /* Tabs Section */
 .tabs-section {
-  background: white;
-  border-top: 1px solid #e5e7eb;
+  background: var(--color-white, #FFFFFF);
+  border-top: 1px solid var(--color-gray-300, #e5e7eb);
   padding: 2rem;
 }
 
@@ -658,7 +658,7 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 
   .left-column {
     border-right: none;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--color-gray-300, #e5e7eb);
   }
 }
 

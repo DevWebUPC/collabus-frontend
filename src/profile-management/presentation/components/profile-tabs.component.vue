@@ -321,7 +321,7 @@ onMounted(async () => {
 }
 .add-comment-btn {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: none;
   border-radius: 6px;
   padding: 0.5rem 1rem;
@@ -337,7 +337,7 @@ onMounted(async () => {
 <style scoped>
 .tabs-container {
   display: flex;
-  background-color: #f8f9fa;
+  background-color: var(--color-gray-50, #f8f9fa);
   border-radius: 12px;
   padding: 4px;
   width: fit-content;
@@ -400,7 +400,7 @@ onMounted(async () => {
 
 <style scoped>
 .projects-list {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -419,7 +419,7 @@ onMounted(async () => {
   border-bottom: none;
 }
 .project-item:hover {
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   padding-left: 2rem;
 }
 .project-info {

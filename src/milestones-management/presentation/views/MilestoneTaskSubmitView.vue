@@ -436,13 +436,13 @@ onMounted(async () => {
 <style scoped>
 .milestone-task-submit-view {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
   padding: 0;
 }
 
 /* Header */
 .page-header {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-bottom: 1px solid #e2e8f0;
   padding: 1.5rem 2rem;
 }
@@ -501,7 +501,7 @@ onMounted(async () => {
 
 /* Tarjeta de información de la tarea */
 .task-info-card {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -548,7 +548,7 @@ onMounted(async () => {
 .checklist-section,
 .task-attachments-section,
 .submission-form {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -568,7 +568,7 @@ onMounted(async () => {
   gap: 0.75rem;
   padding: 0.75rem;
   border-radius: 6px;
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
 }
 
 .checklist-text {
@@ -595,7 +595,7 @@ onMounted(async () => {
   gap: 0.5rem;
   padding: 0.75rem;
   border-radius: 6px;
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
 }
 
 .attachment-name {
@@ -663,8 +663,8 @@ onMounted(async () => {
   gap: 0.75rem;
   padding: 0.75rem;
   border-radius: 6px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
+  background: var(--color-gray-300, #f8fafc);
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .file-name,
@@ -690,7 +690,7 @@ onMounted(async () => {
   justify-content: flex-end;
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 /* Estados vacíos y loading */
@@ -700,7 +700,7 @@ onMounted(async () => {
   justify-content: center;
   align-items: center;
   padding: 4rem 2rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   margin: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);

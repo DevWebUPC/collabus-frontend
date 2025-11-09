@@ -69,14 +69,14 @@ const onCvSelect = async (event) => {
     ];
 
     if (!allowedTypes.includes(file.type)) {
-      alert('Por favor, selecciona un archivo PDF o DOC');
+      alert(t('onboarding.skills.cvInvalidType'));
       event.target.value = '';
       return;
     }
 
     // Validar tamaño (5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert('El archivo debe ser menor a 5MB');
+      alert(t('onboarding.skills.cvTooLarge'));
       event.target.value = '';
       return;
     }
@@ -97,7 +97,7 @@ const onCvSelect = async (event) => {
       updateModelValue();
     } catch (error) {
       console.error('Error converting file to Base64:', error);
-      alert('Error al procesar el archivo');
+      alert(t('onboarding.skills.fileError'));
       event.target.value = '';
     }
   }
@@ -147,9 +147,9 @@ watch(() => props.modelValue, (newValue) => {
   <pv-card class="step-card">
     <template #title>
       <div class="step-header">
-        <h1 class="main-title">Define tus Habilidades y Experiencias</h1>
+        <h1 class="main-title">{{ t('onboarding.skills.title') }}</h1>
         <p class="subtitle">
-          Agrega tus principales competencias o sube tu CV para que otros usuarios te conozcan mejor
+          {{ t('onboarding.description.subtitle') }}
         </p>
       </div>
     </template>
@@ -158,18 +158,18 @@ watch(() => props.modelValue, (newValue) => {
       <div class="step-content">
         <!-- Sección de Habilidades -->
         <div class="skills-section">
-          <h3 class="section-title">Habilidades</h3>
+          <h3 class="section-title">{{ t('onboarding.skills.skillsSection') }}</h3>
           <div class="skills-input-group">
             <pv-input-text
                 v-model="newSkill"
-                placeholder="Escribe una Habilidad"
+                :placeholder="t('onboarding.skills.addSkillPlaceholder')"
                 class="skill-input"
                 @keypress.enter="addSkill"
             />
             <pv-button
-                @click="addSkill"
-                class="add-skill-btn"
-                label="+"
+          @click="addSkill"
+            class="add-skill-btn"
+            :label="t('onboarding.skills.addSkill')"
                 severity="secondary"
             />
           </div>
@@ -189,31 +189,31 @@ watch(() => props.modelValue, (newValue) => {
 
         <!-- Sección de Experiencia -->
         <div class="experience-section">
-          <h3 class="section-title">Añadir Experiencia</h3>
+          <h3 class="section-title">{{ t('onboarding.skills.experiencesSection') }}</h3>
 
           <div class="experience-form">
             <div class="form-row">
               <div class="form-group">
-                <label>Cargo/Puesto</label>
+        <label>{{ t('onboarding.skills.positionPlaceholder') }}</label>
                 <pv-input-text
                     v-model="newExperience.position"
-                    placeholder="Cargo/Puesto"
+          :placeholder="t('onboarding.skills.positionPlaceholder')"
                     class="w-full"
                 />
               </div>
               <div class="form-group">
-                <label>Empresa/Institución</label>
+        <label>{{ t('onboarding.skills.companyPlaceholder') }}</label>
                 <pv-input-text
                     v-model="newExperience.company"
-                    placeholder="Empresa/Institución"
+          :placeholder="t('onboarding.skills.companyPlaceholder')"
                     class="w-full"
                 />
               </div>
               <div class="form-group">
-                <label>Tiempo</label>
+        <label>{{ t('onboarding.skills.startDatePlaceholder') }}</label>
                 <pv-input-text
                     v-model="newExperience.StartDate"
-                    placeholder="Ej: 2 años"
+          :placeholder="t('onboarding.skills.startDatePlaceholder')"
                     class="w-full"
                 />
               </div>
@@ -222,7 +222,7 @@ watch(() => props.modelValue, (newValue) => {
             <pv-button
                 @click="addExperience"
                 class="add-experience-btn"
-                label="Añadir experiencia"
+        :label="t('onboarding.skills.addExperience')"
                 severity="secondary"
                 outlined
             />
@@ -246,12 +246,12 @@ watch(() => props.modelValue, (newValue) => {
 
         <!-- Sección de CV - CORREGIDO -->
         <div class="cv-section">
-          <h3 class="section-title">Subir CV</h3>
+          <h3 class="section-title">{{ t('onboarding.skills.cvSection') }}</h3>
           <div class="cv-upload">
             <pv-button
                 @click="openFileSelector"
                 class="cv-upload-btn"
-                :label="cvFile ? 'Cambiar archivo' : 'Seleccionar archivo'"
+                :label="cvFile ? t('onboarding.profile.change') : t('onboarding.skills.uploadCv')"
                 severity="secondary"
                 outlined
             />
@@ -267,7 +267,7 @@ watch(() => props.modelValue, (newValue) => {
             />
           </div>
           <p class="file-hint">
-            Formatos aceptados: PDF, DOC, DOCX (máx. 5MB)
+            {{ t('onboarding.skills.cvAcceptTypes') }} ({{ t('onboarding.skills.cvTooLarge') }})
           </p>
         </div>
       </div>
@@ -275,23 +275,23 @@ watch(() => props.modelValue, (newValue) => {
 
     <template #footer>
       <div class="card-footer">
-        <pv-button
-            @click="$emit('prev')"
-            class="back-button"
-            label="Atrás"
-            outlined
-        />
+    <pv-button
+      @click="$emit('prev')"
+      class="back-button"
+      :label="t('onboarding.skills.back')"
+      outlined
+    />
         <div class="right-buttons">
           <pv-button
               @click="$emit('next')"
               class="skip-button"
-              label="Omitir →"
+        :label="t('onboarding.description.skip') + ' →'"
               text
           />
           <pv-button
               @click="$emit('next')"
               class="continue-button"
-              label="Guardar"
+        :label="t('onboarding.profile.save')"
           />
         </div>
       </div>
@@ -337,9 +337,9 @@ watch(() => props.modelValue, (newValue) => {
 .section-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   margin-bottom: 1rem;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid var(--color-gray-300, #e5e7eb);
   padding-bottom: 0.5rem;
 }
 
@@ -369,7 +369,7 @@ watch(() => props.modelValue, (newValue) => {
 }
 
 .skill-tag {
-  background: #e5e7eb;
+  background: var(--color-gray-300, var(--color-gray-300, #e5e7eb));
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -417,7 +417,7 @@ watch(() => props.modelValue, (newValue) => {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
   border-radius: 6px;
   border-left: 3px solid #6C63FF;
 }

@@ -390,7 +390,7 @@ onMounted(async () => {
   padding: 0.75rem 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   font-weight: 600;
   font-size: 1rem;
   backdrop-filter: blur(10px);
@@ -403,7 +403,7 @@ onMounted(async () => {
 }
 
 .profile-title {
-  color: white;
+  color: var(--color-white, #FFFFFF);
   font-size: 1.75rem;
   font-weight: 600;
   margin: 0;
@@ -461,7 +461,7 @@ onMounted(async () => {
 }
 
 .error-content h3 {
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   margin-bottom: 0.5rem;
 }
 
@@ -489,7 +489,7 @@ onMounted(async () => {
 
 /* Profile Content */
 .profile-content {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;

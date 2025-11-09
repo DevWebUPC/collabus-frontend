@@ -424,7 +424,7 @@ export default {
 
 <style scoped>
 .task-create-form {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -473,7 +473,7 @@ export default {
 
 .separator {
   height: 1px;
-  background: #e5e7eb;
+  background: var(--color-gray-300, #e5e7eb);
   margin: 0.5rem 0;
 }
 
@@ -483,7 +483,7 @@ export default {
   align-items: center;
   gap: 0.5rem;
   padding: 1rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   border-radius: 6px;
   color: var(--color-gray-600);
 }
@@ -544,9 +544,9 @@ export default {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   border-radius: 6px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .attachment-item i {
@@ -559,7 +559,7 @@ export default {
   gap: 1rem;
   margin-top: 2rem;
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 /* Responsive */

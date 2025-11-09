@@ -85,7 +85,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   font-weight: bold;
   font-size: 1rem;
 }
@@ -150,7 +150,7 @@ export default {
 
 .profile-button {
   background: #4299e1;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;

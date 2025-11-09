@@ -269,7 +269,7 @@ watch(
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   min-height: 100vh;
 }
 
@@ -380,7 +380,7 @@ watch(
 /* Tab Navigation */
 .tab-navigation {
   display: flex;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 4px;
   margin-bottom: 2rem;

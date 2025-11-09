@@ -34,9 +34,9 @@ watch(() => props.modelValue.bio, (newBio) => {
   <pv-card class="step-card">
     <template #title>
       <div class="step-header">
-        <h1 class="main-title">Cuéntanos sobre ti</h1>
+        <h1 class="main-title">{{ t('onboarding.description.title') }}</h1>
         <p class="subtitle">
-          Comparte una breve descripción que muestre tu experiencia y lo que te apasiona
+          {{ t('onboarding.description.subtitle') }}
         </p>
       </div>
     </template>
@@ -145,7 +145,7 @@ watch(() => props.modelValue.bio, (newBio) => {
   display: block;
   margin-bottom: 0.75rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 1rem;
   text-align: center;
 }
@@ -164,7 +164,7 @@ watch(() => props.modelValue.bio, (newBio) => {
   resize: vertical;
   min-height: 200px;
   flex: 1;
-  border: 2px solid #e5e7eb !important;
+  border: 2px solid var(--color-gray-300, #e5e7eb) !important;
   border-radius: 8px !important;
   padding: 1rem !important;
   font-size: 0.95rem !important;

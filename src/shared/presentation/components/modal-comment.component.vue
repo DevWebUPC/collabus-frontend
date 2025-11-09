@@ -155,7 +155,7 @@ const resetForm = () => {
 }
 
 .modal-container {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   width: 100%;
   max-width: 500px;
@@ -181,13 +181,13 @@ const resetForm = () => {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 1.5rem 0;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-gray-300, #e5e7eb);
   padding-bottom: 1rem;
 }
 
 .modal-header h2 {
   margin: 0;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 1.5rem;
   font-weight: 600;
 }
@@ -204,7 +204,7 @@ const resetForm = () => {
 
 .close-button:hover {
   background: #f3f4f6;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 .modal-content {
@@ -217,7 +217,7 @@ const resetForm = () => {
 
 .rating-section h3 {
   margin: 0 0 1rem 0;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -256,7 +256,7 @@ const resetForm = () => {
 
 .comment-section h3 {
   margin: 0 0 1rem 0;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -264,7 +264,7 @@ const resetForm = () => {
 .comment-textarea {
   width: 100%;
   padding: 1rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--color-gray-300, #e5e7eb);
   border-radius: 8px;
   resize: vertical;
   font-family: inherit;
@@ -292,7 +292,7 @@ const resetForm = () => {
   display: flex;
   gap: 1rem;
   padding: 1rem 1.5rem 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .cancel-button, .submit-button {
@@ -308,16 +308,16 @@ const resetForm = () => {
 
 .cancel-button {
   background: #f3f4f6;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 .cancel-button:hover {
-  background: #e5e7eb;
+  background: var(--color-gray-300, #e5e7eb);
 }
 
 .submit-button {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .submit-button:hover:not(:disabled) {

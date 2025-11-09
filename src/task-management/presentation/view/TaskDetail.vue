@@ -419,7 +419,7 @@ onMounted(async () => {
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   min-height: 80vh;
@@ -459,7 +459,7 @@ onMounted(async () => {
   align-items: flex-start;
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .task-title-section {
@@ -519,7 +519,7 @@ onMounted(async () => {
 /* Prioridades */
 .priority-low {
   background: #f3f4f6;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 .priority-medium {
@@ -573,10 +573,10 @@ onMounted(async () => {
 }
 
 .detail-section {
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   padding: 1.5rem;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .section-title {
@@ -607,9 +607,9 @@ onMounted(async () => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 6px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   transition: all 0.2s ease;
 }
 
@@ -629,15 +629,15 @@ onMounted(async () => {
 
 .checklist-text {
   flex: 1;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-weight: 500;
 }
 
 .comment-content {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   padding: 1.5rem;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .comment-header {
@@ -658,7 +658,7 @@ onMounted(async () => {
   height: 40px;
   border-radius: 50%;
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -691,7 +691,7 @@ onMounted(async () => {
   color: #4b5563;
   margin: 0;
   font-size: 1rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   padding: 1rem;
   border-radius: 6px;
   border-left: 4px solid var(--color-primary);
@@ -708,9 +708,9 @@ onMounted(async () => {
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -726,7 +726,7 @@ onMounted(async () => {
   height: 48px;
   border-radius: 8px;
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -755,10 +755,10 @@ onMounted(async () => {
 }
 
 .detail-card {
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   padding: 1.5rem;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .card-title {
@@ -782,7 +782,7 @@ onMounted(async () => {
   height: 48px;
   border-radius: 50%;
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -840,7 +840,7 @@ onMounted(async () => {
 
 .date-value {
   font-weight: 500;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 .tools-list {
@@ -854,14 +854,14 @@ onMounted(async () => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 6px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .tool-name {
   flex: 1;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-weight: 500;
 }
 

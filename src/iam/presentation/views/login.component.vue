@@ -158,7 +158,7 @@ const handlePasswordRecovery = (email) => {
 
 <style scoped>
 .login-header {
-  background-color: white;
+  background-color: var(--color-white, #FFFFFF);
   border-bottom: 1px solid #e2e8f0;
   padding: 1rem 0;
   position: sticky;
@@ -211,12 +211,12 @@ const handlePasswordRecovery = (email) => {
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 80px);
-  background-color: #f5f5f5;
+  background-color: var(--color-gray-100, #f5f5f5);
   padding: 20px;
 }
 
 .login-card {
-  background-color: white;
+  background-color: var(--color-white, #FFFFFF);
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 40px;
@@ -274,7 +274,7 @@ const handlePasswordRecovery = (email) => {
 .loading-spinner {
   width: 24px;
   height: 24px;
-  border: 3px solid #e5e7eb;
+  border: 3px solid var(--color-gray-300, #e5e7eb);
   border-top: 3px solid #6C63FF;
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -345,7 +345,7 @@ const handlePasswordRecovery = (email) => {
 .login-button {
   padding: 12px;
   background-color: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: none;
   border-radius: 4px;
   font-size: 16px;

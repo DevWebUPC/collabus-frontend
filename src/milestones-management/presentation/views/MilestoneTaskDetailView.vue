@@ -213,7 +213,7 @@ onMounted(async () => {
             </h2>
             <div class="checklist">
               <div
-                  v-for="(item, index) in task.checklist"
+                  v-for="(item) in task.checklist"
                   :key="item.id"
                   class="checklist-item"
                   :class="{ 'completed': item.completed }"
@@ -380,7 +380,7 @@ onMounted(async () => {
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   min-height: 80vh;
@@ -425,7 +425,7 @@ onMounted(async () => {
 .task-header {
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .task-title {
@@ -504,10 +504,10 @@ onMounted(async () => {
 
 /* Detail Sections */
 .detail-section, .info-section {
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   padding: 1.5rem;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .section-title {
@@ -540,9 +540,9 @@ onMounted(async () => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 6px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   transition: all 0.2s ease;
 }
 
@@ -560,7 +560,7 @@ onMounted(async () => {
 }
 
 .checklist-text {
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   flex: 1;
 }
 
@@ -571,10 +571,10 @@ onMounted(async () => {
 
 /* Comment */
 .comment-bubble {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   padding: 1.5rem;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   border-left: 4px solid var(--color-primary);
 }
 
@@ -597,9 +597,9 @@ onMounted(async () => {
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -615,7 +615,7 @@ onMounted(async () => {
   height: 48px;
   border-radius: 8px;
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -655,7 +655,7 @@ onMounted(async () => {
   height: 64px;
   border-radius: 50%;
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -681,10 +681,10 @@ onMounted(async () => {
 
 /* Milestone Info */
 .milestone-info {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   padding: 1rem;
   border-radius: 6px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .milestone-title {
@@ -739,7 +739,7 @@ onMounted(async () => {
 .submission-notes h4, .submission-links h4, .submission-attachments h4 {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   margin: 0 0 0.5rem 0;
 }
 
@@ -748,10 +748,10 @@ onMounted(async () => {
   font-size: 0.875rem;
   line-height: 1.5;
   margin: 0;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   padding: 0.75rem;
   border-radius: 6px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .links-list {
@@ -787,9 +787,9 @@ onMounted(async () => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 4px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.875rem;
@@ -886,7 +886,7 @@ onMounted(async () => {
 /* Button Styles */
 :deep(.go-back-btn.p-button) {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: 1px solid var(--color-primary);
 }
 </style>

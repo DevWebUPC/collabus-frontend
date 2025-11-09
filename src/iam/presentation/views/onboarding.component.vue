@@ -139,7 +139,7 @@ const completeOnboarding = async () => {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: white;
+  background: var(--color-white, #FFFFFF);
 }
 
 .right-container {
@@ -149,21 +149,21 @@ const completeOnboarding = async () => {
 }
 
 .onboarding-header {
-  background-color: white;
+  background-color: var(--color-white, #FFFFFF);
   border-bottom: 1px solid #e2e8f0;
-  padding: 1rem 0;
+  padding: 1rem;
   position: sticky;
   top: 0;
   z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
 }
 
 .header-content {
-  max-width: 1200px;
-  margin: 0 auto;
+  margin: 0;
   padding: 0 2rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .logo {

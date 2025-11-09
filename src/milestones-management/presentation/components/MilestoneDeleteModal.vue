@@ -176,14 +176,14 @@ const handleClose = () => {
 
 .milestone-details {
   padding: 1rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   border-radius: 6px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .detail-item {
   margin-bottom: 0.5rem;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 0.9rem;
 }
 
@@ -203,7 +203,7 @@ const handleClose = () => {
 
 .confirmation-section label {
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 0.9rem;
 }
 
@@ -224,7 +224,7 @@ const handleClose = () => {
   gap: 0.75rem;
   justify-content: flex-end;
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 :deep(.p-button) {

@@ -178,12 +178,12 @@ watch(() => props.modelValue, (newValue) => {
 
 .role-card {
   padding: 1rem 0.75rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--color-gray-300, #e5e7eb);
   border-radius: 8px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   font-size: 0.9rem;
   font-weight: 500;
   min-height: 60px;
@@ -203,7 +203,7 @@ watch(() => props.modelValue, (newValue) => {
 .role-card.selected {
   border-color: #6C63FF;
   background-color: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2);
 }
@@ -222,11 +222,11 @@ watch(() => props.modelValue, (newValue) => {
   left: 0;
   right: 0;
   height: 1px;
-  background: #e5e7eb;
+  background: var(--color-gray-300, #e5e7eb);
 }
 
 .separator-text {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   padding: 0 1rem;
   color: #6b7280;
   font-size: 0.9rem;
@@ -243,7 +243,7 @@ watch(() => props.modelValue, (newValue) => {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 0.95rem;
 }
 

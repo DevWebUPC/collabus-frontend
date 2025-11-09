@@ -331,7 +331,7 @@ onMounted(async () => {
 .attachments-section,
 .checklist-section,
 .actions-section {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -383,7 +383,7 @@ onMounted(async () => {
 
 /* Notes */
 .notes-content {
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
   padding: 1rem;
   border-radius: 8px;
   border-left: 4px solid var(--color-primary);
@@ -403,7 +403,7 @@ onMounted(async () => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
   border-radius: 8px;
   border: 1px solid #e2e8f0;
 }
@@ -430,7 +430,7 @@ onMounted(async () => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
   border-radius: 8px;
   border: 1px solid #e2e8f0;
 }
@@ -477,13 +477,13 @@ onMounted(async () => {
 
 :deep(.approve-btn.p-button) {
   background: var(--color-green-500);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: 1px solid var(--color-green-500);
 }
 
 :deep(.revisions-btn.p-button) {
   background: var(--color-orange-500);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: 1px solid var(--color-orange-500);
 }
 
@@ -495,7 +495,7 @@ onMounted(async () => {
   justify-content: center;
   padding: 4rem 2rem;
   text-align: center;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

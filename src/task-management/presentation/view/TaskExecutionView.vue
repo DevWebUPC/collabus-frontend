@@ -527,7 +527,7 @@ onMounted(() => {
   padding: 1rem;
   max-width: 900px;
   margin: 0 auto;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   min-height: 100vh;
 }
 
@@ -601,7 +601,7 @@ onMounted(() => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   border-radius: 6px;
   border-left: 4px solid #3b82f6;
 }
@@ -657,7 +657,7 @@ onMounted(() => {
 }
 
 .checklist-item:hover {
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
 }
 
 .checklist-text {
@@ -693,7 +693,7 @@ onMounted(() => {
 .links-section {
   margin-top: 1rem;
   padding: 1rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   border-radius: 6px;
 }
 
@@ -721,7 +721,7 @@ onMounted(() => {
 .files-section {
   margin-top: 1rem;
   padding: 1rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   border-radius: 6px;
 }
 
@@ -740,7 +740,7 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border: 1px solid #e9ecef;
   border-radius: 6px;
   margin-bottom: 0.5rem;

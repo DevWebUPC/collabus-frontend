@@ -185,7 +185,7 @@ onMounted(() => {
   padding: 0.75rem;
   border-radius: 8px;
   border: 1px solid var(--color-gray-200);
-  background: white;
+  background: var(--color-white, #FFFFFF);
   transition: all 0.2s ease;
 }
 
@@ -250,12 +250,12 @@ onMounted(() => {
 
 .badge.urgent {
   background: var(--color-error);
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .badge.normal {
   background: var(--color-success);
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 /* NUEVO: Estilos para el botón Ver Todos */

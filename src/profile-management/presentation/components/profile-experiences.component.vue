@@ -84,7 +84,7 @@ const toggleExperiences = () => {
 
 <style scoped>
 .experience-table {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -94,13 +94,13 @@ const toggleExperiences = () => {
 }
 
 .header-cell {
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid var(--color-gray-300, #e5e7eb);
   background-color: #f9fafb;
 }
 
 .data-cell {
   border-top: none;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-gray-300, #e5e7eb);
   min-height: 60px;
   display: flex;
   align-items: center;

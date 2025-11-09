@@ -108,7 +108,7 @@ const handlePasswordReset = () => {
 .recovery-container {
   display: flex;
   min-height: 100vh;
-  background: white;
+  background: var(--color-white, #FFFFFF);
 }
 
 /* Panel izquierdo */
@@ -189,7 +189,7 @@ const handlePasswordReset = () => {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 0.9rem;
 }
 
@@ -213,7 +213,7 @@ const handlePasswordReset = () => {
 }
 
 .login-header {
-  background-color: white;
+  background-color: var(--color-white, #FFFFFF);
   border-bottom: 1px solid #e2e8f0;
   padding: 1rem 0;
   position: sticky;

@@ -173,7 +173,7 @@ export default {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: none;
   border-radius: 6px;
   cursor: pointer;

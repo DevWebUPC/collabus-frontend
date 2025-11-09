@@ -606,7 +606,7 @@ const cancelar = () => {
 }
 
 .tarea-item {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1.5rem;
@@ -619,19 +619,19 @@ const cancelar = () => {
   align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .tarea-header h4 {
   margin: 0;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 h5 {
@@ -668,7 +668,7 @@ h6 {
 
 .divider {
   height: 1px;
-  background: #e5e7eb;
+  background: var(--color-gray-300, #e5e7eb);
   margin: 1.5rem 0;
 }
 
@@ -690,8 +690,8 @@ h6 {
   display: flex;
   align-items: center;
   padding: 0.5rem;
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--color-white, #FFFFFF);
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   border-radius: 4px;
   margin-bottom: 0.25rem;
 }
@@ -700,8 +700,8 @@ h6 {
   display: flex;
   align-items: center;
   padding: 0.5rem;
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--color-white, #FFFFFF);
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   border-radius: 4px;
   margin-bottom: 0.25rem;
 }
@@ -712,7 +712,7 @@ h6 {
   gap: 0.5rem;
   margin-top: 2rem;
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 :deep(.p-inputtext) {

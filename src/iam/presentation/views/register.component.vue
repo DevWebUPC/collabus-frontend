@@ -152,7 +152,7 @@ const handleRegister = async () => {
 .register-container {
   display: flex;
   min-height: 100vh;
-  background: white;
+  background: var(--color-white, #FFFFFF);
 }
 
 /* Panel izquierdo */
@@ -228,7 +228,7 @@ const handleRegister = async () => {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 0.9rem;
 }
 
@@ -258,7 +258,7 @@ const handleRegister = async () => {
 .footer {
   text-align: center;
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .copyright {
@@ -268,7 +268,7 @@ const handleRegister = async () => {
 }
 
 .login-header {
-  background-color: white;
+  background-color: var(--color-white, #FFFFFF);
   border-bottom: 1px solid #e2e8f0;
   padding: 1rem 0;
   position: sticky;

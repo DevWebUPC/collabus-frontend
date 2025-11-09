@@ -96,7 +96,7 @@ watch(recoveryEmail, () => {
 }
 
 .instruction-text {
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   margin: 0;
   line-height: 1.5;
   font-size: 1rem;
@@ -131,7 +131,7 @@ watch(recoveryEmail, () => {
 .send-button {
   background-color: #FF7A30;
   border: none;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   padding: 0.75rem 2rem;
   font-size: 1rem;
   font-weight: 500;
@@ -155,7 +155,7 @@ watch(recoveryEmail, () => {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-gray-300, #e5e7eb);
   position: relative;
 }
 

@@ -204,7 +204,7 @@ const getStatusClass = (status) => {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   min-height: 100vh;
 }
 
@@ -212,7 +212,7 @@ const getStatusClass = (status) => {
   display: flex;
   align-items: center;
   margin-bottom: 2rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -236,7 +236,7 @@ const getStatusClass = (status) => {
   align-items: center;
   justify-content: center;
   padding: 3rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   gap: 1rem;
@@ -251,7 +251,7 @@ const getStatusClass = (status) => {
 }
 
 .detail-section {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -407,7 +407,7 @@ const getStatusClass = (status) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -431,7 +431,7 @@ const getStatusClass = (status) => {
 
 :deep(.accept-btn.p-button) {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: 1px solid var(--color-primary);
 }
 
@@ -444,7 +444,7 @@ const getStatusClass = (status) => {
 .error-state {
   text-align: center;
   padding: 3rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

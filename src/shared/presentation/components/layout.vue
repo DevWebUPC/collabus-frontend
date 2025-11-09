@@ -197,7 +197,7 @@ onMounted(async () => {
 
 .nav-link {
   text-decoration: none;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-weight: 500;
   font-size: 1rem;
   padding: 0.5rem 1rem;
@@ -214,7 +214,7 @@ onMounted(async () => {
 }
 
 .user-avatar {
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 /* Grid principal */
@@ -253,7 +253,7 @@ onMounted(async () => {
 .drawer-nav-link {
   display: block;
   text-decoration: none;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-weight: 500;
   font-size: 1rem;
   padding: 1rem;
@@ -272,7 +272,7 @@ onMounted(async () => {
 .drawer-plan {
   margin-top: 1rem;
   padding: 1rem 0;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 /* Responsive */

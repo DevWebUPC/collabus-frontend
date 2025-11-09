@@ -47,7 +47,7 @@ function openPlansModal() {
 
 <style scoped>
 .pa-card{
-  background:#fff;
+  background:var(--color-white, #ffffff);
   border-radius:20px;
   padding:20px 18px 28px;
   box-shadow:0 10px 30px rgba(0,0,0,.08);
@@ -68,7 +68,7 @@ function openPlansModal() {
   border-radius:999px;
   border:none;
   cursor:pointer;
-  color:#fff;
+  color:var(--color-white, #ffffff);
   display:flex;
   flex-direction:column;
   align-items:center;

@@ -32,7 +32,7 @@ export default {
 
 <style scoped>
 .personal-stats-card {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);

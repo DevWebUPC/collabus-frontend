@@ -60,7 +60,7 @@ export default {
   background: linear-gradient(135deg, #6C63FF 0%, #8B5CF6 100%);
   border-radius: 16px;
   padding: 2rem;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   box-shadow: 0 8px 32px rgba(108, 99, 255, 0.3);
   position: relative;
   overflow: hidden;

@@ -240,7 +240,7 @@ watch(() => props.modelValue, (newValue) => {
 }
 
 .change-text {
-  color: white;
+  color: var(--color-white, #FFFFFF);
   font-size: 0.7rem;
   font-weight: 600;
 }
@@ -268,7 +268,7 @@ watch(() => props.modelValue, (newValue) => {
   display: block;
   margin-bottom: 0.375rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 0.9rem;
 }
 

@@ -2,8 +2,8 @@
 <template>
   <div class="ranking-list-container">
     <div class="ranking-header">
-      <h1 style="color: white;">{{ $t('profile.ranking.title') }}</h1>
-      <p class="ranking-subtitle" style="color: white;">{{ $t('profile.ranking.subtitle') }}</p>
+      <h1 style="color: var(--color-white, #FFFFFF);">{{ $t('profile.ranking.title') }}</h1>
+      <p class="ranking-subtitle" style="color: var(--color-white, #FFFFFF);">{{ $t('profile.ranking.subtitle') }}</p>
     </div>
 
     <!-- Estados de carga y error -->
@@ -100,7 +100,7 @@ export default {
 <style scoped>
 .ranking-list-container {
   width: 100%;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -110,7 +110,7 @@ export default {
   padding: 2.5rem 2rem;
   text-align: center;
   background: linear-gradient(135deg, #6C63FF 0%, #8B5CF6 100%);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   position: relative;
   overflow: hidden;
 }
@@ -132,7 +132,7 @@ export default {
   font-weight: 800;
   position: relative;
   z-index: 2;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .ranking-subtitle {
@@ -142,7 +142,7 @@ export default {
   font-weight: 500;
   position: relative;
   z-index: 2;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .ranking-content {
@@ -190,7 +190,7 @@ export default {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -212,12 +212,12 @@ export default {
 
   .ranking-header h1 {
     font-size: 2rem;
-    color: white;
+    color: var(--color-white, #FFFFFF);
   }
 
   .ranking-subtitle {
     font-size: 1rem;
-    color: white;
+    color: var(--color-white, #FFFFFF);
   }
 
   .loading-state,

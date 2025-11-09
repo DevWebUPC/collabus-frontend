@@ -160,6 +160,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: var(--color-black);
+    --color-gray-50: #121212;
+    --color-gray-900: #E0E0E0;
+  }
+}
+
 /* CSS Reset & Base Styles */
 *,
 *::before,

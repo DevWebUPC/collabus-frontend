@@ -418,13 +418,13 @@ const startTask = (task) => {
 <style scoped>
 .milestone-tasks-view {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
   padding: 0;
 }
 
 /* Header */
 .page-header {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-bottom: 1px solid #e2e8f0;
   padding: 1.5rem 2rem;
 }
@@ -473,7 +473,7 @@ const startTask = (task) => {
 
 /* Estadísticas */
 .stats-section {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   padding: 2rem;
   border-bottom: 1px solid #e2e8f0;
 }
@@ -491,7 +491,7 @@ const startTask = (task) => {
   align-items: center;
   gap: 1rem;
   padding: 1.5rem;
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
   border-radius: 8px;
   border: 1px solid #e2e8f0;
 }
@@ -569,7 +569,7 @@ const startTask = (task) => {
 }
 
 .task-card {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -668,7 +668,7 @@ const startTask = (task) => {
   gap: 0.75rem;
   padding: 0.5rem;
   border-radius: 6px;
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
 }
 
 .checklist-item.completed {
@@ -739,7 +739,7 @@ const startTask = (task) => {
   justify-content: center;
   align-items: center;
   padding: 4rem 2rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   margin: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
