@@ -186,13 +186,6 @@ watch(
         </pv-button>
         <pv-button
             v-if="store.isOwned"
-            :class="['tab-button', { active: activeTab === 'contributions' }]"
-            @click="activeTab = 'contributions'"
-        >
-          {{ $t('projects.detail.tabs.contributions') }}
-        </pv-button>
-        <pv-button
-            v-if="store.isOwned"
             :class="['tab-button', { active: activeTab === 'applicants' }]"
             @click="activeTab = 'applicants'"
         >
@@ -262,11 +255,7 @@ watch(
             v-else-if="activeTab === 'milestones' && !store.isOwned"
         />
 
-        <EmptyTabContent
-            v-else-if="activeTab === 'contributions'"
-            tab-name="contributions"
-            icon="pi-dollar"
-        />
+
 
         <ApplicantsCard v-else-if="activeTab === 'applicants'" />
 

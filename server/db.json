@@ -1692,68 +1692,6 @@
       "reviewedAt": "2025-10-20T05:46:35.425Z"
     }
   ],
-  "categories": [
-    {
-      "id": "1",
-      "name": "Web Development",
-      "description": "Full-stack web application development",
-      "color": "#3b82f6",
-      "icon": "pi pi-globe",
-      "isActive": true,
-      "createdAt": "2025-10-01T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "2",
-      "name": "Mobile Development",
-      "description": "iOS and Android mobile application development",
-      "color": "#10b981",
-      "icon": "pi pi-mobile",
-      "isActive": true,
-      "createdAt": "2025-10-01T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "3",
-      "name": "Data Science",
-      "description": "Data analysis, machine learning, and business intelligence",
-      "color": "#f59e0b",
-      "icon": "pi pi-chart-bar",
-      "isActive": true,
-      "createdAt": "2025-10-01T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "4",
-      "name": "AI/ML",
-      "description": "Artificial intelligence and machine learning solutions",
-      "color": "#8b5cf6",
-      "icon": "pi pi-cog",
-      "isActive": true,
-      "createdAt": "2025-10-01T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "5",
-      "name": "Design",
-      "description": "UI/UX design and graphic design services",
-      "color": "#ef4444",
-      "icon": "pi pi-palette",
-      "isActive": true,
-      "createdAt": "2025-10-01T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    },
-    {
-      "id": "6",
-      "name": "Marketing",
-      "description": "Digital marketing and brand promotion",
-      "color": "#06b6d4",
-      "icon": "pi pi-megaphone",
-      "isActive": true,
-      "createdAt": "2025-10-01T00:00:00.000Z",
-      "updatedAt": "2025-10-01T00:00:00.000Z"
-    }
-  ],
   "projectAreas": [
     {
       "id": "1",

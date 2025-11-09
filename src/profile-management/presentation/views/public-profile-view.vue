@@ -9,6 +9,8 @@ import ProfileSkills from '../components/profile-skills.component.vue';
 import ProfileExperiences from '../components/profile-experiences.component.vue';
 import ProfileTabs from '../components/profile-tabs.component.vue';
 import CommentModal from '../../../shared/presentation/components/modal-comment.component.vue'; // 👈 NUEVA IMPORTACIÓN
+import { useUserStore } from '../../../iam/application/user-store.js';
+const userStore = useUserStore();
 
 const route = useRoute();
 const router = useRouter();
@@ -72,7 +74,7 @@ const transformProfileData = (storeProfile) => {
     experiences: (storeProfile.experiences || []).map(exp => ({
       company: exp.company || 'Empresa',
       role: exp.position || 'Rol',
-      duration: exp.duration || 'No especificado'
+      StartDate: exp.StartDate || 'No especificado'
     }))
   };
 };
@@ -83,11 +85,21 @@ const handlePointsClick = async () => {
     isUpdatingPoints.value = true;
 
     try {
-      // Obtener el ID del usuario actual (debes tener esto en tu store de auth)
-      const currentUserId = 'current-user-id'; // 👈 Reemplaza con el ID real del usuario
+      // 🔥 OBTENER EL ID REAL DEL USUARIO AUTENTICADO
+      const currentUserId = userStore.currentUser?.id?.toString(); // Asegurar que sea string
+
+      if (!currentUserId) {
+        console.error('❌ No hay usuario autenticado');
+        alert('Debes iniciar sesión para dar puntos');
+        return;
+      }
+
+      console.log('⭐ Usuario actual:', currentUserId);
+      console.log('📊 Puntos actuales:', publicProfile.value.points);
+      console.log('👥 Quienes dieron puntos:', publicProfile.value.pointsGivenBy);
 
       // Verificar si el usuario ya dio puntos
-      const hasGivenPoint = publicProfile.value.pointsGivenBy?.includes(currentUserId);
+      const hasGivenPoint = publicProfile.value.pointsGivenBy?.includes(currentUserId) || false;
 
       let newPoints;
       let newPointsGivenBy;
@@ -95,7 +107,7 @@ const handlePointsClick = async () => {
       if (hasGivenPoint) {
         // Quitar punto
         newPoints = Math.max(0, (publicProfile.value.points || 0) - 1);
-        newPointsGivenBy = publicProfile.value.pointsGivenBy?.filter(id => id !== currentUserId) || [];
+        newPointsGivenBy = (publicProfile.value.pointsGivenBy || []).filter(id => id !== currentUserId);
         console.log('👎 Punto quitado del perfil:', publicProfile.value.username);
       } else {
         // Agregar punto
@@ -104,18 +116,22 @@ const handlePointsClick = async () => {
         console.log('⭐ Punto agregado al perfil:', publicProfile.value.username);
       }
 
-      // Actualizar localmente
-      publicProfile.value.points = newPoints;
-      publicProfile.value.pointsGivenBy = newPointsGivenBy;
+      console.log('🔄 Nuevos puntos:', newPoints);
+      console.log('🔄 Nueva lista de puntos:', newPointsGivenBy);
 
-      // Actualizar en el backend
+      // Actualizar en el backend - SOLO ENVIAR DATOS DE PUNTOS
       await updateProfilePoints(publicProfile.value.id, {
         points: newPoints,
         pointsGivenBy: newPointsGivenBy
       });
 
+      // 🔥 ACTUALIZAR LOCALMENTE DESPUÉS DEL ÉXITO
+      publicProfile.value.points = newPoints;
+      publicProfile.value.pointsGivenBy = newPointsGivenBy;
+
     } catch (error) {
-      console.error('Error al actualizar puntos:', error);
+      console.error('❌ Error al actualizar puntos:', error);
+      alert('Error al actualizar los puntos. Intenta nuevamente.');
     } finally {
       isUpdatingPoints.value = false;
     }
@@ -326,8 +342,11 @@ onMounted(async () => {
     </div>
 
     <!-- Tabs Section -->
-    <ProfileTabs v-if="publicProfile" :profile-data="profileData" :is-public="true" />
-
+    <ProfileTabs
+        :profile-data="profileData"
+        :is-public="true"
+        :profile-id="publicProfile?.id"
+    />
     <!-- 👇 NUEVO: Modal de comentarios -->
     <CommentModal
         :visible="showCommentModal"

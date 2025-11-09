@@ -21,6 +21,7 @@ export class TaskSubmissionAssembler {
         });
     }
 
+
     static fromEntityToApi(entity) {
         if (!entity) return null;
 
@@ -30,20 +31,22 @@ export class TaskSubmissionAssembler {
             return isNaN(dateObj.getTime()) ? null : dateObj.toISOString();
         };
 
+        // ✅ FORMATO CORRECTO PARA EL BACKEND .NET
         return {
-            id: entity.id,
-            taskId: entity.taskId,
-            collaboratorId: entity.collaboratorId,
-            submittedAt: safeDate(entity.submittedAt),
-            links: entity.links,
-            attachments: entity.attachments,
-            notes: entity.notes,
-            status: entity.status,
-            reviewedAt: safeDate(entity.reviewedAt),
-            reviewerId: entity.reviewerId,
-            reviewNotes: entity.reviewNotes,
-            createdAt: safeDate(entity.createdAt),
-            updatedAt: safeDate(entity.updatedAt)
+            taskId: parseInt(entity.taskId),
+            collaboratorId: parseInt(entity.collaboratorId),
+            collaboratorName: entity.collaboratorName || 'Colaborador', // ✅ REQUERIDO
+            notes: entity.notes || '',
+            links: (entity.links || []).map(link => ({
+                url: typeof link === 'string' ? link : link.url,
+                description: typeof link === 'string' ? '' : (link.description || '')
+            })),
+            attachments: (entity.attachments || []).map(attachment => ({
+                name: attachment.name || 'archivo',
+                type: attachment.type || 'file',
+                url: attachment.url || '',
+                size: attachment.size || 0
+            }))
         };
     }
 

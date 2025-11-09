@@ -74,19 +74,41 @@ export const useApplicationStore = defineStore('application', () => {
     // CORREGIDO: Función para verificar aplicación existente
     const checkExistingApplication = async (applicantId, projectId, roleId) => {
         try {
+            console.log('🔍 Checking existing application for:', { applicantId, projectId, roleId });
+
+            // Primero buscar en el store local (más rápido)
+            const existingInStore = applications.value.find(app =>
+                String(app.applicantId) === String(applicantId) &&
+                String(app.projectId) === String(projectId) &&
+                String(app.roleId) === String(roleId)
+            );
+
+            if (existingInStore) {
+                console.log('⚠️ Found existing application in store:', existingInStore);
+                return { exists: true, application: existingInStore };
+            }
+
+            // Si no está en el store, consultar la API
             const response = await applicationsApi.getAll();
             const existingApp = response.data.find(app =>
-                app.applicantId == applicantId &&
-                app.projectId == projectId &&
-                app.roleId == roleId
+                String(app.applicantId) === String(applicantId) &&
+                String(app.projectId) === String(projectId) &&
+                String(app.roleId) === String(roleId)
             );
-            return { exists: !!existingApp };
+
+            if (existingApp) {
+                console.log('⚠️ Found existing application in API:', existingApp);
+                // Agregar al store para futuras verificaciones
+                applications.value.push(ApplicationAssembler.fromApiToEntity(existingApp));
+            }
+
+            return { exists: !!existingApp, application: existingApp };
         } catch (error) {
             console.error('Error checking existing application:', error);
+            // En caso de error, asumir que no existe para no bloquear al usuario
             return { exists: false };
         }
     };
-
     // Application CRUD Operations - CORREGIDO
 
     const fetchUserApplications = async (userId = null) => {
@@ -180,58 +202,52 @@ export const useApplicationStore = defineStore('application', () => {
             clearError();
 
             const reviewerId = userStore.currentUser?.id;
+            const application = applications.value.find(app => app.id === applicationId);
 
-            const updateData = {
-                status: status,
-                reviewNotes: reviewNotes,
-                reviewerId: reviewerId,
-                reviewedAt: new Date().toISOString()
-            };
-
-            const response = await applicationsApi.updateApplication(applicationId, updateData);
-
-            // ✅ SOLUCIÓN COMPLETA: Si se acepta la aplicación, agregar como colaborador
-            if (status === 'accepted') {
-                try {
-                    const application = applications.value.find(app => app.id === applicationId);
-                    if (application && projectDetailStore.project) {
-                        // Buscar el nombre del rol
-                        const role = projectDetailStore.project.roles.find(r =>
-                            String(r.id) === String(application.roleId)
-                        );
-
-                        const collaboratorData = {
-                            applicantId: application.applicantId,
-                            applicantName: application.applicantName,
-                            role: role?.name || 'Colaborador',
-                            roleId: application.roleId,
-                            progress: 0,
-                            joinedAt: new Date().toISOString()
-                        };
-
-                        console.log('🎉 Adding collaborator:', collaboratorData);
-
-                        // Agregar colaborador al proyecto
-                        await projectDetailStore.addCollaborator(collaboratorData);
-
-                        // ✅ NUEVO: Forzar recarga de proyectos para actualizar las listas
-                        await projectsStore.fetchProjects();
-
-                        console.log('✅ Projects reloaded after adding collaborator');
-                    }
-                } catch (collabError) {
-                    console.error('Error adding collaborator:', collabError);
-                }
+            if (!application) {
+                throw new Error('Application not found');
             }
 
-            // ✅ ACTUALIZACIÓN: Si se rechaza, también actualizar inmediatamente
-            if (status === 'rejected') {
-                // Recargar aplicaciones para reflejar el cambio de estado
+            console.log('🔄 Updating application status:', { applicationId, status, reviewNotes });
+
+
+            // Determinar qué endpoint usar según el estado
+            let response;
+            if (status === 'accepted') {
+                response = await applicationsApi.acceptApplication(applicationId, {
+                    reviewerId,
+                    reviewNotes
+                });
+
+                // ✅ NUEVO: Recargar el proyecto para obtener colaboradores actualizados
+                if (projectDetailStore.project) {
+                    await projectDetailStore.fetchProjectById(projectDetailStore.project.id);
+                }
+
+            } else if (status === 'rejected') {
+                response = await applicationsApi.rejectApplication(applicationId, {
+                    reviewerId,
+                    reviewNotes
+                });
+
+                if (projectDetailStore.project) {
+                    await projectDetailStore.fetchProjectById(projectDetailStore.project.id);
+                }
+
+            } else {
+                response = await applicationsApi.updateApplicationStatus(applicationId, {
+                    status,
+                    reviewerId,
+                    reviewNotes
+                });
+            }
+
+            // ✅ ACTUALIZACIÓN: Recargar aplicaciones para reflejar el cambio de estado
+            if (projectDetailStore.project?.id) {
                 await fetchProjectApplications(projectDetailStore.project.id);
             }
 
             // Update in store
-            const application = applications.value.find(app => app.id === applicationId);
             if (application) {
                 application.status = status;
                 application.reviewNotes = reviewNotes;
@@ -241,12 +257,17 @@ export const useApplicationStore = defineStore('application', () => {
 
             // Update current application if it's the one being viewed
             if (currentApplication.value?.id === applicationId) {
-                currentApplication.value = { ...currentApplication.value, ...updateData };
+                currentApplication.value.status = status;
+                currentApplication.value.reviewNotes = reviewNotes;
+                currentApplication.value.reviewerId = reviewerId;
+                currentApplication.value.reviewedAt = new Date().toISOString();
             }
 
+            console.log('✅ Application status updated successfully');
             return application;
         } catch (err) {
             error.value = err.message || 'Error al actualizar el estado de la postulación';
+            console.error('❌ Error updating application status:', err);
             throw err;
         } finally {
             setLoading(false);
@@ -363,6 +384,7 @@ export const useApplicationStore = defineStore('application', () => {
     };
 
 
+    // En application.store.js - MODIFICAR la función submitApplication
     const submitApplication = async (applicationData) => {
         try {
             setLoading(true);
@@ -376,7 +398,7 @@ export const useApplicationStore = defineStore('application', () => {
             );
 
             if (existingCheck.exists) {
-                throw new Error('Ya has postulado a este rol en el proyecto');
+                throw new Error('Ya te has postulado a este rol en el proyecto');
             }
 
             // Transform form data to API format
@@ -389,17 +411,41 @@ export const useApplicationStore = defineStore('application', () => {
             const newApplication = ApplicationAssembler.fromApiToEntity(response.data);
             applications.value.push(newApplication);
 
-
-
             return newApplication;
         } catch (err) {
-            error.value = err.message || 'Error al enviar la postulación';
-            throw err;
+            // ✅ MEJORA: Manejar específicamente el error 400 de aplicación duplicada
+            if (err.response?.status === 400) {
+                // Verificar si el mensaje del backend indica duplicado
+                const backendMessage = err.response?.data?.message || err.response?.data;
+
+                if (backendMessage && (
+                    backendMessage.includes('duplicate') ||
+                    backendMessage.includes('already exists') ||
+                    backendMessage.includes('Application already exists')
+                )) {
+                    error.value = 'Ya te has postulado a este rol en el proyecto';
+                } else {
+                    error.value = backendMessage || 'No puedes postularte dos veces al mismo rol';
+                }
+            }
+            // ✅ MEJORA: Capturar otros errores de validación del backend
+            else if (err.response?.status === 400) {
+                const backendMessage = err.response?.data?.message || err.response?.data;
+                error.value = backendMessage || 'Error en los datos de la postulación';
+            }
+            else if (err.message === 'Ya te has postulado a este rol en el proyecto') {
+                error.value = err.message;
+            }
+            else {
+                error.value = err.message || 'Error al enviar la postulación';
+            }
+
+            console.error('❌ Error submitting application:', err.response?.data || err.message);
+            throw new Error(error.value); // Lanzar el error con mensaje amigable
         } finally {
             setLoading(false);
         }
     };
-
 
     const clearAll = () => {
         applications.value = [];

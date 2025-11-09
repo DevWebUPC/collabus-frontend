@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useTaskSubmissionStore } from '../../application/task-submission-store.js';
 import { useTaskStore } from '../../application/task-store.js';
@@ -24,17 +24,22 @@ const loadSubmissionData = async () => {
 
     console.log('🔄 Cargando submission para tarea:', taskId);
 
-    // Cargar submissions de la tarea
+    // ✅ PRIMERO: Limpiar el estado anterior
+    taskSubmissionStore.currentSubmission = null;
+
+    // ✅ Cargar submissions de la tarea específica
     await taskSubmissionStore.loadSubmissionsByTask(taskId);
 
-    // Obtener la primera submission (asumimos una por tarea por ahora)
-    const submissions = taskSubmissionStore.submissions;
-    if (submissions.length > 0) {
-      submission.value = submissions[0];
-      console.log('✅ Submission encontrada:', submission.value);
-    } else {
-      console.warn('⚠️ No se encontraron submissions para esta tarea');
-      submission.value = null;
+    // ✅ USAR EL NUEVO MÉTODO para obtener la submission correcta
+    submission.value = taskSubmissionStore.getSubmissionByTaskId(taskId);
+
+    console.log('✅ Submission encontrada:', submission.value);
+
+    // Si no hay submission, buscar por el método alternativo
+    if (!submission.value && taskSubmissionStore.submissions.length > 0) {
+      submission.value = taskSubmissionStore.submissions.find(
+          sub => sub.taskId === taskId.toString()
+      );
     }
 
     // Cargar detalles de la tarea
@@ -50,6 +55,14 @@ const loadSubmissionData = async () => {
   }
 };
 
+watch(
+    () => route.params.taskId,
+    async (newTaskId, oldTaskId) => {
+      if (newTaskId && newTaskId !== oldTaskId) {
+        await loadSubmissionData();
+      }
+    }
+);
 // Obtener información del colaborador
 const collaboratorInfo = computed(() => {
   if (!task.value || !submission.value) return null;
@@ -60,6 +73,7 @@ const collaboratorInfo = computed(() => {
 
   return collaborator || { name: 'Colaborador' };
 });
+
 
 // Formatear fecha
 const formatDate = (dateString) => {
@@ -183,8 +197,8 @@ onMounted(async () => {
               class="link-item"
           >
             <i class="pi pi-link"></i>
-            <a :href="link" target="_blank" rel="noopener noreferrer">
-              {{ link }}
+            <a :href="link.url" target="_blank" rel="noopener noreferrer">
+              {{ link.url }}
             </a>
           </div>
         </div>

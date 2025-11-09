@@ -3,7 +3,7 @@ import { TasksApi } from '../infrastructure/task-api.js';
 import { TaskAssembler } from '../infrastructure/task.assembler.js';
 
 /**
- * Task Store
+ * Task Store - ACTUALIZADO para backend .NET
  * Manages task state and operations for the task-management bounded context
  */
 export const useTaskStore = defineStore('task', {
@@ -53,7 +53,10 @@ export const useTaskStore = defineStore('task', {
          */
         getOverdueTasks: (state) => (projectId) => {
             const projectTasks = state.tasks.filter(task => task.projectId === projectId);
-            return projectTasks.filter(task => task.isOverdue && task.status !== 'completed');
+            return projectTasks.filter(task => {
+                const isOverdue = task.dueDate && new Date(task.dueDate) < new Date();
+                return isOverdue && task.status !== 'completed';
+            });
         },
 
         /**
@@ -65,8 +68,8 @@ export const useTaskStore = defineStore('task', {
             const threeDaysFromNow = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
 
             return projectTasks.filter(task =>
-                task.priority === 'high' || task.priority === 'urgent' &&
-                task.dueDate && task.dueDate <= threeDaysFromNow &&
+                (task.priority === 'high' || task.priority === 'urgent') &&
+                task.dueDate && new Date(task.dueDate) <= threeDaysFromNow &&
                 task.status !== 'completed'
             );
         },
@@ -81,7 +84,10 @@ export const useTaskStore = defineStore('task', {
             const completed = projectTasks.filter(task => task.status === 'completed').length;
             const inProgress = projectTasks.filter(task => task.status === 'in_progress').length;
             const pending = projectTasks.filter(task => task.status === 'pending').length;
-            const overdue = projectTasks.filter(task => task.isOverdue && task.status !== 'completed').length;
+            const overdue = projectTasks.filter(task => {
+                const isOverdue = task.dueDate && new Date(task.dueDate) < new Date();
+                return isOverdue && task.status !== 'completed';
+            }).length;
 
             const totalProgress = total > 0
                 ? Math.round(projectTasks.reduce((sum, task) => sum + task.progress, 0) / total)
@@ -99,33 +105,6 @@ export const useTaskStore = defineStore('task', {
         },
 
         /**
-         * Get task statistics for a collaborator
-         */
-        getCollaboratorTaskStats: (state) => (projectId, collaboratorId) => {
-            const collaboratorTasks = state.tasks.filter(task =>
-                task.projectId === projectId && task.assignedTo === collaboratorId
-            );
-
-            const total = collaboratorTasks.length;
-            const completed = collaboratorTasks.filter(task => task.status === 'completed').length;
-            const inProgress = collaboratorTasks.filter(task => task.status === 'in_progress').length;
-            const pending = collaboratorTasks.filter(task => task.status === 'pending').length;
-
-            const totalProgress = total > 0
-                ? Math.round(collaboratorTasks.reduce((sum, task) => sum + task.progress, 0) / total)
-                : 0;
-
-            return {
-                total,
-                completed,
-                inProgress,
-                pending,
-                totalProgress,
-                completionRate: total > 0 ? Math.round((completed / total) * 100) : 0
-            };
-        },
-
-        /**
          * Check if store is loading
          */
         isLoading: (state) => state.loading,
@@ -137,12 +116,25 @@ export const useTaskStore = defineStore('task', {
     },
 
     actions: {
-
         /**
          * Set loading state
          */
         setLoading(loading) {
             this.loading = loading;
+        },
+
+        /**
+         * Set error
+         */
+        setError(error) {
+            this.error = error;
+        },
+
+        /**
+         * Clear error
+         */
+        clearError() {
+            this.error = null;
         },
 
         /**
@@ -164,22 +156,38 @@ export const useTaskStore = defineStore('task', {
             this.collaboratorTasks.clear();
         },
 
-
-
-        /**
-         * Set error
-         */
-        setError(error) {
-            this.error = error;
+        async addTaskTool(projectId, taskId, name) {
+            try {
+                const tasksApi = new TasksApi();
+                const response = await tasksApi.addTaskTool(projectId, taskId, name);
+                return TaskAssembler.fromApiToEntity(response.data);
+            } catch (error) {
+                console.error(`❌ Error adding tool to task ${taskId}:`, error);
+                throw error;
+            }
         },
 
-        /**
-         * Clear error
-         */
-        clearError() {
-            this.error = null;
+        async removeTaskTool(projectId, taskId, toolId) {
+            try {
+                const tasksApi = new TasksApi();
+                const response = await tasksApi.removeTaskTool(projectId, taskId, toolId);
+                return TaskAssembler.fromApiToEntity(response.data);
+            } catch (error) {
+                console.error(`❌ Error removing tool from task ${taskId}:`, error);
+                throw error;
+            }
         },
 
+        async toggleTaskTool(projectId, taskId, toolId) {
+            try {
+                const tasksApi = new TasksApi();
+                const response = await tasksApi.toggleTaskTool(projectId, taskId, toolId);
+                return TaskAssembler.fromApiToEntity(response.data);
+            } catch (error) {
+                console.error(`❌ Error toggling tool in task ${taskId}:`, error);
+                throw error;
+            }
+        },
         /**
          * Load all tasks for a project
          */
@@ -193,7 +201,7 @@ export const useTaskStore = defineStore('task', {
 
                 const tasks = TaskAssembler.fromApiArrayToEntityArray(response.data);
 
-                // Actualizar estados de tareas vencidas
+                // Filtrar tareas existentes de este proyecto y agregar las nuevas
                 this.tasks = [
                     ...this.tasks.filter(task => task.projectId !== projectId),
                     ...tasks
@@ -217,44 +225,15 @@ export const useTaskStore = defineStore('task', {
         },
 
         /**
-         * Load tasks for a specific collaborator
-         */
-        async loadCollaboratorTasks(projectId, collaboratorId) {
-            try {
-                this.setLoading(true);
-                this.clearError();
-
-                const tasksApi = new TasksApi();
-                const response = await tasksApi.getCollaboratorTasks(projectId, collaboratorId);
-
-                const tasks = TaskAssembler.fromApiArrayToEntityArray(response.data);
-
-                // Actualizar cache de colaborador
-                const cacheKey = `${projectId}_${collaboratorId}`;
-                this.collaboratorTasks.set(cacheKey, tasks);
-
-                console.log(`✅ Loaded ${tasks.length} tasks for collaborator ${collaboratorId}`);
-                return tasks;
-            } catch (error) {
-                const errorMsg = `Error loading collaborator tasks: ${error.message}`;
-                this.setError(errorMsg);
-                console.error('❌', errorMsg);
-                throw error;
-            } finally {
-                this.setLoading(false);
-            }
-        },
-
-        /**
          * Load a specific task by ID
          */
-        async loadTask(projectId, taskId) {  // ✅ AGREGAR projectId como parámetro
+        async loadTask(projectId, taskId) {
             try {
                 this.setLoading(true);
                 this.clearError();
 
                 const tasksApi = new TasksApi();
-                const response = await tasksApi.getTask(projectId, taskId);  // ✅ Pasar projectId
+                const response = await tasksApi.getTask(projectId, taskId);
 
                 this.currentTask = TaskAssembler.fromApiToEntity(response.data);
 
@@ -279,8 +258,18 @@ export const useTaskStore = defineStore('task', {
                 this.clearError();
 
                 const tasksApi = new TasksApi();
-                const response = await tasksApi.createTask(taskData);
 
+                // Convertir a formato API .NET
+                const apiData = TaskAssembler.fromFormToApi(
+                    taskData,
+                    taskData.projectId,
+                    taskData.createdBy,
+                    taskData.assignedTo,
+                    taskData.assignedToName,
+                    taskData.role
+                );
+
+                const response = await tasksApi.createTask(apiData);
                 const newTask = TaskAssembler.fromApiToEntity(response.data);
 
                 // Agregar a la lista global
@@ -304,24 +293,6 @@ export const useTaskStore = defineStore('task', {
         },
 
         /**
-         * Create task from form data
-         */
-        async createTaskFromForm(formData, projectId, createdBy, assignedTo, assignedToName, role) {
-            const apiData = TaskAssembler.fromFormToApi(
-                formData,
-                projectId,
-                createdBy,
-                assignedTo,
-                assignedToName,
-                role
-            );
-            return await this.createTask(apiData);
-        },
-
-        /**
-         * Update a task
-         */
-        /**
          * Update a task
          */
         async updateTask(projectId, taskId, updateData) {
@@ -330,8 +301,15 @@ export const useTaskStore = defineStore('task', {
                 this.clearError();
 
                 const tasksApi = new TasksApi();
-                const response = await tasksApi.updateTask(projectId, taskId, updateData);
 
+                // Preparar datos para la actualización
+                const apiUpdateData = {
+                    ...updateData,
+                    taskId: parseInt(taskId),
+                    projectId: parseInt(projectId)
+                };
+
+                const response = await tasksApi.updateTask(projectId, taskId, apiUpdateData);
                 const updatedTask = TaskAssembler.fromApiToEntity(response.data);
 
                 // ✅ ACTUALIZAR ESTADO BASADO EN FECHA ANTES DE GUARDAR
@@ -371,28 +349,25 @@ export const useTaskStore = defineStore('task', {
         /**
          * Update task status
          */
-        async updateTaskStatus(projectId, taskId, status, progress = null) {
+        async updateTaskStatus(projectId, taskId, status) {
             try {
-                console.log(`🔄 Updating task status: ${taskId}, status: ${status}, progress: ${progress}`);
+                console.log(`🔄 Updating task status: ${taskId}, status: ${status}`);
 
-                const updateData = TaskAssembler.toStatusUpdateApi(taskId, status, progress);
-                const updatedTask = await this.updateTask(projectId, taskId, updateData);
+                const tasksApi = new TasksApi();
+                const response = await tasksApi.updateTaskStatus(projectId, taskId, status);
+                const updatedTask = TaskAssembler.fromApiToEntity(response.data);
 
                 // ✅ FORZAR ACTUALIZACIÓN INMEDIATA EN EL STORE
-                if (status === 'completed') {
-                    // Actualizar en la lista global
-                    const index = this.tasks.findIndex(task => task.id === taskId);
-                    if (index !== -1) {
-                        this.tasks[index] = updatedTask;
-                    }
-
-                    // Invalidar caches
-                    this.projectTasks.delete(projectId);
-                    this.collaboratorTasks.clear();
-
-                    console.log('🎯 Tarea completada - store actualizado');
+                const index = this.tasks.findIndex(task => task.id === taskId);
+                if (index !== -1) {
+                    this.tasks[index] = updatedTask;
                 }
 
+                // Invalidar caches
+                this.projectTasks.delete(projectId);
+                this.collaboratorTasks.clear();
+
+                console.log('🎯 Task status updated - store updated');
                 return updatedTask;
             } catch (error) {
                 console.error(`❌ Error updating task status for task ${taskId}:`, error);
@@ -401,89 +376,31 @@ export const useTaskStore = defineStore('task', {
         },
 
         /**
-         * Update task progress
+         * Update task due date
          */
-        async updateTaskProgress(projectId, taskId, progress) {
-            const updateData = TaskAssembler.toProgressUpdateApi(taskId, progress);
-            return await this.updateTask(projectId, taskId, updateData); // ✅ Pasar projectId
-        },
-
-        /**
-         * Update task checklist
-         */
-        async updateTaskChecklist(projectId, taskId, checklist) {
+        async updateTaskDueDate(projectId, taskId, dueDate, updatedBy) {
             try {
-                this.setLoading(true);
-                this.clearError();
+                console.log(`📅 Updating task due date: ${taskId} -> ${dueDate}`);
 
                 const tasksApi = new TasksApi();
-                const response = await tasksApi.updateTask(projectId, taskId, {
-                    checklist: checklist,
-                    updatedAt: new Date().toISOString()
-                });
-
+                const response = await tasksApi.updateTaskDueDate(projectId, taskId, dueDate, updatedBy);
                 const updatedTask = TaskAssembler.fromApiToEntity(response.data);
 
-                // Actualizar en la lista global
+                // Actualizar en el store
                 const index = this.tasks.findIndex(task => task.id === taskId);
                 if (index !== -1) {
                     this.tasks[index] = updatedTask;
                 }
 
-                // Actualizar current task si es el mismo
-                if (this.currentTask && this.currentTask.id === taskId) {
-                    this.currentTask = updatedTask;
-                }
+                // Invalidar caches
+                this.projectTasks.delete(projectId);
+                this.collaboratorTasks.clear();
 
-                console.log(`✅ Updated task checklist: ${updatedTask.title}`);
+                console.log('✅ Task due date updated - store updated');
                 return updatedTask;
             } catch (error) {
-                const errorMsg = `Error updating task checklist: ${error.message}`;
-                this.setError(errorMsg);
-                console.error('❌', errorMsg);
+                console.error(`❌ Error updating task due date for task ${taskId}:`, error);
                 throw error;
-            } finally {
-                this.setLoading(false);
-            }
-        },
-
-        /**
-         * Reassign task to another collaborator
-         */
-        async reassignTask(taskId, collaboratorId, collaboratorName, role = '') {
-            try {
-                this.setLoading(true);
-                this.clearError();
-
-                const tasksApi = new TasksApi();
-                const response = await tasksApi.reassignTask(taskId, collaboratorId, collaboratorName, role);
-
-                const updatedTask = TaskAssembler.fromApiToEntity(response.data);
-
-                // Actualizar en la lista global
-                const index = this.tasks.findIndex(task => task.id === taskId);
-                if (index !== -1) {
-                    this.tasks[index] = updatedTask;
-                }
-
-                // Invalidar caches relevantes
-                this.projectTasks.delete(updatedTask.projectId);
-                // Invalidar cache del colaborador anterior y nuevo
-                this.collaboratorTasks.forEach((_, key) => {
-                    if (key.includes(updatedTask.projectId)) {
-                        this.collaboratorTasks.delete(key);
-                    }
-                });
-
-                console.log(`✅ Reassigned task to: ${collaboratorName}`);
-                return updatedTask;
-            } catch (error) {
-                const errorMsg = `Error reassigning task: ${error.message}`;
-                this.setError(errorMsg);
-                console.error('❌', errorMsg);
-                throw error;
-            } finally {
-                this.setLoading(false);
             }
         },
 
@@ -496,7 +413,9 @@ export const useTaskStore = defineStore('task', {
                 this.clearError();
 
                 const tasksApi = new TasksApi();
-                await tasksApi.deleteTask(projectId, taskId);
+                const deletedBy = localStorage.getItem('userId') || '1'; // Obtener ID del usuario actual
+
+                await tasksApi.deleteTask(projectId, taskId, deletedBy);
 
                 // ✅ ELIMINAR INMEDIATAMENTE de la lista global
                 this.tasks = this.tasks.filter(task => task.id !== taskId);
@@ -523,73 +442,44 @@ export const useTaskStore = defineStore('task', {
         },
 
         /**
-         * Load overdue tasks for a project
+         * Add checklist item to task
          */
-        async loadOverdueTasks(projectId) {
+        async addChecklistItem(projectId, taskId, text) {
             try {
-                this.setLoading(true);
-                this.clearError();
-
                 const tasksApi = new TasksApi();
-                const response = await tasksApi.getOverdueTasks(projectId);
-
-                const tasks = TaskAssembler.fromApiArrayToEntityArray(response.data);
-                console.log(`✅ Loaded ${tasks.length} overdue tasks for project ${projectId}`);
-                return tasks;
+                const response = await tasksApi.addChecklistItem(projectId, taskId, text);
+                return TaskAssembler.fromApiToEntity(response.data);
             } catch (error) {
-                const errorMsg = `Error loading overdue tasks: ${error.message}`;
-                this.setError(errorMsg);
-                console.error('❌', errorMsg);
+                console.error(`❌ Error adding checklist item to task ${taskId}:`, error);
                 throw error;
-            } finally {
-                this.setLoading(false);
             }
         },
 
         /**
-         * Load urgent tasks for a project
+         * Remove checklist item from task
          */
-        async loadUrgentTasks(projectId) {
+        async removeChecklistItem(projectId, taskId, itemId) {
             try {
-                this.setLoading(true);
-                this.clearError();
-
                 const tasksApi = new TasksApi();
-                const response = await tasksApi.getUrgentTasks(projectId);
-
-                const tasks = TaskAssembler.fromApiArrayToEntityArray(response.data);
-                console.log(`✅ Loaded ${tasks.length} urgent tasks for project ${projectId}`);
-                return tasks;
+                const response = await tasksApi.removeChecklistItem(projectId, taskId, itemId);
+                return TaskAssembler.fromApiToEntity(response.data);
             } catch (error) {
-                const errorMsg = `Error loading urgent tasks: ${error.message}`;
-                this.setError(errorMsg);
-                console.error('❌', errorMsg);
+                console.error(`❌ Error removing checklist item from task ${taskId}:`, error);
                 throw error;
-            } finally {
-                this.setLoading(false);
             }
         },
 
         /**
-         * Load task statistics for a project
+         * Toggle checklist item completion
          */
-        async loadTaskStats(projectId) {
+        async toggleChecklistItem(projectId, taskId, itemId) {
             try {
-                this.setLoading(true);
-                this.clearError();
-
                 const tasksApi = new TasksApi();
-                const response = await tasksApi.getTaskStats(projectId);
-
-                console.log(`✅ Loaded task stats for project ${projectId}`);
-                return response.data;
+                const response = await tasksApi.toggleChecklistItem(projectId, taskId, itemId);
+                return TaskAssembler.fromApiToEntity(response.data);
             } catch (error) {
-                const errorMsg = `Error loading task stats: ${error.message}`;
-                this.setError(errorMsg);
-                console.error('❌', errorMsg);
+                console.error(`❌ Error toggling checklist item in task ${taskId}:`, error);
                 throw error;
-            } finally {
-                this.setLoading(false);
             }
         },
 

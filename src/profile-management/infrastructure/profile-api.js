@@ -1,4 +1,3 @@
-// infrastructure/profile-api.js
 import { BaseApi } from '../../shared/infrastructure/base-api.js';
 import { BaseEndpoint } from '../../shared/infrastructure/base-endpoint.js';
 
@@ -9,8 +8,7 @@ import { BaseEndpoint } from '../../shared/infrastructure/base-endpoint.js';
 export class ProfileApi extends BaseEndpoint {
     constructor() {
         const baseApi = new BaseApi();
-        super(baseApi, '/profiles');
-
+        super(baseApi, '/profile');
         // Agregar interceptors para debugging
         this.http.interceptors.request.use(request => {
             console.log('🚀 Profile API Request:', request.method?.toUpperCase(), request.url);
@@ -42,17 +40,41 @@ export class ProfileApi extends BaseEndpoint {
      * @returns {Promise} API response
      */
     create(profileData) {
-        return this.http.post(this.endpointPath, profileData);
+        return this.http.post(this.endpointPath, profileData); // ✅ Ahora será /api/v1/profile
     }
 
     /**
-     * Get profile by user ID
+     * Get profile by user ID - NUEVO MÉTODO
      * @param {string} userId - User ID
      * @returns {Promise} API response
      */
     getByUserId(userId) {
-        return this.http.get(`${this.endpointPath}?userId=${encodeURIComponent(userId)}`);
+        // Primero intentamos obtener todos los perfiles y filtrar
+        return this.http.get(this.endpointPath)
+            .then(response => {
+                if (!response.data || !Array.isArray(response.data)) {
+                    throw new Error('Respuesta inválida de la API');
+                }
+
+                // Buscar el perfil que coincida con el userId
+                const profile = response.data.find(p =>
+                    p.userId === userId ||
+                    p.userId === parseInt(userId) ||
+                    p.userId?.toString() === userId.toString()
+                );
+
+                if (!profile) {
+                    // Crear un error 404 simulado
+                    const error = new Error('Profile not found');
+                    error.response = { status: 404 };
+                    throw error;
+                }
+
+                // Devolver la respuesta en el mismo formato que el backend
+                return { data: profile };
+            });
     }
+
 
     /**
      * Update profile
@@ -71,9 +93,8 @@ export class ProfileApi extends BaseEndpoint {
      * @returns {Promise} API response
      */
     patch(id, profileData) {
-        return this.http.patch(`${this.endpointPath}/${id}`, profileData);
+        return this.http.put(`${this.endpointPath}/${id}`, profileData);
     }
-
     /**
      * Delete profile
      * @param {string} id - Profile ID

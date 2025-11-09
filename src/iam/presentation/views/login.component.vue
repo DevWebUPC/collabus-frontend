@@ -36,7 +36,7 @@ const handleLogin = async () => {
 
     console.log('🔐 Attempting login for:', email.value);
 
-    // Usar el user store para hacer login
+    // Usar el user store para hacer login con el backend real
     await userStore.login(email.value, password.value);
 
     console.log('✅ Login successful, redirecting...');

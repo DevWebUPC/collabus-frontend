@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref} from 'vue';
+import {reactive, ref, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
 import ProgressStepper from "../components/progress-stepper.component.vue";
 import ProfileStep from "../components/profile-step.component.vue"
@@ -22,6 +22,17 @@ const formData = reactive({
   skills: { abilities: [], experiences: [], cv: null },
 });
 
+// Verificar si el usuario está autenticado
+onMounted(() => {
+  if (!userStore.isAuthenticated) {
+    console.log('❌ Usuario no autenticado, redirigiendo a login');
+    router.push('/login');
+    return;
+  }
+
+  console.log('✅ Usuario autenticado:', userStore.currentUser);
+});
+
 // Navegacion entre pasos
 const nextStep = () => {
   if(currentStep.value < 4) {
@@ -39,14 +50,28 @@ const prevStep  = () => {
 
 const completeOnboarding = async () => {
   try {
-    console.log("Onboarding data:", formData);
+    console.log("📝 Completando onboarding...");
+    console.log("Datos del formulario:", formData);
+    console.log("Usuario actual:", userStore.currentUser);
+
+    if (!userStore.currentUser || !userStore.currentUser.id) {
+      throw new Error('No hay usuario autenticado');
+    }
 
     // Usar el profile store para completar el onboarding
-    await profileStore.completeOnboarding(formData, userStore.currentUser.id);
+    const newProfile = await profileStore.completeOnboarding(formData, userStore.currentUser.id);
 
-    router.push("/home");
+    if (newProfile) {
+      console.log('✅ Onboarding completado exitosamente');
+      console.log('Nuevo perfil creado:', newProfile);
+
+      // Redirigir directamente al perfil
+      router.push("/profile");
+    } else {
+      throw new Error('No se pudo crear el perfil');
+    }
   } catch (error) {
-    console.error('Error completing onboarding:', error);
+    console.error('❌ Error completando onboarding:', error);
     alert(error.message || 'Error al completar el onboarding');
   }
 };

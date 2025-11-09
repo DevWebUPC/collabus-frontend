@@ -1,11 +1,14 @@
 <script setup>
-import { ref, computed, nextTick } from "vue";
+import { ref, computed, nextTick, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import FooterContent from "./footer-content.vue";
-
+import { useProfileStore } from "../../../profile-management/application/profile-store.js";
+import { useUserStore } from "../../../iam/application/user-store.js";
 import PlanActual from "../../../subscription/presentation/components/PlanActual.vue";
 import PlanesModal from "../../../subscription/presentation/components/PlanesModal.vue";
+const userStore = useUserStore();
+const profileStore = useProfileStore();
 
 const { t } = useI18n();
 const router = useRouter();
@@ -53,6 +56,17 @@ const handleDrawerHide = () => {
 const goToProfile = () => {
   router.push("/profile");
 };
+
+onMounted(async () => {
+  if (userStore.isAuthenticated && !profileStore.currentProfile) {
+    console.log('🔄 Cargando perfil del usuario...');
+    try {
+      await profileStore.getProfileByUserId(userStore.currentUser.id);
+    } catch (error) {
+      console.log('ℹ️ Usuario sin perfil, debe completar onboarding');
+    }
+  }
+});
 </script>
 
 <template>
