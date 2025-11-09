@@ -385,7 +385,7 @@ onMounted(async () => {
 .role-card .role-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin: 0;
   padding-bottom: 0;
   border-bottom: none;
@@ -471,7 +471,7 @@ onMounted(async () => {
 .project-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin: 0 0 1rem 0;
   line-height: 1.2;
 }
@@ -511,14 +511,14 @@ onMounted(async () => {
 .section-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin: 0 0 1rem 0;
 }
 
 .subsection-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin: 0 0 1rem 0;
 }
 

@@ -486,7 +486,7 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 }
 
 .error-content h3 {
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin-bottom: 1rem;
   font-size: 1.5rem;
   font-weight: 600;
@@ -531,7 +531,7 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 }
 
 .no-profile-content h3 {
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin-bottom: 1rem;
   font-size: 1.5rem;
   font-weight: 600;
@@ -576,7 +576,7 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 }
 
 .auth-content h3 {
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin-bottom: 1rem;
   font-size: 1.5rem;
   font-weight: 600;

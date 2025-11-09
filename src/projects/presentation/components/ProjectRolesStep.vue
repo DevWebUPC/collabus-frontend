@@ -198,7 +198,7 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 .step-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin: 0;
 }
 
@@ -224,7 +224,7 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 .role-label {
   display: block;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }
@@ -256,7 +256,7 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 .card-title-label {
   display: block;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }

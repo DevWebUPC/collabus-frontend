@@ -160,7 +160,7 @@ watch(recoveryEmail, () => {
 }
 
 .modal-title {
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0;

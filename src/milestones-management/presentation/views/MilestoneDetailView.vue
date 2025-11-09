@@ -463,7 +463,7 @@ onMounted(async () => {
 .milestone-title {
   font-size: 2.25rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin-bottom: 1rem;
   line-height: 1.2;
 }
@@ -545,7 +545,7 @@ onMounted(async () => {
 .section-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -647,7 +647,7 @@ onMounted(async () => {
 
 .attachment-name {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin-bottom: 0.25rem;
 }
 
@@ -710,7 +710,7 @@ onMounted(async () => {
 .task-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin: 0;
   flex: 1;
 }
@@ -780,7 +780,7 @@ onMounted(async () => {
 
 .user-name {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   font-size: 0.875rem;
 }
 
