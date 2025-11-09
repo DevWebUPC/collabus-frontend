@@ -153,7 +153,7 @@ watch(() => props.modelValue, (newValue) => {
 }
 
 .subtitle {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.95rem;
   line-height: 1.5;
   margin: 0;
@@ -228,7 +228,7 @@ watch(() => props.modelValue, (newValue) => {
 .separator-text {
   background: var(--color-white, #FFFFFF);
   padding: 0 1rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.9rem;
   position: relative;
   z-index: 1;
@@ -254,7 +254,7 @@ watch(() => props.modelValue, (newValue) => {
 /* Mensaje informativo */
 .info-message {
   text-align: center;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.85rem;
   font-style: italic;
   margin-top: auto;

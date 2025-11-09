@@ -435,7 +435,7 @@ onMounted(async () => {
 .project-author {
   margin: 0 0 0.25rem 0;
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 .project-date {
   margin: 0;

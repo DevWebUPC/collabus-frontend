@@ -114,7 +114,7 @@ function select(name){ emit('select', name) }
 .card-head{padding:18px 22px 10px;text-align:center}
 .card-head h3{margin:0 0 6px;font-size:18px;font-weight:800;color:#111827}
 .price{margin:0 0 10px;font-weight:900;font-size:30px}
-.price span{font-size:12px;color:#6b7280;font-weight:600}
+.price span{font-size:12px;color:var(--color-gray-900, #6b7280);font-weight:600}
 .price.indigo{color:#5b61f6}
 .price.orange{color:#ff8a3d}
 

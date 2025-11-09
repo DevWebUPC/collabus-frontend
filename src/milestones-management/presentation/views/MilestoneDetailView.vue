@@ -503,7 +503,7 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-weight: 500;
 }
 
@@ -652,7 +652,7 @@ onMounted(async () => {
 }
 
 .attachment-type {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
 }
 
@@ -671,7 +671,7 @@ onMounted(async () => {
 .empty-tasks {
   text-align: center;
   padding: 2rem 1rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .empty-icon {
@@ -744,7 +744,7 @@ onMounted(async () => {
 }
 
 .task-description p {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
   line-height: 1.5;
   margin: 0;
@@ -785,7 +785,7 @@ onMounted(async () => {
 }
 
 .user-role {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.75rem;
 }
 
@@ -801,7 +801,7 @@ onMounted(async () => {
 
 .progress-text {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-weight: 500;
 }
 

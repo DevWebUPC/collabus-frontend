@@ -230,7 +230,7 @@ const updateDurationType = (value) => { store.detailsData.durationType = value }
 :deep(.p-inputnumber .p-inputnumber-button) {
   background: #F3F4F6;
   border: 1px solid #D1D5DB;
-  color: #6B7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 :deep(.p-inputnumber .p-inputnumber-button:hover) {

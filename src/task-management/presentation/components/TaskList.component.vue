@@ -267,7 +267,7 @@ export default {
 
 .collaborator-role {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .task-title {
@@ -278,7 +278,7 @@ export default {
 
 .task-description {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   line-height: 1.3;
 }
 
@@ -411,7 +411,7 @@ export default {
 }
 
 .empty-text {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   margin-bottom: 1.5rem;
   font-size: 1rem;
 }

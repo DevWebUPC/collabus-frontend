@@ -677,12 +677,12 @@ onMounted(async () => {
 }
 
 .comment-role {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
 }
 
 .comment-date {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
 }
 
@@ -746,7 +746,7 @@ onMounted(async () => {
 }
 
 .attachment-date {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
 }
 
@@ -801,7 +801,7 @@ onMounted(async () => {
 }
 
 .user-role {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
 }
 
@@ -817,7 +817,7 @@ onMounted(async () => {
 }
 
 .project-entrepreneur {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
 }
 
@@ -834,7 +834,7 @@ onMounted(async () => {
 }
 
 .date-label {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
 }
 

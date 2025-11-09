@@ -434,7 +434,7 @@ onMounted(async () => {
 
 .loading-text {
   margin-top: 1rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 1.1rem;
 }
 
@@ -466,7 +466,7 @@ onMounted(async () => {
 }
 
 .error-content p {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   margin-bottom: 1.5rem;
 }
 

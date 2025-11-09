@@ -148,7 +148,7 @@ const formatDate = (date) => {
   padding: 12px 24px;
   border: none;
   background: transparent;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-weight: 500;
   font-size: 0.95rem;
   border-radius: 8px;
@@ -182,7 +182,7 @@ const formatDate = (date) => {
   align-items: center;
   justify-content: center;
   padding: 3rem 2rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .loading-spinner {
@@ -204,7 +204,7 @@ const formatDate = (date) => {
 .empty-state {
   padding: 3rem 2rem;
   text-align: center;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .empty-state p {
@@ -248,7 +248,7 @@ const formatDate = (date) => {
 .project-author {
   margin: 0 0 0.25rem 0;
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .project-date {

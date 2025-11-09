@@ -638,14 +638,14 @@ h5 {
   margin: 0 0 0.5rem 0;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 h6 {
   margin: 0 0 0.5rem 0;
   font-size: 0.8rem;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .herramientas-input {

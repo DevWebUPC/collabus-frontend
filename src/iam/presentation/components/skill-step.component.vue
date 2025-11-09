@@ -323,7 +323,7 @@ watch(() => props.modelValue, (newValue) => {
 }
 
 .subtitle {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.9rem;
   line-height: 1.4;
   margin: 0;
@@ -380,7 +380,7 @@ watch(() => props.modelValue, (newValue) => {
 
 .remove-skill {
   cursor: pointer;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-weight: bold;
   font-size: 1.1rem;
 }
@@ -427,13 +427,13 @@ watch(() => props.modelValue, (newValue) => {
 }
 
 .experience-duration {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.85rem;
 }
 
 .remove-experience {
   cursor: pointer;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-weight: bold;
   font-size: 1.2rem;
   padding: 0.25rem;
@@ -455,7 +455,7 @@ watch(() => props.modelValue, (newValue) => {
 }
 
 .cv-file-name {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.85rem;
   font-style: italic;
 }

@@ -246,7 +246,7 @@ watch(() => props.modelValue, (newValue) => {
 }
 
 .avatar-hint {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.8rem;
   margin: 0;
 }

@@ -179,7 +179,7 @@ const clearFilters = () => {
 }
 
 .clear-btn {
-  background: #6b7280;
+  background: var(--color-gray-900, #6b7280);
   color: var(--color-white, #FFFFFF);
 }
 

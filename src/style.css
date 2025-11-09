@@ -164,6 +164,7 @@
   :root {
     --color-white: var(--color-black);
     --color-gray-50: #121212;
+    --color-gray-100: #1E1E1E;
     --color-gray-900: #E0E0E0;
   }
 }

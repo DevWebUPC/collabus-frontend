@@ -117,7 +117,7 @@ export default {
 .search-state {
   text-align: center;
   padding: 1rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-style: italic;
 }
 

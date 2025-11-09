@@ -437,7 +437,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   padding: 4rem 2rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .loading-spinner {
@@ -481,7 +481,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.95rem;
   flex-wrap: wrap;
 }
@@ -500,7 +500,7 @@ onMounted(async () => {
 }
 
 .publish-date {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 /* Sections */

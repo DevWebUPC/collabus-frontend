@@ -456,7 +456,7 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 
 .loading-text {
   margin-top: 1.5rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 1.2rem;
   font-weight: 500;
 }
@@ -493,7 +493,7 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 }
 
 .error-content p {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   margin-bottom: 2rem;
   line-height: 1.6;
   font-size: 1.1rem;
@@ -538,7 +538,7 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 }
 
 .no-profile-content p {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   margin-bottom: 2rem;
   line-height: 1.6;
   font-size: 1.1rem;
@@ -583,7 +583,7 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 }
 
 .auth-content p {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   margin-bottom: 2rem;
   line-height: 1.6;
   font-size: 1.1rem;

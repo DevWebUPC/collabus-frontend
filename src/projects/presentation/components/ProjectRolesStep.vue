@@ -280,7 +280,7 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 
 .item-number {
   font-weight: 500;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
   min-width: 40px;
   flex-shrink: 0;

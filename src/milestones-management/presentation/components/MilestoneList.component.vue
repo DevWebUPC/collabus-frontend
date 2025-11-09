@@ -514,13 +514,13 @@ const handleModalCancel = () => {
 .loading-state {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .empty-state {
   text-align: center;
   padding: 3rem 1rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .empty-icon {
@@ -621,7 +621,7 @@ const handleModalCancel = () => {
 }
 
 .milestone-description {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
   line-height: 1.5;
   margin-bottom: 1rem;
@@ -642,7 +642,7 @@ const handleModalCancel = () => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
 }
 
@@ -727,7 +727,7 @@ const handleModalCancel = () => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
   margin-bottom: 1rem;
 }
@@ -743,7 +743,7 @@ const handleModalCancel = () => {
 
 .tools-label {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
@@ -798,7 +798,7 @@ const handleModalCancel = () => {
 
 .total-tasks {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .collaborators-tasks {
@@ -834,7 +834,7 @@ const handleModalCancel = () => {
 
 .collaborator-stats {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .completed-tasks {
@@ -892,7 +892,7 @@ const handleModalCancel = () => {
 }
 
 .task-description {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
   line-height: 1.4;
   margin-bottom: 0.5rem;
@@ -902,7 +902,7 @@ const handleModalCancel = () => {
   display: flex;
   gap: 1rem;
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .task-progress {
@@ -951,7 +951,7 @@ const handleModalCancel = () => {
 .no-tasks {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   background: var(--color-gray-50, #f8f9fa);
   border-radius: 6px;
   border: 1px dashed var(--color-gray-300, #e5e7eb);

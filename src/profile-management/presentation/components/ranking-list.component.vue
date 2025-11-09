@@ -159,7 +159,7 @@ export default {
   justify-content: center;
   padding: 3rem 2rem;
   text-align: center;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 1.1rem;
 }
 

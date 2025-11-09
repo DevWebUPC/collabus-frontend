@@ -267,7 +267,7 @@ const handlePasswordRecovery = (email) => {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   margin-bottom: 20px;
 }
 
@@ -323,7 +323,7 @@ const handlePasswordRecovery = (email) => {
 
 :deep(.p-inputtext:disabled) {
   background-color: #f9fafb;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   cursor: not-allowed;
 }
 

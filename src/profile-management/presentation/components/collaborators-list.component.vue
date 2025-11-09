@@ -157,7 +157,7 @@ export default {
   text-align: center;
   padding: 3rem;
   font-size: 1.2rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .error-state {
@@ -165,7 +165,7 @@ export default {
 }
 
 .empty-search-state {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-style: italic;
 }
 

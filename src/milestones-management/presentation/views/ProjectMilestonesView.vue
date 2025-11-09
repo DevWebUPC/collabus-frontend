@@ -417,7 +417,7 @@ onUnmounted(() => {
 
 .dropdown-arrow {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .create-button {

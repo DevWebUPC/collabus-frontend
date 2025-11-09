@@ -118,7 +118,7 @@ watch(() => props.modelValue.bio, (newBio) => {
 }
 
 .subtitle {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.95rem;
   line-height: 1.5;
   margin: 0;
@@ -151,7 +151,7 @@ watch(() => props.modelValue.bio, (newBio) => {
 }
 
 .input-hint {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.8rem;
   margin-top: 0.5rem;
   margin-bottom: 0;
@@ -180,7 +180,7 @@ watch(() => props.modelValue.bio, (newBio) => {
 .char-counter {
   text-align: right;
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   margin-top: 0.5rem;
 }
 

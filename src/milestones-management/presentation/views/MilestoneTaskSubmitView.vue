@@ -639,7 +639,7 @@ onMounted(async () => {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   cursor: pointer;
 }
 

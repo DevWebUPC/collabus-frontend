@@ -206,7 +206,7 @@ const formatDate = (dateString) => {
 }
 
 .current-date {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.9rem;
 }
 
@@ -245,7 +245,7 @@ const formatDate = (dateString) => {
 .no-milestone {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .no-milestone .error-icon {

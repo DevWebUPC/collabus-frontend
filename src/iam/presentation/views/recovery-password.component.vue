@@ -172,7 +172,7 @@ const handlePasswordReset = () => {
 }
 
 .recovery-subtitle {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 1rem;
   margin: 0;
 }

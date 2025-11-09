@@ -197,7 +197,7 @@ const resetForm = () => {
   border: none;
   padding: 0.5rem;
   cursor: pointer;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   border-radius: 6px;
   transition: all 0.2s ease;
 }
@@ -249,7 +249,7 @@ const resetForm = () => {
 
 .rating-text {
   margin: 0;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.9rem;
   font-style: italic;
 }
@@ -283,7 +283,7 @@ const resetForm = () => {
 
 .character-count {
   text-align: right;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.8rem;
   margin-top: 0.5rem;
 }

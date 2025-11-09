@@ -311,7 +311,7 @@ const updateSummary = (value) => { store.basicInfoData.summary = value }
   border-left: none;
   border-radius: 0 8px 8px 0;
   background: #F9FAFB;
-  color: #6B7280;
+  color: var(--color-gray-900, #6b7280);
   cursor: pointer;
   display: flex;
   align-items: center;

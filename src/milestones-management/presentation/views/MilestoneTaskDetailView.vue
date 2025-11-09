@@ -471,7 +471,7 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-weight: 500;
 }
 
@@ -552,7 +552,7 @@ onMounted(async () => {
 }
 
 .checklist-checkbox {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .checklist-checkbox .completed {
@@ -566,7 +566,7 @@ onMounted(async () => {
 
 .checklist-item.completed .checklist-text {
   text-decoration: line-through;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 /* Comment */
@@ -635,7 +635,7 @@ onMounted(async () => {
 }
 
 .attachment-type {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
 }
 
@@ -675,7 +675,7 @@ onMounted(async () => {
 }
 
 .user-role {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
 }
 
@@ -695,7 +695,7 @@ onMounted(async () => {
 }
 
 .milestone-description {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
   margin: 0 0 1rem 0;
   line-height: 1.4;
@@ -728,7 +728,7 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
 }
 
@@ -802,7 +802,7 @@ onMounted(async () => {
 .no-submission {
   text-align: center;
   padding: 2rem 1rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .no-submission-icon {

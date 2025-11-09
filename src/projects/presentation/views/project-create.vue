@@ -438,7 +438,7 @@ const debugState = () => {
 
 .item-label {
   font-weight: 500;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   min-width: 50px;
 }
 
@@ -558,7 +558,7 @@ const debugState = () => {
   font-weight: 500;
   border-radius: 24px;
   border: 1px solid #D1D5DB;
-  color: #6B7280;
+  color: var(--color-gray-900, #6b7280);
   background: var(--color-white, #FFFFFF);
   font-size: 14px;
 }
@@ -642,14 +642,14 @@ const debugState = () => {
 
 :deep(.p-button.p-button-outlined) {
   border: 1px solid #D1D5DB;
-  color: #6B7280;
+  color: var(--color-gray-900, #6b7280);
   background: var(--color-white, #FFFFFF);
 }
 
 :deep(.p-button.p-button-outlined:hover) {
   border-color: #9CA3AF;
   background: #F9FAFB;
-  color: #6B7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 :deep(.p-button:not(.p-button-outlined)) {
