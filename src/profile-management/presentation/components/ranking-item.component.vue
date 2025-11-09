@@ -26,14 +26,14 @@
             {{ skill }}
           </span>
           <span v-if="collaborator.skills.length > 3" class="skill-tag-more">
-            +{{ collaborator.skills.length - 3 }} más
+            +{{ collaborator.skills.length - 3 }} {{ $t('common.more') }}
           </span>
         </div>
       </div>
 
-      <div class="score-section">
-        <div class="score-value">{{ collaborator.score }} pts</div>
-        <button class="profile-btn" @click="viewProfile">Ver Perfil</button>
+        <div class="score-section">
+        <div class="score-value">{{ collaborator.score }} {{ $t('profile.collaborator.pointsSuffix') }}</div>
+        <button class="profile-btn" @click="viewProfile">{{ $t('profile.collaborator.viewProfile') }}</button>
       </div>
     </div>
   </div>

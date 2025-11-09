@@ -1,6 +1,7 @@
 <!-- profile-management/presentation/views/profile-view.vue -->
 <script setup lang="js">
 import { ref, onMounted, computed, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useProfileStore } from '../../application/profile-store.js';
 import { useAuthStore } from '../../../iam/application/auth-store.js';
@@ -10,12 +11,14 @@ import ProfileStats from '../components/profile-stats.component.vue';
 import ProfileDescription from '../components/profile-description.component.vue';
 import ProfileSkills from '../components/profile-skills.component.vue';
 import ProfileExperiences from '../components/profile-experiences.component.vue';
-import ProfileTabs from '../components/profile-tabs.component.vue'; // 👈 Agregar esta importación
+import ProfileTabs from '../components/profile-tabs.component.vue';
+import LanguageSwitcher from '../../../shared/presentation/components/language-switcher.vue';
 
 const profileStore = useProfileStore();
 const authStore = useAuthStore();
 const userStore = useUserStore();
 const router = useRouter();
+const { t } = useI18n();
 const isLoadingProfile = ref(false);
 
 // 👇 Watch para detectar cambios en el usuario autenticado
@@ -117,7 +120,7 @@ const loadUserProfile = async () => {
 const handleLogout = async () => {
   try {
     // Mostrar confirmación
-    if (!confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+    if (!confirm(t('profile.logoutConfirm'))) {
       return;
     }
 
@@ -135,8 +138,8 @@ const handleLogout = async () => {
     router.push('/login');
 
   } catch (error) {
-    console.error('❌ Error en logout:', error);
-    alert('Error al cerrar sesión');
+  console.error('❌ Error en logout:', error);
+  alert(t('profile.logoutError'));
   }
 };
 
@@ -171,25 +174,26 @@ onMounted(async () => {
     <div class="profile-header-section">
       <div class="header-content">
         <div class="header-title">
-          <h1 class="profile-title">Mi Perfil</h1>
-          <p class="profile-subtitle">Gestiona tu información y proyectos</p>
+          <h1 class="profile-title">{{ $t('profile.myProfileTitle') }}</h1>
+          <p class="profile-subtitle">{{ $t('profile.subtitle') }}</p>
         </div>
-        <pv-button
-            @click="handleLogout"
-            class="logout-button"
-            icon="pi pi-sign-out"
-            label="Cerrar Sesión"
-            severity="secondary"
-            outlined
-        />
+        <language-switcher/>
+    <pv-button
+      @click="handleLogout"
+      class="logout-button"
+      icon="pi pi-sign-out"
+      :label="$t('profile.logout')"
+      severity="secondary"
+      outlined
+    />
       </div>
     </div>
 
     <!-- Loading State -->
     <div v-if="isLoadingProfile || profileStore.loading" class="loading-container">
       <div class="loading-content">
-        <pv-progressspinner class="loading-spinner" />
-        <p class="loading-text">Cargando tu perfil...</p>
+  <pv-progressspinner class="loading-spinner" />
+  <p class="loading-text">{{ $t('profile.loadingYourProfile') }}</p>
       </div>
     </div>
 
@@ -199,14 +203,14 @@ onMounted(async () => {
         <template #content>
           <div class="error-content">
             <i class="pi pi-exclamation-triangle error-icon"></i>
-            <h3>Error al cargar el perfil</h3>
-            <p>{{ profileStore.error }}</p>
-            <pv-button
-                @click="loadUserProfile"
-                label="Reintentar"
-                class="retry-button"
-                icon="pi pi-refresh"
-            />
+            <h3>{{ $t('profile.errorLoadingProfileTitle') }}</h3>
+              <p>{{ profileStore.error }}</p>
+      <pv-button
+        @click="loadUserProfile"
+        :label="$t('profile.retry')"
+        class="retry-button"
+        icon="pi pi-refresh"
+      />
           </div>
         </template>
       </pv-card>
@@ -218,11 +222,11 @@ onMounted(async () => {
         <template #content>
           <div class="no-profile-content">
             <i class="pi pi-user-edit no-profile-icon"></i>
-            <h3>Perfil Incompleto</h3>
-            <p>No se encontró un perfil completo para este usuario.</p>
+            <h3>{{ $t('profile.noProfileTitle') }}</h3>
+            <p>{{ $t('profile.noProfileMessage') }}</p>
             <pv-button
                 @click="router.push('/create-account')"
-                label="Completar Perfil"
+                :label="$t('profile.completeProfile')"
                 class="complete-profile-button"
                 icon="pi pi-user-plus"
             />
@@ -272,11 +276,11 @@ onMounted(async () => {
         <template #content>
           <div class="auth-content">
             <i class="pi pi-lock auth-icon"></i>
-            <h3>Acceso Restringido</h3>
-            <p>Debes iniciar sesión para ver esta página.</p>
+            <h3>{{ $t('profile.accessRestricted') }}</h3>
+            <p>{{ $t('profile.mustLogin') }}</p>
             <pv-button
                 @click="router.push('/login')"
-                label="Ir al Login"
+                :label="$t('profile.goToLogin')"
                 class="login-button"
                 icon="pi pi-sign-in"
             />

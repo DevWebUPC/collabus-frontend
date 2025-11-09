@@ -2,19 +2,19 @@
 <template>
   <div class="ranking-list-container">
     <div class="ranking-header">
-      <h1 style="color: white;">Ranking de Colaboradores</h1>
-      <p class="ranking-subtitle" style="color: white;">Colabora con los mejores y ten buen éxito en tus proyectos</p>
+      <h1 style="color: white;">{{ $t('profile.ranking.title') }}</h1>
+      <p class="ranking-subtitle" style="color: white;">{{ $t('profile.ranking.subtitle') }}</p>
     </div>
 
     <!-- Estados de carga y error -->
     <div v-if="loading" class="loading-state">
       <div class="spinner"></div>
-      Cargando ranking...
+      {{ $t('profile.ranking.loading') }}
     </div>
 
     <div v-else-if="error" class="error-state">
       {{ error }}
-      <button @click="loadRanking" class="retry-btn">Reintentar</button>
+      <button @click="loadRanking" class="retry-btn">{{ $t('profile.ranking.retry') }}</button>
     </div>
 
     <!-- Contenido del ranking -->
@@ -29,7 +29,7 @@
 
       <!-- Mensaje cuando no hay colaboradores -->
       <div v-if="rankedCollaborators.length === 0" class="empty-state">
-        No se encontraron colaboradores para el ranking
+        {{ $t('profile.ranking.empty') }}
       </div>
     </div>
   </div>
@@ -83,7 +83,7 @@ export default {
 
       } catch (err) {
         console.error('Error loading ranking:', err)
-        this.error = 'Error al cargar el ranking de colaboradores'
+        this.error = this.$t('profile.ranking.error')
       } finally {
         this.loading = false
       }

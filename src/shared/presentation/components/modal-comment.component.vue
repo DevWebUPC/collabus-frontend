@@ -1,5 +1,6 @@
 <!-- CommentModal.vue -->
 <script setup>
+import { useI18n } from 'vue-i18n';
 import { ref, computed, onMounted } from 'vue';
 import { useProfileStore } from '../../../profile-management/application/profile-store.js';
 import { useUserStore } from '../../../iam/application/user-store.js';
@@ -28,14 +29,16 @@ onMounted(() => {
   }
 });
 
+const { t } = useI18n();
+
 const ratingText = computed(() => {
   const ratings = {
-    0: 'Selecciona una calificación',
-    1: 'Muy Malo',
-    2: 'Malo',
-    3: 'Regular',
-    4: 'Bueno',
-    5: 'Excelente'
+    0: t('profile.ratingSelect'),
+    1: t('profile.rating1'),
+    2: t('profile.rating2'),
+    3: t('profile.rating3'),
+    4: t('profile.rating4'),
+    5: t('profile.rating5')
   };
   return ratings[currentRating.value];
 });
@@ -75,7 +78,7 @@ const resetForm = () => {
     <div class="modal-container">
       <!-- Modal Header -->
       <div class="modal-header">
-        <h2>Dejar Comentario</h2>
+        <h2>{{ $t('profile.leaveCommentTitle') }}</h2>
         <button class="close-button" @click="closeModal">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -87,7 +90,7 @@ const resetForm = () => {
       <div class="modal-content">
         <!-- Star Rating -->
         <div class="rating-section">
-          <h3>Calificación</h3>
+          <h3>{{ $t('profile.ratingTitle') }}</h3>
           <div class="stars-container">
             <button
                 v-for="star in 5"
@@ -106,16 +109,16 @@ const resetForm = () => {
 
         <!-- Comment Textarea -->
         <div class="comment-section">
-          <h3>Tu Comentario</h3>
+          <h3>{{ $t('profile.yourComment') }}</h3>
           <textarea
               v-model="commentText"
-              placeholder="Escribe tu comentario aquí..."
+              :placeholder="$t('profile.commentPlaceholder')"
               class="comment-textarea"
               rows="6"
               maxlength="500"
           ></textarea>
           <div class="character-count">
-            {{ commentText.length }}/500 caracteres
+            {{ commentText.length }}/500 {{ $t('profile.characters') }}
           </div>
         </div>
       </div>
@@ -123,14 +126,14 @@ const resetForm = () => {
       <!-- Modal Footer -->
       <div class="modal-footer">
         <button class="cancel-button" @click="closeModal">
-          Cancelar
+          {{ $t('profile.cancel') }}
         </button>
         <button
             class="submit-button"
             @click="submitComment"
             :disabled="!currentRating || !commentText.trim()"
         >
-          Enviar Comentario
+          {{ $t('profile.submitComment') }}
         </button>
       </div>
     </div>

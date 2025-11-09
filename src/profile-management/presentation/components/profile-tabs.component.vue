@@ -142,14 +142,14 @@ onMounted(async () => {
           :class="{ 'sub-tab-active': selectedProjectView === 'my-projects' }"
           @click="selectedProjectView = 'my-projects'"
       >
-        Mis Proyectos
+        {{ $t('profile.subtabs.myProjects') }}
       </div>
       <div
           class="sub-tab-option"
           :class="{ 'sub-tab-active': selectedProjectView === 'favorites' }"
           @click="selectedProjectView = 'favorites'"
       >
-        Favoritos
+        {{ $t('profile.subtabs.favorites') }}
       </div>
     </div>
 
@@ -159,7 +159,7 @@ onMounted(async () => {
         <div v-if="selectedProjectView === 'my-projects'">
           <!-- Contenido de Mis Proyectos -->
           <div v-if="myProjects.length === 0">
-            <p>No tienes proyectos propios.</p>
+            <p>{{ $t('profile.noOwnProjects') }}</p>
           </div>
           <div v-else class="projects-list">
             <div 
@@ -183,7 +183,7 @@ onMounted(async () => {
         <div v-else-if="selectedProjectView === 'favorites'">
           <!-- Contenido de Favoritos -->
           <div v-if="favoriteProjects.length === 0">
-            <p>No tienes proyectos favoritos.</p>
+            <p>{{ $t('profile.noFavoriteProjects') }}</p>
           </div>
           <div v-else class="projects-list">
             <div 

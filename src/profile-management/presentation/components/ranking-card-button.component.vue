@@ -2,11 +2,11 @@
   <div class="ranking-card">
     <button class="circular-ranking-button" @click="goToRanking">
       <div class="button-text">
-        <span class="line-1">Ranking De</span>
-        <span class="line-2">Colaboradores</span>
+        <span class="line-1">{{ $t('profile.ranking.card.line1') }}</span>
+        <span class="line-2">{{ $t('profile.ranking.card.line2') }}</span>
       </div>
     </button>
-    <p class="ranking-description">Ver ranking completo</p>
+    <p class="ranking-description">{{ $t('profile.ranking.card.description') }}</p>
   </div>
 </template>
 

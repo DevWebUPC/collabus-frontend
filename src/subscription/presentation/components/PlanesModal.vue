@@ -3,8 +3,8 @@
     <div class="pm-backdrop" @click.self="$emit('close')">
       <div class="pm-sheet" role="dialog" aria-modal="true" aria-label="Selecciona un plan">
         <header class="pm-header">
-          <h2>Selecciona un plan</h2>
-          <button class="pm-close" @click="$emit('close')" aria-label="Cerrar">✕</button>
+          <h2>{{ $t('subscription.plansModal.selectPlanTitle') }}</h2>
+          <button class="pm-close" @click="$emit('close')" :aria-label="$t('subscription.plansModal.close')">✕</button>
         </header>
 
         <div class="pm-content">
@@ -12,63 +12,63 @@
             <!-- GRATUITO -->
             <article class="card">
               <div class="card-head">
-                <h3>Plan Gratuito</h3>
-                <p class="price indigo">$0 <span>/ siempre gratis</span></p>
+                <h3>{{ $t('subscription.plansModal.free.title') }}</h3>
+                <p class="price indigo">{{ $t('subscription.plansModal.free.price') }} <span>{{ $t('subscription.plansModal.free.period') }}</span></p>
               </div>
 
               <hr class="sep" />
 
               <div class="section">
-                <p class="section-title indigo">👤 Para Emprendedores</p>
+                <p class="section-title indigo">{{ $t('subscription.plansModal.free.entrepreneursTitle') }}</p>
                 <ul class="list indigo">
-                  <li>✓ Hasta <b>5 proyectos activos</b></li>
-                  <li>✓ Mínimo <b>2 Reward</b></li>
-                  <li>✓ Invitar hasta <b>3 colaboradores</b></li>
-                  <li>✓ Hasta <b>3 tareas</b> y <b>2 hitos</b></li>
+                  <li>{{ $t('subscription.plansModal.free.entrepreneurs.li1') }}</li>
+                  <li>{{ $t('subscription.plansModal.free.entrepreneurs.li2') }}</li>
+                  <li>{{ $t('subscription.plansModal.free.entrepreneurs.li3') }}</li>
+                  <li>{{ $t('subscription.plansModal.free.entrepreneurs.li4') }}</li>
                 </ul>
               </div>
 
               <div class="section">
-                <p class="section-title indigo">🤝 Para Colaboradores</p>
+                <p class="section-title indigo">{{ $t('subscription.plansModal.free.collaboratorsTitle') }}</p>
                 <ul class="list indigo">
-                  <li>✓ Solo participar hasta <b>2 proyectos</b></li>
-                  <li>✓ Completar hasta <b>2 tareas</b></li>
-                  <li>✓ Completar solo <b>2 tareas</b> de <b>2 hitos</b></li>
+                  <li>{{ $t('subscription.plansModal.free.collaborators.li1') }}</li>
+                  <li>{{ $t('subscription.plansModal.free.collaborators.li2') }}</li>
+                  <li>{{ $t('subscription.plansModal.free.collaborators.li3') }}</li>
                 </ul>
               </div>
 
-              <pv-button class="cta indigo" @click="select('Gratuito')">Seleccionar plan</pv-button>
+              <pv-button class="cta indigo" @click="select('Gratuito')">{{ $t('subscription.plansModal.free.cta') }}</pv-button>
             </article>
 
             <!-- PREMIUM -->
             <article class="card">
               <div class="card-head">
-                <h3>Plan Premium</h3>
-                <p class="price orange">$5 <span>/ mensual</span></p>
+                <h3>{{ $t('subscription.plansModal.premium.title') }}</h3>
+                <p class="price orange">{{ $t('subscription.plansModal.premium.price') }} <span>{{ $t('subscription.plansModal.premium.period') }}</span></p>
               </div>
 
               <hr class="sep" />
 
               <div class="section">
-                <p class="section-title orange">👤 Para Emprendedores</p>
+                <p class="section-title orange">{{ $t('subscription.plansModal.premium.entrepreneursTitle') }}</p>
                 <ul class="list orange">
-                  <li>✓ <b>Proyectos ilimitados</b></li>
-                  <li>✓ <b>Reward</b> ilimitado</li>
-                  <li>✓ Mentorías y <b>soporte prioritario</b></li>
-                  <li>✓ <b>Tareas</b> e <b>hitos</b> ilimitados</li>
+                  <li>{{ $t('subscription.plansModal.premium.entrepreneurs.li1') }}</li>
+                  <li>{{ $t('subscription.plansModal.premium.entrepreneurs.li2') }}</li>
+                  <li>{{ $t('subscription.plansModal.premium.entrepreneurs.li3') }}</li>
+                  <li>{{ $t('subscription.plansModal.premium.entrepreneurs.li4') }}</li>
                 </ul>
               </div>
 
               <div class="section">
-                <p class="section-title orange">🤝 Para Colaboradores</p>
+                <p class="section-title orange">{{ $t('subscription.plansModal.premium.collaboratorsTitle') }}</p>
                 <ul class="list orange">
-                  <li>✓ <b>Participación ilimitada</b> de proyectos</li>
-                  <li>✓ Completar <b>tareas ilimitadas</b></li>
-                  <li>✓ Completar diferentes tareas de <b>hitos ilimitados</b></li>
+                  <li>{{ $t('subscription.plansModal.premium.collaborators.li1') }}</li>
+                  <li>{{ $t('subscription.plansModal.premium.collaborators.li2') }}</li>
+                  <li>{{ $t('subscription.plansModal.premium.collaborators.li3') }}</li>
                 </ul>
               </div>
 
-              <pv-button class="cta orange" @click="select('Premium')">Suscribirse ahora</pv-button>
+              <pv-button class="cta orange" @click="select('Premium')">{{ $t('subscription.plansModal.premium.cta') }}</pv-button>
             </article>
           </div>
         </div>

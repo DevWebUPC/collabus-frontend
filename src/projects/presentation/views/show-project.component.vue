@@ -106,7 +106,7 @@ onMounted(async () => {
   <div class="project-detail-container">
     <div v-if="loading" class="loading-container">
       <div class="loading-spinner"></div>
-      <span>Cargando proyecto...</span>
+      <span>{{ $t('projects.detail.loading') }}</span>
     </div>
 
     <div v-else-if="project" class="project-content">

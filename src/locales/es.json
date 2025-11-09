@@ -73,6 +73,7 @@
   "common": {
     "loading": "Cargando...",
     "notSpecified": "No especificado",
+    "more": "más",
     "oneMonth": "1 mes",
     "months": "{count} meses",
     "unnamed": "Sin nombre",
@@ -282,6 +283,45 @@
   },
   "profile": {
     "see-CV": "Ver CV",
+    "publicProfileTitle": "Perfil de Colaborador",
+  "myProfileTitle": "Mi Perfil",
+    "subtabs": {
+      "myProjects": "Mis Proyectos",
+      "favorites": "Favoritos"
+    },
+    "noOwnProjects": "No tienes proyectos propios.",
+    "noFavoriteProjects": "No tienes proyectos favoritos.",
+    "loadingProfile": "Cargando perfil...",
+    "notFoundTitle": "Perfil no encontrado",
+    "notFoundMessage": "No se pudo encontrar el perfil solicitado.",
+    "retry": "Reintentar",
+    "invite": "Invitar a Colaborar",
+    "leaveComment": "Dejar Comentario",
+    "leaveCommentTitle": "Dejar Comentario",
+  "ratingSelect": "Selecciona una calificación",
+  "rating1": "Muy Malo",
+  "rating2": "Malo",
+  "rating3": "Regular",
+  "rating4": "Bueno",
+  "rating5": "Excelente",
+  "ratingTitle": "Calificación",
+  "yourComment": "Tu Comentario",
+  "commentPlaceholder": "Escribe tu comentario aquí...",
+  "characters": "caracteres",
+  "cancel": "Cancelar",
+  "submitComment": "Enviar Comentario",
+  "subtitle": "Gestiona tu información y proyectos",
+  "logout": "Cerrar Sesión",
+  "loadingYourProfile": "Cargando tu perfil...",
+  "errorLoadingProfileTitle": "Error al cargar el perfil",
+  "noProfileTitle": "Perfil Incompleto",
+  "noProfileMessage": "No se encontró un perfil completo para este usuario.",
+  "completeProfile": "Completar Perfil",
+  "accessRestricted": "Acceso Restringido",
+  "mustLogin": "Debes iniciar sesión para ver esta página.",
+  "goToLogin": "Ir al Login",
+  "logoutConfirm": "¿Estás seguro de que quieres cerrar sesión?",
+  "logoutError": "Error al cerrar sesión",
     "portfolio": "Portafolio",
     "points": "Puntos",
     "projects": "Proyectos",
@@ -316,6 +356,77 @@
     },
     "comments": {
       "empty": "Aún no hay comentarios para este perfil."
+    },
+    "collaboratorsList": {
+      "title": "Lista de Colaboradores",
+      "loading": "Cargando colaboradores...",
+      "error": "Error al cargar los colaboradores",
+      "retry": "Reintentar",
+      "emptySearch": "No se encontraron colaboradores que coincidan con tu búsqueda",
+      "empty": "No se encontraron colaboradores"
+    },
+    "collaborator": {
+      "scoreLabel": "Puntuación:",
+      "viewProfile": "Ver Perfil",
+      "pointsSuffix": "pts"
+    },
+    "ranking": {
+      "title": "Ranking de Colaboradores",
+      "subtitle": "Colabora con los mejores y ten buen éxito en tus proyectos",
+      "loading": "Cargando ranking...",
+      "error": "Error al cargar el ranking de colaboradores",
+      "retry": "Reintentar",
+      "empty": "No se encontraron colaboradores para el ranking",
+      "card": {
+        "line1": "Ranking",
+        "line2": "Colaboradores",
+        "description": "Ver ranking completo"
+      }
+    },
+    "searchFilters": {
+      "searchLabel": "Buscar por nombre o habilidad",
+      "searchPlaceholderExample": "Ej: Juan Pérez o JavaScript",
+      "roleLabel": "Filtrar por rol",
+      "rolePlaceholderExample": "Ej: Ingeniero, Marketing, Gerente",
+      "minScoreLabel": "Puntuación mínima",
+      "minScorePlaceholder": "Mínimo",
+      "maxScoreLabel": "Puntuación máxima",
+      "maxScorePlaceholder": "Máximo",
+      "searching": "Buscando...",
+      "search": "Buscar",
+      "clear": "Limpiar",
+      "roles": {
+        "projectGeneral": "General de Proyectos",
+        "secretary": "Secretaría",
+        "engineer": "Ingeniero",
+        "digitalMarketing": "Marketing Digital",
+        "manager": "Gerente",
+        "professional": "Profesional"
+      }
+    },
+    "welcomeHeader": {
+      "title": "Bienvenido a la sección colaboradores",
+      "descriptionLine1": "Aquí podrá buscar los colaboradores con distintas habilidades y un rol específico",
+      "descriptionLine2Before": "También puedes ver en qué ranking te encuentras de los mejores colaboradores de",
+      "brand": "Collabus",
+      "descriptionLine2After": ".",
+      "imageAlt": "Colaboradores CollabUs"
+    },
+    "personalStats": {
+      "title": "Estadísticas personales",
+      "currentScoreLabel": "Tu puntuación actual:",
+      "rankingLabel": "Ranking:",
+      "activeProjectsLabel": "Proyectos activos:"
+    }
+  },
+  "shared": {
+    "headerPresentation": {
+      "brand": "Collabus",
+      "line1": "Colabora con los mejores",
+      "line2": "y ten buen éxito",
+      "line3": "de tus proyectos",
+      "statCollaborators": "Colaboradores",
+      "statSuccess": "Éxito"
     }
   },
   "application": {
@@ -351,6 +462,63 @@
     "errors": {
       "invalidFileType": "Solo se permiten archivos PDF",
       "submissionFailed": "Error al enviar la postulación. Intenta nuevamente."
+    }
+  },
+  "subscription": {
+    "currentPlan": {
+      "title": "Plan Actual",
+      "ariaLabel": "Ver y cambiar plan",
+      "change": "Cambiar",
+      "changeSuffix": "de Plan",
+      "plan": "Plan",
+      "hint": "Haz clic para ver los planes"
+    },
+    "plans": {
+      "Gratuito": "Gratuito",
+      "Premium": "Premium"
+    },
+    "plansModal": {
+      "selectPlanTitle": "Selecciona un plan",
+      "close": "Cerrar",
+      "free": {
+        "title": "Plan Gratuito",
+        "price": "$0",
+        "period": "/ siempre gratis",
+        "entrepreneursTitle": "👤 Para Emprendedores",
+        "entrepreneurs": {
+          "li1": "Hasta 5 proyectos activos",
+          "li2": "Mínimo 2 Reward",
+          "li3": "Invitar hasta 3 colaboradores",
+          "li4": "Hasta 3 tareas y 2 hitos"
+        },
+        "collaboratorsTitle": "🤝 Para Colaboradores",
+        "collaborators": {
+          "li1": "Solo participar hasta 2 proyectos",
+          "li2": "Completar hasta 2 tareas",
+          "li3": "Completar solo 2 tareas de 2 hitos"
+        },
+        "cta": "Seleccionar plan"
+      },
+      "premium": {
+        "title": "Plan Premium",
+        "price": "$5",
+        "period": "/ mensual",
+        "entrepreneursTitle": "👤 Para Emprendedores",
+        "entrepreneurs": {
+          "li1": "Proyectos ilimitados",
+          "li2": "Reward ilimitado",
+          "li3": "Mentorías y soporte prioritario",
+          "li4": "Tareas e hitos ilimitados"
+        },
+        "collaboratorsTitle": "🤝 Para Colaboradores",
+        "collaborators": {
+          "li1": "Participación ilimitada de proyectos",
+          "li2": "Completar tareas ilimitadas",
+          "li3": "Completar diferentes tareas de hitos ilimitados"
+        },
+        "cta": "Suscribirse ahora"
+      },
+      "footer": "© CollabUs · 2025"
     }
   },
   "common": {

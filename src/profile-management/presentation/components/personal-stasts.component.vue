@@ -1,17 +1,17 @@
 <template>
   <div class="personal-stats-card">
-    <h3>Estadísticas personales</h3>
+    <h3>{{ $t('profile.personalStats.title') }}</h3>
     <div class="stats-content">
       <div class="stat-item">
-        <span class="stat-label">Tu puntuación actual:</span>
-        <span class="stat-value">{{ stats.score }} pts</span>
+        <span class="stat-label">{{ $t('profile.personalStats.currentScoreLabel') }}</span>
+        <span class="stat-value">{{ stats.score }} {{ $t('profile.collaborator.pointsSuffix') }}</span>
       </div>
       <div class="stat-item">
-        <span class="stat-label">Ranking:</span>
+        <span class="stat-label">{{ $t('profile.personalStats.rankingLabel') }}</span>
         <span class="stat-value">#{{ stats.ranking }}</span>
       </div>
       <div class="stat-item">
-        <span class="stat-label">Proyectos activos:</span>
+        <span class="stat-label">{{ $t('profile.personalStats.activeProjectsLabel') }}</span>
         <span class="stat-value">{{ stats.activeProjects }}</span>
       </div>
     </div>

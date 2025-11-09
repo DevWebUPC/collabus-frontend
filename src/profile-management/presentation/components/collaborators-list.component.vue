@@ -71,7 +71,7 @@ export default {
 
       } catch (err) {
         console.error('Error loading collaborators:', err);
-        this.error = 'Error al cargar los colaboradores';
+    this.error = this.$t('profile.collaboratorsList.error');
       } finally {
         this.loading = false;
       }
@@ -94,23 +94,23 @@ export default {
 </script>
 <template>
   <div class="collaborators-list-container">
-    <h1>Lista de Colaboradores</h1>
+  <h1>{{ $t('profile.collaboratorsList.title') }}</h1>
 
     <!-- Estado de carga -->
     <div v-if="loading" class="loading-state">
-      Cargando colaboradores...
+      {{ $t('profile.collaboratorsList.loading') }}
     </div>
 
     <!-- Estado de error -->
     <div v-else-if="error" class="error-state">
       {{ error }}
-      <button @click="loadCollaborators" class="retry-btn">Reintentar</button>
+      <button @click="loadCollaborators" class="retry-btn">{{ $t('profile.collaboratorsList.retry') }}</button>
     </div>
 
     <!-- Lista de colaboradores -->
     <div v-else class="collaborators-grid">
-      <div v-if="isFiltered && localCollaborators.length === 0" class="empty-search-state">
-        No se encontraron colaboradores que coincidan con tu búsqueda
+        <div v-if="isFiltered && localCollaborators.length === 0" class="empty-search-state">
+        {{ $t('profile.collaboratorsList.emptySearch') }}
       </div>
 
       <CollaboratorItem
@@ -122,7 +122,7 @@ export default {
 
       <!-- Mensaje cuando no hay colaboradores (solo para carga inicial) -->
       <div v-if="!isFiltered && localCollaborators.length === 0" class="empty-state">
-        No se encontraron colaboradores
+        {{ $t('profile.collaboratorsList.empty') }}
       </div>
     </div>
   </div>

@@ -1,19 +1,19 @@
 <template>
   <section class="pa-card">
-    <h3 class="pa-title">Plan Actual</h3>
+  <h3 class="pa-title">{{ $t('subscription.currentPlan.title') }}</h3>
 
     <pv-button
         class="pa-circle"
         @click="openPlansModal"
-        aria-label="Ver y cambiar plan"
+        :aria-label="$t('subscription.currentPlan.ariaLabel')"
         @mouseenter="isHovered = true"
         @mouseleave="isHovered = false"
     >
-      <span class="pa-circle__title">{{ isHovered ? 'Cambiar' : 'Plan' }}</span>
-      <span class="pa-circle__name">{{ isHovered ? 'de Plan' : currentPlan }}</span>
+      <span class="pa-circle__title">{{ isHovered ? $t('subscription.currentPlan.change') : $t('subscription.currentPlan.plan') }}</span>
+      <span class="pa-circle__name">{{ isHovered ? $t('subscription.currentPlan.changeSuffix') : $t('subscription.plans.' + currentPlan) }}</span>
     </pv-button>
 
-    <p class="pa-hint">Haz clic para ver los planes</p>
+  <p class="pa-hint">{{ $t('subscription.currentPlan.hint') }}</p>
   </section>
 </template>
 

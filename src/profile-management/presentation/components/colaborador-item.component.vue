@@ -30,8 +30,8 @@ export default {
 
     <div class="collaborator-details">
       <div class="score">
-        <span class="score-label">Puntuación:</span>
-        <span class="score-value">{{ collaborator.score }}pts</span>
+        <span class="score-label">{{ $t('profile.collaborator.scoreLabel') }}</span>
+        <span class="score-value">{{ collaborator.score }}{{ $t('profile.collaborator.pointsSuffix') }}</span>
       </div>
 
       <div class="skills">
@@ -48,7 +48,7 @@ export default {
           class="profile-button"
           @click="viewProfile"
       >
-        Ver Perfil
+        {{ $t('profile.collaborator.viewProfile') }}
       </button>
     </div>
   </div>
