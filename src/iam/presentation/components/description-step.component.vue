@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   modelValue: {
@@ -12,6 +13,7 @@ const emit = defineEmits(['update:modelValue', 'complete', 'prev']);
 
 // Biografía con límite de caracteres
 const bioText = ref(props.modelValue.bio || '');
+const { t } = useI18n();
 
 // Actualizar el modelo cuando cambie la biografía
 watch(bioText, (newBio) => {
@@ -43,12 +45,12 @@ watch(() => props.modelValue.bio, (newBio) => {
       <div class="step-content">
         <!-- Biografía -->
         <div class="form-group">
-          <label for="bio" class="form-label">Tu Biografía</label>
+          <label for="bio" class="form-label">{{ $t('onboarding.description.bioLabel') }}</label>
           <pv-textarea
               id="bio"
               v-model="bioText"
               :rows="6"
-              placeholder="Describe tu experiencia profesional, habilidades, proyectos destacados, intereses y lo que te apasiona..."
+              :placeholder="$t('onboarding.description.bioPlaceholder')"
               class="w-full bio-textarea"
               :autoResize="true"
           />
@@ -56,10 +58,10 @@ watch(() => props.modelValue.bio, (newBio) => {
             'warning': bioText.length > 400,
             'error': bioText.length >= 500
           }">
-            {{ bioText.length }}/500 caracteres
+            {{ t('onboarding.description.charCounter', { count: bioText.length }) }}
           </div>
           <p class="input-hint">
-            Esta descripción será visible para otros usuarios en tu perfil
+            {{ $t('onboarding.description.visibleHint') }}
           </p>
         </div>
       </div>
@@ -70,20 +72,20 @@ watch(() => props.modelValue.bio, (newBio) => {
         <pv-button
             @click="$emit('prev')"
             class="back-button"
-            label="Atrás"
+            :label="$t('onboarding.description.back')"
             outlined
         />
         <div class="right-buttons">
           <pv-button
               @click="$emit('complete')"
               class="skip-button"
-              label="Omitir"
+              :label="$t('onboarding.description.skip')"
               text
           />
           <pv-button
               @click="$emit('complete')"
               class="continue-button"
-              label="Completar"
+              :label="$t('onboarding.description.complete')"
               :disabled="!bioText.trim()"
           />
         </div>

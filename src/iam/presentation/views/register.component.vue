@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../../application/user-store.js'; // Ajusta la ruta según tu estructura
 import { Button as PvButton, InputText } from "primevue";
+import languageSwitcher from '../../../shared/presentation/components/language-switcher.vue';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -66,7 +67,6 @@ const handleRegister = async () => {
         <img src="/logo.png" :alt="$t('auth.logoAlt')" class="logo-image" />
       </div>
       <div class="right-container">
-        <language-switcher />
         <pv-button
           @click="goBack"
           class="back-button desktop-only"

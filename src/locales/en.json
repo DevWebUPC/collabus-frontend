@@ -85,7 +85,11 @@
       "yesterday": "Yesterday",
       "days-ago": "days ago",
       "days-ago-prefix": ""
-    }
+    },
+    "optional": "optional",
+    "cancel": "Cancel",
+    "goBack": "Go Back",
+    "more": "more"
   },
   "projects": {
     "title": "Projects",
@@ -555,6 +559,14 @@
       "passwordsNoMatch": "Passwords do not match",
       "error": "Registration failed"
     },
+    "forgotPasswordModal": {
+      "title": "Recover Password",
+      "instruction": "Enter your email address:",
+      "emailPlaceholder": "example@gmail.com",
+      "send": "Send",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address"
+    },
     "recovery": {
       "title": "Reset Password",
       "subtitle": "Please enter a new password",
@@ -566,12 +578,60 @@
       "passwordMismatch": "Passwords do not match"
     }
   },
-  "common": {
-    "optional": "optional",
-    "cancel": "Cancel",
-    "goBack": "Go Back",
-    "more": "more",
-    "loading": "Loading...",
-    "unknown": "Unknown"
+  "onboarding": {
+    "profile": {
+      "title": "Set up your profile",
+      "avatarHintAdd": "Add a photo for your profile",
+      "avatarHintChange": "Click to change the photo",
+      "invalidImage": "Please select an image file",
+      "imageTooLarge": "Image must be smaller than 1MB",
+      "change": "Change",
+      "addPhoto": "Add photo",
+      "usernameLabel": "Profile name",
+      "usernamePlaceholder": "Your username",
+      "save": "Save"
+    },
+    "description": {
+      "title": "Tell us about yourself",
+      "subtitle": "Share a short description that shows your experience and passions",
+      "bioLabel": "Your biography",
+      "bioPlaceholder": "Describe your professional experience, skills, notable projects, interests and what you're passionate about...",
+      "charCounter": "{count}/500 characters",
+      "visibleHint": "This description will be visible to other users on your profile",
+      "back": "Back",
+      "skip": "Skip",
+      "complete": "Complete"
+    },
+    "role": {
+      "title": "How would you like to present yourself?",
+      "subtitle": "Collaborators look for people with different skills and roles. Which role would you like to take?",
+      "or": "or",
+      "customRoleLabel": "Write your role",
+      "customRolePlaceholder": "Type your custom role...",
+      "infoMessage": "You can edit this role later in your profile",
+      "back": "Back",
+      "save": "Save"
+    },
+    "skills": {
+      "title": "Skills & Experience",
+      "skillsSection": "Skills",
+      "addSkillPlaceholder": "Add a skill",
+      "addSkill": "Add",
+      "removeSkill": "Remove",
+      "experiencesSection": "Experiences",
+      "positionPlaceholder": "Position",
+      "companyPlaceholder": "Company",
+      "startDatePlaceholder": "Start date",
+      "addExperience": "Add experience",
+      "removeExperience": "Remove",
+      "cvSection": "CV",
+      "uploadCv": "Upload CV",
+      "cvAcceptTypes": "Accepted: PDF, DOC",
+      "cvTooLarge": "File must be smaller than 5MB",
+      "cvInvalidType": "Please select a PDF or DOC file",
+      "fileError": "Error processing the file",
+      "back": "Back",
+      "next": "Next"
+    }
   }
 }

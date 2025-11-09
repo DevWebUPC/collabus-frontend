@@ -83,7 +83,10 @@
       "yesterday": "Ayer",
       "days-ago": "días",
       "days-ago-prefix": "Hace"
-    }
+    },
+    "optional": "opcional",
+    "cancel": "Cancelar",
+    "goBack": "Volver"
   },
   "projects": {
     "title": "Proyectos",
@@ -553,6 +556,14 @@
       "passwordsNoMatch": "Las contraseñas no coinciden",
       "error": "Error al registrarse"
     },
+    "forgotPasswordModal": {
+      "title": "Recuperar Contraseña",
+      "instruction": "Ingresa tu correo electrónico:",
+      "emailPlaceholder": "ejemplo@gmail.com",
+      "send": "Enviar",
+      "emailRequired": "El correo electrónico es requerido",
+      "emailInvalid": "Por favor ingresa un correo electrónico válido"
+    },
     "recovery": {
       "title": "Recuperar Contraseña",
       "subtitle": "Por favor ingresa una nueva contraseña",
@@ -564,11 +575,60 @@
       "passwordMismatch": "Las contraseñas no coinciden"
     }
   },
-  "common": {
-    "optional": "opcional",
-    "cancel": "Cancelar",
-    "goBack": "Volver",
-    "loading": "Cargando...",
-    "unknown": "Desconocido"
+  "onboarding": {
+    "profile": {
+      "title": "Configura tu Perfil",
+      "avatarHintAdd": "Añade una foto para tu perfil",
+      "avatarHintChange": "Haz clic para cambiar la foto",
+      "invalidImage": "Por favor, selecciona un archivo de imagen",
+      "imageTooLarge": "La imagen debe ser menor a 1MB",
+      "change": "Cambiar",
+      "addPhoto": "Añadir foto",
+      "usernameLabel": "Nombre de Perfil",
+      "usernamePlaceholder": "Tu nombre de usuario",
+      "save": "Guardar"
+    },
+    "description": {
+      "title": "Cuéntanos sobre ti",
+      "subtitle": "Comparte una breve descripción que muestre tu experiencia y lo que te apasiona",
+      "bioLabel": "Tu Biografía",
+      "bioPlaceholder": "Describe tu experiencia profesional, habilidades, proyectos destacados, intereses y lo que te apasiona...",
+      "charCounter": "{count}/500 caracteres",
+      "visibleHint": "Esta descripción será visible para otros usuarios en tu perfil",
+      "back": "Atrás",
+      "skip": "Omitir",
+      "complete": "Completar"
+    },
+    "role": {
+      "title": "¿Cómo te gustaría Presentarte?",
+      "subtitle": "Los colaboradores suelen buscar personas con distintas habilidades y roles. ¿Qué rol te gustaría asumir?",
+      "or": "o",
+      "customRoleLabel": "Escribir tu rol",
+      "customRolePlaceholder": "Escribe tu rol personalizado...",
+      "infoMessage": "Tu rol entre los otros datos ingresados los puedes editar en tu perfil",
+      "back": "Atrás",
+      "save": "Guardar"
+    },
+    "skills": {
+      "title": "Habilidades y Experiencia",
+      "skillsSection": "Habilidades",
+      "addSkillPlaceholder": "Añade una habilidad",
+      "addSkill": "Añadir",
+      "removeSkill": "Eliminar",
+      "experiencesSection": "Experiencias",
+      "positionPlaceholder": "Puesto",
+      "companyPlaceholder": "Empresa",
+      "startDatePlaceholder": "Fecha de inicio",
+      "addExperience": "Añadir experiencia",
+      "removeExperience": "Eliminar",
+      "cvSection": "CV",
+      "uploadCv": "Subir CV",
+      "cvAcceptTypes": "Aceptados: PDF, DOC",
+      "cvTooLarge": "El archivo debe ser menor a 5MB",
+      "cvInvalidType": "Por favor, selecciona un archivo PDF o DOC",
+      "fileError": "Error al procesar el archivo",
+      "back": "Atrás",
+      "next": "Siguiente"
+    }
   }
 }

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   modelValue: {
@@ -7,6 +8,7 @@ const props = defineProps({
     required: true
   }
 });
+const { t } = useI18n();
 
 const emit = defineEmits(['update:modelValue', 'next', 'prev']);
 
@@ -64,10 +66,9 @@ watch(() => props.modelValue, (newValue) => {
   <pv-card class="step-card">
     <template #title>
       <div class="step-header">
-        <h1 class="main-title">¿Cómo te gustaría Presentarte?</h1>
+        <h1 class="main-title">{{ $t('onboarding.role.title') }}</h1>
         <p class="subtitle">
-          Los colaboradores suelen buscar personas con distintas habilidades y roles.
-          ¿Qué rol te gustaría asumir?
+          {{ $t('onboarding.role.subtitle') }}
         </p>
       </div>
     </template>
@@ -88,15 +89,15 @@ watch(() => props.modelValue, (newValue) => {
 
         <!-- Separador -->
         <div class="separator">
-          <span class="separator-text">o</span>
+          <span class="separator-text">{{ $t('onboarding.role.or') }}</span>
         </div>
 
         <!-- Rol personalizado -->
         <div class="custom-role-section">
-          <label class="custom-role-label">Escribir tu rol</label>
+      <label class="custom-role-label">{{ $t('onboarding.role.customRoleLabel') }}</label>
           <pv-input-text
-              v-model="modelValue.customRole"
-              placeholder="Escribe tu rol personalizado..."
+        v-model="modelValue.customRole"
+        :placeholder="$t('onboarding.role.customRolePlaceholder')"
               class="custom-role-input"
               @input="updateCustomRole(modelValue.customRole)"
           />
@@ -104,25 +105,25 @@ watch(() => props.modelValue, (newValue) => {
 
         <!-- Mensaje informativo -->
         <p class="info-message">
-          Tu rol entre los otros datos ingresados los puedes editar en tu perfil
+          {{ $t('onboarding.role.infoMessage') }}
         </p>
       </div>
     </template>
 
     <template #footer>
       <div class="card-footer">
-        <pv-button
-            @click="$emit('prev')"
-            class="back-button"
-            label="Atrás"
-            outlined
-        />
-        <pv-button
-            @click="$emit('next')"
-            class="continue-button"
-            label="Guardar"
-            :disabled="!modelValue.selectedRole && !modelValue.customRole"
-        />
+    <pv-button
+      @click="$emit('prev')"
+      class="back-button"
+      :label="$t('onboarding.role.back')"
+      outlined
+    />
+    <pv-button
+      @click="$emit('next')"
+      class="continue-button"
+      :label="$t('onboarding.role.save')"
+      :disabled="!modelValue.selectedRole && !modelValue.customRole"
+    />
       </div>
     </template>
   </pv-card>

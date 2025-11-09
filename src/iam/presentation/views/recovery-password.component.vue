@@ -52,7 +52,6 @@ const handlePasswordReset = () => {
         <img src="/logo.png" alt="CollabUs Logo" class="logo-image" />
       </div>
       <div class="right-container">
-        <language-switcher />
         <pv-button
           @click="goBack"
           class="back-button desktop-only"

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   modelValue: {
@@ -7,6 +8,7 @@ const props = defineProps({
     required: true
   }
 });
+const { t } = useI18n();
 
 const emit = defineEmits(['update:modelValue', 'next', 'prev']);
 
