@@ -521,6 +521,49 @@
       "footer": "© CollabUs · 2025"
     }
   },
+  "auth": {
+    "back": "Volver",
+    "logoAlt": "Logo CollabUs",
+    "login": {
+      "subtitle": "Inicia sesión en tu cuenta",
+      "fillFields": "Por favor completa el correo y la contraseña",
+      "loading": "Cargando...",
+      "emailLabel": "Correo",
+      "emailPlaceholder": "correo.ejemplo.com",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "loggingIn": "Iniciando sesión...",
+      "login": "Iniciar sesión",
+      "noAccountPrefix": "¿No tienes una cuenta?",
+      "register": "Registrarse",
+      "error": "Error al iniciar sesión"
+    },
+    "register": {
+      "title": "Crear una cuenta",
+      "fullNameLabel": "Nombre completo",
+      "fullNamePlaceholder": "Ingresa tu nombre completo",
+      "emailLabel": "Correo",
+      "emailPlaceholder": "correo.ejemplo.com",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Ingresa una contraseña",
+      "confirmPasswordLabel": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Confirma tu contraseña",
+      "save": "Registrar",
+      "passwordsNoMatch": "Las contraseñas no coinciden",
+      "error": "Error al registrarse"
+    },
+    "recovery": {
+      "title": "Recuperar Contraseña",
+      "subtitle": "Por favor ingresa una nueva contraseña",
+      "newPasswordLabel": "Nueva Contraseña",
+      "confirmPasswordLabel": "Confirmar nueva contraseña",
+      "newPasswordPlaceholder": "Ingresa tu nueva contraseña",
+      "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
+      "confirmButton": "Confirmar nueva contraseña",
+      "passwordMismatch": "Las contraseñas no coinciden"
+    }
+  },
   "common": {
     "optional": "opcional",
     "cancel": "Cancelar",

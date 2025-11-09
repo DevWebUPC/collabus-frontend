@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../../application/user-store.js'; // Ajusta la ruta según tu estructura
 import { Button as PvButton, InputText } from "primevue";
@@ -11,6 +12,7 @@ const fullName = ref('');
 const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+const { t } = useI18n();
 
 const goBack = () => {
   router.push('/');
@@ -18,7 +20,7 @@ const goBack = () => {
 
 const handleRegister = async () => {
   if (password.value !== confirmPassword.value) {
-    alert('Las contraseñas no coinciden');
+    alert(t('auth.register.passwordsNoMatch'));
     return;
   }
 
@@ -33,9 +35,9 @@ const handleRegister = async () => {
 
     // Redirigir al onboarding después del registro exitoso
     router.push('/create-account');
-  } catch (error) {
+    } catch (error) {
     console.error('Error en registro:', error);
-    alert(error.message || 'Error en el registro');
+    alert(error.message || t('auth.register.error'));
   }
 };
 </script>
@@ -44,13 +46,16 @@ const handleRegister = async () => {
   <header class="login-header">
     <div class="header-content">
       <div class="logo">
-        <img src="/logo.png" alt="CollabUs Logo" class="logo">
+        <img src="/logo.png" :alt="$t('auth.logoAlt')" class="logo">
       </div>
-      <pv-button
+      <div class="right-container">
+        <language-switcher />
+        <pv-button
           @click="goBack"
           class="back-button mobile-only"
-          label="Regresar"
-      />
+          :label="$t('auth.back')"
+        />
+      </div>
     </div>
   </header>
 
@@ -58,77 +63,80 @@ const handleRegister = async () => {
     <!-- Panel izquierdo -->
     <div class="card-left">
       <div class="logo-section">
-        <img src="/logo.png" alt="CollabUs Logo" class="logo-image" />
+        <img src="/logo.png" :alt="$t('auth.logoAlt')" class="logo-image" />
       </div>
-      <pv-button
+      <div class="right-container">
+        <language-switcher />
+        <pv-button
           @click="goBack"
           class="back-button desktop-only"
-          label="Regresar"
-      />
+          :label="$t('auth.back')"
+        />
+      </div>
     </div>
 
     <!-- Panel derecho -->
     <div class="card-right">
       <div class="register-content">
         <div class="register-header">
-          <h1 class="main-title">Registrar Usuario</h1>
+          <h1 class="main-title">{{ $t('auth.register.title') }}</h1>
         </div>
 
         <form @submit.prevent="handleRegister" class="register-form">
           <div class="form-group">
-            <label for="fullName">Nombres y Apellidos</label>
-            <pv-input-text
+      <label for="fullName">{{ $t('auth.register.fullNameLabel') }}</label>
+      <pv-input-text
                 type="text"
                 id="fullName"
                 v-model="fullName"
-                placeholder="Juan Pedro Quispe Sandoval"
+        :placeholder="$t('auth.register.fullNamePlaceholder')"
                 required
                 class="w-full text-input"
             />
           </div>
 
           <div class="form-group">
-            <label for="email">Correo Electrónico</label>
-            <pv-input-text
+      <label for="email">{{ $t('auth.register.emailLabel') }}</label>
+      <pv-input-text
                 type="email"
                 id="email"
                 v-model="email"
-                placeholder="ejemplo@gmail.com"
+        :placeholder="$t('auth.register.emailPlaceholder')"
                 required
                 class="w-full text-input"
             />
           </div>
 
           <div class="form-group">
-            <label for="password">Contraseña</label>
-            <pv-input-text
+      <label for="password">{{ $t('auth.register.passwordLabel') }}</label>
+      <pv-input-text
                 type="password"
                 id="password"
                 v-model="password"
-                placeholder="Ingresa tu contraseña"
+        :placeholder="$t('auth.register.passwordPlaceholder')"
                 required
                 class="w-full password-input"
             />
           </div>
 
           <div class="form-group">
-            <label for="confirmPassword">Confirmar Contraseña</label>
-            <pv-input-text
+      <label for="confirmPassword">{{ $t('auth.register.confirmPasswordLabel') }}</label>
+      <pv-input-text
                 type="password"
                 id="confirmPassword"
                 v-model="confirmPassword"
-                placeholder="Confirma tu contraseña"
+        :placeholder="$t('auth.register.confirmPasswordPlaceholder')"
                 required
                 class="w-full password-input"
             />
           </div>
 
-          <pv-button
-              type="submit"
-              class="register-button w-full"
-              label="Guardar"
-              :loading="userStore.loading"
-          />
+      <pv-button
+        type="submit"
+        class="register-button w-full"
+        :label="$t('auth.register.save')"
+        :loading="userStore.loading"
+      />
         </form>
 
         <div class="footer">

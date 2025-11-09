@@ -1,11 +1,14 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { Button as PvButton, InputText } from "primevue";
+import languageSwitcher from '../../../shared/presentation/components/language-switcher.vue';
 
 const router = useRouter();
 const newPassword = ref('');
 const confirmPassword = ref('');
+const { t } = useI18n();
 
 const goBack = () => {
   router.push('/');
@@ -13,7 +16,7 @@ const goBack = () => {
 
 const handlePasswordReset = () => {
   if (newPassword.value !== confirmPassword.value) {
-    alert('Las contraseñas no coinciden');
+    alert(t('auth.recovery.passwordMismatch'));
     return;
   }
 
@@ -31,11 +34,14 @@ const handlePasswordReset = () => {
       <div class="logo">
         <img src="/logo.png" alt="CollabUs Logo" class="logo">
       </div>
-      <pv-button
+      <div class="right-container">
+        <language-switcher />
+        <pv-button
           @click="goBack"
           class="back-button mobile-only"
-          label="Regresar"
-      />
+          :label="$t('auth.back')"
+        />
+      </div>
     </div>
   </header>
 
@@ -45,51 +51,54 @@ const handlePasswordReset = () => {
       <div class="logo-section">
         <img src="/logo.png" alt="CollabUs Logo" class="logo-image" />
       </div>
-      <pv-button
+      <div class="right-container">
+        <language-switcher />
+        <pv-button
           @click="goBack"
           class="back-button desktop-only"
-          label="Regresar"
-      />
+          :label="$t('auth.back')"
+        />
+      </div>
     </div>
 
     <!-- Panel derecho -->
     <div class="card-right">
       <div class="recovery-content">
         <div class="recovery-header">
-          <h1 class="main-title">Recuperar Contraseña</h1>
-          <p class="recovery-subtitle">Por favor ingresa una nueva contraseña</p>
+          <h1 class="main-title">{{$t('auth.recovery.title')}}</h1>
+          <p class="recovery-subtitle">{{$t('auth.recovery.subtitle')}}</p>
         </div>
 
         <form @submit.prevent="handlePasswordReset" class="recovery-form">
           <div class="form-group">
-            <label for="newPassword">Nueva Contraseña</label>
-            <pv-input-text
-                type="password"
-                id="newPassword"
-                v-model="newPassword"
-                placeholder="Ingresa tu nueva contraseña"
-                required
-                class="w-full password-input"
-            />
+      <label for="newPassword">{{$t('auth.recovery.newPasswordLabel')}}</label>
+      <pv-input-text
+        type="password"
+        id="newPassword"
+        v-model="newPassword"
+        :placeholder="$t('auth.recovery.newPasswordPlaceholder')"
+        required
+        class="w-full password-input"
+      />
           </div>
 
           <div class="form-group">
-            <label for="confirmPassword">Confirmar nueva contraseña</label>
-            <pv-input-text
-                type="password"
-                id="confirmPassword"
-                v-model="confirmPassword"
-                placeholder="Confirma tu nueva contraseña"
-                required
-                class="w-full password-input"
-            />
+      <label for="confirmPassword">{{$t('auth.recovery.confirmPasswordLabel')}}</label>
+      <pv-input-text
+        type="password"
+        id="confirmPassword"
+        v-model="confirmPassword"
+        :placeholder="$t('auth.recovery.confirmPasswordPlaceholder')"
+        required
+        class="w-full password-input"
+      />
           </div>
 
-          <pv-button
-              type="submit"
-              class="recovery-button w-full"
-              label="Confirmar nueva contraseña"
-          />
+      <pv-button
+        type="submit"
+        class="recovery-button w-full"
+        :label="$t('auth.recovery.confirmButton')"
+      />
         </form>
       </div>
     </div>

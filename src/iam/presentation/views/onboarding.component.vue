@@ -8,6 +8,7 @@ import RoleStep from "../components/role-step.component.vue";
 import DescriptionStep from "../components/description-step.component.vue";
 import { useProfileStore  } from '../../../profile-management/application/profile-store.js';
 import {useUserStore} from "../../application/user-store.js";
+import languageSwitcher from '../../../shared/presentation/components/language-switcher.vue';
 
 const userStore = useUserStore();
 const profileStore = useProfileStore();
@@ -84,6 +85,9 @@ const completeOnboarding = async () => {
       <div class="header-content">
         <img src="/logo.png" alt="CollabUs Logo" class="logo">
       </div>
+      <div class="right-container">
+        <language-switcher />
+      </div>
     </header>
 
     <!-- Progress Stepper -->
@@ -136,6 +140,12 @@ const completeOnboarding = async () => {
   display: flex;
   flex-direction: column;
   background: white;
+}
+
+.right-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .onboarding-header {

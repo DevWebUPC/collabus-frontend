@@ -523,6 +523,49 @@
       "footer": "© CollabUs · 2025"
     }
   },
+  "auth": {
+    "back": "Back",
+    "logoAlt": "CollabUs Logo",
+    "login": {
+      "subtitle": "Sign in to your account",
+      "fillFields": "Please enter both email and password",
+      "loading": "Loading...",
+      "emailLabel": "Email",
+      "emailPlaceholder": "email@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "forgotPassword": "Forgot password?",
+      "loggingIn": "Signing in...",
+      "login": "Sign In",
+      "noAccountPrefix": "Don't have an account?",
+      "register": "Register",
+      "error": "Login failed"
+    },
+    "register": {
+      "title": "Create an account",
+      "fullNameLabel": "Full name",
+      "fullNamePlaceholder": "Enter your full name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "email@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter a password",
+      "confirmPasswordLabel": "Confirm password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "save": "Register",
+      "passwordsNoMatch": "Passwords do not match",
+      "error": "Registration failed"
+    },
+    "recovery": {
+      "title": "Reset Password",
+      "subtitle": "Please enter a new password",
+      "newPasswordLabel": "New password",
+      "confirmPasswordLabel": "Confirm new password",
+      "newPasswordPlaceholder": "Enter your new password",
+      "confirmPasswordPlaceholder": "Confirm your new password",
+      "confirmButton": "Confirm new password",
+      "passwordMismatch": "Passwords do not match"
+    }
+  },
   "common": {
     "optional": "optional",
     "cancel": "Cancel",
