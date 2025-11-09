@@ -85,7 +85,11 @@
       "yesterday": "Yesterday",
       "days-ago": "days ago",
       "days-ago-prefix": ""
-    }
+    },
+    "optional": "optional",
+    "cancel": "Cancel",
+    "goBack": "Go Back",
+    "more": "more"
   },
   "projects": {
     "title": "Projects",
@@ -285,6 +289,45 @@
   },
   "profile": {
     "see-CV": "See CV",
+    "publicProfileTitle": "Collaborator Profile",
+    "myProfileTitle": "My Profile",
+    "subtabs": {
+      "myProjects": "My Projects",
+      "favorites": "Favorites"
+    },
+    "noOwnProjects": "You don't have any own projects.",
+    "noFavoriteProjects": "You don't have any favorite projects.",
+    "loadingProfile": "Loading profile...",
+    "notFoundTitle": "Profile not found",
+    "notFoundMessage": "Could not find the requested profile.",
+    "retry": "Retry",
+    "invite": "Invite to Collaborate",
+    "leaveComment": "Leave Comment",
+    "leaveCommentTitle": "Leave Comment",
+  "ratingSelect": "Select a rating",
+  "rating1": "Very Bad",
+  "rating2": "Bad",
+  "rating3": "Average",
+  "rating4": "Good",
+  "rating5": "Excellent",
+  "ratingTitle": "Rating",
+  "yourComment": "Your Comment",
+  "commentPlaceholder": "Write your comment here...",
+  "characters": "characters",
+  "cancel": "Cancel",
+  "submitComment": "Send Comment",
+  "subtitle": "Manage your information and projects",
+  "logout": "Log out",
+  "loadingYourProfile": "Loading your profile...",
+  "errorLoadingProfileTitle": "Error loading profile",
+  "noProfileTitle": "Incomplete Profile",
+  "noProfileMessage": "No complete profile found for this user.",
+  "completeProfile": "Complete Profile",
+  "accessRestricted": "Restricted Access",
+  "mustLogin": "You must log in to view this page.",
+  "goToLogin": "Go to Login",
+    "logoutConfirm": "Are you sure you want to log out?",
+    "logoutError": "Error logging out",
     "portfolio": "Portfolio",
     "points": "Points",
     "projects": "Projects",
@@ -319,6 +362,77 @@
     },
     "comments": {
       "empty": "No comments yet for this profile."
+    },
+    "collaboratorsList": {
+      "title": "Collaborators List",
+      "loading": "Loading collaborators...",
+      "error": "Error loading collaborators",
+      "retry": "Retry",
+      "emptySearch": "No collaborators match your search",
+      "empty": "No collaborators found"
+    },
+    "collaborator": {
+      "scoreLabel": "Score:",
+      "viewProfile": "View Profile",
+      "pointsSuffix": "pts"
+    },
+    "ranking": {
+      "title": "Collaborators Ranking",
+      "subtitle": "Collaborate with the best to succeed in your projects",
+      "loading": "Loading ranking...",
+      "error": "Error loading collaborators ranking",
+      "retry": "Retry",
+      "empty": "No collaborators found for the ranking",
+      "card": {
+        "line1": "Ranking",
+        "line2": "Collaborators",
+        "description": "View full ranking"
+      }
+    },
+    "searchFilters": {
+      "searchLabel": "Search by name or skill",
+      "searchPlaceholderExample": "Ex: Juan Pérez or JavaScript",
+      "roleLabel": "Filter by role",
+      "rolePlaceholderExample": "Ex: Engineer, Marketing, Manager",
+      "minScoreLabel": "Minimum score",
+      "minScorePlaceholder": "Min",
+      "maxScoreLabel": "Maximum score",
+      "maxScorePlaceholder": "Max",
+      "searching": "Searching...",
+      "search": "Search",
+      "clear": "Clear",
+      "roles": {
+        "projectGeneral": "Project General",
+        "secretary": "Secretary",
+        "engineer": "Engineer",
+        "digitalMarketing": "Digital Marketing",
+        "manager": "Manager",
+        "professional": "Professional"
+      }
+    },
+    "welcomeHeader": {
+      "title": "Welcome to the collaborators section",
+      "descriptionLine1": "Here you can search collaborators with different skills and a specific role",
+      "descriptionLine2Before": "You can also see where you rank among the top collaborators of",
+      "brand": "Collabus",
+      "descriptionLine2After": ".",
+      "imageAlt": "CollabUs collaborators"
+    },
+    "personalStats": {
+      "title": "Personal statistics",
+      "currentScoreLabel": "Your current score:",
+      "rankingLabel": "Ranking:",
+      "activeProjectsLabel": "Active projects:"
+    }
+  },
+  "shared": {
+    "headerPresentation": {
+      "brand": "Collabus",
+      "line1": "Collaborate with the best",
+      "line2": "and achieve great success",
+      "line3": "in your projects",
+      "statCollaborators": "Collaborators",
+      "statSuccess": "Success"
     }
   },
   "application": {
@@ -356,11 +470,168 @@
       "submissionFailed": "Error submitting application. Please try again."
     }
   },
-  "common": {
-    "optional": "optional",
-    "cancel": "Cancel",
-    "goBack": "Go Back",
-    "loading": "Loading...",
-    "unknown": "Unknown"
+  "subscription": {
+    "currentPlan": {
+      "title": "Current Plan",
+      "ariaLabel": "View and change plan",
+      "change": "Change",
+      "changeSuffix": "of Plan",
+      "plan": "Plan",
+      "hint": "Click to view plans"
+    },
+    "plans": {
+      "Gratuito": "Free",
+      "Premium": "Premium"
+    },
+    "plansModal": {
+      "selectPlanTitle": "Select a plan",
+      "close": "Close",
+      "free": {
+        "title": "Free Plan",
+        "price": "$0",
+        "period": "/ always free",
+        "entrepreneursTitle": "For Entrepreneurs",
+        "entrepreneurs": {
+          "li1": "Up to 5 active projects",
+          "li2": "Minimum 2 Rewards",
+          "li3": "Invite up to 3 collaborators",
+          "li4": "Up to 3 tasks and 2 milestones"
+        },
+        "collaboratorsTitle": "For Collaborators",
+        "collaborators": {
+          "li1": "Participate in up to 2 projects",
+          "li2": "Complete up to 2 tasks",
+          "li3": "Complete only 2 tasks of 2 milestones"
+        },
+        "cta": "Select plan"
+      },
+      "premium": {
+        "title": "Premium Plan",
+        "price": "$5",
+        "period": "/ monthly",
+        "entrepreneursTitle": "For Entrepreneurs",
+        "entrepreneurs": {
+          "li1": "Unlimited projects",
+          "li2": "Unlimited Rewards",
+          "li3": "Mentorship and priority support",
+          "li4": "Unlimited tasks and milestones"
+        },
+        "collaboratorsTitle": "For Collaborators",
+        "collaborators": {
+          "li1": "Unlimited project participation",
+          "li2": "Complete unlimited tasks",
+          "li3": "Complete tasks across unlimited milestones"
+        },
+        "cta": "Subscribe now"
+      },
+      "footer": "© CollabUs · 2025"
+    }
+  },
+  "auth": {
+    "back": "Back",
+    "logoAlt": "CollabUs Logo",
+    "login": {
+      "subtitle": "Sign in to your account",
+      "fillFields": "Please enter both email and password",
+      "loading": "Loading...",
+      "emailLabel": "Email",
+      "emailPlaceholder": "email@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "forgotPassword": "Forgot password?",
+      "loggingIn": "Signing in...",
+      "login": "Sign In",
+      "noAccountPrefix": "Don't have an account?",
+      "register": "Register",
+      "error": "Login failed"
+    },
+    "register": {
+      "title": "Create an account",
+      "fullNameLabel": "Full name",
+      "fullNamePlaceholder": "Enter your full name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "email@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter a password",
+      "confirmPasswordLabel": "Confirm password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "save": "Register",
+      "passwordsNoMatch": "Passwords do not match",
+      "error": "Registration failed"
+    },
+    "forgotPasswordModal": {
+      "title": "Recover Password",
+      "instruction": "Enter your email address:",
+      "emailPlaceholder": "example@gmail.com",
+      "send": "Send",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address"
+    },
+    "recovery": {
+      "title": "Reset Password",
+      "subtitle": "Please enter a new password",
+      "newPasswordLabel": "New password",
+      "confirmPasswordLabel": "Confirm new password",
+      "newPasswordPlaceholder": "Enter your new password",
+      "confirmPasswordPlaceholder": "Confirm your new password",
+      "confirmButton": "Confirm new password",
+      "passwordMismatch": "Passwords do not match"
+    }
+  },
+  "onboarding": {
+    "profile": {
+      "title": "Set up your profile",
+      "avatarHintAdd": "Add a photo for your profile",
+      "avatarHintChange": "Click to change the photo",
+      "invalidImage": "Please select an image file",
+      "imageTooLarge": "Image must be smaller than 1MB",
+      "change": "Change",
+      "addPhoto": "Add photo",
+      "usernameLabel": "Profile name",
+      "usernamePlaceholder": "Your username",
+      "save": "Save"
+    },
+    "description": {
+      "title": "Tell us about yourself",
+      "subtitle": "Share a short description that shows your experience and passions",
+      "bioLabel": "Your biography",
+      "bioPlaceholder": "Describe your professional experience, skills, notable projects, interests and what you're passionate about...",
+      "charCounter": "{count}/500 characters",
+      "visibleHint": "This description will be visible to other users on your profile",
+      "back": "Back",
+      "skip": "Skip",
+      "complete": "Complete"
+    },
+    "role": {
+      "title": "How would you like to present yourself?",
+      "subtitle": "Collaborators look for people with different skills and roles. Which role would you like to take?",
+      "or": "or",
+      "customRoleLabel": "Write your role",
+      "customRolePlaceholder": "Type your custom role...",
+      "infoMessage": "You can edit this role later in your profile",
+      "back": "Back",
+      "save": "Save"
+    },
+    "skills": {
+      "title": "Skills & Experience",
+      "skillsSection": "Skills",
+      "addSkillPlaceholder": "Add a skill",
+      "addSkill": "Add",
+      "removeSkill": "Remove",
+      "experiencesSection": "Experiences",
+      "positionPlaceholder": "Position",
+      "companyPlaceholder": "Company",
+      "startDatePlaceholder": "Start date",
+      "addExperience": "Add experience",
+      "removeExperience": "Remove",
+      "cvSection": "CV",
+      "uploadCv": "Upload CV",
+      "cvAcceptTypes": "Accepted: PDF, DOC",
+      "cvTooLarge": "File must be smaller than 5MB",
+      "cvInvalidType": "Please select a PDF or DOC file",
+      "fileError": "Error processing the file",
+      "back": "Back",
+      "next": "Next"
+    }
   }
 }

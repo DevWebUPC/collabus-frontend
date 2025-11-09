@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   modelValue: {
@@ -12,6 +13,7 @@ const emit = defineEmits(['update:modelValue', 'complete', 'prev']);
 
 // Biografía con límite de caracteres
 const bioText = ref(props.modelValue.bio || '');
+const { t } = useI18n();
 
 // Actualizar el modelo cuando cambie la biografía
 watch(bioText, (newBio) => {
@@ -32,9 +34,9 @@ watch(() => props.modelValue.bio, (newBio) => {
   <pv-card class="step-card">
     <template #title>
       <div class="step-header">
-        <h1 class="main-title">Cuéntanos sobre ti</h1>
+        <h1 class="main-title">{{ t('onboarding.description.title') }}</h1>
         <p class="subtitle">
-          Comparte una breve descripción que muestre tu experiencia y lo que te apasiona
+          {{ t('onboarding.description.subtitle') }}
         </p>
       </div>
     </template>
@@ -43,12 +45,12 @@ watch(() => props.modelValue.bio, (newBio) => {
       <div class="step-content">
         <!-- Biografía -->
         <div class="form-group">
-          <label for="bio" class="form-label">Tu Biografía</label>
+          <label for="bio" class="form-label">{{ $t('onboarding.description.bioLabel') }}</label>
           <pv-textarea
               id="bio"
               v-model="bioText"
               :rows="6"
-              placeholder="Describe tu experiencia profesional, habilidades, proyectos destacados, intereses y lo que te apasiona..."
+              :placeholder="$t('onboarding.description.bioPlaceholder')"
               class="w-full bio-textarea"
               :autoResize="true"
           />
@@ -56,10 +58,10 @@ watch(() => props.modelValue.bio, (newBio) => {
             'warning': bioText.length > 400,
             'error': bioText.length >= 500
           }">
-            {{ bioText.length }}/500 caracteres
+            {{ t('onboarding.description.charCounter', { count: bioText.length }) }}
           </div>
           <p class="input-hint">
-            Esta descripción será visible para otros usuarios en tu perfil
+            {{ $t('onboarding.description.visibleHint') }}
           </p>
         </div>
       </div>
@@ -70,20 +72,20 @@ watch(() => props.modelValue.bio, (newBio) => {
         <pv-button
             @click="$emit('prev')"
             class="back-button"
-            label="Atrás"
+            :label="$t('onboarding.description.back')"
             outlined
         />
         <div class="right-buttons">
           <pv-button
               @click="$emit('complete')"
               class="skip-button"
-              label="Omitir"
+              :label="$t('onboarding.description.skip')"
               text
           />
           <pv-button
               @click="$emit('complete')"
               class="continue-button"
-              label="Completar"
+              :label="$t('onboarding.description.complete')"
               :disabled="!bioText.trim()"
           />
         </div>
@@ -116,7 +118,7 @@ watch(() => props.modelValue.bio, (newBio) => {
 }
 
 .subtitle {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.95rem;
   line-height: 1.5;
   margin: 0;
@@ -143,13 +145,13 @@ watch(() => props.modelValue.bio, (newBio) => {
   display: block;
   margin-bottom: 0.75rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 1rem;
   text-align: center;
 }
 
 .input-hint {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.8rem;
   margin-top: 0.5rem;
   margin-bottom: 0;
@@ -162,7 +164,7 @@ watch(() => props.modelValue.bio, (newBio) => {
   resize: vertical;
   min-height: 200px;
   flex: 1;
-  border: 2px solid #e5e7eb !important;
+  border: 2px solid var(--color-gray-300, #e5e7eb) !important;
   border-radius: 8px !important;
   padding: 1rem !important;
   font-size: 0.95rem !important;
@@ -178,7 +180,7 @@ watch(() => props.modelValue.bio, (newBio) => {
 .char-counter {
   text-align: right;
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   margin-top: 0.5rem;
 }
 

@@ -171,7 +171,7 @@ onMounted(async () => {
   <div class="project-detail-container">
     <div v-if="loading" class="loading-container">
       <div class="loading-spinner"></div>
-      <span>Cargando proyecto...</span>
+      <span>{{ $t('projects.detail.loading') }}</span>
     </div>
 
     <div v-else-if="project" class="project-content">
@@ -316,7 +316,7 @@ onMounted(async () => {
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border: 1px solid #e2e8f0;
   border-radius: 50%;
   cursor: pointer;
@@ -353,7 +353,7 @@ onMounted(async () => {
 
 .role-card {
   padding: 1.5rem;
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   transition: all 0.2s ease;
@@ -385,7 +385,7 @@ onMounted(async () => {
 .role-card .role-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin: 0;
   padding-bottom: 0;
   border-bottom: none;
@@ -437,13 +437,13 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   padding: 4rem 2rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #e5e7eb;
+  border: 4px solid var(--color-gray-300, #e5e7eb);
   border-top: 4px solid var(--color-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -471,7 +471,7 @@ onMounted(async () => {
 .project-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin: 0 0 1rem 0;
   line-height: 1.2;
 }
@@ -481,7 +481,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.95rem;
   flex-wrap: wrap;
 }
@@ -500,7 +500,7 @@ onMounted(async () => {
 }
 
 .publish-date {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 /* Sections */
@@ -511,14 +511,14 @@ onMounted(async () => {
 .section-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin: 0 0 1rem 0;
 }
 
 .subsection-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin: 0 0 1rem 0;
 }
 
@@ -532,7 +532,7 @@ onMounted(async () => {
 /* Section Divider */
 .section-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+  background: linear-gradient(90deg, transparent, var(--color-gray-300, #e5e7eb), transparent);
   margin: 2rem 0;
 }
 
@@ -541,7 +541,7 @@ onMounted(async () => {
   font-size: 1.1rem;
   color: var(--color-primary);
   padding: 0.75rem 1rem;
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
   border-radius: 8px;
   border-left: 4px solid var(--color-primary);
 }
@@ -556,8 +556,8 @@ onMounted(async () => {
 
 .info-card {
   padding: 1.25rem;
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--color-white, #FFFFFF);
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   border-radius: 8px;
   transition: transform 0.2s ease;
 }
@@ -570,7 +570,7 @@ onMounted(async () => {
 .card-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   margin: 0 0 0.75rem 0;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #f1f5f9;
@@ -586,7 +586,7 @@ onMounted(async () => {
   padding: 0.5rem 0;
   color: #4b5563;
   line-height: 1.5;
-  border-bottom: 1px solid #f8fafc;
+  border-bottom: 1px solid var(--color-gray-300, #f8fafc);
 }
 
 .card-item:last-child {

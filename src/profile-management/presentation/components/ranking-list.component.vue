@@ -2,19 +2,19 @@
 <template>
   <div class="ranking-list-container">
     <div class="ranking-header">
-      <h1 style="color: white;">Ranking de Colaboradores</h1>
-      <p class="ranking-subtitle" style="color: white;">Colabora con los mejores y ten buen éxito en tus proyectos</p>
+      <h1 style="color: var(--color-white, #FFFFFF);">{{ $t('profile.ranking.title') }}</h1>
+      <p class="ranking-subtitle" style="color: var(--color-white, #FFFFFF);">{{ $t('profile.ranking.subtitle') }}</p>
     </div>
 
     <!-- Estados de carga y error -->
     <div v-if="loading" class="loading-state">
       <div class="spinner"></div>
-      Cargando ranking...
+      {{ $t('profile.ranking.loading') }}
     </div>
 
     <div v-else-if="error" class="error-state">
       {{ error }}
-      <button @click="loadRanking" class="retry-btn">Reintentar</button>
+      <button @click="loadRanking" class="retry-btn">{{ $t('profile.ranking.retry') }}</button>
     </div>
 
     <!-- Contenido del ranking -->
@@ -29,7 +29,7 @@
 
       <!-- Mensaje cuando no hay colaboradores -->
       <div v-if="rankedCollaborators.length === 0" class="empty-state">
-        No se encontraron colaboradores para el ranking
+        {{ $t('profile.ranking.empty') }}
       </div>
     </div>
   </div>
@@ -83,7 +83,7 @@ export default {
 
       } catch (err) {
         console.error('Error loading ranking:', err)
-        this.error = 'Error al cargar el ranking de colaboradores'
+        this.error = this.$t('profile.ranking.error')
       } finally {
         this.loading = false
       }
@@ -100,7 +100,7 @@ export default {
 <style scoped>
 .ranking-list-container {
   width: 100%;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -110,7 +110,7 @@ export default {
   padding: 2.5rem 2rem;
   text-align: center;
   background: linear-gradient(135deg, #6C63FF 0%, #8B5CF6 100%);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   position: relative;
   overflow: hidden;
 }
@@ -132,7 +132,7 @@ export default {
   font-weight: 800;
   position: relative;
   z-index: 2;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .ranking-subtitle {
@@ -142,7 +142,7 @@ export default {
   font-weight: 500;
   position: relative;
   z-index: 2;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .ranking-content {
@@ -159,7 +159,7 @@ export default {
   justify-content: center;
   padding: 3rem 2rem;
   text-align: center;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 1.1rem;
 }
 
@@ -190,7 +190,7 @@ export default {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -212,12 +212,12 @@ export default {
 
   .ranking-header h1 {
     font-size: 2rem;
-    color: white;
+    color: var(--color-white, #FFFFFF);
   }
 
   .ranking-subtitle {
     font-size: 1rem;
-    color: white;
+    color: var(--color-white, #FFFFFF);
   }
 
   .loading-state,

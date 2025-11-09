@@ -75,7 +75,7 @@ defineProps({
 .step.active .step-circle {
   background-color: #6C63FF;
   border-color: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.2);
 }
 
@@ -83,7 +83,7 @@ defineProps({
 .inner-dot {
   width: 8px;
   height: 8px;
-  background-color: white;
+  background-color: var(--color-white, #FFFFFF);
   border-radius: 50%;
   display: inline-block;
 }
@@ -92,7 +92,7 @@ defineProps({
 .step.completed .step-circle {
   background-color: #10b981;
   border-color: #10b981;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .step.completed .checkmark {
@@ -110,7 +110,7 @@ defineProps({
 .step-connector {
   flex: 1;
   height: 2px;
-  background-color: #e5e7eb;
+  background-color: var(--color-gray-300, #e5e7eb);
   margin: 0 0.5rem;
   position: relative;
   transition: background-color 0.3s ease;
@@ -121,7 +121,7 @@ defineProps({
 }
 
 .step.active .step-connector {
-  background: linear-gradient(90deg, #10b981 50%, #e5e7eb 50%);
+  background: linear-gradient(90deg, #10b981 50%, var(--color-gray-300, #e5e7eb) 50%);
 }
 
 @media (max-width: 768px) {

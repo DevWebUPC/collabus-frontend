@@ -35,57 +35,57 @@ const clearFilters = () => {
     <div class="filters-container">
       <!-- Campo de búsqueda por nombre o habilidad -->
       <div class="filter-group">
-        <label for="search-query">Buscar por nombre o habilidad</label>
+        <label for="search-query">{{ $t('profile.searchFilters.searchLabel') }}</label>
         <input
             id="search-query"
             type="text"
             v-model="searchQuery"
-            placeholder="Ej: Juan Pérez o JavaScript"
+            :placeholder="$t('profile.searchFilters.searchPlaceholderExample')"
             class="filter-input"
         >
       </div>
 
       <!-- Tipo de Rol -->
       <div class="filter-group">
-        <label for="role-type">Filtrar por rol</label>
+        <label for="role-type">{{ $t('profile.searchFilters.roleLabel') }}</label>
         <input
             id="role-type"
             type="text"
             v-model="selectedRole"
-            placeholder="Ej: Ingeniero, Marketing, Gerente"
+            :placeholder="$t('profile.searchFilters.rolePlaceholderExample')"
             class="filter-input"
             list="role-options"
         >
         <datalist id="role-options">
-          <option>General de Proyectos</option>
-          <option>Secretaría</option>
-          <option>Ingeniero</option>
-          <option>Marketing Digital</option>
-          <option>Gerente</option>
-          <option>Profesional</option>
+          <option>{{ $t('profile.searchFilters.roles.projectGeneral') }}</option>
+          <option>{{ $t('profile.searchFilters.roles.secretary') }}</option>
+          <option>{{ $t('profile.searchFilters.roles.engineer') }}</option>
+          <option>{{ $t('profile.searchFilters.roles.digitalMarketing') }}</option>
+          <option>{{ $t('profile.searchFilters.roles.manager') }}</option>
+          <option>{{ $t('profile.searchFilters.roles.professional') }}</option>
         </datalist>
       </div>
 
       <!-- Mínimo -->
       <div class="filter-group">
-        <label for="min-score">Puntuación mínima</label>
+        <label for="min-score">{{ $t('profile.searchFilters.minScoreLabel') }}</label>
         <input
             id="min-score"
             type="number"
             v-model="minScore"
-            placeholder="Mínimo"
+            :placeholder="$t('profile.searchFilters.minScorePlaceholder')"
             class="filter-input"
         >
       </div>
 
       <!-- Máximo -->
       <div class="filter-group">
-        <label for="max-score">Puntuación máxima</label>
+        <label for="max-score">{{ $t('profile.searchFilters.maxScoreLabel') }}</label>
         <input
             id="max-score"
             type="number"
             v-model="maxScore"
-            placeholder="Máximo"
+            :placeholder="$t('profile.searchFilters.maxScorePlaceholder')"
             class="filter-input"
         >
       </div>
@@ -93,10 +93,10 @@ const clearFilters = () => {
       <!-- Botones -->
       <div class="filter-actions">
         <button class="search-btn" @click="search" :disabled="isSearching">
-          {{ isSearching ? 'Buscando...' : 'Buscar' }}
+          {{ isSearching ? $t('profile.searchFilters.searching') : $t('profile.searchFilters.search') }}
         </button>
         <button class="clear-btn" @click="clearFilters" :disabled="isSearching">
-          Limpiar
+          {{ $t('profile.searchFilters.clear') }}
         </button>
       </div>
     </div>
@@ -105,7 +105,7 @@ const clearFilters = () => {
 
 <style scoped>
 .search-filters {
-  background: #fff;
+  background: var(--color-white, #ffffff);
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -130,7 +130,7 @@ const clearFilters = () => {
   font-size: 0.875rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 .filter-select,
@@ -139,7 +139,7 @@ const clearFilters = () => {
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 0.875rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   min-height: 40px;
 }
 
@@ -170,7 +170,7 @@ const clearFilters = () => {
 
 .search-btn {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .search-btn:hover {
@@ -179,8 +179,8 @@ const clearFilters = () => {
 }
 
 .clear-btn {
-  background: #6b7280;
-  color: white;
+  background: var(--color-gray-900, #6b7280);
+  color: var(--color-white, #FFFFFF);
 }
 
 .clear-btn:hover {

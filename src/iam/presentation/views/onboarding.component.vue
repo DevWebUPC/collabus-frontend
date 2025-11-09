@@ -8,6 +8,7 @@ import RoleStep from "../components/role-step.component.vue";
 import DescriptionStep from "../components/description-step.component.vue";
 import { useProfileStore  } from '../../../profile-management/application/profile-store.js';
 import {useUserStore} from "../../application/user-store.js";
+import languageSwitcher from '../../../shared/presentation/components/language-switcher.vue';
 
 const userStore = useUserStore();
 const profileStore = useProfileStore();
@@ -84,6 +85,9 @@ const completeOnboarding = async () => {
       <div class="header-content">
         <img src="/logo.png" alt="CollabUs Logo" class="logo">
       </div>
+      <div class="right-container">
+        <language-switcher />
+      </div>
     </header>
 
     <!-- Progress Stepper -->
@@ -135,25 +139,31 @@ const completeOnboarding = async () => {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: white;
+  background: var(--color-white, #FFFFFF);
+}
+
+.right-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .onboarding-header {
-  background-color: white;
+  background-color: var(--color-white, #FFFFFF);
   border-bottom: 1px solid #e2e8f0;
-  padding: 1rem 0;
+  padding: 1rem;
   position: sticky;
   top: 0;
   z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
 }
 
 .header-content {
-  max-width: 1200px;
-  margin: 0 auto;
+  margin: 0;
   padding: 0 2rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .logo {

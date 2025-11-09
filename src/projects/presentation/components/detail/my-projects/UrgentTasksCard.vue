@@ -149,7 +149,7 @@ onMounted(() => {
   padding: 0.75rem;
   border-radius: 8px;
   border: 1px solid var(--color-gray-200);
-  background: white;
+  background: var(--color-white, #FFFFFF);
   transition: all 0.2s ease;
 }
 
@@ -207,22 +207,22 @@ onMounted(() => {
 
 .task-status.completed {
   background: var(--color-success);
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .task-status.in_progress {
   background: var(--color-warning);
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .task-status.pending {
   background: var(--color-gray-400);
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .task-status.retrasado {
   background: var(--color-error);
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .no-tasks {
@@ -246,12 +246,12 @@ onMounted(() => {
 
 .badge.urgent {
   background: var(--color-error);
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .badge.normal {
   background: var(--color-success);
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .view-all {

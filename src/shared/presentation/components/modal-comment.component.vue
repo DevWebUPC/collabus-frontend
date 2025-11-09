@@ -1,5 +1,6 @@
 <!-- CommentModal.vue -->
 <script setup>
+import { useI18n } from 'vue-i18n';
 import { ref, computed, onMounted } from 'vue';
 import { useProfileStore } from '../../../profile-management/application/profile-store.js';
 import { useUserStore } from '../../../iam/application/user-store.js';
@@ -28,14 +29,16 @@ onMounted(() => {
   }
 });
 
+const { t } = useI18n();
+
 const ratingText = computed(() => {
   const ratings = {
-    0: 'Selecciona una calificación',
-    1: 'Muy Malo',
-    2: 'Malo',
-    3: 'Regular',
-    4: 'Bueno',
-    5: 'Excelente'
+    0: t('profile.ratingSelect'),
+    1: t('profile.rating1'),
+    2: t('profile.rating2'),
+    3: t('profile.rating3'),
+    4: t('profile.rating4'),
+    5: t('profile.rating5')
   };
   return ratings[currentRating.value];
 });
@@ -75,7 +78,7 @@ const resetForm = () => {
     <div class="modal-container">
       <!-- Modal Header -->
       <div class="modal-header">
-        <h2>Dejar Comentario</h2>
+        <h2>{{ $t('profile.leaveCommentTitle') }}</h2>
         <button class="close-button" @click="closeModal">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -87,7 +90,7 @@ const resetForm = () => {
       <div class="modal-content">
         <!-- Star Rating -->
         <div class="rating-section">
-          <h3>Calificación</h3>
+          <h3>{{ $t('profile.ratingTitle') }}</h3>
           <div class="stars-container">
             <button
                 v-for="star in 5"
@@ -106,16 +109,16 @@ const resetForm = () => {
 
         <!-- Comment Textarea -->
         <div class="comment-section">
-          <h3>Tu Comentario</h3>
+          <h3>{{ $t('profile.yourComment') }}</h3>
           <textarea
               v-model="commentText"
-              placeholder="Escribe tu comentario aquí..."
+              :placeholder="$t('profile.commentPlaceholder')"
               class="comment-textarea"
               rows="6"
               maxlength="500"
           ></textarea>
           <div class="character-count">
-            {{ commentText.length }}/500 caracteres
+            {{ commentText.length }}/500 {{ $t('profile.characters') }}
           </div>
         </div>
       </div>
@@ -123,14 +126,14 @@ const resetForm = () => {
       <!-- Modal Footer -->
       <div class="modal-footer">
         <button class="cancel-button" @click="closeModal">
-          Cancelar
+          {{ $t('profile.cancel') }}
         </button>
         <button
             class="submit-button"
             @click="submitComment"
             :disabled="!currentRating || !commentText.trim()"
         >
-          Enviar Comentario
+          {{ $t('profile.submitComment') }}
         </button>
       </div>
     </div>
@@ -152,7 +155,7 @@ const resetForm = () => {
 }
 
 .modal-container {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   width: 100%;
   max-width: 500px;
@@ -178,13 +181,13 @@ const resetForm = () => {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 1.5rem 0;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-gray-300, #e5e7eb);
   padding-bottom: 1rem;
 }
 
 .modal-header h2 {
   margin: 0;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 1.5rem;
   font-weight: 600;
 }
@@ -194,14 +197,14 @@ const resetForm = () => {
   border: none;
   padding: 0.5rem;
   cursor: pointer;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   border-radius: 6px;
   transition: all 0.2s ease;
 }
 
 .close-button:hover {
   background: #f3f4f6;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 .modal-content {
@@ -214,7 +217,7 @@ const resetForm = () => {
 
 .rating-section h3 {
   margin: 0 0 1rem 0;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -246,14 +249,14 @@ const resetForm = () => {
 
 .rating-text {
   margin: 0;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.9rem;
   font-style: italic;
 }
 
 .comment-section h3 {
   margin: 0 0 1rem 0;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -261,7 +264,7 @@ const resetForm = () => {
 .comment-textarea {
   width: 100%;
   padding: 1rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--color-gray-300, #e5e7eb);
   border-radius: 8px;
   resize: vertical;
   font-family: inherit;
@@ -280,7 +283,7 @@ const resetForm = () => {
 
 .character-count {
   text-align: right;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.8rem;
   margin-top: 0.5rem;
 }
@@ -289,7 +292,7 @@ const resetForm = () => {
   display: flex;
   gap: 1rem;
   padding: 1rem 1.5rem 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .cancel-button, .submit-button {
@@ -305,16 +308,16 @@ const resetForm = () => {
 
 .cancel-button {
   background: #f3f4f6;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 .cancel-button:hover {
-  background: #e5e7eb;
+  background: var(--color-gray-300, #e5e7eb);
 }
 
 .submit-button {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .submit-button:hover:not(:disabled) {

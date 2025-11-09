@@ -414,7 +414,7 @@ onMounted(async () => {
 
 /* Header */
 .tasks-header {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 2rem;
   margin-bottom: 1.5rem;
@@ -445,7 +445,7 @@ onMounted(async () => {
 }
 
 .stat-card {
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
   padding: 1.5rem;
   border-radius: 8px;
   text-align: center;
@@ -475,7 +475,7 @@ onMounted(async () => {
 
 /* Filtros */
 .filters-section {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
@@ -497,7 +497,7 @@ onMounted(async () => {
 
 .filter-btn.active {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .filter-btn:not(.active):hover {
@@ -512,7 +512,7 @@ onMounted(async () => {
 }
 
 .task-card {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -653,7 +653,7 @@ onMounted(async () => {
   justify-content: center;
   align-items: center;
   padding: 4rem 2rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -731,19 +731,19 @@ onMounted(async () => {
 
 /* Button Styles */
 :deep(.view-btn.p-button) {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   color: var(--color-primary);
   border: 1px solid var(--color-primary);
 }
 
 :deep(.view-btn.p-button:hover) {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 :deep(.start-btn.p-button) {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: 1px solid var(--color-primary);
 }
 
@@ -754,13 +754,13 @@ onMounted(async () => {
 
 :deep(.reviewed-btn.p-button) {
   background: var(--color-green-500);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: 1px solid var(--color-green-500);
 }
 
 :deep(.show-all-btn.p-button) {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: 1px solid var(--color-primary);
 }
 </style>

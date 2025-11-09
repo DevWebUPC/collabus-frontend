@@ -194,19 +194,19 @@ const formatDate = (dateString) => {
 
 .milestone-info {
   padding: 1rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   border-radius: 6px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .milestone-info h4 {
   margin: 0 0 0.5rem 0;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 1.125rem;
 }
 
 .current-date {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.9rem;
 }
 
@@ -218,7 +218,7 @@ const formatDate = (dateString) => {
 
 .date-selection label {
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 0.9rem;
 }
 
@@ -239,13 +239,13 @@ const formatDate = (dateString) => {
   gap: 0.75rem;
   justify-content: flex-end;
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .no-milestone {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .no-milestone .error-icon {
@@ -255,7 +255,7 @@ const formatDate = (dateString) => {
 
 .no-milestone h4 {
   margin: 0 0 0.5rem 0;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 .no-milestone p {

@@ -4,6 +4,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../../application/user-store.js'; // Ajusta la ruta según tu estructura
 import ModalForgetPassword from '../components/modal-forget-password.component.vue';
+import languageSwitcher from '../../../shared/presentation/components/language-switcher.vue';
+import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -11,6 +13,7 @@ const showForgotPasswordModal = ref(false);
 const email = ref('');
 const password = ref('');
 const loginError = ref('');
+const { t } = useI18n();
 
 const goBack = () => {
   window.location.href = 'https://devwebupc.github.io/landing-page/';
@@ -30,7 +33,7 @@ const handleLogin = async () => {
 
     // Validaciones básicas
     if (!email.value || !password.value) {
-      loginError.value = 'Por favor, completa todos los campos';
+      loginError.value = t('auth.login.fillFields');
       return;
     }
 
@@ -46,7 +49,7 @@ const handleLogin = async () => {
 
   } catch (error) {
     console.error('❌ Login error:', error);
-    loginError.value = error.message || 'Error al iniciar sesión';
+    loginError.value = error.message || t('auth.login.error');
   }
 };
 
@@ -60,16 +63,19 @@ const handlePasswordRecovery = (email) => {
   <header class="login-header">
     <div class="header-content">
       <div class="logo">
-        <img src="/logo.png" alt="CollabUs Logo" class="logo-image">
+  <img src="/logo.png" :alt="$t('auth.logoAlt')" class="logo-image">
       </div>
-      <button
-          @click="goBack"
-          class="back-button"
-          text
-          icon="pi pi-arrow-left"
-      >
-        Regresar
-      </button>
+      <div class="right-container">
+        <language-switcher />
+        <button
+            @click="goBack"
+            class="back-button"
+            text
+            icon="pi pi-arrow-left"
+        >
+          {{ $t('auth.back') }}
+        </button>
+      </div>
     </div>
   </header>
 
@@ -77,7 +83,7 @@ const handlePasswordRecovery = (email) => {
     <div class="login-card">
       <div class="login-card-header">
         <h1 class="logo-text">CollabUs</h1>
-        <p class="login-subtitle">Inicia sesión en tu cuenta</p>
+  <p class="login-subtitle">{{ $t('auth.login.subtitle') }}</p>
       </div>
 
       <!-- Mensaje de error -->
@@ -89,17 +95,17 @@ const handlePasswordRecovery = (email) => {
       <!-- Loading state -->
       <div v-if="userStore.loading" class="loading-state">
         <div class="loading-spinner"></div>
-        <span>Iniciando sesión...</span>
+        <span>{{ $t('auth.login.loading') }}</span>
       </div>
 
       <form @submit.prevent="handleLogin" class="login-form" :class="{ 'disabled': userStore.loading }">
         <div class="form-group">
-          <label for="email">Correo Electrónico</label>
+      <label for="email">{{ $t('auth.login.emailLabel') }}</label>
           <pv-input-text
               type="email"
               id="email"
               v-model="email"
-              placeholder="ejemplo123@gmail.com"
+        :placeholder="$t('auth.login.emailPlaceholder')"
               required
               class="w-full"
               :disabled="userStore.loading"
@@ -107,12 +113,12 @@ const handlePasswordRecovery = (email) => {
         </div>
 
         <div class="form-group">
-          <label for="password">Contraseña</label>
+      <label for="password">{{ $t('auth.login.passwordLabel') }}</label>
           <pv-input-text
               type="password"
               id="password"
               v-model="password"
-              placeholder="Ingresa tu contraseña"
+        :placeholder="$t('auth.login.passwordPlaceholder')"
               required
               class="w-full"
               :disabled="userStore.loading"
@@ -120,24 +126,24 @@ const handlePasswordRecovery = (email) => {
         </div>
 
         <div class="forgot-password">
-          <a href="#" @click.prevent="openForgotPasswordModal">¿Olvidaste tu contraseña?</a>
+          <a href="#" @click.prevent="openForgotPasswordModal">{{ $t('auth.login.forgotPassword') }}</a>
         </div>
 
-        <pv-button
-            type="submit"
-            class="login-button w-full"
-            :label="userStore.loading ? 'Ingresando...' : 'Ingresar'"
-            :disabled="userStore.loading || !email || !password"
-            :loading="userStore.loading"
-        />
+    <pv-button
+      type="submit"
+      class="login-button w-full"
+      :label="userStore.loading ? $t('auth.login.loggingIn') : $t('auth.login.login')"
+      :disabled="userStore.loading || !email || !password"
+      :loading="userStore.loading"
+    />
       </form>
 
       <div class="register-link">
-        <p>¿No tienes cuenta? <a href="#" @click.prevent="goToRegister">Registrate</a></p>
+        <p>{{ $t('auth.login.noAccountPrefix') }} <a href="#" @click.prevent="goToRegister">{{ $t('auth.login.register') }}</a></p>
       </div>
 
       <div class="footer">
-        <p>Todos los derechos reservados CollabUs © 2025</p>
+        <p>{{ $t('footer.copyright') }}</p>
       </div>
     </div>
   </div>
@@ -152,12 +158,18 @@ const handlePasswordRecovery = (email) => {
 
 <style scoped>
 .login-header {
-  background-color: white;
+  background-color: var(--color-white, #FFFFFF);
   border-bottom: 1px solid #e2e8f0;
   padding: 1rem 0;
   position: sticky;
   top: 0;
   z-index: 100;
+}
+
+.right-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .header-content {
@@ -199,12 +211,12 @@ const handlePasswordRecovery = (email) => {
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 80px);
-  background-color: #f5f5f5;
+  background-color: var(--color-gray-100, #f5f5f5);
   padding: 20px;
 }
 
 .login-card {
-  background-color: white;
+  background-color: var(--color-white, #FFFFFF);
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 40px;
@@ -255,14 +267,14 @@ const handlePasswordRecovery = (email) => {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   margin-bottom: 20px;
 }
 
 .loading-spinner {
   width: 24px;
   height: 24px;
-  border: 3px solid #e5e7eb;
+  border: 3px solid var(--color-gray-300, #e5e7eb);
   border-top: 3px solid #6C63FF;
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -311,7 +323,7 @@ const handlePasswordRecovery = (email) => {
 
 :deep(.p-inputtext:disabled) {
   background-color: #f9fafb;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   cursor: not-allowed;
 }
 
@@ -333,7 +345,7 @@ const handlePasswordRecovery = (email) => {
 .login-button {
   padding: 12px;
   background-color: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: none;
   border-radius: 4px;
   font-size: 16px;

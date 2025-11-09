@@ -450,7 +450,7 @@ export default {
 /* Los estilos permanecen iguales */
 .tasks-container {
   padding: 1.5rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -462,7 +462,7 @@ export default {
 
 .create-button {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: none;
   border-radius: 6px;
   padding: 0.5rem 1rem;
@@ -484,9 +484,9 @@ export default {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   border-radius: 6px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   cursor: pointer;
   position: relative;
   min-width: 160px;
@@ -494,14 +494,14 @@ export default {
 
 .filter-text {
   font-size: 0.875rem;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-weight: 500;
   flex: 1;
 }
 
 .dropdown-arrow {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 /* Dropdown Styles */
@@ -510,8 +510,8 @@ export default {
   top: 100%;
   left: 0;
   right: 0;
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--color-white, #FFFFFF);
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   border-radius: 6px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   z-index: 1000;
@@ -523,13 +523,13 @@ export default {
 .dropdown-item {
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   cursor: pointer;
   border-bottom: 1px solid #f3f4f6;
 }
 
 .dropdown-item:hover {
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
 }
 
 .dropdown-item:last-child {

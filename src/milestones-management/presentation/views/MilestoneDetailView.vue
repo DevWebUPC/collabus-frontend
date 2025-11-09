@@ -419,7 +419,7 @@ onMounted(async () => {
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   min-height: 80vh;
@@ -457,13 +457,13 @@ onMounted(async () => {
 .milestone-header {
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .milestone-title {
   font-size: 2.25rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin-bottom: 1rem;
   line-height: 1.2;
 }
@@ -503,7 +503,7 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-weight: 500;
 }
 
@@ -536,16 +536,16 @@ onMounted(async () => {
 
 /* Detail Sections */
 .detail-section {
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   padding: 1.5rem;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .section-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -572,9 +572,9 @@ onMounted(async () => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 6px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .tool-icon {
@@ -582,16 +582,16 @@ onMounted(async () => {
 }
 
 .tool-name {
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-weight: 500;
 }
 
 /* Comment */
 .comment-bubble {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   padding: 1.5rem;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   border-left: 4px solid var(--color-primary);
 }
 
@@ -614,9 +614,9 @@ onMounted(async () => {
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -632,7 +632,7 @@ onMounted(async () => {
   height: 48px;
   border-radius: 8px;
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -647,12 +647,12 @@ onMounted(async () => {
 
 .attachment-name {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin-bottom: 0.25rem;
 }
 
 .attachment-type {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
 }
 
@@ -662,16 +662,16 @@ onMounted(async () => {
 
 /* Tasks Section */
 .tasks-section {
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   padding: 1.5rem;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .empty-tasks {
   text-align: center;
   padding: 2rem 1rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .empty-icon {
@@ -687,10 +687,10 @@ onMounted(async () => {
 }
 
 .task-card {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   padding: 1.5rem;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   transition: all 0.2s ease;
 }
 
@@ -710,7 +710,7 @@ onMounted(async () => {
 .task-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin: 0;
   flex: 1;
 }
@@ -744,7 +744,7 @@ onMounted(async () => {
 }
 
 .task-description p {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
   line-height: 1.5;
   margin: 0;
@@ -765,7 +765,7 @@ onMounted(async () => {
   height: 32px;
   border-radius: 50%;
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -780,12 +780,12 @@ onMounted(async () => {
 
 .user-name {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   font-size: 0.875rem;
 }
 
 .user-role {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.75rem;
 }
 
@@ -801,13 +801,13 @@ onMounted(async () => {
 
 .progress-text {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-weight: 500;
 }
 
 .progress-bar {
   height: 6px;
-  background: #e5e7eb;
+  background: var(--color-gray-300, #e5e7eb);
   border-radius: 3px;
   overflow: hidden;
 }
@@ -913,19 +913,19 @@ onMounted(async () => {
 
 /* Button Styles */
 :deep(.view-task-btn.p-button) {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   color: var(--color-primary);
   border: 1px solid var(--color-primary);
 }
 
 :deep(.view-task-btn.p-button:hover) {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 :deep(.go-back-btn.p-button) {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: 1px solid var(--color-primary);
 }
 </style>

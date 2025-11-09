@@ -112,7 +112,7 @@ export default {
 
 <style scoped>
 .upload-area {
-  border: 2px dashed #e5e7eb;
+  border: 2px dashed var(--color-gray-300, #e5e7eb);
   border-radius: 8px;
   padding: 2rem;
   text-align: center;
@@ -145,8 +145,8 @@ export default {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem;
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--color-white, #FFFFFF);
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   border-radius: 6px;
   margin-bottom: 0.5rem;
 }

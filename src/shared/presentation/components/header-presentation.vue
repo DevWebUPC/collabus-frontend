@@ -3,18 +3,18 @@
   <div class="header-presentation">
     <div class="presentation-card">
       <!-- Logo y Título -->
-      <div class="logo-section">
+        <div class="logo-section">
         <div class="logo">
           <span class="logo-icon">👥</span>
         </div>
-        <h1 class="title">Collabus</h1>
+        <h1 class="title">{{ $t('shared.headerPresentation.brand') }}</h1>
       </div>
 
       <!-- Mensaje inspirador -->
       <div class="message-section">
-        <p class="message-line">Colabora con los mejores</p>
-        <p class="message-line">y ten buen éxito</p>
-        <p class="message-line">de tus proyectos</p>
+        <p class="message-line">{{ $t('shared.headerPresentation.line1') }}</p>
+        <p class="message-line">{{ $t('shared.headerPresentation.line2') }}</p>
+        <p class="message-line">{{ $t('shared.headerPresentation.line3') }}</p>
       </div>
 
       <!-- Línea decorativa -->
@@ -28,11 +28,11 @@
       <div class="stats-section">
         <div class="stat-item">
           <span class="stat-number">500+</span>
-          <span class="stat-label">Colaboradores</span>
+          <span class="stat-label">{{ $t('shared.headerPresentation.statCollaborators') }}</span>
         </div>
         <div class="stat-item">
           <span class="stat-number">95%</span>
-          <span class="stat-label">Éxito</span>
+          <span class="stat-label">{{ $t('shared.headerPresentation.statSuccess') }}</span>
         </div>
       </div>
     </div>
@@ -60,7 +60,7 @@ export default {
   background: linear-gradient(135deg, #6C63FF 0%, #8B5CF6 100%);
   border-radius: 16px;
   padding: 2rem;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   box-shadow: 0 8px 32px rgba(108, 99, 255, 0.3);
   position: relative;
   overflow: hidden;

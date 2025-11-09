@@ -228,21 +228,21 @@ onMounted(async () => {
     <!-- Header Section -->
     <div class="profile-header-section">
       <div class="header-content">
-        <button class="back-button" @click="goBack">
+  <button class="back-button" @click="goBack">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          Volver
+    {{ $t('common.goBack') }}
         </button>
-        <h1 class="profile-title">Perfil de Colaborador</h1>
+  <h1 class="profile-title">{{ $t('profile.publicProfileTitle') }}</h1>
       </div>
     </div>
 
     <!-- Loading State -->
     <div v-if="isLoading" class="loading-container">
       <div class="loading-content">
-        <pv-progressspinner class="loading-spinner" />
-        <p class="loading-text">Cargando perfil...</p>
+  <pv-progressspinner class="loading-spinner" />
+  <p class="loading-text">{{ $t('profile.loadingProfile') }}</p>
       </div>
     </div>
 
@@ -252,22 +252,22 @@ onMounted(async () => {
         <template #content>
           <div class="error-content">
             <i class="pi pi-exclamation-triangle error-icon"></i>
-            <h3>Perfil no encontrado</h3>
-            <p>No se pudo encontrar el perfil solicitado.</p>
+            <h3>{{ $t('profile.notFoundTitle') }}</h3>
+            <p>{{ $t('profile.notFoundMessage') }}</p>
             <div class="error-actions">
-              <pv-button
-                  @click="loadPublicProfile"
-                  label="Reintentar"
-                  class="retry-button"
-                  icon="pi pi-refresh"
-              />
-              <pv-button
-                  @click="goBack"
-                  label="Volver"
-                  class="secondary-button"
-                  severity="secondary"
-                  outlined
-              />
+        <pv-button
+          @click="loadPublicProfile"
+          :label="$t('profile.retry')"
+          class="retry-button"
+          icon="pi pi-refresh"
+        />
+        <pv-button
+          @click="goBack"
+          :label="$t('common.goBack')"
+          class="secondary-button"
+          severity="secondary"
+          outlined
+        />
             </div>
           </div>
         </template>
@@ -282,20 +282,20 @@ onMounted(async () => {
 
         <!-- Public Actions -->
         <div class="public-actions">
-          <pv-button
-              @click="handleInvite"
-              class="action-button invite-button"
-              icon="pi pi-user-plus"
-              label="Invitar a Colaborar"
-          />
-          <pv-button
-              @click="handleComment"
-              class="action-button comment-button"
-              icon="pi pi-comment"
-              label="Dejar Comentario"
-              severity="secondary"
-              outlined
-          />
+      <pv-button
+        @click="handleInvite"
+        class="action-button invite-button"
+        icon="pi pi-user-plus"
+        :label="$t('profile.invite')"
+      />
+      <pv-button
+        @click="handleComment"
+        class="action-button comment-button"
+        icon="pi pi-comment"
+        :label="$t('profile.leaveComment')"
+        severity="secondary"
+        outlined
+      />
         </div>
       </div>
 
@@ -308,20 +308,20 @@ onMounted(async () => {
 
             <!-- Public Actions -->
             <div class="public-actions">
-              <pv-button
-                  @click="handleInvite"
-                  class="action-button invite-button"
-                  icon="pi pi-user-plus"
-                  label="Invitar a Colaborar"
-              />
-              <pv-button
-                  @click="handleComment"
-                  class="action-button comment-button"
-                  icon="pi pi-comment"
-                  label="Dejar Comentario"
-                  severity="secondary"
-                  outlined
-              />
+        <pv-button
+          @click="handleInvite"
+          class="action-button invite-button"
+          icon="pi pi-user-plus"
+          :label="$t('profile.invite')"
+        />
+        <pv-button
+          @click="handleComment"
+          class="action-button comment-button"
+          icon="pi pi-comment"
+          :label="$t('profile.leaveComment')"
+          severity="secondary"
+          outlined
+        />
             </div>
           </div>
 
@@ -390,7 +390,7 @@ onMounted(async () => {
   padding: 0.75rem 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   font-weight: 600;
   font-size: 1rem;
   backdrop-filter: blur(10px);
@@ -403,7 +403,7 @@ onMounted(async () => {
 }
 
 .profile-title {
-  color: white;
+  color: var(--color-white, #FFFFFF);
   font-size: 1.75rem;
   font-weight: 600;
   margin: 0;
@@ -434,7 +434,7 @@ onMounted(async () => {
 
 .loading-text {
   margin-top: 1rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 1.1rem;
 }
 
@@ -461,12 +461,12 @@ onMounted(async () => {
 }
 
 .error-content h3 {
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   margin-bottom: 0.5rem;
 }
 
 .error-content p {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   margin-bottom: 1.5rem;
 }
 
@@ -489,7 +489,7 @@ onMounted(async () => {
 
 /* Profile Content */
 .profile-content {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;

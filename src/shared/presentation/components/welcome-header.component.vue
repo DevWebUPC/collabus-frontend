@@ -2,17 +2,17 @@
 <template>
   <div class="welcome-card">
     <div class="card-content">
-      <h2 class="title">Bienvenido a la sección colaboradores</h2>
-      <p class="description">
-        Aquí podrá buscar los colaboradores con distintas habilidades y un rol específico
-        <br><br>
-        También puedes ver en qué ranking te encuentras de los mejores colaboradores de <strong style="color: #6C63FF">Collabus</strong>.
-      </p>
+        <h2 class="title">{{ $t('profile.welcomeHeader.title') }}</h2>
+        <p class="description">
+          {{ $t('profile.welcomeHeader.descriptionLine1') }}
+          <br><br>
+          {{ $t('profile.welcomeHeader.descriptionLine2Before') }} <strong style="color: #6C63FF">{{ $t('profile.welcomeHeader.brand') }}</strong>{{ $t('profile.welcomeHeader.descriptionLine2After') }}
+        </p>
 
-      <div class="image-container">
-        <img src="/public/welcome.png" alt="Colaboradores CollabUs" class="centered-image">
+        <div class="image-container">
+          <img src="/public/welcome.png" :alt="$t('profile.welcomeHeader.imageAlt')" class="centered-image">
+        </div>
       </div>
-    </div>
   </div>
 </template>
 

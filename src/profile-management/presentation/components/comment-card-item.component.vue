@@ -75,9 +75,9 @@ onMounted(() => {
   gap: 1rem;
   padding: 1rem;
   margin-bottom: 1rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--color-gray-300, #e5e7eb);
   border-radius: 12px;
-  background: #fff;
+  background: var(--color-white, #ffffff);
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   align-items: flex-start;
   max-width: 500px;
@@ -99,7 +99,7 @@ onMounted(() => {
 .user-name {
   font-weight: 600;
   font-size: 0.9rem;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 .comment-img {

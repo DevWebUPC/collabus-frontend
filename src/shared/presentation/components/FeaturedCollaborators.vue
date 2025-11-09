@@ -1,9 +1,11 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 import { useProfileStore } from '../../../profile-management/application/profile-store.js'; // Ajusta la ruta según tu estructura
 
 const { t } = useI18n();
+const router = useRouter();
 const profileStore = useProfileStore();
 
 // Computed properties
@@ -33,15 +35,13 @@ onMounted(async () => {
 
 // Handle view more collaborators
 const handleViewMore = () => {
-  // Navigate to ranking page
-  window.location.href = '/ranking-colaboradores'; // O usa vue-router si está configurado
+  router.push('/ranking-colaboradores');
 };
 
 // Handle collaborator profile view
 const handleViewProfile = (collaborator) => {
   console.log('View collaborator profile:', collaborator);
-  // Navegar al perfil del colaborador
-  window.location.href = `/profile/${collaborator.id}`;
+  router.push(`/profile/${collaborator.id}`);
 };
 
 // Get rating stars (mantenemos por compatibilidad)

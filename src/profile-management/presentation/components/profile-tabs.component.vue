@@ -218,14 +218,14 @@ onMounted(async () => {
           :class="{ 'sub-tab-active': selectedProjectView === 'my-projects' }"
           @click="selectedProjectView = 'my-projects'"
       >
-        Mis Proyectos
+        {{ $t('profile.subtabs.myProjects') }}
       </div>
       <div
           class="sub-tab-option"
           :class="{ 'sub-tab-active': selectedProjectView === 'favorites' }"
           @click="selectedProjectView = 'favorites'"
       >
-        Favoritos
+        {{ $t('profile.subtabs.favorites') }}
       </div>
     </div>
 
@@ -235,7 +235,7 @@ onMounted(async () => {
         <div v-if="selectedProjectView === 'my-projects'">
           <!-- Contenido de Mis Proyectos -->
           <div v-if="myProjects.length === 0">
-            <p>No tienes proyectos propios.</p>
+            <p>{{ $t('profile.noOwnProjects') }}</p>
           </div>
           <div v-else class="projects-list">
             <div
@@ -259,7 +259,7 @@ onMounted(async () => {
         <div v-else-if="selectedProjectView === 'favorites'">
           <!-- Contenido de Favoritos -->
           <div v-if="favoriteProjects.length === 0">
-            <p>No tienes proyectos favoritos.</p>
+            <p>{{ $t('profile.noFavoriteProjects') }}</p>
           </div>
           <div v-else class="projects-list">
             <div
@@ -321,7 +321,7 @@ onMounted(async () => {
 }
 .add-comment-btn {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: none;
   border-radius: 6px;
   padding: 0.5rem 1rem;
@@ -337,7 +337,7 @@ onMounted(async () => {
 <style scoped>
 .tabs-container {
   display: flex;
-  background-color: #f8f9fa;
+  background-color: var(--color-gray-50, #f8f9fa);
   border-radius: 12px;
   padding: 4px;
   width: fit-content;
@@ -400,7 +400,7 @@ onMounted(async () => {
 
 <style scoped>
 .projects-list {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -419,7 +419,7 @@ onMounted(async () => {
   border-bottom: none;
 }
 .project-item:hover {
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   padding-left: 2rem;
 }
 .project-info {
@@ -435,7 +435,7 @@ onMounted(async () => {
 .project-author {
   margin: 0 0 0.25rem 0;
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 .project-date {
   margin: 0;

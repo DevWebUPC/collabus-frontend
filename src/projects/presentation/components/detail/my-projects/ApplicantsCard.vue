@@ -355,7 +355,7 @@ const rejectApplicant = async (applicant) => {
 <style scoped>
 /* Los estilos se mantienen igual */
 .applicants-card {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -434,7 +434,7 @@ const rejectApplicant = async (applicant) => {
 }
 
 .table-body {
-  background: white;
+  background: var(--color-white, #FFFFFF);
 }
 
 .table-row {
@@ -466,7 +466,7 @@ const rejectApplicant = async (applicant) => {
   height: 40px;
   border-radius: 50%;
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -577,7 +577,7 @@ const rejectApplicant = async (applicant) => {
 
 :deep(.accept-btn.p-button) {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: 1px solid var(--color-primary);
   border-radius: 6px;
   font-size: 0.75rem;

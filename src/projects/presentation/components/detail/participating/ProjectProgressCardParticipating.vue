@@ -161,7 +161,7 @@ onMounted(async () => {
   position: absolute;
   width: 100px;
   height: 100px;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 50%;
 }
 

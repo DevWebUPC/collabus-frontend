@@ -1,51 +1,6 @@
-<template>
-  <pv-dialog
-      :visible="visible"
-      modal
-      :style="{ width: '25rem' }"
-      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-      @update:visible="$emit('update:visible', $event)"
-
-  >
-    <template #header>
-      <div class="modal-header">
-        <h2 class="modal-title">Recuperar Contraseña</h2>
-      </div>
-    </template>
-
-    <div class="forgot-password-content">
-      <p class="instruction-text">
-        Ingresa tu correo electrónico:
-      </p>
-
-      <div class="field">
-        <pv-input-text
-            id="recoveryEmail"
-            v-model="recoveryEmail"
-            type="email"
-            placeholder="ejemplo@gmail.com"
-            class="w-full email-input"
-            :class="{ 'p-invalid': emailError }"
-        />
-        <small v-if="emailError" class="p-error">{{ emailError }}</small>
-      </div>
-    </div>
-
-    <template #footer>
-      <div class="footer-buttons">
-        <pv-button
-            label="Enviar"
-            @click="handleSubmit"
-            :disabled="!recoveryEmail"
-            class="send-button"
-        />
-      </div>
-    </template>
-  </pv-dialog>
-</template>
-
 <script setup>
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   visible: Boolean
@@ -55,18 +10,19 @@ const emit = defineEmits(['update:visible', 'submit'])
 
 const recoveryEmail = ref('')
 const emailError = ref('')
+const { t } = useI18n();
 
 
 const handleSubmit = () => {
   // Validar email
   if (!recoveryEmail.value) {
-    emailError.value = 'El correo electrónico es requerido'
+    emailError.value = t('auth.forgotPasswordModal.emailRequired')
     return
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(recoveryEmail.value)) {
-    emailError.value = 'Por favor ingresa un correo electrónico válido'
+    if (!emailRegex.test(recoveryEmail.value)) {
+    emailError.value = t('auth.forgotPasswordModal.emailInvalid')
     return
   }
 
@@ -84,6 +40,53 @@ watch(recoveryEmail, () => {
 })
 </script>
 
+<template>
+  <pv-dialog
+      :visible="visible"
+      modal
+      :style="{ width: '25rem' }"
+      :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+      @update:visible="$emit('update:visible', $event)"
+
+  >
+    <template #header>
+      <div class="modal-header">
+        <h2 class="modal-title">{{ $t('auth.forgotPasswordModal.title') }}</h2>
+      </div>
+    </template>
+
+    <div class="forgot-password-content">
+      <p class="instruction-text">
+        {{ $t('auth.forgotPasswordModal.instruction') }}
+      </p>
+
+      <div class="field">
+        <pv-input-text
+            id="recoveryEmail"
+            v-model="recoveryEmail"
+            type="email"
+            :placeholder="$t('auth.forgotPasswordModal.emailPlaceholder')"
+            class="w-full email-input"
+            :class="{ 'p-invalid': emailError }"
+        />
+        <small v-if="emailError" class="p-error">{{ emailError }}</small>
+      </div>
+    </div>
+
+    <template #footer>
+      <div class="footer-buttons">
+        <pv-button
+            :label="$t('auth.forgotPasswordModal.send')"
+            @click="handleSubmit"
+            :disabled="!recoveryEmail"
+            class="send-button"
+        />
+      </div>
+    </template>
+  </pv-dialog>
+</template>
+
+
 <style scoped>
 .forgot-password-content {
   display: flex;
@@ -93,7 +96,7 @@ watch(recoveryEmail, () => {
 }
 
 .instruction-text {
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   margin: 0;
   line-height: 1.5;
   font-size: 1rem;
@@ -128,7 +131,7 @@ watch(recoveryEmail, () => {
 .send-button {
   background-color: #FF7A30;
   border: none;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   padding: 0.75rem 2rem;
   font-size: 1rem;
   font-weight: 500;
@@ -152,12 +155,12 @@ watch(recoveryEmail, () => {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-gray-300, #e5e7eb);
   position: relative;
 }
 
 .modal-title {
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0;

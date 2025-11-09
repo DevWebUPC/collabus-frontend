@@ -1,8 +1,10 @@
 <script setup>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../../application/user-store.js'; // Ajusta la ruta según tu estructura
 import { Button as PvButton, InputText } from "primevue";
+import languageSwitcher from '../../../shared/presentation/components/language-switcher.vue';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -11,6 +13,7 @@ const fullName = ref('');
 const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+const { t } = useI18n();
 
 const goBack = () => {
   router.push('/');
@@ -18,7 +21,7 @@ const goBack = () => {
 
 const handleRegister = async () => {
   if (password.value !== confirmPassword.value) {
-    alert('Las contraseñas no coinciden');
+    alert(t('auth.register.passwordsNoMatch'));
     return;
   }
 
@@ -33,9 +36,9 @@ const handleRegister = async () => {
 
     // Redirigir al onboarding después del registro exitoso
     router.push('/create-account');
-  } catch (error) {
+    } catch (error) {
     console.error('Error en registro:', error);
-    alert(error.message || 'Error en el registro');
+    alert(error.message || t('auth.register.error'));
   }
 };
 </script>
@@ -44,13 +47,16 @@ const handleRegister = async () => {
   <header class="login-header">
     <div class="header-content">
       <div class="logo">
-        <img src="/logo.png" alt="CollabUs Logo" class="logo">
+        <img src="/logo.png" :alt="$t('auth.logoAlt')" class="logo">
       </div>
-      <pv-button
+      <div class="right-container">
+        <language-switcher />
+        <pv-button
           @click="goBack"
           class="back-button mobile-only"
-          label="Regresar"
-      />
+          :label="$t('auth.back')"
+        />
+      </div>
     </div>
   </header>
 
@@ -58,77 +64,79 @@ const handleRegister = async () => {
     <!-- Panel izquierdo -->
     <div class="card-left">
       <div class="logo-section">
-        <img src="/logo.png" alt="CollabUs Logo" class="logo-image" />
+        <img src="/logo.png" :alt="$t('auth.logoAlt')" class="logo-image" />
       </div>
-      <pv-button
+      <div class="right-container">
+        <pv-button
           @click="goBack"
           class="back-button desktop-only"
-          label="Regresar"
-      />
+          :label="$t('auth.back')"
+        />
+      </div>
     </div>
 
     <!-- Panel derecho -->
     <div class="card-right">
       <div class="register-content">
         <div class="register-header">
-          <h1 class="main-title">Registrar Usuario</h1>
+          <h1 class="main-title">{{ $t('auth.register.title') }}</h1>
         </div>
 
         <form @submit.prevent="handleRegister" class="register-form">
           <div class="form-group">
-            <label for="fullName">Nombres y Apellidos</label>
-            <pv-input-text
+      <label for="fullName">{{ $t('auth.register.fullNameLabel') }}</label>
+      <pv-input-text
                 type="text"
                 id="fullName"
                 v-model="fullName"
-                placeholder="Juan Pedro Quispe Sandoval"
+        :placeholder="$t('auth.register.fullNamePlaceholder')"
                 required
                 class="w-full text-input"
             />
           </div>
 
           <div class="form-group">
-            <label for="email">Correo Electrónico</label>
-            <pv-input-text
+      <label for="email">{{ $t('auth.register.emailLabel') }}</label>
+      <pv-input-text
                 type="email"
                 id="email"
                 v-model="email"
-                placeholder="ejemplo@gmail.com"
+        :placeholder="$t('auth.register.emailPlaceholder')"
                 required
                 class="w-full text-input"
             />
           </div>
 
           <div class="form-group">
-            <label for="password">Contraseña</label>
-            <pv-input-text
+      <label for="password">{{ $t('auth.register.passwordLabel') }}</label>
+      <pv-input-text
                 type="password"
                 id="password"
                 v-model="password"
-                placeholder="Ingresa tu contraseña"
+        :placeholder="$t('auth.register.passwordPlaceholder')"
                 required
                 class="w-full password-input"
             />
           </div>
 
           <div class="form-group">
-            <label for="confirmPassword">Confirmar Contraseña</label>
-            <pv-input-text
+      <label for="confirmPassword">{{ $t('auth.register.confirmPasswordLabel') }}</label>
+      <pv-input-text
                 type="password"
                 id="confirmPassword"
                 v-model="confirmPassword"
-                placeholder="Confirma tu contraseña"
+        :placeholder="$t('auth.register.confirmPasswordPlaceholder')"
                 required
                 class="w-full password-input"
             />
           </div>
 
-          <pv-button
-              type="submit"
-              class="register-button w-full"
-              label="Guardar"
-              :loading="userStore.loading"
-          />
+      <pv-button
+        type="submit"
+        class="register-button w-full"
+        :label="$t('auth.register.save')"
+        :loading="userStore.loading"
+      />
         </form>
 
         <div class="footer">
@@ -144,7 +152,7 @@ const handleRegister = async () => {
 .register-container {
   display: flex;
   min-height: 100vh;
-  background: white;
+  background: var(--color-white, #FFFFFF);
 }
 
 /* Panel izquierdo */
@@ -220,7 +228,7 @@ const handleRegister = async () => {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 0.9rem;
 }
 
@@ -250,17 +258,17 @@ const handleRegister = async () => {
 .footer {
   text-align: center;
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 .copyright {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
   margin: 0;
 }
 
 .login-header {
-  background-color: white;
+  background-color: var(--color-white, #FFFFFF);
   border-bottom: 1px solid #e2e8f0;
   padding: 1rem 0;
   position: sticky;

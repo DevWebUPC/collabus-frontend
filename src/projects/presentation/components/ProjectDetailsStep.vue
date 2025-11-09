@@ -151,8 +151,8 @@ const updateDurationType = (value) => { store.detailsData.durationType = value }
 }
 
 .form-group {
-  background: white;
-  border: 1px solid #E5E7EB;
+  background: var(--color-white, #FFFFFF);
+  border: 1px solid var(--color-gray-300, #e5e7eb);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -230,13 +230,13 @@ const updateDurationType = (value) => { store.detailsData.durationType = value }
 :deep(.p-inputnumber .p-inputnumber-button) {
   background: #F3F4F6;
   border: 1px solid #D1D5DB;
-  color: #6B7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 :deep(.p-inputnumber .p-inputnumber-button:hover) {
   background: #6C63FF;
   border-color: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 :deep(.p-inputtext:focus),
@@ -262,7 +262,7 @@ const updateDurationType = (value) => { store.detailsData.durationType = value }
 
 :deep(.p-button.p-button-outlined:hover) {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 :deep(.p-button:disabled) {
@@ -287,7 +287,7 @@ const updateDurationType = (value) => { store.detailsData.durationType = value }
 :deep(.p-dropdown-panel) {
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--color-gray-300, #e5e7eb);
 }
 
 :deep(.p-dropdown-item) {
@@ -296,12 +296,12 @@ const updateDurationType = (value) => { store.detailsData.durationType = value }
 }
 
 :deep(.p-dropdown-item:hover) {
-  background: #F8FAFC;
+  background: var(--color-gray-300, #f8fafc);
 }
 
 :deep(.p-dropdown-item.p-highlight) {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 /* Responsive design */

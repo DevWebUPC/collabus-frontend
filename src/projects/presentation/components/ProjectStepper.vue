@@ -49,7 +49,7 @@ const props = defineProps({
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #E5E7EB;
+  background: var(--color-gray-300, #e5e7eb);
   transition: all 0.3s ease;
 }
 

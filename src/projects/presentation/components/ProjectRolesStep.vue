@@ -198,7 +198,7 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 .step-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   margin: 0;
 }
 
@@ -209,7 +209,7 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 }
 
 .role-section {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -224,7 +224,7 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 .role-label {
   display: block;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }
@@ -242,7 +242,7 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 
 /* Individual Role Card */
 .role-card {
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
   border-radius: 16px;
   padding: 1.5rem;
   border: 1px solid #e2e8f0;
@@ -256,7 +256,7 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 .card-title-label {
   display: block;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-gray-900, #1f2937);
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }
@@ -280,7 +280,7 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 
 .item-number {
   font-weight: 500;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.875rem;
   min-width: 40px;
   flex-shrink: 0;
@@ -314,7 +314,7 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 
 /* Buttons */
 .add-card-button {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border: 1px solid #6C63FF;
   color: #6C63FF;
   font-weight: 500;
@@ -326,12 +326,12 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 }
 
 .add-card-button:hover {
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
 }
 
 .add-role-button {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   font-weight: 600;
   padding: 0.875rem 2rem;
   border-radius: 12px;
@@ -381,19 +381,19 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 }
 
 :deep(.p-button.p-button-outlined) {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border: 1px solid #6C63FF;
   color: #6C63FF;
 }
 
 :deep(.p-button.p-button-outlined:hover) {
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
 }
 
 :deep(.p-button:not(.p-button-outlined):not(.p-button-text)) {
   background: #6C63FF;
   border: none;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 :deep(.p-button:not(.p-button-outlined):not(.p-button-text):hover) {

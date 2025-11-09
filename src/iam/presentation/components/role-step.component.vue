@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   modelValue: {
@@ -7,6 +8,7 @@ const props = defineProps({
     required: true
   }
 });
+const { t } = useI18n();
 
 const emit = defineEmits(['update:modelValue', 'next', 'prev']);
 
@@ -64,10 +66,9 @@ watch(() => props.modelValue, (newValue) => {
   <pv-card class="step-card">
     <template #title>
       <div class="step-header">
-        <h1 class="main-title">¿Cómo te gustaría Presentarte?</h1>
+        <h1 class="main-title">{{ $t('onboarding.role.title') }}</h1>
         <p class="subtitle">
-          Los colaboradores suelen buscar personas con distintas habilidades y roles.
-          ¿Qué rol te gustaría asumir?
+          {{ $t('onboarding.role.subtitle') }}
         </p>
       </div>
     </template>
@@ -88,15 +89,15 @@ watch(() => props.modelValue, (newValue) => {
 
         <!-- Separador -->
         <div class="separator">
-          <span class="separator-text">o</span>
+          <span class="separator-text">{{ $t('onboarding.role.or') }}</span>
         </div>
 
         <!-- Rol personalizado -->
         <div class="custom-role-section">
-          <label class="custom-role-label">Escribir tu rol</label>
+      <label class="custom-role-label">{{ $t('onboarding.role.customRoleLabel') }}</label>
           <pv-input-text
-              v-model="modelValue.customRole"
-              placeholder="Escribe tu rol personalizado..."
+        v-model="modelValue.customRole"
+        :placeholder="$t('onboarding.role.customRolePlaceholder')"
               class="custom-role-input"
               @input="updateCustomRole(modelValue.customRole)"
           />
@@ -104,25 +105,25 @@ watch(() => props.modelValue, (newValue) => {
 
         <!-- Mensaje informativo -->
         <p class="info-message">
-          Tu rol entre los otros datos ingresados los puedes editar en tu perfil
+          {{ $t('onboarding.role.infoMessage') }}
         </p>
       </div>
     </template>
 
     <template #footer>
       <div class="card-footer">
-        <pv-button
-            @click="$emit('prev')"
-            class="back-button"
-            label="Atrás"
-            outlined
-        />
-        <pv-button
-            @click="$emit('next')"
-            class="continue-button"
-            label="Guardar"
-            :disabled="!modelValue.selectedRole && !modelValue.customRole"
-        />
+    <pv-button
+      @click="$emit('prev')"
+      class="back-button"
+      :label="$t('onboarding.role.back')"
+      outlined
+    />
+    <pv-button
+      @click="$emit('next')"
+      class="continue-button"
+      :label="$t('onboarding.role.save')"
+      :disabled="!modelValue.selectedRole && !modelValue.customRole"
+    />
       </div>
     </template>
   </pv-card>
@@ -152,7 +153,7 @@ watch(() => props.modelValue, (newValue) => {
 }
 
 .subtitle {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.95rem;
   line-height: 1.5;
   margin: 0;
@@ -177,12 +178,12 @@ watch(() => props.modelValue, (newValue) => {
 
 .role-card {
   padding: 1rem 0.75rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--color-gray-300, #e5e7eb);
   border-radius: 8px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   font-size: 0.9rem;
   font-weight: 500;
   min-height: 60px;
@@ -202,7 +203,7 @@ watch(() => props.modelValue, (newValue) => {
 .role-card.selected {
   border-color: #6C63FF;
   background-color: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2);
 }
@@ -221,13 +222,13 @@ watch(() => props.modelValue, (newValue) => {
   left: 0;
   right: 0;
   height: 1px;
-  background: #e5e7eb;
+  background: var(--color-gray-300, #e5e7eb);
 }
 
 .separator-text {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   padding: 0 1rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.9rem;
   position: relative;
   z-index: 1;
@@ -242,7 +243,7 @@ watch(() => props.modelValue, (newValue) => {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 0.95rem;
 }
 
@@ -253,7 +254,7 @@ watch(() => props.modelValue, (newValue) => {
 /* Mensaje informativo */
 .info-message {
   text-align: center;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.85rem;
   font-style: italic;
   margin-top: auto;

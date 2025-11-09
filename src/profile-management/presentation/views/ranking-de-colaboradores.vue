@@ -61,11 +61,11 @@ export default {
   <div class="ranking-container">
     <!-- Botón de retroceso -->
     <div class="back-button-container">
-      <button class="back-button" @click="goBack">
+  <button class="back-button" @click="goBack">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Volver
+        {{ $t('common.goBack') }}
       </button>
     </div>
 
@@ -93,7 +93,7 @@ export default {
 <style scoped>
 .ranking-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: var(--color-gray-50, #f9f9f9);
   padding: 1rem;
 }
 
@@ -108,7 +108,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border: 2px solid #e9ecef;
   border-radius: 12px;
   padding: 0.75rem 1.5rem;
@@ -122,7 +122,7 @@ export default {
 
 .back-button:hover {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border-color: #6C63FF;
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(108, 99, 255, 0.2);

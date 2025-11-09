@@ -213,7 +213,7 @@ export default {
   grid-template-columns: 1fr 2fr 1fr 1fr 100px;
   gap: 1rem;
   padding: 0.75rem 1rem;
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   border-radius: 6px;
   margin-bottom: 0.5rem;
 }
@@ -221,13 +221,13 @@ export default {
 .header-col {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   text-align: left;
 }
 
 .separator {
   height: 1px;
-  background: #e5e7eb;
+  background: var(--color-gray-300, #e5e7eb);
   margin: 0.5rem 0;
 }
 
@@ -261,30 +261,30 @@ export default {
 
 .collaborator-name {
   font-weight: 500;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 0.875rem;
 }
 
 .collaborator-role {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 .task-title {
   font-weight: 500;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 0.875rem;
 }
 
 .task-description {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   line-height: 1.3;
 }
 
 .due-date {
   font-size: 0.875rem;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
 }
 
 .status-badge {
@@ -411,14 +411,14 @@ export default {
 }
 
 .empty-text {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   margin-bottom: 1.5rem;
   font-size: 1rem;
 }
 
 .create-first-task-btn {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: none;
   border-radius: 6px;
   padding: 0.75rem 1.5rem;
@@ -439,7 +439,7 @@ export default {
     grid-template-columns: 1fr;
     gap: 0.75rem;
     padding: 1rem;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--color-gray-300, #e5e7eb);
     border-radius: 8px;
     margin-bottom: 0.75rem;
   }

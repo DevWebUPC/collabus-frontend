@@ -26,14 +26,14 @@
             {{ skill }}
           </span>
           <span v-if="collaborator.skills.length > 3" class="skill-tag-more">
-            +{{ collaborator.skills.length - 3 }} más
+            +{{ collaborator.skills.length - 3 }} {{ $t('common.more') }}
           </span>
         </div>
       </div>
 
-      <div class="score-section">
-        <div class="score-value">{{ collaborator.score }} pts</div>
-        <button class="profile-btn" @click="viewProfile">Ver Perfil</button>
+        <div class="score-section">
+        <div class="score-value">{{ collaborator.score }} {{ $t('profile.collaborator.pointsSuffix') }}</div>
+        <button class="profile-btn" @click="viewProfile">{{ $t('profile.collaborator.viewProfile') }}</button>
       </div>
     </div>
   </div>
@@ -84,12 +84,12 @@ export default {
   padding: 1.5rem;
   border-bottom: 2px solid #e9ecef;
   gap: 1.5rem;
-  background: white;
+  background: var(--color-white, #FFFFFF);
   transition: all 0.3s ease;
 }
 
 .ranking-item:hover {
-  background: #f8f9fa;
+  background: var(--color-gray-50, #f8f9fa);
   transform: translateX(5px);
 }
 
@@ -185,13 +185,13 @@ export default {
 
 .skill-tag:hover {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   transform: translateY(-1px);
 }
 
 .skill-tag-more {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -221,7 +221,7 @@ export default {
 
 .profile-btn {
   background: #6C63FF;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   border: none;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;

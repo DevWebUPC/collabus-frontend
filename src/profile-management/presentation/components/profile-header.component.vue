@@ -160,7 +160,7 @@ const viewPortfolio = () => {
 
 /* Estilo para el avatar por defecto */
 .bg-gray-200 {
-  background-color: #e5e7eb;
+  background-color: var(--color-gray-300, #e5e7eb);
 }
 
 .cv-indicator {

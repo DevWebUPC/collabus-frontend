@@ -1,19 +1,19 @@
 <template>
   <section class="pa-card">
-    <h3 class="pa-title">Plan Actual</h3>
+  <h3 class="pa-title">{{ $t('subscription.currentPlan.title') }}</h3>
 
     <pv-button
         class="pa-circle"
         @click="openPlansModal"
-        aria-label="Ver y cambiar plan"
+        :aria-label="$t('subscription.currentPlan.ariaLabel')"
         @mouseenter="isHovered = true"
         @mouseleave="isHovered = false"
     >
-      <span class="pa-circle__title">{{ isHovered ? 'Cambiar' : 'Plan' }}</span>
-      <span class="pa-circle__name">{{ isHovered ? 'de Plan' : currentPlan }}</span>
+      <span class="pa-circle__title">{{ isHovered ? $t('subscription.currentPlan.change') : $t('subscription.currentPlan.plan') }}</span>
+      <span class="pa-circle__name">{{ isHovered ? $t('subscription.currentPlan.changeSuffix') : $t('subscription.plans.' + currentPlan) }}</span>
     </pv-button>
 
-    <p class="pa-hint">Haz clic para ver los planes</p>
+  <p class="pa-hint">{{ $t('subscription.currentPlan.hint') }}</p>
   </section>
 </template>
 
@@ -47,7 +47,7 @@ function openPlansModal() {
 
 <style scoped>
 .pa-card{
-  background:#fff;
+  background:var(--color-white, #ffffff);
   border-radius:20px;
   padding:20px 18px 28px;
   box-shadow:0 10px 30px rgba(0,0,0,.08);
@@ -68,7 +68,7 @@ function openPlansModal() {
   border-radius:999px;
   border:none;
   cursor:pointer;
-  color:#fff;
+  color:var(--color-white, #ffffff);
   display:flex;
   flex-direction:column;
   align-items:center;

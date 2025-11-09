@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   modelValue: {
@@ -15,6 +16,7 @@ const fileInput = ref();
 const hasImage = ref(false);
 const currentImage = ref('');
 const username = ref(props.modelValue.username || '');
+const { t } = useI18n();
 
 // Sincronizar username
 watch(username, (newUsername) => {
@@ -29,13 +31,13 @@ const onFileSelect = (event) => {
   if (file) {
     // Validar que sea una imagen
     if (!file.type.startsWith('image/')) {
-      alert('Por favor, selecciona un archivo de imagen');
+      alert(t('onboarding.profile.invalidImage'));
       return;
     }
 
     // Validar tamaño (1MB)
     if (file.size > 1000000) {
-      alert('La imagen debe ser menor a 1MB');
+      alert(t('onboarding.profile.imageTooLarge'));
       return;
     }
 
@@ -73,8 +75,8 @@ watch(() => props.modelValue, (newValue) => {
 <template>
   <pv-card class="step-card">
     <template #title>
-      <div class="step-header">
-        <h1 class="main-title">Configura tu Perfil</h1>
+        <div class="step-header">
+        <h1 class="main-title">{{ $t('onboarding.profile.title') }}</h1>
       </div>
     </template>
 
@@ -104,7 +106,7 @@ watch(() => props.modelValue, (newValue) => {
             </div>
 
             <p class="avatar-hint">
-              {{ hasImage ? 'Haz clic para cambiar la foto' : 'Añade una foto para tu perfil' }}
+              {{ hasImage ? $t('onboarding.profile.avatarHintChange') : $t('onboarding.profile.avatarHintAdd') }}
             </p>
 
             <!-- Input file oculto -->
@@ -119,11 +121,11 @@ watch(() => props.modelValue, (newValue) => {
         </div>
 
         <div class="form-group">
-          <label for="username">Nombre de Perfil</label>
+      <label for="username">{{ $t('onboarding.profile.usernameLabel') }}</label>
           <pv-input-text
               id="username"
               v-model="username"
-              placeholder="Tu nombre de usuario"
+        :placeholder="$t('onboarding.profile.usernamePlaceholder')"
               class="w-full"
           />
         </div>
@@ -131,11 +133,11 @@ watch(() => props.modelValue, (newValue) => {
     </template>
 
     <template #footer>
-      <div class="card-footer">
+        <div class="card-footer">
         <pv-button
             @click="$emit('next')"
             class="continue-button w-full"
-            label="Guardar"
+            :label="$t('onboarding.profile.save')"
         />
       </div>
     </template>
@@ -238,13 +240,13 @@ watch(() => props.modelValue, (newValue) => {
 }
 
 .change-text {
-  color: white;
+  color: var(--color-white, #FFFFFF);
   font-size: 0.7rem;
   font-weight: 600;
 }
 
 .avatar-hint {
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   font-size: 0.8rem;
   margin: 0;
 }
@@ -266,7 +268,7 @@ watch(() => props.modelValue, (newValue) => {
   display: block;
   margin-bottom: 0.375rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 0.9rem;
 }
 

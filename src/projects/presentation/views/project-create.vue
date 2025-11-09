@@ -167,7 +167,7 @@ const debugState = () => {
 <style scoped>
 .project-create-container {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--color-gray-300, #f8fafc);
   padding: 2rem;
 }
 
@@ -207,7 +207,7 @@ const debugState = () => {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #e5e7eb;
+  background: var(--color-gray-300, #e5e7eb);
   transition: all 0.3s ease;
 }
 
@@ -236,7 +236,7 @@ const debugState = () => {
 }
 
 .form-card {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   padding: 2rem;
@@ -253,7 +253,7 @@ const debugState = () => {
 .step-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   margin: 0;
 }
 
@@ -265,14 +265,14 @@ const debugState = () => {
 .form-label {
   display: block;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-gray-900, #374151);
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }
 
 .form-input {
   width: 100%;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--color-gray-300, #e5e7eb);
   border-radius: 8px;
   padding: 0.75rem 1rem;
   font-size: 1rem;
@@ -311,7 +311,7 @@ const debugState = () => {
 .add-skill-btn {
   background: var(--color-primary);
   border: none;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-size: 0.875rem;
@@ -403,8 +403,8 @@ const debugState = () => {
 }
 
 .role-card {
-  background: white;
-  border: 2px solid #e5e7eb;
+  background: var(--color-white, #FFFFFF);
+  border: 2px solid var(--color-gray-300, #e5e7eb);
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1rem;
@@ -438,7 +438,7 @@ const debugState = () => {
 
 .item-label {
   font-weight: 500;
-  color: #6b7280;
+  color: var(--color-gray-900, #6b7280);
   min-width: 50px;
 }
 
@@ -465,12 +465,12 @@ const debugState = () => {
 .add-card-btn:hover,
 .add-role-btn:hover {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 .add-role-btn {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   margin-top: 1rem;
 }
 
@@ -499,7 +499,7 @@ const debugState = () => {
 .add-area-btn {
   background: var(--color-primary);
   border: none;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-size: 0.875rem;
@@ -518,7 +518,7 @@ const debugState = () => {
 .add-tag-btn {
   background: var(--color-primary);
   border: none;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-size: 0.875rem;
@@ -558,8 +558,8 @@ const debugState = () => {
   font-weight: 500;
   border-radius: 24px;
   border: 1px solid #D1D5DB;
-  color: #6B7280;
-  background: white;
+  color: var(--color-gray-900, #6b7280);
+  background: var(--color-white, #FFFFFF);
   font-size: 14px;
 }
 
@@ -576,7 +576,7 @@ const debugState = () => {
   border-radius: 24px;
   background: var(--color-primary);
   border: none;
-  color: white;
+  color: var(--color-white, #FFFFFF);
   font-size: 14px;
   min-width: 120px;
 }
@@ -597,7 +597,7 @@ const debugState = () => {
 :deep(.p-inputtext),
 :deep(.p-dropdown),
 :deep(.p-inputnumber-input) {
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--color-gray-300, #e5e7eb);
   border-radius: 8px;
   padding: 0.75rem 1rem;
   font-size: 1rem;
@@ -617,7 +617,7 @@ const debugState = () => {
 }
 
 :deep(.p-textarea) {
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--color-gray-300, #e5e7eb);
   border-radius: 8px;
   padding: 0.75rem 1rem;
   font-size: 1rem;
@@ -642,20 +642,20 @@ const debugState = () => {
 
 :deep(.p-button.p-button-outlined) {
   border: 1px solid #D1D5DB;
-  color: #6B7280;
-  background: white;
+  color: var(--color-gray-900, #6b7280);
+  background: var(--color-white, #FFFFFF);
 }
 
 :deep(.p-button.p-button-outlined:hover) {
   border-color: #9CA3AF;
   background: #F9FAFB;
-  color: #6B7280;
+  color: var(--color-gray-900, #6b7280);
 }
 
 :deep(.p-button:not(.p-button-outlined)) {
   background: var(--color-primary);
   border: none;
-  color: white;
+  color: var(--color-white, #FFFFFF);
 }
 
 :deep(.p-button:not(.p-button-outlined):hover:not(:disabled)) {

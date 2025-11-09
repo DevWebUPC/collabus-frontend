@@ -2,11 +2,11 @@
   <div class="ranking-card">
     <button class="circular-ranking-button" @click="goToRanking">
       <div class="button-text">
-        <span class="line-1">Ranking De</span>
-        <span class="line-2">Colaboradores</span>
+        <span class="line-1">{{ $t('profile.ranking.card.line1') }}</span>
+        <span class="line-2">{{ $t('profile.ranking.card.line2') }}</span>
       </div>
     </button>
-    <p class="ranking-description">Ver ranking completo</p>
+    <p class="ranking-description">{{ $t('profile.ranking.card.description') }}</p>
   </div>
 </template>
 
@@ -26,7 +26,7 @@ export default {
 
 <style scoped>
 .ranking-card {
-  background: white;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -54,7 +54,7 @@ export default {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-  color: white;
+  color: var(--color-white, #FFFFFF);
   padding: 1rem;
 }
 
