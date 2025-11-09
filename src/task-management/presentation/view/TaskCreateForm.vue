@@ -20,17 +20,27 @@
         </div>
       </div>
 
-      <div class ="formr.section">
+      <!-- Asignar a Colaborador -->
+      <div class="form-section">
         <label class="section-label">Asignar a</label>
+        <div v-if="loadingCollaborators" class="loading-collaborators">
+          <pv-progress-spinner style="width: 20px; height: 20px" />
+          <span>Cargando colaboradores...</span>
+        </div>
+        <div v-else-if="collaborators.length === 0" class="no-collaborators">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>No hay colaboradores aceptados en este proyecto</span>
+        </div>
         <pv-dropdown
+            v-else
             v-model="task.assignedTo"
             :options="collaborators"
-            option-label="name"
-            option-value="id"
+            option-label="applicantName"
+            option-value="applicantId"
             placeholder="Seleccionar colaborador"
             class="w-full"
-            :loading="loadingCollaborators"
         />
+        <small class="helper-text">Solo se muestran colaboradores con aplicación aceptada</small>
       </div>
 
       <!-- Descripción -->
@@ -54,7 +64,7 @@
           />
         </div>
         <div v-for="(item, index) in task.checklist" :key="index" class="checklist-item">
-          <pv-inputtext v-model="item.text" class="w-full" />
+          <pv-inputtext v-model="item.text" class="w-full" placeholder="Descripción del paso..." />
           <pv-button
               icon="pi pi-times"
               text
@@ -138,7 +148,12 @@
     <!-- Action Buttons -->
     <div class="form-actions">
       <pv-button label="Cancelar" text @click="$emit('cancel')" />
-      <pv-button label="Crear Tarea" @click="createTask" :disabled="!isFormValid" />
+      <pv-button
+          label="Crear Tarea"
+          @click="createTask"
+          :disabled="!isFormValid"
+          :loading="creatingTask"
+      />
     </div>
 
     <!-- Modales -->
@@ -174,12 +189,13 @@ export default {
     const showFileModal = ref(false)
     const showLinkModal = ref(false)
     const loadingCollaborators = ref(false)
+    const creatingTask = ref(false)
 
     const task = ref({
       title: '',
       dueDate: null,
       description: '',
-      assignedTo: null, // NUEVO: ID del colaborador seleccionado
+      assignedTo: null,
       checklist: [],
       tools: [],
       comment: '',
@@ -195,52 +211,119 @@ export default {
           task.value.dueDate !== null
     })
 
-    // Cargar colaboradores del proyecto
-    const loadCollaborators = async () => {
+    // Cargar colaboradores aceptados del proyecto
+    const loadAcceptedCollaborators = async () => {
       try {
         loadingCollaborators.value = true
-        // Usar los colaboradores del store del proyecto
-        if (projectDetailStore.project?.collaborators) {
-          collaborators.value = projectDetailStore.project.collaborators.map(collab => ({
-            id: collab.applicantId,
-            name: collab.name,
-            role: collab.role
-          }))
-          console.log('👥 Colaboradores cargados:', collaborators.value)
+        console.log('🔄 Cargando colaboradores aceptados...')
+
+        // Asegurarse de que el proyecto esté cargado
+        if (!projectDetailStore.project) {
+          console.log('📋 Cargando detalles del proyecto primero...')
+          await projectDetailStore.loadProjectDetail(projectDetailStore.projectId)
         }
+
+        console.log('📊 Proyecto cargado:', projectDetailStore.project)
+
+        // Obtener colaboradores aceptados - usando applicantName y applicantId
+        if (projectDetailStore.project?.collaborators) {
+          // Filtrar solo los colaboradores con estado "accepted"
+          const acceptedCollaborators = projectDetailStore.project.collaborators
+              .filter(collab => collab.status?.toLowerCase() === 'accepted')
+              .map(collab => ({
+                applicantId: collab.applicantId || collab.id,
+                applicantName: collab.applicantName || collab.name || 'Colaborador sin nombre',
+                role: collab.role || 'Sin rol definido',
+                status: collab.status
+              }))
+
+          collaborators.value = acceptedCollaborators
+          console.log('✅ Colaboradores aceptados cargados:', collaborators.value)
+        } else {
+          console.log('⚠️ No se encontraron colaboradores en el proyecto')
+          collaborators.value = []
+        }
+
+        // Si no hay colaboradores, intentar cargar aplicaciones
+        if (collaborators.value.length === 0) {
+          console.log('🔄 Intentando cargar aplicaciones...')
+          await loadCollaboratorsFromApplications()
+        }
+
       } catch (error) {
-        console.error('Error cargando colaboradores:', error)
+        console.error('❌ Error cargando colaboradores:', error)
+        collaborators.value = []
       } finally {
         loadingCollaborators.value = false
       }
     }
 
+    // Método alternativo para cargar colaboradores desde las aplicaciones
+    const loadCollaboratorsFromApplications = async () => {
+      try {
+        console.log('🔄 Cargando desde aplicaciones...')
+
+        // Si el proyecto tiene aplicaciones, usarlas
+        if (projectDetailStore.project?.applications) {
+          const acceptedApplications = projectDetailStore.project.applications
+              .filter(app => app.status?.toLowerCase() === 'accepted')
+              .map(app => ({
+                applicantId: app.applicantId,
+                applicantName: app.applicantName || 'Colaborador',
+                role: app.role || 'Colaborador',
+                status: app.status
+              }))
+
+          collaborators.value = acceptedApplications
+          console.log('✅ Colaboradores desde aplicaciones:', collaborators.value)
+        }
+      } catch (error) {
+        console.error('❌ Error cargando desde aplicaciones:', error)
+      }
+    }
+
     const createTask = async () => {
       try {
+        creatingTask.value = true
         console.log('📝 Creando tarea:', task.value);
 
         // Obtener información del colaborador seleccionado
-        const selectedCollaborator = collaborators.value.find(c => c.id === task.value.assignedTo);
+        const selectedCollaborator = collaborators.value.find(c => c.applicantId === task.value.assignedTo);
 
         if (!selectedCollaborator) {
           console.error('❌ No se encontró el colaborador seleccionado');
+          creatingTask.value = false
           return;
         }
 
-        // Preparar datos para la tarea
+        // Preparar datos para la tarea - FORMATO CORRECTO PARA .NET
         const taskData = {
           title: task.value.title,
           description: task.value.description,
           dueDate: task.value.dueDate,
-          assignedTo: task.value.assignedTo,
-          assignedToName: selectedCollaborator.name,
-          role: selectedCollaborator.role,
-          checklist: task.value.checklist,
-          tools: task.value.tools,
-          comment: task.value.comment,
-          attachments: task.value.attachments,
+          status: 'pending', // Siempre pending al crear
+          priority: 'medium', // Por defecto
           projectId: projectDetailStore.project.id,
-          createdBy: localStorage.getItem('userId') || '1'
+          assignedTo: selectedCollaborator.applicantId,
+          assignedToName: selectedCollaborator.applicantName,
+          role: selectedCollaborator.role,
+          checklist: task.value.checklist.map(item => ({
+            text: item.text,
+            completed: false
+          })),
+          tools: task.value.tools.map(tool => ({
+            name: tool.name,
+            checked: false
+          })),
+          comment: task.value.comment,
+          attachments: task.value.attachments.map(att => ({
+            name: att.name,
+            type: att.type || 'file',
+            url: att.url || '',
+            icon: att.icon || 'pi pi-file'
+          })),
+          estimatedHours: 0, // Por defecto
+          createdBy: parseInt(localStorage.getItem('userId') || '1')
         }
 
         console.log('🚀 Enviando tarea a store:', taskData);
@@ -253,6 +336,8 @@ export default {
 
       } catch (error) {
         console.error('❌ Error creando tarea:', error);
+      } finally {
+        creatingTask.value = false
       }
     }
 
@@ -287,6 +372,7 @@ export default {
           id: Date.now() + Math.random(),
           name: file.name,
           type: 'file',
+          url: URL.createObjectURL(file),
           icon: 'pi pi-file'
         })
       })
@@ -295,8 +381,9 @@ export default {
     const handleLinkAdded = (linkData) => {
       task.value.attachments.push({
         id: Date.now() + Math.random(),
-        name: linkData.url,
+        name: linkData.description || linkData.url,
         type: 'link',
+        url: linkData.url,
         icon: 'pi pi-link'
       })
     }
@@ -310,7 +397,8 @@ export default {
 
     // Cargar colaboradores cuando el componente se monta
     onMounted(() => {
-      loadCollaborators()
+      console.log('🚀 TaskCreateForm montado, cargando colaboradores...')
+      loadAcceptedCollaborators()
     })
 
     return {
@@ -319,6 +407,7 @@ export default {
       task,
       collaborators,
       loadingCollaborators,
+      creatingTask,
       isFormValid,
       createTask,
       addChecklistItem,
@@ -388,6 +477,38 @@ export default {
   margin: 0.5rem 0;
 }
 
+/* Estilos para colaboradores */
+.loading-collaborators {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  color: var(--color-gray-600);
+}
+
+.no-collaborators {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 6px;
+  color: #856404;
+}
+
+.no-collaborators i {
+  color: #ffc107;
+}
+
+.helper-text {
+  color: var(--color-gray-500);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
 .checklist-item {
   display: flex;
   gap: 0.5rem;
@@ -398,11 +519,6 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.tool-completed {
-  text-decoration: line-through;
-  color: var(--color-gray-500);
 }
 
 .attachment-buttons {

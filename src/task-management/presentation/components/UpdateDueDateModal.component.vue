@@ -15,7 +15,7 @@
 
       <div class="form-section">
         <label class="section-label">Colaborador</label>
-        <p class="collaborator-info">{{ task?.assignedToName }} - {{ task?.role }}</p>
+        <p class="collaborator-info">{{ task?.assignedToName}}</p>
       </div>
 
       <div class="form-section">

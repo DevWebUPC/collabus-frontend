@@ -9,6 +9,7 @@ export const useUserStore = defineStore('user', () => {
     const currentUser = ref(null);
     const loading = ref(false);
     const error = ref(null);
+    const token = ref(localStorage.getItem('authToken'));
 
     // API instance
     const usersApi = new UsersApi();
@@ -24,6 +25,15 @@ export const useUserStore = defineStore('user', () => {
 
     const clearError = () => {
         error.value = null;
+    };
+
+    const setToken = (newToken) => {
+        token.value = newToken;
+        if (newToken) {
+            localStorage.setItem('authToken', newToken);
+        } else {
+            localStorage.removeItem('authToken');
+        }
     };
 
     // User registration - CORREGIDO
@@ -96,68 +106,90 @@ export const useUserStore = defineStore('user', () => {
         }
     };
 
-    // Login - CORREGIDO
+    // Login - CONECTADO AL BACKEND C#
     const login = async (email, password) => {
         try {
             setLoading(true);
             clearError();
 
-            const response = await usersApi.getByEmail(email);
-            const users = response.data;
+            console.log('🔐 Attempting login with backend:', email);
 
-            if (!users || users.length === 0) {
-                throw new Error('Usuario no encontrado');
+            // Usar el endpoint de autenticación del backend C#
+            const response = await usersApi.authenticate(email, password);
+
+            if (response.data && response.data.token) {
+                const { id, fullName, token: authToken } = response.data;
+
+                // Guardar token
+                setToken(authToken);
+
+                // Crear usuario con datos del backend
+                const user = {
+                    id: id,
+                    fullName: fullName,
+                    email: email,
+                    token: authToken
+                };
+
+                // Store user in local storage
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                localStorage.setItem('userId', user.id);
+
+                currentUser.value = user;
+
+                console.log('✅ Login successful for user:', fullName);
+                return user;
+            } else {
+                throw new Error('Respuesta de autenticación inválida');
             }
 
-            // Buscar usuario que coincida con email Y contraseña
-            const userData = users.find(user =>
-                user.email === email && user.password === password
-            );
-
-            if (!userData) {
-                throw new Error('Credenciales incorrectas');
-            }
-
-            // ✅ SOLUCIÓN: Usar directamente los datos del backend
-            const user = UserAssembler.fromApiToEntity(userData);
-
-            // Store user in local storage
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            localStorage.setItem('userId', user.id);
-
-            currentUser.value = user;
-
-            return user;
         } catch (err) {
-            setError(err.message);
-            throw err;
+            console.error('❌ Login error:', err);
+
+            let errorMessage = 'Error al iniciar sesión';
+            if (err.response?.status === 401) {
+                errorMessage = 'Credenciales incorrectas';
+            } else if (err.response?.data) {
+                errorMessage = err.response.data;
+            } else if (err.message) {
+                errorMessage = err.message;
+            }
+
+            setError(errorMessage);
+            throw new Error(errorMessage);
         } finally {
             setLoading(false);
         }
     };
 
-    // Resto del código permanece igual...
-    const logout = () => {
-        currentUser.value = null;
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('currentProfile'); // 👈 Limpiar perfil también
-        localStorage.removeItem('profileId'); // 👈 Limpiar ID de perfil
-    };
-
+    // Verificar si el usuario está autenticado
     const isAuthenticated = computed(() => {
-        return !!currentUser.value;
+        return !!currentUser.value && !!token.value;
     });
 
+    // Logout
+    const logout = () => {
+        currentUser.value = null;
+        token.value = null;
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('currentProfile');
+        localStorage.removeItem('profileId');
+    };
+
+    // Inicializar usuario desde localStorage
     const initializeUser = () => {
         const storedUser = localStorage.getItem('currentUser');
-        if (storedUser) {
+        const storedToken = localStorage.getItem('authToken');
+
+        if (storedUser && storedToken) {
             try {
                 currentUser.value = JSON.parse(storedUser);
+                token.value = storedToken;
             } catch (e) {
                 console.error('Error parsing stored user:', e);
-                localStorage.removeItem('currentUser');
-                localStorage.removeItem('userId');
+                logout();
             }
         }
     };
@@ -167,6 +199,7 @@ export const useUserStore = defineStore('user', () => {
         currentUser,
         loading,
         error,
+        token,
 
         // Computed
         isAuthenticated,

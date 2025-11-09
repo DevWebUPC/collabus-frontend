@@ -47,23 +47,7 @@ export class ApplicationsApi extends BaseEndpoint {
     getApplication(applicationId) {
         return this.http.get(`${this.endpointPath}/${applicationId}`);
     }
-
-    /**
-     * Update an application's status
-     * @param {string} applicationId - Application ID
-     * @param {string} status - New status
-     * @param {string} reviewedBy - User ID who is reviewing
-     * @param {string} reviewNotes - Notes from the reviewer
-     * @returns {Promise} API response
-     */
-    updateApplicationStatus(applicationId, status, reviewedBy, reviewNotes = '') {
-        return this.http.patch(`${this.endpointPath}/${applicationId}/status`, {
-            status,
-            reviewedBy,
-            reviewNotes
-        });
-    }
-
+    
     /**
      * Withdraw an application (delete)
      * @param {string} applicationId - Application ID
@@ -90,5 +74,35 @@ export class ApplicationsApi extends BaseEndpoint {
      */
     updateApplication(applicationId, updateData) {
         return this.http.patch(`${this.endpointPath}/${applicationId}`, updateData);
+    }
+
+    /**
+     * Accept an application
+     * @param {string} applicationId - Application ID
+     * @param {Object} data - Acceptance data
+     * @returns {Promise} API response
+     */
+    acceptApplication(applicationId, data) {
+        return this.http.post(`${this.endpointPath}/${applicationId}/accept`, data);
+    }
+
+    /**
+     * Reject an application
+     * @param {string} applicationId - Application ID
+     * @param {Object} data - Rejection data
+     * @returns {Promise} API response
+     */
+    rejectApplication(applicationId, data) {
+        return this.http.post(`${this.endpointPath}/${applicationId}/reject`, data);
+    }
+
+    /**
+     * Update application status
+     * @param {string} applicationId - Application ID
+     * @param {Object} data - Status update data
+     * @returns {Promise} API response
+     */
+    updateApplicationStatus(applicationId, data) {
+        return this.http.patch(`${this.endpointPath}/${applicationId}/status`, data);
     }
 }

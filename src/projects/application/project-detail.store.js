@@ -96,6 +96,7 @@ export const useProjectDetailStore = defineStore("project-detail", () => {
 
             console.log('✅ Project loaded - isOwned:', projectEntity.userId === getCurrentUserId());
             console.log('✅ Project loaded - isParticipating:', projectEntity.userId !== getCurrentUserId());
+            console.log('👥 Collaborators in loaded project:', projectEntity.collaborators); // ✅ NUEVO LOG
 
             return projectEntity;
         } catch (err) {
@@ -123,32 +124,30 @@ export const useProjectDetailStore = defineStore("project-detail", () => {
 
     const addCollaborator = async (collaboratorData) => {
         try {
+            console.log('🔄 Adding collaborator to project:', collaboratorData);
+
             if (!project.value) {
                 throw new Error('No project loaded');
             }
 
-            console.log('🔄 Adding collaborator to project:', project.value.id, collaboratorData);
+            // ✅ USAR EL NUEVO ENDPOINT
+            const response = await projectsApi.addCollaborator(project.value.id, {
+                applicantId: collaboratorData.applicantId,
+                applicantName: collaboratorData.applicantName,
+                role: collaboratorData.role,
+                roleId: collaboratorData.roleId
+            });
 
-            // Agregar colaborador localmente
-            const success = project.value.addCollaborator(collaboratorData);
-            if (!success) {
-                throw new Error('Collaborator already exists');
-            }
+            // Actualizar proyecto localmente con la respuesta del backend
+            project.value = response.data;
 
-            // ✅ SOLUCIÓN: Actualizar en la API con TODOS los datos del colaborador
-            const updateData = {
-                collaborators: project.value.collaborators
-            };
+            console.log('✅ Collaborator saved to backend via API:', collaboratorData);
 
-            console.log('📤 Sending update to API:', updateData);
-            await projectsApi.update(project.value.id, updateData);
-
-            console.log('✅ Collaborator added successfully:', collaboratorData);
             return true;
-        } catch (err) {
-            setError('Failed to add collaborator: ' + err.message);
-            console.error('Error adding collaborator:', err);
-            throw err;
+        } catch (error) {
+            console.error('❌ Error adding collaborator:', error);
+            setError('Failed to add collaborator: ' + error.message);
+            throw error;
         }
     };
 
@@ -158,20 +157,24 @@ export const useProjectDetailStore = defineStore("project-detail", () => {
                 throw new Error('No project loaded');
             }
 
-            // Remover colaborador localmente
+            // Remove collaborator locally
             const success = project.value.removeCollaborator(collaboratorId);
             if (!success) {
                 throw new Error('Collaborator not found');
             }
 
-            // Actualizar en la API
+            // ✅ ACTUALIZACIÓN: Actualizar en el backend
             const updateData = {
                 collaborators: project.value.collaborators
             };
 
             await projectsApi.update(project.value.id, updateData);
 
-            console.log('✅ Collaborator removed:', collaboratorId);
+            console.log('✅ Collaborator removed from backend:', collaboratorId);
+
+            // Forzar reactividad
+            project.value = { ...project.value };
+
             return true;
         } catch (err) {
             setError('Failed to remove collaborator: ' + err.message);

@@ -2,7 +2,7 @@ import { BaseApi } from '../../shared/infrastructure/base-api.js';
 import { BaseEndpoint } from '../../shared/infrastructure/base-endpoint.js';
 
 /**
- * Tasks API Service
+ * Tasks API Service - ADAPTADO para backend .NET
  * Handles HTTP requests for task-related operations
  */
 export class TasksApi extends BaseEndpoint {
@@ -16,31 +16,44 @@ export class TasksApi extends BaseEndpoint {
      * @param {string} projectId - Project ID
      * @returns {Promise} API response
      */
-    getProjectTasks(projectId) {
-        return this.http.get(`${this.endpointPath}/${projectId}`)
-            .then(response => {
-                // Extraer tasks del proyecto
-                return {
-                    data: response.data.tasks || []
-                };
-            });
+    async getProjectTasks(projectId) {
+        try {
+            console.log(`📋 Getting tasks for project ${projectId}`);
+            const response = await this.http.get(`${this.endpointPath}/${projectId}/tasks`);
+            console.log('✅ Tasks received:', response.data);
+            return { data: response.data };
+        } catch (error) {
+            console.error('❌ Error getting project tasks:', error);
+            throw error;
+        }
     }
 
     /**
-     * Get tasks assigned to a specific collaborator
+     * Search tasks with filters
      * @param {string} projectId - Project ID
-     * @param {string} collaboratorId - Collaborator ID
+     * @param {Object} filters - Search filters
      * @returns {Promise} API response
      */
-    getCollaboratorTasks(projectId, collaboratorId) {
-        return this.http.get(`${this.endpointPath}/${projectId}`)
-            .then(response => {
-                const tasks = response.data.tasks || [];
-                const collaboratorTasks = tasks.filter(task =>
-                    task.assignedTo === collaboratorId
-                );
-                return { data: collaboratorTasks };
-            });
+    async searchTasks(projectId, filters = {}) {
+        try {
+            const params = new URLSearchParams();
+
+            if (filters.assignedToName) {
+                params.append('assignedToName', filters.assignedToName);
+            }
+            if (filters.status) {
+                params.append('status', filters.status);
+            }
+
+            const queryString = params.toString();
+            const url = `${this.endpointPath}/${projectId}/tasks/search${queryString ? `?${queryString}` : ''}`;
+
+            const response = await this.http.get(url);
+            return { data: response.data };
+        } catch (error) {
+            console.error('❌ Error searching tasks:', error);
+            throw error;
+        }
     }
 
     /**
@@ -51,75 +64,91 @@ export class TasksApi extends BaseEndpoint {
      */
     async getTask(projectId, taskId) {
         try {
-            console.log(`🔍 Buscando tarea ${taskId} en proyecto ${projectId}`);
-
-            // Obtener el proyecto
-            const projectResponse = await this.http.get(`${this.endpointPath}/${projectId}`);
-            const project = projectResponse.data;
-
-            console.log('📋 Tareas del proyecto:', project.tasks);
-
-            if (!project.tasks || !Array.isArray(project.tasks)) {
-                console.log('❌ No hay tareas en el proyecto');
-                throw new Error('No tasks found in project');
-            }
-
-            // ✅ FIX: Normalizar IDs para comparación
-            const normalizedTaskId = String(taskId);
-
-            // Buscar la tarea específica
-            const task = project.tasks.find(t => {
-                const normalizedExistingId = String(t.id);
-                console.log(`🔍 Comparando: ${normalizedExistingId} con ${normalizedTaskId}`);
-                return normalizedExistingId === normalizedTaskId;
-            });
-
-            if (!task) {
-                console.log('❌ Tarea no encontrada. Tareas disponibles:', project.tasks.map(t => t.id));
-                throw new Error(`Task not found: ${taskId}`);
-            }
-
-            console.log('✅ Tarea encontrada:', task);
-            return { data: task };
+            console.log(`🔍 Getting task ${taskId} from project ${projectId}`);
+            const response = await this.http.get(`${this.endpointPath}/${projectId}/tasks/${taskId}`);
+            console.log('✅ Task received:', response.data);
+            return { data: response.data };
         } catch (error) {
-            console.error('❌ Error en getTask:', error);
+            console.error('❌ Error getting task:', error);
             throw error;
         }
     }
 
-
     /**
      * Create a new task
-     * @param {Object} taskData - Task data
+     * @param {Object} taskData - Task data in backend format
      * @returns {Promise} API response
      */
     async createTask(taskData) {
-        const { projectId, ...task } = taskData;
-
-        // Obtener el proyecto actual
-        const projectResponse = await this.http.get(`${this.endpointPath}/${projectId}`);
-        const project = projectResponse.data;
-
-        // Agregar la tarea al array de tasks del proyecto
-        if (!project.tasks) {
-            project.tasks = [];
+        try {
+            console.log('🚀 Creating task:', taskData);
+            const response = await this.http.post(
+                `${this.endpointPath}/${taskData.projectId}/tasks`,
+                taskData
+            );
+            console.log('✅ Task created:', response.data);
+            return { data: response.data };
+        } catch (error) {
+            console.error('❌ Error creating task:', error);
+            throw error;
         }
+    }
 
-        const newTask = {
-            ...task,
-            id: Date.now().toString(), // Generar ID único
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-        };
+    /**
+     * Toggle task tool
+     */
+    async toggleTaskTool(projectId, taskId, toolId) {
+        try {
+            console.log(`🔄 Toggling task tool ${toolId} for task ${taskId}`);
+            const response = await this.http.patch(
+                `${this.endpointPath}/${projectId}/tasks/${taskId}/tools/${toolId}/toggle`
+            );
+            console.log('✅ Task tool toggled:', response.data);
+            return { data: response.data };
+        } catch (error) {
+            console.error('❌ Error toggling task tool:', error);
+            throw error;
+        }
+    }
 
-        project.tasks.push(newTask);
+    /**
+     * Add task tool
+     */
+    async addTaskTool(projectId, taskId, name) {
+        try {
+            console.log(`➕ Adding task tool to task ${taskId}: ${name}`);
+            const response = await this.http.post(
+                `${this.endpointPath}/${projectId}/tasks/${taskId}/tools`,
+                { name },
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            console.log('✅ Task tool added:', response.data);
+            return { data: response.data };
+        } catch (error) {
+            console.error('❌ Error adding task tool:', error);
+            throw error;
+        }
+    }
 
-        // Actualizar el proyecto con la nueva tarea
-        const updateResponse = await this.http.patch(`${this.endpointPath}/${projectId}`, {
-            tasks: project.tasks
-        });
-
-        return { data: newTask };
+    /**
+     * Remove task tool
+     */
+    async removeTaskTool(projectId, taskId, toolId) {
+        try {
+            console.log(`🗑️ Removing task tool ${toolId} from task ${taskId}`);
+            const response = await this.http.delete(
+                `${this.endpointPath}/${projectId}/tasks/${taskId}/tools/${toolId}`
+            );
+            console.log('✅ Task tool removed:', response.data);
+            return { data: response.data };
+        } catch (error) {
+            console.error('❌ Error removing task tool:', error);
+            throw error;
+        }
     }
 
     /**
@@ -131,75 +160,17 @@ export class TasksApi extends BaseEndpoint {
      */
     async updateTask(projectId, taskId, updateData) {
         try {
-            console.log(`🔄 Updating task ${taskId} in project ${projectId}`, updateData);
-
-            // Obtener el proyecto actual
-            const projectResponse = await this.http.get(`${this.endpointPath}/${projectId}`);
-            const project = projectResponse.data;
-
-            if (!project.tasks || !Array.isArray(project.tasks)) {
-                throw new Error('No tasks found in project');
-            }
-
-            // ✅ FIX: Normalizar IDs para comparación
-            const normalizedTaskId = String(taskId);
-
-            // Encontrar y actualizar la tarea
-            const taskIndex = project.tasks.findIndex(t => {
-                const normalizedExistingId = String(t.id);
-                return normalizedExistingId === normalizedTaskId;
-            });
-
-            if (taskIndex === -1) {
-                console.error('❌ Task not found. Available tasks:', project.tasks.map(t => ({ id: t.id, type: typeof t.id })));
-                throw new Error(`Task not found: ${taskId}`);
-            }
-
-            // Actualizar la tarea
-            project.tasks[taskIndex] = {
-                ...project.tasks[taskIndex],
-                ...updateData,
-                updatedAt: new Date().toISOString()
-            };
-
-            // Actualizar el proyecto completo
-            await this.http.patch(`${this.endpointPath}/${projectId}`, {
-                tasks: project.tasks
-            });
-
-            console.log('✅ Task updated successfully:', project.tasks[taskIndex]);
-            return { data: project.tasks[taskIndex] };
+            console.log(`🔄 Updating task ${taskId}:`, updateData);
+            const response = await this.http.put(
+                `${this.endpointPath}/${projectId}/tasks/${taskId}`,
+                updateData
+            );
+            console.log('✅ Task updated:', response.data);
+            return { data: response.data };
         } catch (error) {
-            console.error('❌ Error in updateTask:', error);
+            console.error('❌ Error updating task:', error);
             throw error;
         }
-    }
-
-    /**
-     * Delete a task
-     * @param {string} projectId - Project ID
-     * @param {string} taskId - Task ID
-     * @returns {Promise} API response
-     */
-    async deleteTask(projectId, taskId) {
-        // Obtener el proyecto actual
-        const projectResponse = await this.http.get(`${this.endpointPath}/${projectId}`);
-        const project = projectResponse.data;
-
-        // Filtrar la tarea a eliminar
-        const initialLength = project.tasks.length;
-        project.tasks = project.tasks.filter(t => t.id !== taskId);
-
-        if (project.tasks.length === initialLength) {
-            throw new Error('Task not found');
-        }
-
-        // Actualizar el proyecto
-        await this.http.patch(`${this.endpointPath}/${projectId}`, {
-            tasks: project.tasks
-        });
-
-        return { data: { success: true } };
     }
 
     /**
@@ -207,145 +178,165 @@ export class TasksApi extends BaseEndpoint {
      * @param {string} projectId - Project ID
      * @param {string} taskId - Task ID
      * @param {string} status - New status
-     * @param {number} progress - Progress percentage (optional)
      * @returns {Promise} API response
      */
-    updateTaskStatus(projectId, taskId, status, progress = null) {
-        const updateData = {
-            status: status,
-            updatedAt: new Date().toISOString()
-        };
-
-        if (progress !== null) {
-            updateData.progress = progress;
+    async updateTaskStatus(projectId, taskId, status) {
+        try {
+            console.log(`🔄 Updating task status: ${taskId} -> ${status}`);
+            const response = await this.http.patch(
+                `${this.endpointPath}/${projectId}/tasks/${taskId}/status`,
+                status, // El backend espera solo el string del status
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            console.log('✅ Task status updated:', response.data);
+            return { data: response.data };
+        } catch (error) {
+            console.error('❌ Error updating task status:', error);
+            throw error;
         }
-
-        if (status === 'completed') {
-            updateData.completedAt = new Date().toISOString();
-        }
-
-        return this.updateTask(projectId, taskId, updateData);
-    }
-
-    /**
-     * Update task progress
-     * @param {string} taskId - Task ID
-     * @param {number} progress - Progress percentage
-     * @returns {Promise} API response
-     */
-    updateTaskProgress(taskId, progress) {
-        return this.http.patch(`${this.endpointPath}/${taskId}/progress`, {
-            progress: progress,
-            updatedAt: new Date().toISOString(),
-            status: progress === 100 ? 'completed' : 'in_progress'
-        });
-    }
-
-    /**
-     * Update task checklist
-     * @param {string} taskId - Task ID
-     * @param {Array} checklist - Updated checklist
-     * @returns {Promise} API response
-     */
-    updateTaskChecklist(taskId, checklist) {
-        const completedItems = checklist.filter(item => item.completed).length;
-        const progress = checklist.length > 0 ? Math.round((completedItems / checklist.length) * 100) : 0;
-
-        return this.http.patch(`${this.endpointPath}/${taskId}/checklist`, {
-            checklist: checklist,
-            progress: progress,
-            updatedAt: new Date().toISOString(),
-            status: progress === 100 ? 'completed' : 'in_progress'
-        });
-    }
-
-    /**
-     * Reassign a task to another collaborator
-     * @param {string} taskId - Task ID
-     * @param {string} collaboratorId - New collaborator ID
-     * @param {string} collaboratorName - New collaborator name
-     * @param {string} role - New role
-     * @returns {Promise} API response
-     */
-    reassignTask(taskId, collaboratorId, collaboratorName, role = '') {
-        return this.http.patch(`${this.endpointPath}/${taskId}/reassign`, {
-            assignedTo: collaboratorId,
-            assignedToName: collaboratorName,
-            role: role,
-            updatedAt: new Date().toISOString()
-        });
     }
 
     /**
      * Update task due date
+     * @param {string} projectId - Project ID
      * @param {string} taskId - Task ID
      * @param {string} dueDate - New due date (ISO string)
+     * @param {string} updatedBy - User ID who updated
      * @returns {Promise} API response
      */
-    updateTaskDueDate(taskId, dueDate) {
-        return this.http.patch(`${this.endpointPath}/${taskId}/due-date`, {
-            dueDate: dueDate,
-            updatedAt: new Date().toISOString()
-        });
-    }
+    async updateTaskDueDate(projectId, taskId, dueDate, updatedBy) {
+        try {
+            console.log(`📅 Updating task due date: ${taskId} -> ${dueDate}`);
 
+            // ✅ CORREGIR: Enviar solo la fecha en el body y updatedBy como query parameter
+            const response = await this.http.patch(
+                `${this.endpointPath}/${projectId}/tasks/${taskId}/due-date?updatedBy=${updatedBy}`,
+                dueDate.toISOString(),  // Solo la fecha ISO en el body
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            console.log('✅ Task due date updated:', response.data);
+            return { data: response.data };
+        } catch (error) {
+            console.error('❌ Error updating task due date:', error);
+            throw error;
+        }
+    }
     /**
-     * Log time spent on a task
+     * Delete a task
+     * @param {string} projectId - Project ID
      * @param {string} taskId - Task ID
-     * @param {number} hours - Hours to add
+     * @param {string} deletedBy - User ID who deleted
      * @returns {Promise} API response
      */
-    logTaskTime(taskId, hours) {
-        return this.http.patch(`${this.endpointPath}/${taskId}/log-time`, {
-            actualHours: hours,
-            updatedAt: new Date().toISOString()
-        });
+    async deleteTask(projectId, taskId, deletedBy) {
+        try {
+            console.log(`🗑️ Deleting task ${taskId}`);
+            const response = await this.http.delete(
+                `${this.endpointPath}/${projectId}/tasks/${taskId}?deletedBy=${deletedBy}`
+            );
+            console.log('✅ Task deleted successfully');
+            return { data: { success: true } };
+        } catch (error) {
+            console.error('❌ Error deleting task:', error);
+            throw error;
+        }
     }
 
     /**
-     * Get overdue tasks for a project
+     * Add checklist item to task
      * @param {string} projectId - Project ID
+     * @param {string} taskId - Task ID
+     * @param {string} text - Checklist item text
      * @returns {Promise} API response
      */
-    getOverdueTasks(projectId) {
-        return this.http.get(`${this.endpointPath}/overdue?projectId=${projectId}`);
+    async addChecklistItem(projectId, taskId, text) {
+        try {
+            console.log(`📝 Adding checklist item to task ${taskId}: ${text}`);
+            const response = await this.http.post(
+                `${this.endpointPath}/${projectId}/tasks/${taskId}/checklist`,
+                text,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            console.log('✅ Checklist item added:', response.data);
+            return { data: response.data };
+        } catch (error) {
+            console.error('❌ Error adding checklist item:', error);
+            throw error;
+        }
     }
 
     /**
-     * Get tasks by status for a project
+     * Remove checklist item from task
      * @param {string} projectId - Project ID
-     * @param {string} status - Task status
+     * @param {string} taskId - Task ID
+     * @param {string} itemId - Checklist item ID
      * @returns {Promise} API response
      */
-    getTasksByStatus(projectId, status) {
-        return this.http.get(`${this.endpointPath}?projectId=${projectId}&status=${status}`);
+    async removeChecklistItem(projectId, taskId, itemId) {
+        try {
+            console.log(`🗑️ Removing checklist item ${itemId} from task ${taskId}`);
+            const response = await this.http.delete(
+                `${this.endpointPath}/${projectId}/tasks/${taskId}/checklist/${itemId}`
+            );
+            console.log('✅ Checklist item removed:', response.data);
+            return { data: response.data };
+        } catch (error) {
+            console.error('❌ Error removing checklist item:', error);
+            throw error;
+        }
     }
 
     /**
-     * Get urgent tasks (high priority + due soon)
+     * Toggle checklist item completion
      * @param {string} projectId - Project ID
+     * @param {string} taskId - Task ID
+     * @param {string} itemId - Checklist item ID
      * @returns {Promise} API response
      */
-    getUrgentTasks(projectId) {
-        return this.http.get(`${this.endpointPath}/urgent?projectId=${projectId}`);
+    async toggleChecklistItem(projectId, taskId, itemId) {
+        try {
+            console.log(`🔄 Toggling checklist item ${itemId} for task ${taskId}`);
+            const response = await this.http.patch(
+                `${this.endpointPath}/${projectId}/tasks/${taskId}/checklist/${itemId}/toggle`
+            );
+            console.log('✅ Checklist item toggled:', response.data);
+            return { data: response.data };
+        } catch (error) {
+            console.error('❌ Error toggling checklist item:', error);
+            throw error;
+        }
     }
 
     /**
-     * Get task statistics for a project
-     * @param {string} projectId - Project ID
+     * Create tasks for all accepted applicants
+     * @param {Object} baseTaskData - Base task data
      * @returns {Promise} API response
      */
-    getTaskStats(projectId) {
-        return this.http.get(`${this.endpointPath}/stats?projectId=${projectId}`);
-    }
-
-    /**
-     * Get task statistics for a collaborator
-     * @param {string} projectId - Project ID
-     * @param {string} collaboratorId - Collaborator ID
-     * @returns {Promise} API response
-     */
-    getCollaboratorTaskStats(projectId, collaboratorId) {
-        return this.http.get(`${this.endpointPath}/stats?projectId=${projectId}&assignedTo=${collaboratorId}`);
+    async createTasksForAllAcceptedApplicants(baseTaskData) {
+        try {
+            console.log('🚀 Creating tasks for all accepted applicants:', baseTaskData);
+            const response = await this.http.post(
+                `${this.endpointPath}/${baseTaskData.projectId}/tasks/bulk`,
+                baseTaskData
+            );
+            console.log('✅ Bulk tasks created:', response.data);
+            return { data: response.data };
+        } catch (error) {
+            console.error('❌ Error creating bulk tasks:', error);
+            throw error;
+        }
     }
 }

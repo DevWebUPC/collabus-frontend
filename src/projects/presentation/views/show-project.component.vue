@@ -54,52 +54,117 @@ const toggleLike = () => {
 };
 
 const toggleSave = async () => {
-  isSaved.value = !isSaved.value;
   const userId = authStore.currentUser?.id;
   let profileId = null;
+
+  console.log('⭐ Toggle Save - UserId:', userId);
+
   if (userId) {
     if (!profileStore.allProfiles.length) {
       await profileStore.fetchAllProfiles();
     }
     const profile = profileStore.allProfiles.find(p => String(p.userId) === String(userId));
     profileId = profile?.id;
+    console.log('👤 Profile found:', profile, 'ProfileId:', profileId);
   }
+
   const projectId = project.value?.id;
-  if (!profileId || !projectId) return;
-  if (isSaved.value) {
-    // Guardar como favorito
-    await projectsStore.addFavorite(profileId, projectId);
-  } else {
-    // Quitar de favoritos
-    await projectsStore.removeFavorite(profileId, projectId);
+
+  console.log('📋 Toggle Save - ProfileId:', profileId, 'ProjectId:', projectId);
+
+  if (!profileId || !projectId) {
+    console.log('❌ No se pudo obtener profileId o projectId');
+    alert('No se pudo obtener la información necesaria');
+    return;
+  }
+
+  try {
+    // 🔥 NUEVO: Verificar estado actual antes de cambiar
+    const currentIsSaved = projectsStore.favorites.some(fav =>
+        fav.profileId === profileId && fav.projectId === projectId
+    );
+
+    console.log('🔍 Current favorite status:', currentIsSaved);
+
+    if (currentIsSaved) {
+      // Ya está guardado, vamos a eliminar
+      console.log('➖ Eliminando de favoritos...');
+      await projectsStore.removeFavorite(profileId, projectId);
+      isSaved.value = false;
+      console.log('✅ Eliminado de favoritos');
+    } else {
+      // No está guardado, vamos a agregar
+      console.log('➕ Agregando a favoritos...');
+      await projectsStore.addFavorite(profileId, projectId);
+      isSaved.value = true;
+      console.log('✅ Agregado a favoritos');
+    }
+  } catch (error) {
+    console.error('❌ Error al cambiar estado de favorito:', error);
+
+    // 🔥 MEJORADO: Mensajes de error más específicos
+    let errorMessage = 'Error al actualizar favoritos';
+    if (error.response?.status === 400) {
+      errorMessage = 'No se pudo agregar a favoritos (posible duplicado)';
+    } else if (error.response?.data) {
+      errorMessage = error.response.data;
+    }
+
+    alert(errorMessage);
+
+    // Revertir el estado visual basado en el estado real
+    const actualIsSaved = projectsStore.favorites.some(fav =>
+        fav.profileId === profileId && fav.projectId === projectId
+    );
+    isSaved.value = actualIsSaved;
   }
 };
 
 onMounted(async () => {
   try {
+    console.log('🟡 Iniciando carga del proyecto...');
+
+    const projectId = route.params.id;
+    console.log('🔍 Project ID:', projectId);
+
     // Obtener el userId del usuario autenticado
     const userId = authStore.currentUser?.id;
+    console.log('👤 User ID:', userId);
+
     let profileId = null;
     if (userId) {
       if (!profileStore.allProfiles.length) {
+        console.log('🔄 Cargando perfiles...');
         await profileStore.fetchAllProfiles();
       }
       const profile = profileStore.allProfiles.find(p => String(p.userId) === String(userId));
       profileId = profile?.id;
+      console.log('📝 Profile ID:', profileId);
     }
-    const projectId = route.params.id;
+
+    console.log('📡 Fetching project from store...');
     project.value = await projectsStore.fetchProjectById(projectId);
+
+    console.log('✅ Proyecto cargado:', project.value);
+    console.log('🎓 Academic Level:', project.value?.academicLevel);
+    console.log('👥 Roles:', project.value?.roles);
+    console.log('📊 Roles length:', project.value?.roles?.length);
+
     // Verificar si el proyecto ya está en favoritos
     if (profileId && project.value?.id) {
+      console.log('⭐ Verificando favoritos...');
       await projectsStore.fetchFavorites(profileId);
       isSaved.value = projectsStore.favorites.some(fav => fav.projectId === project.value.id);
     }
   } catch (error) {
-    console.error('Error loading project:', error);
+    console.error('❌ Error loading project:', error);
+    console.error('Error details:', error.response?.data || error.message);
   } finally {
     loading.value = false;
+    console.log('🏁 Carga completada');
   }
 });
+
 </script>
 
 <template>
@@ -112,14 +177,6 @@ onMounted(async () => {
     <div v-else-if="project" class="project-content">
       <!-- 🧡 NUEVO: Contenedor para los iconos de interacción -->
       <div class="interaction-icons">
-        <button
-            class="icon-button"
-            :class="{ 'liked': isLiked }"
-            @click="toggleLike"
-            aria-label="Me gusta"
-        >
-          <span class="heart-icon">{{ isLiked ? '❤️' : '🤍' }}</span>
-        </button>
         <button
             class="icon-button"
             :class="{ 'saved': isSaved }"

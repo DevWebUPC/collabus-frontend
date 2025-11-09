@@ -37,8 +37,16 @@ export const useProfileStore = defineStore('profile', () => {
         try {
             setLoading(true);
             clearError();
+            console.log('📥 Fetching comments for profileId:', profileId);
             const response = await commentApi.getCommentsByProfile(profileId);
-            comments.value = CommentAssembler.fromApiArrayToEntityArray(response.data);
+
+            // 🔥 VERIFICAR: Asegurar que solo tenemos comentarios de este perfil
+            const filteredComments = response.data.filter(comment =>
+                String(comment.profileId) === String(profileId)
+            );
+
+            comments.value = CommentAssembler.fromApiArrayToEntityArray(filteredComments);
+            console.log('✅ Comments loaded for profile:', filteredComments.length);
         } catch (err) {
             setError('Failed to fetch comments');
             console.error('Error fetching comments:', err);
@@ -155,6 +163,8 @@ export const useProfileStore = defineStore('profile', () => {
             setLoading(true);
             clearError();
 
+            console.log('🔄 Creando perfil para userId:', userId);
+
             // Transform data and create profile
             const apiData = ProfileAssembler.fromOnboardingToApi(onboardingData, userId);
             const response = await profileApi.create(apiData);
@@ -163,11 +173,18 @@ export const useProfileStore = defineStore('profile', () => {
             if (response.status >= 200 && response.status < 300) {
                 const newProfile = ProfileAssembler.fromApiToEntity(response.data);
 
+                console.log('✅ Perfil creado exitosamente:', newProfile);
+
                 // Store profile in local storage for persistence
                 localStorage.setItem('currentProfile', JSON.stringify(newProfile));
                 localStorage.setItem('profileId', newProfile.id);
 
+                // Actualizar el estado del store
                 currentProfile.value = newProfile;
+
+                // También agregar a la lista de perfiles
+                allProfiles.value.push(newProfile);
+
                 return newProfile;
             } else {
                 throw new Error('Error al completar el onboarding');
@@ -175,46 +192,39 @@ export const useProfileStore = defineStore('profile', () => {
         } catch (err) {
             const errorMessage = err.response?.data?.message || err.message || 'Error al completar el onboarding';
             setError(errorMessage);
+            console.error('❌ Error en completeOnboarding:', err);
             throw err;
         } finally {
             setLoading(false);
         }
     };
 
-    // Get profile by user ID - ACTUALIZADO
-    const getProfileByUserId = async (userId, forceRefresh = false) => {
+    const getProfileByUserId = async (userId) => {
         try {
-            setLoading(true);
-            clearError();
+            // Buscar en los perfiles ya cargados primero
+            const existingProfile = allProfiles.value.find(profile =>
+                String(profile.userId) === String(userId)
+            );
 
-            console.log('🔄 Cargando perfil desde API para userId:', userId);
-
-            const response = await profileApi.getByUserId(userId);
-            const profiles = response.data;
-
-            if (!profiles || profiles.length === 0) {
-                console.log('❌ No se encontró perfil para userId:', userId);
-                return null;
+            if (existingProfile) {
+                return existingProfile;
             }
 
-            const profile = ProfileAssembler.fromApiToEntity(profiles[0]);
-            console.log('✅ Perfil cargado desde API:', profile);
+            // Si no está cargado, buscar en la API
+            // Necesitarás implementar este endpoint en tu backend
+            const response = await profileApi.getByUserId(userId);
+            if (response.data) {
+                const profile = ProfileAssembler.fromApiToEntity(response.data);
+                allProfiles.value.push(profile);
+                return profile;
+            }
 
-            // Actualizar el perfil actual y localStorage
-            currentProfile.value = profile;
-            localStorage.setItem('currentProfile', JSON.stringify(profile));
-            localStorage.setItem('profileId', profile.id);
-
-            return profile;
-        } catch (err) {
-            const errorMessage = err.response?.data?.message || err.message || 'Error al obtener el perfil';
-            setError(errorMessage);
-            throw err;
-        } finally {
-            setLoading(false);
+            return null;
+        } catch (error) {
+            console.error('Error getting profile by userId:', error);
+            return null;
         }
     };
-
 
     // Update profile
     const updateProfile = async (profileData) => {
@@ -255,8 +265,15 @@ export const useProfileStore = defineStore('profile', () => {
             setLoading(true);
             clearError();
 
-            const apiData = ProfileAssembler.fromUpdateToApi(profileData);
-            const response = await profileApi.patch(profileId, apiData);
+            console.log('🔄 Actualizando puntos del perfil:', profileId, profileData);
+
+            // 🔥 ENVIAR SOLO LOS CAMPOS NECESARIOS PARA PUNTOS
+            const pointsData = {
+                points: profileData.points,
+                pointsGivenBy: profileData.pointsGivenBy
+            };
+
+            const response = await profileApi.patch(profileId, pointsData);
 
             if (response.status >= 200 && response.status < 300) {
                 const updatedProfile = ProfileAssembler.fromApiToEntity(response.data);
@@ -273,13 +290,15 @@ export const useProfileStore = defineStore('profile', () => {
                     localStorage.setItem('currentProfile', JSON.stringify(updatedProfile));
                 }
 
+                console.log('✅ Puntos actualizados exitosamente');
                 return updatedProfile;
             } else {
-                throw new Error('Error al actualizar el perfil');
+                throw new Error('Error al actualizar los puntos');
             }
         } catch (err) {
-            const errorMessage = err.response?.data?.message || err.message || 'Error al actualizar el perfil';
+            const errorMessage = err.response?.data?.message || err.message || 'Error al actualizar los puntos';
             setError(errorMessage);
+            console.error('❌ Error actualizando puntos:', err);
             throw err;
         } finally {
             setLoading(false);

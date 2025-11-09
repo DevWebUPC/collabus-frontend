@@ -13,10 +13,9 @@ import { DurationTypeAssembler } from "../infrastructure/duration-type.assembler
  * Manages the state and logic for project creation process
  */
 export const useProjectCreateStore = defineStore("project-create", () => {
+
+
     // APIs
-    const projectAreasApi = new ProjectAreasApi();
-    const academicLevelsApi = new AcademicLevelsApi();
-    const durationTypesApi = new DurationTypesApi();
     const projectsApi = new ProjectsApi();
 
     // Loading states
@@ -35,9 +34,36 @@ export const useProjectCreateStore = defineStore("project-create", () => {
     const totalSteps = ref(3);
 
     // Options data
-    const projectAreas = ref([]);
-    const academicLevels = ref([]);
-    const durationTypes = ref([]);
+    const projectAreas = ref([
+        { id: 1, name: "Tecnología", description: "Proyectos de tecnología y software", active: true },
+        { id: 2, name: "Educación", description: "Proyectos educativos y de aprendizaje", active: true },
+        { id: 3, name: "Salud", description: "Proyectos de salud y medicina", active: true },
+        { id: 4, name: "Negocios", description: "Proyectos empresariales y startups", active: true },
+        { id: 5, name: "Arte y Diseño", description: "Proyectos creativos y artísticos", active: true },
+        { id: 6, name: "Ciencia", description: "Proyectos científicos e investigación", active: true },
+        { id: 7, name: "Medio Ambiente", description: "Proyectos ambientales y sostenibilidad", active: true },
+        { id: 8, name: "Social", description: "Proyectos sociales y comunitarios", active: true },
+        { id: 9, name: "Deportes", description: "Proyectos deportivos y fitness", active: true },
+        { id: 10, name: "Marketing", description: "Proyectos de marketing y publicidad", active: true }
+    ]);
+
+    const academicLevels = ref([
+        { id: 1, name: "Bachiller", level: 1, description: "Nivel de bachillerato", active: true },
+        { id: 2, name: "Estudiante Universitario", level: 2, description: "Cursando estudios universitarios", active: true },
+        { id: 3, name: "Egresado", level: 3, description: "Graduado universitario", active: true },
+        { id: 4, name: "Licenciado", level: 4, description: "Título de licenciatura", active: true },
+        { id: 5, name: "Maestría", level: 5, description: "Estudios de maestría", active: true },
+        { id: 6, name: "Doctorado", level: 6, description: "Estudios de doctorado", active: true },
+        { id: 7, name: "Autodidacta", level: 2, description: "Aprendizaje independiente", active: true },
+        { id: 8, name: "Técnico", level: 3, description: "Formación técnica especializada", active: true }
+    ]);
+
+    const durationTypes = ref([
+        { id: 1, name: "Días", value: "dias", multiplier: 1, active: true },
+        { id: 2, name: "Semanas", value: "semanas", multiplier: 7, active: true },
+        { id: 3, name: "Meses", value: "meses", multiplier: 30, active: true },
+        { id: 4, name: "Años", value: "años", multiplier: 365, active: true }
+    ]);
 
     // Form validation rules
     const validationRules = reactive({
@@ -165,25 +191,39 @@ export const useProjectCreateStore = defineStore("project-create", () => {
 
     // Project areas computed
     const availableAreas = computed(() => {
-        return ProjectAreaAssembler.fromEntityArrayToOptions(projectAreas.value);
+        return projectAreas.value
+            .filter(area => area.active)
+            .map(area => ({
+                label: area.name,
+                value: area.name, // Usar el nombre como valor para el dropdown
+                description: area.description
+            }));
     });
 
     const areasSuggestions = computed(() => {
         return projectAreas.value
-            .filter((area) => area.isActive())
-            .map((area) => area.name);
+            .filter(area => area.active)
+            .map(area => area.name);
     });
 
     // Academic levels computed
     const availableAcademicLevels = computed(() => {
-        return AcademicLevelAssembler.fromEntityArrayToStringArray(
-            academicLevels.value
-        );
+        return academicLevels.value
+            .filter(level => level.active)
+            .map(level => level.name)
+            .sort(); // Ordenar alfabéticamente
     });
 
     // Duration types computed
     const availableDurationTypes = computed(() => {
-        return DurationTypeAssembler.fromEntityArrayToOptions(durationTypes.value);
+        return durationTypes.value
+            .filter(type => type.active)
+            .map(type => ({
+                label: type.name,
+                value: type.value,
+                multiplier: type.multiplier
+            }))
+            .sort((a, b) => a.multiplier - b.multiplier); // Ordenar por duración
     });
 
     // Debug computed for roles validation
@@ -457,17 +497,15 @@ export const useProjectCreateStore = defineStore("project-create", () => {
     };
 
     // Data loading methods
+    // Actualiza los métodos de carga para usar datos locales
     const loadProjectAreas = async () => {
         try {
             loadingAreas.value = true;
-            const response = await projectAreasApi.getAll();
-
-            projectAreas.value = ProjectAreaAssembler.fromApiArrayToEntityArray(
-                response.data
-            );
+            // Ya tenemos los datos localmente, no necesita hacer API call
+            console.log('Project areas loaded from local data');
         } catch (error) {
             console.error("Error loading project areas:", error);
-            addError("Failed to load project areas");
+            // No agregamos error porque tenemos datos locales
         } finally {
             loadingAreas.value = false;
         }
@@ -476,14 +514,11 @@ export const useProjectCreateStore = defineStore("project-create", () => {
     const loadAcademicLevels = async () => {
         try {
             loadingLevels.value = true;
-            const response = await academicLevelsApi.getAll();
-
-            academicLevels.value = AcademicLevelAssembler.fromApiArrayToEntityArray(
-                response.data
-            );
+            // Ya tenemos los datos localmente
+            console.log('Academic levels loaded from local data');
         } catch (error) {
             console.error("Error loading academic levels:", error);
-            addError("Failed to load academic levels");
+            // No agregamos error porque tenemos datos locales
         } finally {
             loadingLevels.value = false;
         }
@@ -492,14 +527,11 @@ export const useProjectCreateStore = defineStore("project-create", () => {
     const loadDurationTypes = async () => {
         try {
             loadingDurationTypes.value = true;
-            const response = await durationTypesApi.getAll();
-
-            durationTypes.value = DurationTypeAssembler.fromApiArrayToEntityArray(
-                response.data
-            );
+            // Ya tenemos los datos localmente
+            console.log('Duration types loaded from local data');
         } catch (error) {
             console.error("Error loading duration types:", error);
-            addError("Failed to load duration types");
+            // No agregamos error porque tenemos datos locales
         } finally {
             loadingDurationTypes.value = false;
         }
@@ -508,11 +540,13 @@ export const useProjectCreateStore = defineStore("project-create", () => {
     const loadAllOptions = async () => {
         loading.value = true;
         try {
+            // Cargar todos los datos locales simultáneamente
             await Promise.all([
                 loadProjectAreas(),
                 loadAcademicLevels(),
                 loadDurationTypes(),
             ]);
+            console.log('All reference data loaded successfully from local storage');
         } finally {
             loading.value = false;
         }
@@ -529,66 +563,54 @@ export const useProjectCreateStore = defineStore("project-create", () => {
                 throw new Error("Please fix validation errors before submitting");
             }
 
-            // Obtener el perfil del usuario actual para el nombre del autor
-            const userId = localStorage.getItem("userId") || "1";
-            let authorName = "Usuario"; // Valor por defecto
+            // Obtener el ID del usuario actual (esto debería venir de tu sistema de autenticación)
+            const userId = localStorage.getItem("userId") || "1"; // Temporal
 
-            try {
-                // Importar y usar el store de perfiles para obtener el nombre real
-                const { useProfileStore } = await import('../../profile-management/application/profile-store.js');
-                const profileStore = useProfileStore();
-
-                // Obtener el perfil del usuario actual
-                const userProfile = await profileStore.getProfileByUserId(userId);
-                if (userProfile && userProfile.username) {
-                    authorName = userProfile.username;
-                }
-            } catch (profileError) {
-                console.warn("No se pudo obtener el perfil del usuario:", profileError);
-                // Si falla, intentar obtener del localStorage como fallback
-                const storedProfile = localStorage.getItem("currentProfile");
-                if (storedProfile) {
-                    try {
-                        const parsedProfile = JSON.parse(storedProfile);
-                        if (parsedProfile && parsedProfile.username) {
-                            authorName = parsedProfile.username;
-                        }
-                    } catch (e) {
-                        console.warn("Error al parsear perfil almacenado:", e);
-                    }
-                }
-            }
-
-            // Prepare project data
+            // Prepare project data for backend
             const projectData = {
+                userId: parseInt(userId),
                 title: basicInfoData.projectName,
-                description: basicInfoData.summary,
-                areas: basicInfoData.areas,
-                tags: basicInfoData.tags,
+                summary: basicInfoData.summary,
+                description: basicInfoData.summary, // Usar el mismo valor para description
                 academicLevel: detailsData.academicLevel,
                 benefits: detailsData.benefits,
                 skills: detailsData.skills,
                 durationQuantity: detailsData.durationQuantity,
                 durationType: detailsData.durationType,
+                areas: basicInfoData.areas,
+                tags: basicInfoData.tags,
                 roles: rolesData,
-                status: "active",
-                progress: 0,
-                userId: userId,
-                authorName: authorName, // Usar el nombre real del perfil
-                collaborators: [],
-                tasks: [],
-                milestones: [],
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
+                status: "draft",
+                progress: 0
             };
+
+            console.log('Sending project data to backend:', projectData);
 
             const response = await projectsApi.create(projectData);
 
-            resetForm();
-            return response.data;
+            if (response && response.data) {
+                console.log('Project created successfully:', response.data);
+                resetForm();
+                return response.data;
+            } else {
+                throw new Error('No response data received from server');
+            }
         } catch (error) {
             console.error("Error submitting project:", error);
-            addError(error.message || "Failed to create project");
+
+            // Manejar errores específicos del backend
+            if (error.response) {
+                // Error de respuesta del servidor
+                const errorMessage = error.response.data?.message || error.response.data || 'Failed to create project';
+                addError(errorMessage);
+            } else if (error.request) {
+                // Error de red
+                addError('Network error: Could not connect to server');
+            } else {
+                // Otros errores
+                addError(error.message || "Failed to create project");
+            }
+
             return null;
         } finally {
             submitting.value = false;

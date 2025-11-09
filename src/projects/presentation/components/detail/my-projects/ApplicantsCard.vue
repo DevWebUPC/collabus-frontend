@@ -112,7 +112,6 @@ const filteredApplicants = computed(() => {
   }
 
   const filtered = pendingApps.filter(application => {
-    // CORREGIDO: Comparar convirtiendo ambos a string o ambos a número
     const role = projectDetailStore.project?.roles.find(r =>
         String(r.id) === String(application.roleId)
     );
@@ -180,11 +179,22 @@ const acceptApplicant = async (applicant) => {
         'Aplicante aceptado en el proyecto'
     );
 
-    // 2. Recargar aplicaciones para reflejar el cambio (la aplicación aceptada desaparecerá de la lista)
+    // ✅ MEJORA: Esperar un poco para que el backend procese
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // ✅ MEJORA: Forzar recarga completa del proyecto
+    if (projectDetailStore.project?.id) {
+      console.log('🔄 Forzando recarga del proyecto...');
+      await projectDetailStore.fetchProjectById(projectDetailStore.project.id);
+    }
+
+    // 2. Recargar aplicaciones para reflejar el cambio
     await loadProjectApplications();
 
-    // 3. Mostrar mensaje de éxito
     console.log('🎉 Applicant accepted and added as collaborator!');
+
+    // ✅ MEJORA: Mostrar mensaje de éxito
+    console.log('👥 Colaboradores actuales:', projectDetailStore.project?.collaborators);
 
   } catch (error) {
     console.error('❌ Error accepting applicant:', error);

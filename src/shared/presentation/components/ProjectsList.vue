@@ -12,10 +12,38 @@ const homeStore = useHomeStore();
 
 // Computed properties
 const projects = computed(() => {
-  const currentUserId = userStore.currentUser?.id?.toString();
-  return homeStore.paginatedProjects.filter(project =>
-      project.userId !== currentUserId
-  );
+  // Asegurar que tenemos el usuario actual
+  const currentUser = userStore.currentUser;
+  const currentUserId = currentUser?.id?.toString();
+
+  console.log('🔍 Filtering projects - Current User:', {
+    id: currentUserId,
+    user: currentUser
+  });
+
+  // Si no hay usuario logueado, mostrar todos los proyectos
+  if (!currentUserId) {
+    console.log('🔍 No user logged in, showing all projects');
+    return homeStore.paginatedProjects;
+  }
+
+  const filteredProjects = homeStore.paginatedProjects.filter(project => {
+    const projectUserId = project.userId?.toString();
+    const isOwnProject = projectUserId === currentUserId;
+
+    console.log('🔍 Project check:', {
+      projectId: project.id,
+      projectTitle: project.title,
+      projectUserId,
+      currentUserId,
+      isOwnProject
+    });
+
+    return !isOwnProject; // Excluir proyectos propios
+  });
+
+  console.log('🔍 Final filtered projects:', filteredProjects.length);
+  return filteredProjects;
 });
 const isLoading = computed(() => homeStore.isLoadingProjects);
 const totalProjects = computed(() => homeStore.filteredProjects.length);
