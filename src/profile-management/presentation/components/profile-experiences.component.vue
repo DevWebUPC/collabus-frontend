@@ -73,7 +73,7 @@ const toggleExperiences = () => {
           </div>
           <div class="col-4">
             <div class="data-cell p-3 text-center border-1 border-300 border-round-bottom bg-white">
-              {{ experience.duration }}
+              {{ experience.startDate }}
             </div>
           </div>
         </div>
