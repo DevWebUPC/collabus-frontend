@@ -69,7 +69,7 @@ const transformProfileData = (storeProfile) => {
     experiences: (storeProfile.experiences || []).map(exp => ({
       company: exp.company || 'Empresa',
       role: exp.position || 'Rol',
-      duration: exp.duration || 'No especificado'
+      startDate: exp.startDate || 'No especificado'
     }))
   };
 };
