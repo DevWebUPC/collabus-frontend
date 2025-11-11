@@ -32,15 +32,27 @@ const handleRegister = async () => {
       password: password.value
     };
 
+    // 1. Registrar el usuario
     await userStore.register(registrationData);
 
-    // Redirigir al onboarding después del registro exitoso
-    router.push('/create-account');
-    } catch (error) {
+    // 🔥 2. Hacer login automático con las mismas credenciales
+    console.log('🔄 Haciendo login automático después del registro...');
+    await userStore.login(email.value, password.value);
+
+    // 3. Verificar que el login fue exitoso
+    if (userStore.isAuthenticated) {
+      console.log('✅ Registro y autenticación exitosos, redirigiendo al onboarding');
+      router.push('/create-account');
+    } else {
+      throw new Error('Error en la autenticación automática');
+    }
+
+  } catch (error) {
     console.error('Error en registro:', error);
     alert(error.message || t('auth.register.error'));
   }
 };
+
 </script>
 
 <template>
