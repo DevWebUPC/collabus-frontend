@@ -35,7 +35,7 @@ const handlePointsClick = () => {
           @click="handlePointsClick"
       >
         <template #content>
-          <span class="text-2xl font-extrabold" :class="hasGivenPoint ? 'text-white' : 'text-gray-900'">
+          <span class="text-2xl font-extrabold points">
             {{ profileData.points }} {{ $t('profile.points') }}
             <i v-if="hasGivenPoint" class="pi pi-star-fill ml-2" style="font-size: 1rem"></i>
           </span>
@@ -46,6 +46,10 @@ const handlePointsClick = () => {
 </template>
 
 <style scoped>
+.points {
+  color: var(--color-primary, #6C63FF);
+}
+
 .public-points-card {
   transition: all 0.3s ease;
   cursor: pointer;

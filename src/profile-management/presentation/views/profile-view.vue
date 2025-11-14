@@ -617,7 +617,7 @@ watch([showProfileContent, showNoProfile], ([showContent, showNoProfile]) => {
 
 /* Left Column */
 .left-column {
-  background: var(--color-gray-300, #f8fafc);
+  background: var(--color-white, #FFFFFF);
   border-right: 1px solid var(--color-gray-300, #e5e7eb);
   padding: 2rem;
   display: flex;
