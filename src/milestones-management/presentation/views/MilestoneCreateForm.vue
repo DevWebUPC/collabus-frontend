@@ -610,7 +610,7 @@ const cancelar = () => {
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1.5rem;
-  background: #f9fafb;
+  background: var(--color-gray-100, #FFFFFF);
 }
 
 .tarea-header {

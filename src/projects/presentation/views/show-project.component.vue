@@ -353,7 +353,7 @@ onMounted(async () => {
 
 .role-card {
   padding: 1.5rem;
-  background: var(--color-gray-300, #f8fafc);
+  background: var(--color-gray-100, #f8fafc);
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   transition: all 0.2s ease;
