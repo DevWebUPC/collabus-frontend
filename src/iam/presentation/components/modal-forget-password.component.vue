@@ -65,7 +65,7 @@ watch(recoveryEmail, () => {
             id="recoveryEmail"
             v-model="recoveryEmail"
             type="email"
-            :placeholder="$t('auth.forgotPasswordModal.emailPlaceholder')"
+            placeholder="email@example.com"
             class="w-full email-input"
             :class="{ 'p-invalid': emailError }"
         />
