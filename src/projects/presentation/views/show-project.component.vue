@@ -423,7 +423,7 @@ onMounted(async () => {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
-  background: #ffffff;
+  background: var(--color-white, #FFFFFF);
   min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
