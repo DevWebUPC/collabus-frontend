@@ -105,7 +105,7 @@ const handlePasswordRecovery = (email) => {
               type="email"
               id="email"
               v-model="email"
-        :placeholder="$t('auth.login.emailPlaceholder')"
+              placeholder="email@example.com"
               required
               class="w-full"
               :disabled="userStore.loading"

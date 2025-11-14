@@ -113,7 +113,7 @@ const handleRegister = async () => {
                 type="email"
                 id="email"
                 v-model="email"
-        :placeholder="$t('auth.register.emailPlaceholder')"
+                placeholder="email@example.com"
                 required
                 class="w-full text-input"
             />
