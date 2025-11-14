@@ -242,7 +242,7 @@ const updateItem = (roleIndex, cardIndex, itemIndex, value) => {
 
 /* Individual Role Card */
 .role-card {
-  background: var(--color-gray-300, #f8fafc);
+  background: var(--color-gray-100, #f8fafc);
   border-radius: 16px;
   padding: 1.5rem;
   border: 1px solid #e2e8f0;

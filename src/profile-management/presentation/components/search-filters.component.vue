@@ -174,7 +174,7 @@ const clearFilters = () => {
 }
 
 .search-btn:hover {
-  background: #ffffff;
+  background: var(--color-white, #FFFFFF);
   color: #4A41CC;
 }
 

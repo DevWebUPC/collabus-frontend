@@ -362,7 +362,7 @@ onMounted(async () => {
 
 .sub-tabs-container {
   display: flex;
-  background-color: #ffffff;
+  background-color: var(--color-white, #fff);
   color: #4A41CC;
   border-radius: 8px;
   padding: 2px;

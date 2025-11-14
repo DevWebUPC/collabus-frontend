@@ -167,7 +167,7 @@ const debugState = () => {
 <style scoped>
 .project-create-container {
   min-height: 100vh;
-  background: var(--color-gray-300, #f8fafc);
+  background: var(--color-gray-100, #f8fafc);
   padding: 2rem;
 }
 

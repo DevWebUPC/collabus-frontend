@@ -56,7 +56,7 @@ export default {
 
 <style scoped>
 .collaborator-item {
-  background: #ffffff;
+  background: var(--color-white, #FFFFFF);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);

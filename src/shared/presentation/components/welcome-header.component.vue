@@ -28,6 +28,7 @@ export default {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 5rem;
   max-width: 600px; /* Reducido el ancho máximo */
+  background: var(--color-white, #FFFFFF); 
 }
 
 .card-content {

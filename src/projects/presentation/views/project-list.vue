@@ -163,7 +163,7 @@ const formatDate = (date) => {
 }
 
 .tab-button:hover:not(.active) {
-  background: #f3f4f6;
+  background: var(--color-gray-100);
   color: var(--color-gray-900, #374151);
 }
 
