@@ -39,30 +39,21 @@ const updateTaskStatus = async () => {
   try {
     console.log('🔄 Actualizando estado de la tarea a completado...');
 
-    // ✅ Usar el nuevo método del store
+    // ✅ FORZAR progreso a 100% explícitamente
     const updatedTask = await milestonesStore.updateTaskStatus(
         projectId.value,
         milestoneId.value,
         task.value.id,
         'completed',
-        100
+        100 // ✅ SIEMPRE enviar 100 cuando se completa
     );
 
-    console.log('✅ Estado de la tarea actualizado exitosamente');
+    console.log('✅ Estado de la tarea actualizado exitosamente', updatedTask);
 
-    // ✅ Recargar datos frescos del milestone
+    // Recargar datos frescos
     await milestonesStore.loadProjectMilestones(projectId.value);
-    const updatedMilestone = milestonesStore.getProjectMilestones(projectId.value)
-        .find(m => m.id === milestoneId.value);
 
-    console.log('📊 Estado actualizado del milestone:', {
-      progress: updatedMilestone?.progress,
-      status: updatedMilestone?.status,
-      completedTasks: updatedMilestone?.milestoneTasks?.filter(t => t.status === 'completed').length,
-      totalTasks: updatedMilestone?.milestoneTasks?.length,
-      allTasksCompleted: updatedMilestone?.milestoneTasks?.every(t => t.status === 'completed')
-    });
-
+    console.log('📊 Estado actualizado del milestone');
   } catch (error) {
     console.error('❌ Error actualizando estado de la tarea:', error);
     throw error;
