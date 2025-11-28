@@ -106,45 +106,30 @@ export class MilestonesApi extends BaseEndpoint {
         try {
             console.log(`🔄 Updating milestone ${milestoneId} in project ${projectId}`, updateData);
 
-            // Obtener el proyecto actual
-            const projectResponse = await this.http.get(`${this.endpointPath}/${projectId}`);
-            const project = projectResponse.data;
+            // ✅ USAR PUT EN LUGAR DE PATCH
+            const response = await this.http.put(
+                `${this.endpointPath}/${projectId}/milestones/${milestoneId}`,
+                updateData
+            );
 
-            if (!project.milestones || !Array.isArray(project.milestones)) {
-                throw new Error('No milestones found in project');
-            }
-
-            // Normalizar IDs para comparación
-            const normalizedMilestoneId = String(milestoneId);
-
-            // Encontrar y actualizar el milestone
-            const milestoneIndex = project.milestones.findIndex(m => {
-                const normalizedExistingId = String(m.id);
-                return normalizedExistingId === normalizedMilestoneId;
-            });
-
-            if (milestoneIndex === -1) {
-                console.error('❌ Milestone not found. Available milestones:', project.milestones.map(m => ({ id: m.id, type: typeof m.id })));
-                throw new Error(`Milestone not found: ${milestoneId}`);
-            }
-
-            // Actualizar el milestone
-            project.milestones[milestoneIndex] = {
-                ...project.milestones[milestoneIndex],
-                ...updateData,
-                updatedAt: new Date().toISOString()
-            };
-
-            // Actualizar el proyecto completo
-            await this.http.patch(`${this.endpointPath}/${projectId}`, {
-                milestones: project.milestones
-            });
-
-            console.log('✅ Milestone updated successfully:', project.milestones[milestoneIndex]);
-            return { data: project.milestones[milestoneIndex] };
+            console.log('✅ Milestone updated successfully via PUT endpoint');
+            return { data: response.data };
         } catch (error) {
             console.error('❌ Error in updateMilestone:', error);
-            throw error;
+
+            // ✅ FALLBACK: Intentar con PATCH
+            try {
+                console.log('🔄 Trying PATCH method as fallback...');
+                const patchResponse = await this.http.patch(
+                    `${this.endpointPath}/${projectId}/milestones/${milestoneId}`,
+                    updateData
+                );
+                console.log('✅ Milestone updated successfully via PATCH fallback');
+                return { data: patchResponse.data };
+            } catch (patchError) {
+                console.error('❌ Both PUT and PATCH failed:', patchError);
+                throw error;
+            }
         }
     }
 
@@ -266,44 +251,30 @@ export class MilestonesApi extends BaseEndpoint {
                 updateData
             });
 
-            // Obtener el milestone actual
-            const milestoneResponse = await this.getMilestone(projectId, milestoneId);
-            const milestone = milestoneResponse.data;
+            // ✅ USAR PUT EN LUGAR DE PATCH - el backend tiene PUT
+            const response = await this.http.put(
+                `${this.endpointPath}/${projectId}/milestones/${milestoneId}/tasks/${taskId}`,
+                updateData
+            );
 
-            if (!milestone.milestoneTasks || !Array.isArray(milestone.milestoneTasks)) {
-                throw new Error('No tasks found in milestone');
-            }
-
-            // Normalizar IDs para comparación
-            const normalizedTaskId = String(taskId);
-
-            // Encontrar y actualizar la tarea
-            const taskIndex = milestone.milestoneTasks.findIndex(t => {
-                const normalizedExistingId = String(t.id);
-                return normalizedExistingId === normalizedTaskId;
-            });
-
-            if (taskIndex === -1) {
-                console.error('❌ Task not found. Available tasks:', milestone.milestoneTasks.map(t => ({ id: t.id, type: typeof t.id })));
-                throw new Error('Task not found in milestone');
-            }
-
-            // Actualizar la tarea
-            milestone.milestoneTasks[taskIndex] = {
-                ...milestone.milestoneTasks[taskIndex],
-                ...updateData,
-                updatedAt: new Date().toISOString()
-            };
-
-            console.log('✅ Task updated successfully:', milestone.milestoneTasks[taskIndex]);
-
-            // Actualizar el milestone completo
-            return this.updateMilestone(projectId, milestoneId, {
-                milestoneTasks: milestone.milestoneTasks
-            });
+            console.log('✅ Task updated successfully via PUT endpoint');
+            return { data: response.data };
         } catch (error) {
             console.error('❌ Error in updateMilestoneTask:', error);
-            throw error;
+
+            // ✅ FALLBACK: Intentar con PATCH por si acaso
+            try {
+                console.log('🔄 Trying PATCH method as fallback...');
+                const patchResponse = await this.http.patch(
+                    `${this.endpointPath}/${projectId}/milestones/${milestoneId}/tasks/${taskId}`,
+                    updateData
+                );
+                console.log('✅ Task updated successfully via PATCH fallback');
+                return { data: patchResponse.data };
+            } catch (patchError) {
+                console.error('❌ Both PUT and PATCH failed:', patchError);
+                throw error;
+            }
         }
     }
 

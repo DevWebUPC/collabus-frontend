@@ -34,22 +34,35 @@ const normalizedUserId = computed(() => {
   const userId = userStore.currentUser?.id || localStorage.getItem("userId");
   return userId ? String(userId) : null;
 });
+
 const updateTaskStatus = async () => {
   try {
     console.log('🔄 Actualizando estado de la tarea a completado...');
 
-    await milestonesStore.updateMilestoneTask(
+    // ✅ Usar el nuevo método del store
+    const updatedTask = await milestonesStore.updateTaskStatus(
         projectId.value,
         milestoneId.value,
         task.value.id,
-        {
-          status: 'completed',
-          progress: 100,
-          completedAt: new Date().toISOString()
-        }
+        'completed',
+        100
     );
 
-    console.log('✅ Estado de la tarea actualizado a completado');
+    console.log('✅ Estado de la tarea actualizado exitosamente');
+
+    // ✅ Recargar datos frescos del milestone
+    await milestonesStore.loadProjectMilestones(projectId.value);
+    const updatedMilestone = milestonesStore.getProjectMilestones(projectId.value)
+        .find(m => m.id === milestoneId.value);
+
+    console.log('📊 Estado actualizado del milestone:', {
+      progress: updatedMilestone?.progress,
+      status: updatedMilestone?.status,
+      completedTasks: updatedMilestone?.milestoneTasks?.filter(t => t.status === 'completed').length,
+      totalTasks: updatedMilestone?.milestoneTasks?.length,
+      allTasksCompleted: updatedMilestone?.milestoneTasks?.every(t => t.status === 'completed')
+    });
+
   } catch (error) {
     console.error('❌ Error actualizando estado de la tarea:', error);
     throw error;
@@ -133,34 +146,19 @@ const removeLink = (index) => {
 };
 
 // Enviar la tarea
-// Enviar la tarea
 const submitTask = async () => {
   try {
     submitting.value = true;
 
-    console.log('🚀 Iniciando envío de tarea...', {
+    console.log('🚀 Iniciando envío de tarea COMPLETO...', {
       projectId: projectId.value,
       milestoneId: milestoneId.value,
       taskId: task.value?.id,
-      collaboratorId: normalizedUserId.value,
-      submissionData: submissionData.value
+      collaboratorId: normalizedUserId.value
     });
 
-    // Validaciones
-    if (submissionData.value.files.length === 0 && submissionData.value.links.length === 0) {
-      alert('❌ Debes agregar al menos un archivo o enlace para enviar la tarea');
-      return;
-    }
-
-    // ✅ DEBUG: Verificar que todos los IDs estén presentes
-    console.log('🔍 IDs para la submission:', {
-      taskId: task.value.id,
-      collaboratorId: normalizedUserId.value,
-      milestoneId: milestoneId.value,
-      projectId: projectId.value
-    });
-
-    // Crear la submission
+    // 1. Primero crear la submission
+    console.log('📝 Paso 1: Creando submission...');
     const submission = await submissionStore.createSubmissionFromForm(
         submissionData.value,
         task.value.id,
@@ -171,13 +169,20 @@ const submitTask = async () => {
 
     console.log('✅ Submission creada exitosamente:', submission);
 
-    // ✅ ACTUALIZAR: Marcar la tarea como completada
-    await updateTaskStatus();
+    // 2. Luego actualizar el estado de la tarea
+    console.log('🔄 Paso 2: Actualizando estado de la tarea...');
+    try {
+      await updateTaskStatus();
+      console.log('✅ Estado de la tarea actualizado exitosamente');
+    } catch (taskError) {
+      console.warn('⚠️ No se pudo actualizar el estado de la tarea:', taskError);
+      console.log('📋 Pero la submission fue creada correctamente');
+      // Continuar sin lanzar error
+    }
 
-    // Mostrar mensaje de éxito
-    alert('✅ Tarea enviada y marcada como completada exitosamente');
+    alert('✅ Tarea enviada exitosamente');
 
-    // Redirigir de vuelta a la vista de tareas
+    // Redirigir
     router.push({
       name: 'milestone-tasks',
       params: { projectId: projectId.value },
