@@ -21,9 +21,26 @@ export const useMilestoneTaskSubmissionStore = defineStore('milestoneTaskSubmiss
 
     // Get submission by milestone task ID
     const getSubmissionByMilestoneTaskId = (milestoneTaskId) => {
-        return submissions.value.find(submission =>
-            submission.milestoneTaskId === milestoneTaskId.toString()
-        );
+        console.log('🔍 [STORE] Buscando submission para milestoneTaskId:', milestoneTaskId);
+        console.log('📋 [STORE] Tipo de milestoneTaskId:', typeof milestoneTaskId);
+        console.log('📦 [STORE] Todas las submissions disponibles:', submissions.value);
+
+        const found = submissions.value.find(submission => {
+            console.log(`   🔄 [STORE] Comparando: "${submission.milestoneTaskId}" (${typeof submission.milestoneTaskId}) === "${milestoneTaskId}" (${typeof milestoneTaskId})`);
+            console.log(`   📝 [STORE] Submission details:`, submission);
+
+            // Intentar diferentes formas de comparación
+            const match1 = submission.milestoneTaskId === milestoneTaskId.toString();
+            const match2 = submission.milestoneTaskId === milestoneTaskId;
+            const match3 = submission.milestoneTaskId?.toString() === milestoneTaskId?.toString();
+
+            console.log(`   ✅ [STORE] Match results:`, { match1, match2, match3 });
+
+            return match3; // Usar la comparación más flexible
+        });
+
+        console.log('🎯 [STORE] Resultado de búsqueda:', found);
+        return found;
     };
 
     // Check if milestone task has submission
