@@ -102,6 +102,22 @@ const goToMilestoneDetail = () => {
   });
 };
 
+const submissionFiles = computed(() => {
+  if (!taskSubmission.value?.attachments) return [];
+
+  return taskSubmission.value.attachments.filter(attachment =>
+      attachment.type !== 'link' && !attachment.url?.startsWith('http')
+  );
+});
+
+const submissionLinks = computed(() => {
+  if (!taskSubmission.value?.attachments) return [];
+
+  return taskSubmission.value.attachments.filter(attachment =>
+      attachment.type === 'link' || attachment.url?.startsWith('http')
+  );
+});
+
 // Cargar datos
 const loadTaskData = async () => {
   try {
@@ -293,7 +309,7 @@ onMounted(async () => {
 
           <!-- Información del Hito -->
 
-          <!-- Información de Envío -->
+          <!-- En la sección de Información de Envío -->
           <section v-if="taskSubmission" class="info-section">
             <h2 class="section-title">
               <i class="pi pi-send"></i>
@@ -301,10 +317,10 @@ onMounted(async () => {
             </h2>
             <div class="submission-info">
               <div class="submission-meta">
-                <span class="submission-date">
-                  <i class="pi pi-clock"></i>
-                  Enviado: {{ formatFullDate(taskSubmission.submittedAt) }}
-                </span>
+      <span class="submission-date">
+        <i class="pi pi-clock"></i>
+        Enviado: {{ formatFullDate(taskSubmission.submittedAt) }}
+      </span>
               </div>
 
               <div v-if="taskSubmission.notes" class="submission-notes">
@@ -312,6 +328,7 @@ onMounted(async () => {
                 <p>{{ taskSubmission.notes }}</p>
               </div>
 
+              <!-- Enlaces enviados - SOLO ENLACES -->
               <div v-if="taskSubmission.links && taskSubmission.links.length > 0" class="submission-links">
                 <h4>Enlaces enviados:</h4>
                 <div class="links-list">
@@ -328,16 +345,17 @@ onMounted(async () => {
                 </div>
               </div>
 
-              <div v-if="taskSubmission.attachments && taskSubmission.attachments.length > 0" class="submission-attachments">
+              <!-- Archivos enviados - SOLO ARCHIVOS (excluyendo enlaces) -->
+              <div v-if="submissionFiles && submissionFiles.length > 0" class="submission-attachments">
                 <h4>Archivos enviados:</h4>
                 <div class="attachments-list">
                   <div
-                      v-for="attachment in taskSubmission.attachments"
+                      v-for="attachment in submissionFiles"
                       :key="attachment.id"
                       class="submission-attachment"
                       @click="viewAttachment(attachment)"
                   >
-                    <i :class="attachment.type === 'link' ? 'pi pi-link' : 'pi pi-file'"></i>
+                    <i class="pi pi-file"></i>
                     <span>{{ attachment.name }}</span>
                   </div>
                 </div>
