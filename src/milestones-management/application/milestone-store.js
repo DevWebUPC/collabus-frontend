@@ -570,33 +570,55 @@ export const useMilestonesStore = defineStore('milestone', {
                 this.setLoading(true);
                 this.clearError();
 
+                console.log(`🗑️ Deleting milestone ${milestoneId} from project ${projectId}`);
+
+                // ✅ CORREGIR: Usar correctamente la API
                 const milestonesApi = new MilestonesApi();
+                console.log('🔍 API instance:', milestonesApi);
+                console.log('🔍 API methods:', Object.keys(milestonesApi));
+
+                // ✅ DEBUG: Verificar que el método existe
+                if (typeof milestonesApi.deleteMilestone !== 'function') {
+                    throw new Error('deleteMilestone method not found in API');
+                }
+
+                // ✅ Asegurar que se llama al método correcto
                 await milestonesApi.deleteMilestone(projectId, milestoneId);
 
-                // Eliminar inmediatamente de la lista global
-                this.milestones = this.milestones.filter(milestone => milestone.id !== milestoneId);
+                // Eliminar del estado local
+                const index = this.milestones.findIndex(milestone =>
+                    milestone.id === milestoneId && milestone.projectId === projectId
+                );
 
-                // Limpiar current milestone si es el mismo
+                if (index !== -1) {
+                    this.milestones.splice(index, 1);
+                }
+
+                // Actualizar current milestone si es el mismo
                 if (this.currentMilestone && this.currentMilestone.id === milestoneId) {
                     this.currentMilestone = null;
                 }
 
-                // Invalidar caches completamente
+                // Invalidar caches relevantes
                 this.projectMilestones.delete(projectId);
                 this.milestoneStats.delete(projectId);
 
                 console.log(`✅ Deleted milestone: ${milestoneId}`);
-                return true;
+                return { success: true };
             } catch (error) {
+                console.error('❌ Store - Detailed error:', error);
                 const errorMsg = `Error deleting milestone: ${error.message}`;
-                this.setError(errorMsg);
-                console.error('❌', errorMsg);
+                console.error('❌ Store - Detailed error:', error);
+
+                if (error.response) {
+                    console.error('Backend error details:', error.response.data);
+                }
+
                 throw error;
             } finally {
                 this.setLoading(false);
             }
         },
-
 
         /**
          * Load overdue milestones for a project
