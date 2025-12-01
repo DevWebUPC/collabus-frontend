@@ -140,24 +140,25 @@ export class MilestonesApi extends BaseEndpoint {
      * @returns {Promise} API response
      */
     async deleteMilestone(projectId, milestoneId) {
-        // Obtener el proyecto actual
-        const projectResponse = await this.http.get(`${this.endpointPath}/${projectId}`);
-        const project = projectResponse.data;
+        try {
+            console.log(`🗑️ Deleting milestone ${milestoneId} from project ${projectId}`);
 
-        // Filtrar el milestone a eliminar
-        const initialLength = project.milestones.length;
-        project.milestones = project.milestones.filter(m => m.id !== milestoneId);
+            // ✅ USAR EL ENDPOINT CORRECTO DEL BACKEND
+            const response = await this.http.delete(
+                `${this.endpointPath}/${projectId}/milestones/${milestoneId}`
+            );
 
-        if (project.milestones.length === initialLength) {
-            throw new Error('Milestone not found');
+            console.log('✅ Milestone deleted successfully');
+            return { data: { success: true } };
+        } catch (error) {
+            console.error('❌ Error in deleteMilestone:', error);
+
+            if (error.response) {
+                console.error('Backend error details:', error.response.data);
+            }
+
+            throw error;
         }
-
-        // Actualizar el proyecto
-        await this.http.patch(`${this.endpointPath}/${projectId}`, {
-            milestones: project.milestones
-        });
-
-        return { data: { success: true } };
     }
 
     /**
