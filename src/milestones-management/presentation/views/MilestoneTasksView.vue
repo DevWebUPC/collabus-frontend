@@ -26,6 +26,12 @@ const normalizedUserId = computed(() => {
   return userId ? String(userId) : null;
 });
 
+// Computed: Verificar si el hito completo está vencido
+const isMilestoneOverdue = computed(() => {
+  if (!milestone.value?.dueDate) return false;
+  return isOverdue(milestone.value.dueDate);
+});
+
 // Computed: Filtrar tareas asignadas al usuario
 const assignedTasks = computed(() => {
   if (!milestone.value?.milestoneTasks) return [];
@@ -316,8 +322,11 @@ const startTask = (task) => {
                   label="Hacer Tarea"
                   icon="pi pi-play"
                   class="p-button-primary"
+                  :disabled="isMilestoneOverdue"
                   @click="startTask(task)"
+                  :title="isMilestoneOverdue ? 'El hito está vencido, no se pueden realizar tareas' : 'Comenzar esta tarea'"
               />
+
             </div>
           </div>
         </div>
@@ -456,6 +465,28 @@ const startTask = (task) => {
   flex: 1;
   display: flex;
   justify-content: flex-end;
+}
+
+.task-actions .p-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.overdue-warning {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: #fef3f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  color: #dc2626;
+  font-size: 0.875rem;
+}
+
+.overdue-warning i {
+  font-size: 1rem;
 }
 
 .page-title {

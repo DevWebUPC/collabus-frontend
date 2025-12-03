@@ -18,8 +18,9 @@ const activeFilter = ref('all'); // 'all', 'pending', 'completed', 'overdue'
 
 // Computed: Obtener hitos donde el usuario tiene tareas asignadas
 const myMilestones = computed(() => {
-  if (!projectDetailStore.project?.milestones) {
-    console.log('❌ No project milestones available');
+  // ✅ CORREGIDO: Usar milestonesStore en lugar de projectDetailStore
+  if (!milestonesStore.milestones || milestonesStore.milestones.length === 0) {
+    console.log('❌ No milestones available in milestonesStore');
     return [];
   }
 
@@ -30,36 +31,48 @@ const myMilestones = computed(() => {
   }
 
   console.log('🔍 Filtering milestones for user:', userId);
+  console.log('📋 Total milestones in store:', milestonesStore.milestones.length);
 
-  // Filtrar hitos que tienen al menos una tarea asignada al usuario
-  const userMilestones = projectDetailStore.project.milestones.filter(milestone => {
-    const hasUserTasks = milestone.milestoneTasks?.some(task => {
-      const taskUserId = task.assignedTo ? String(task.assignedTo) : null;
-      return taskUserId === userId;
-    });
+  // ✅ CORRECCIÓN: Usar Set para evitar hitos duplicados y verificar colaboradores actuales
+  const userMilestoneIds = new Set();
+  const userMilestones = [];
 
-    console.log(`   - Milestone "${milestone.title}": ${hasUserTasks ? 'TIENE' : 'NO TIENE'} tareas del usuario`);
-    return hasUserTasks;
-  });
+  milestonesStore.milestones.forEach(milestone => {
+    // ✅ Asegurar que milestoneTasks existe
+    const milestoneTasks = milestone.milestoneTasks || [];
 
-  // Verificar estado de completado basado en submissions
-  const updatedMilestones = userMilestones.map(milestone => {
-    const allTasksCompleted = checkIfAllTasksHaveSubmissions(milestone);
+    // ✅ VERIFICAR SI EL USUARIO ES COLABORADOR ACTUAL DEL PROYECTO
+    const isCurrentCollaborator = projectDetailStore.project?.collaborators?.some(
+        collab => String(collab.applicantId) === userId
+    );
 
-    if (allTasksCompleted && milestone.status !== 'completed') {
-      console.log(`🎯 Milestone "${milestone.title}" debería estar completado`);
-      return {
-        ...milestone,
-        status: 'completed',
-        progress: 100
-      };
+    if (!isCurrentCollaborator) {
+      console.log(`   ⚠️ User ${userId} is not a current collaborator of project`);
+      return; // Saltar este hito si el usuario no es colaborador actual
     }
 
-    return milestone;
+    const hasUserTasks = milestoneTasks.some(task => {
+      const taskUserId = task.assignedTo ? String(task.assignedTo) : null;
+      const isAssignedToMe = taskUserId === userId;
+
+      if (isAssignedToMe) {
+        console.log(`   ✅ Tarea "${task.title}" asignada al usuario en hito "${milestone.title}"`);
+      }
+
+      return isAssignedToMe;
+    });
+
+    // ✅ Si el hito tiene tareas del usuario Y no ha sido agregado aún Y el usuario es colaborador actual
+    if (hasUserTasks && !userMilestoneIds.has(milestone.id) && isCurrentCollaborator) {
+      userMilestoneIds.add(milestone.id);
+      userMilestones.push(milestone);
+      console.log(`   ➕ Agregado hito "${milestone.title}" a la lista del usuario`);
+    }
   });
 
-  console.log('✅ User milestones found:', updatedMilestones.length);
-  return updatedMilestones;
+  console.log('✅ User milestones found (sin duplicados):', userMilestones.length);
+  console.log('📝 Hitos únicos:', userMilestones.map(m => m.title));
+  return userMilestones;
 });
 
 const checkIfAllTasksHaveSubmissions = (milestone) => {

@@ -46,7 +46,8 @@ const tareas = ref([
     archivos: [],
     enlaces: [],
     colaborador: null,
-    nuevoEnlace: ''
+    nuevoEnlace: '',
+    comentario: ''
   }
 ]);
 
@@ -85,7 +86,7 @@ const loadCollaborators = async () => {
     if (projectDetailStore.project?.collaborators) {
       colaboradoresDisponibles.value = projectDetailStore.project.collaborators.map(collab => ({
         id: collab.applicantId,
-        name: collab.name,
+        name: collab.applicantName,
         role: collab.role
       }));
       console.log('👥 Colaboradores cargados para hito:', colaboradoresDisponibles.value);

@@ -400,6 +400,47 @@ export const useMilestonesStore = defineStore('milestone', {
         },
 
         /**
+         * Update milestone task status and automatically update milestone progress
+         */
+        async updateTaskStatus(projectId, milestoneId, taskId, status, progress = null) {
+            try {
+                console.log(`🔄 Store - Actualizando estado de tarea:`, {
+                    projectId,
+                    milestoneId,
+                    taskId,
+                    status,
+                    progress
+                });
+
+                const updateData = {
+                    status: status,
+                    progress: progress !== null ? progress : (status === 'completed' ? 100 : 0)
+                };
+
+                console.log('📤 Datos para actualizar tarea:', updateData);
+
+                const updatedTask = await this.updateMilestoneTask(
+                    projectId,
+                    milestoneId,
+                    taskId,
+                    updateData
+                );
+
+                console.log('✅ Tarea actualizada en store:', updatedTask);
+
+                // ✅ FORZAR ACTUALIZACIÓN INMEDIATA
+                await this.loadProjectMilestones(projectId);
+                await this.loadMilestone(projectId, milestoneId);
+
+                console.log('✅ Store completamente actualizado después de cambiar tarea');
+                return updatedTask;
+            } catch (error) {
+                console.error('❌ Error en updateTaskStatus:', error);
+                throw error;
+            }
+        },
+
+        /**
          * Add a task to a milestone
          */
         async addMilestoneTask(projectId, milestoneId, taskData) {
@@ -448,7 +489,14 @@ export const useMilestonesStore = defineStore('milestone', {
                 this.clearError();
 
                 const milestonesApi = new MilestonesApi();
-                const response = await milestonesApi.updateMilestoneTask(projectId, milestoneId, taskId, updateData);
+
+                // ✅ Asegurar que se usa el endpoint correcto para actualizar tarea individual
+                const response = await milestonesApi.updateMilestoneTask(
+                    projectId,
+                    milestoneId,
+                    taskId,
+                    updateData
+                );
 
                 const updatedMilestone = MilestoneAssembler.fromApiToEntity(response.data);
 
@@ -456,11 +504,6 @@ export const useMilestonesStore = defineStore('milestone', {
                 const index = this.milestones.findIndex(milestone => milestone.id === milestoneId);
                 if (index !== -1) {
                     this.milestones[index] = updatedMilestone;
-                }
-
-                // Actualizar current milestone si es el mismo
-                if (this.currentMilestone && this.currentMilestone.id === milestoneId) {
-                    this.currentMilestone = updatedMilestone;
                 }
 
                 // Invalidar caches relevantes
@@ -527,27 +570,50 @@ export const useMilestonesStore = defineStore('milestone', {
                 this.setLoading(true);
                 this.clearError();
 
+                console.log(`🗑️ Deleting milestone ${milestoneId} from project ${projectId}`);
+
+                // ✅ CORREGIR: Usar correctamente la API
                 const milestonesApi = new MilestonesApi();
+                console.log('🔍 API instance:', milestonesApi);
+                console.log('🔍 API methods:', Object.keys(milestonesApi));
+
+                // ✅ DEBUG: Verificar que el método existe
+                if (typeof milestonesApi.deleteMilestone !== 'function') {
+                    throw new Error('deleteMilestone method not found in API');
+                }
+
+                // ✅ Asegurar que se llama al método correcto
                 await milestonesApi.deleteMilestone(projectId, milestoneId);
 
-                // Eliminar inmediatamente de la lista global
-                this.milestones = this.milestones.filter(milestone => milestone.id !== milestoneId);
+                // Eliminar del estado local
+                const index = this.milestones.findIndex(milestone =>
+                    milestone.id === milestoneId && milestone.projectId === projectId
+                );
 
-                // Limpiar current milestone si es el mismo
+                if (index !== -1) {
+                    this.milestones.splice(index, 1);
+                }
+
+                // Actualizar current milestone si es el mismo
                 if (this.currentMilestone && this.currentMilestone.id === milestoneId) {
                     this.currentMilestone = null;
                 }
 
-                // Invalidar caches completamente
+                // Invalidar caches relevantes
                 this.projectMilestones.delete(projectId);
                 this.milestoneStats.delete(projectId);
 
                 console.log(`✅ Deleted milestone: ${milestoneId}`);
-                return true;
+                return { success: true };
             } catch (error) {
+                console.error('❌ Store - Detailed error:', error);
                 const errorMsg = `Error deleting milestone: ${error.message}`;
-                this.setError(errorMsg);
-                console.error('❌', errorMsg);
+                console.error('❌ Store - Detailed error:', error);
+
+                if (error.response) {
+                    console.error('Backend error details:', error.response.data);
+                }
+
                 throw error;
             } finally {
                 this.setLoading(false);
