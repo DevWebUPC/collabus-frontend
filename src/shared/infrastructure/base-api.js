@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const platformApi = import.meta.env.VITE_COLLAB_US_API_URL || " http://localhost:5074/api/v1";
+const platformApi = import.meta.env.VITE_COLLAB_US_API_URL ||"https://collabus-backend-production.up.railway.app/api/v1";
 
 /**
  * Base API class to handle HTTP requests using Axios
